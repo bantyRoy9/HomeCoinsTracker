@@ -12,6 +12,6 @@ const homeAccSchema = new mongoose.Schema({
     timestamps:true
 });
 
-const HomeAccSchemaModel = mongoose.Model('HomeAccount',homeAccSchema);
+const HomeAccSchemaModel = mongoose.model('HomeAccount',homeAccSchema);
 
 module.exports = HomeAccSchemaModel;
