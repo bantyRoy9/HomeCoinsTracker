@@ -1,41 +1,41 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
     name:{
         type:String,
-        require:[true, 'Name is Required']
+        required:[true, 'Name is requiredd']
     },
     userId:String,
     email:{
         type:String,
         // unique:true 
-        require:[true, 'Email is Required'],
+        required:[true, 'Email is requiredd'],
         validate:[validator.isEmail, 'Provide Valide Email']
     },
     mobile:{
         type:Number,
-        require:true,
-        validate:[validator.isMobile,'Provide Valid Mobile No']
+        required:true
     },
     password:{
         type:String,
-        require:[true,'Password is Required'],
+        required:[true,'Password is requiredd'],
         minlength:4
     },
     confirmPassword:{
         type:String,
-        require:[true,'Confirm Password is Required'],
+        required:[true,'Confirm Password is requiredd'],
         validate:{
             validator : function(el){
-                return el === this.password
+                return (el === this.password)
             },
             message:'Confirm Password Not Match!'
         }
     },
     role:{
         type:String,
-        enum:['user','admin','supperAdmin'],
+        enum:['user','admin','superAdmin'],
         default:'user'
     },
     totalExpend:{
@@ -46,6 +46,14 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'ExpendModel'
     }
+});
+
+userSchema.pre('save', async function(next){
+    this.userId = `${this.name}${Math.trunc((Math.random()+1)*10000)}`
+    if(!this.isModified('password')) return next();
+    this.password = await bcrypt.hash(this.password,12)
+    this.confirmPassword = undefined;
+    next();
 });
 
 const User = mongoose.model('User',userSchema);
