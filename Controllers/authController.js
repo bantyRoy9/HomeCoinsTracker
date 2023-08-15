@@ -1,11 +1,9 @@
-const User = require('./../modals/userModal');
+const User = require('./../Model/User_Schema/userSchema');
 const crypto = require('crypto')
-const AppError = require('./../utils/appError');
-const Email = require('./../utils/email');
+const AppError = require('./../Utils/appError');
 const { promisify } = require('util')
 const jwt = require('jsonwebtoken')
-
-const catchAsync = require('../utils/catchAsync');
+const catchAsync = require('../Utils/catchAsync');
 
 const signToken = id => {
     return jwt.sign({ id }, process.env.jwt_secret, {
@@ -32,22 +30,16 @@ const createSendToken = (user, statusCode, res) => {
     })
 }
 
-exports.signUp = catchAsync(async (req, res, next) => {
+exports.createrUser = catchAsync(async (req, res, next) => {
     console.log(req.body);
-    const newUser = await User.create({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        passwordconfirm: req.body.passwordconfirm
-    });
-    const url = `${req.protocol}://${req.get('host')}/me`;
+    const newUser = await User.create(req.body);
+    // const url = `${req.protocol}://${req.get('host')}/me`;
     // console.log(url);
-    await new Email(newUser, url).sendWelcome()
+    // await new Email(newUser, url).sendWelcome()
     createSendToken(newUser, 201, res)
-
 })
-
-exports.login = catchAsync(async (req, res, next) => {
+ 
+exports.loginUser = catchAsync(async (req, res, next) => {
     const { email, password, phone } = req.body;
 
     // loging with phone
