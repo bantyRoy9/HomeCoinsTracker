@@ -1,8 +1,9 @@
 const express = require('express');
-const { getEarns } = require('../Controllers/accountController');
+const { saveDailyEarns,getUserDetails } = require('../Controllers/accountController');
+const { protect } = require('../Controllers/authController');
 const router = express.Router();
 
-router.post('/earn', getEarns);
+router.post('/dailyEarn',protect,getUserDetails, saveDailyEarns);
 
 
 module.exports = router
