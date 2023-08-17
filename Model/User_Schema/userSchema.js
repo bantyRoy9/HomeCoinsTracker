@@ -26,7 +26,6 @@ const userSchema = new mongoose.Schema({
     },
     confirmPassword:{
         type:String,
-        required:[true,'Confirm Password is requiredd'],
         validate:{
             validator : function(el){
                 return (el === this.password)
@@ -39,14 +38,14 @@ const userSchema = new mongoose.Schema({
         enum:['user','admin','superAdmin'],
         default:'user'
     },
-    totalExpend:{
+    totalExpend:[{
         type: mongoose.Schema.ObjectId,
-        ref: 'ExpendModel'
-    },
-    totalEarn:{
+        ref: 'Expend'
+    }],
+    totalEarn:[{
         type: mongoose.Schema.ObjectId,
-        ref: 'ExpendModel'
-    },
+        ref: 'Earn'
+    }],
     passwordChangeAt: Date
 },
 {
