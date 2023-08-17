@@ -46,7 +46,12 @@ const userSchema = new mongoose.Schema({
     totalEarn:{
         type: mongoose.Schema.ObjectId,
         ref: 'ExpendModel'
-    }
+    },
+    passwordChangeAt: Date
+},
+{
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 userSchema.pre('save', async function(next){
@@ -58,7 +63,15 @@ userSchema.pre('save', async function(next){
 });
 userSchema.methods.correctPassword = async function(candidatePassword, userPassword){
     return await bcrypt.compare(candidatePassword, userPassword)
-}
+};
+userSchema.methods.changePasswordAfter = function(JWTTimeStamp){
+    if(this.passwordChangeAt){
+        const changeTimeStamp = parseInt(this.passwordChangeAt.getTime()/1000,10)
+        return JWTTimeStamp < changeTimeStamp
+    }
+    return false;
+};
+
 
 const User = mongoose.model('User',userSchema);
 
