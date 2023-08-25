@@ -4,15 +4,16 @@
  */
 
 import React from 'react';
-import type { PropsWithChildren } from 'react';
+// import type { PropsWithChildren } from 'react';
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native';
-import { Colors, DebugInstructions, Header, LearnMoreLinks, ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
+import { Header } from 'react-native-elements';
+import { Colors, DebugInstructions, ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+// type SectionProps = PropsWithChildren<{
+//   title: string;
+// }>;
 
-function Section({ children, title }: SectionProps): JSX.Element {
+function Section({ children, title }){
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
@@ -26,7 +27,7 @@ function Section({ children, title }: SectionProps): JSX.Element {
   );
 }
 
-function App(): JSX.Element {
+function App(){
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -36,7 +37,12 @@ function App(): JSX.Element {
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor}/>
       <ScrollView showsHorizontalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
-        {/* <Header /> */}
+      <Header
+  placement="left"
+  leftComponent={{ icon: 'menu', color: '#fff' }}
+  centerComponent={{ text: 'MY TITLE', style: { color: '#fff' } }}
+  rightComponent={{ icon: 'home', color: '#fff' }}
+/>
         <View style={{backgroundColor: isDarkMode ? Colors.black : Colors.white}}>
 
           <Section title="Step One"> Edit <Text style={styles.highlight}>baab</Text> to change this screen and then come back to see your edits.</Section>
