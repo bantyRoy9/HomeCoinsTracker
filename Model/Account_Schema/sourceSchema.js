@@ -9,4 +9,8 @@ const sourceSchema = new mongoose.Schema({
         type:Array
     },
     sourceInv:Number
-})
+});
+
+const  SourceModal = mongoose.model("Sources",sourceSchema);
+
+module.exports = SourceModal;
