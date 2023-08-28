@@ -17,6 +17,18 @@ exports.saveDailyEarns = catchAsync(async(req,res,next) => {
         saveEarn,
     })
 });
+
+exports.totalEarnByUser = catchAsync(async(req,res,next) =>{
+    const toatalErn = await EarnModel.find({earnBy:req.user.id});
+    if(!toatalErn){
+        next(new AppError("Earn not found by this user Id.",500));
+    };
+    res.status(200).json({
+        status:true,
+        length: toatalErn.length,
+        data:toatalErn
+    });
+});
 exports.getTotalEarns = catchAsync(async(req,res,next) =>{
     const totalErans = await EarnModel.find().populate({path:"earnBy"});
     res.status(200).json({
