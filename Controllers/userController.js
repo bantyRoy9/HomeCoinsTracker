@@ -1,5 +1,5 @@
 const catchAsync = require('../Utils/catchAsync');
-const User = require("../Model/User_Schema/userSchema")
+const User = require("../Model/UserModels/userSchema")
 
 exports.getUserDetails = catchAsync(async(req,res,next)=>{
         const user = await User.findOne({_id:req.user.id}).populate({path:'totalEarn'});

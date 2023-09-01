@@ -1,8 +1,8 @@
-const SourceModal = require("../Model/Account_Schema/sourceSchema");
+const { sourceModel } = require("../Model/SourceModels");
 const catchAsync = require("../Utils/catchAsync");
 
 exports.getSource = catchAsync(async(req,res,next)=>{
-    const allSource = await SourceModal.find();
+    const allSource = await sourceModel.find({},'sourceName -_id').lean().populate("createdBy",'name email');
     res.status(200).json({
         status:true,
         msg:'Get all source successfully',
@@ -11,6 +11,10 @@ exports.getSource = catchAsync(async(req,res,next)=>{
 });
 
 exports.createSource = catchAsync(async(req,res,next)=>{
-    await SourceModal.create(req.body);
-
+    await sourceModel.create(req.body);
+    res.status(201).json({
+        status:true,
+        msg:"Source created successfully",
+        data:null
+    });
 })

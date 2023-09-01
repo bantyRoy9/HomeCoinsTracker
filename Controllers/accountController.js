@@ -1,12 +1,9 @@
-const EarnModel = require("../Model/Account_Schema/earnSchema");
-const HomeAccSchemaModel = require("../Model/Account_Schema/homeAcc");
-const User = require("../Model/User_Schema/userSchema");
+const EarnModel = require("../Model/AccountModels/earnSchema");
+const HomeAccSchemaModel = require("../Model/AccountModels/homeAcc");
+const User = require("../Model/UserModels/userSchema");
 const catchAsync = require("../Utils/catchAsync");
 
-exports.getUserIds = async(req,res,next)=>{
-    if(!req.body.earnBy) req.body.earnBy = req.user.id;
-    next();
-};
+
 exports.saveDailyEarns = catchAsync(async(req,res,next) => {
     const saveEarn = await EarnModel.create(req.body);
     const earnByuser = await User.findById({_id:req.body.earnBy});

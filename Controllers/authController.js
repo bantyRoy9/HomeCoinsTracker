@@ -1,4 +1,4 @@
-const User = require('./../Model/User_Schema/userSchema');
+const User = require('../Model/UserModels/userSchema');
 const crypto = require('crypto')
 const AppError = require('./../Utils/appError');
 const { promisify } = require('util')
@@ -136,15 +136,19 @@ exports.isLoggedIn = async (req, res, next) => {
 };
 
 exports.restrictTo = (...role) => {
-    //  console.log(role);
+     //console.log(...role);
     return (req, res, next) => {
-        //  console.log(req.user);
+          //console.log(req.user.role);
         if (!role.includes(req.user.role)) {
             return next(new AppError('You do not have permission to perform this action', 403))
         }
         next();
     }
-}
+};
+exports.getUserId = (keyName) => async(req,res,next)=>{
+    if(!req.body[keyName]) req.body[keyName] = req.user.id;
+    next();
+};
 
 exports.forgetPassword = catchAsync(async (req, res, next) => {
     //  console.log(req.body.email);
