@@ -23,7 +23,6 @@ export default Input
 
 const styles = StyleSheet.create({
     inputContainer:{
-        marginHorizontal:15,
         marginVertical:10,
     },
     inputLabel:{

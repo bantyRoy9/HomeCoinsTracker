@@ -34,14 +34,36 @@ const Login = () => {
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor}/>
       <ScrollView showsHorizontalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
-        <View>
-            <View>
+        <View style={{padding:20}}>
+            <View style={{
+              alignItems:'center'
+            }}>
               <Image source={require('../../Assets/Icons/login.webp')}
-              style={{width:'auto',height:300}}
+              style={{
+                width:200,
+                height:200
+              }}
               />
             </View>
             <View>
-              <Input props={{placeholder:"Email", label:"Email",value:user.email,autoFocus:false}}/>
+              <Text style={{
+                fontSize:50,
+                fontWeight:600,
+                color:'#FFF'
+              }}>
+                LogIn
+              </Text>
+              <Text>
+                Please sign in to continue
+              </Text>
+            </View>
+            <View>
+              <Input props={{
+                placeholder:"Email", 
+                label:"Email :",
+                value:user.email,
+                autoFocus:false
+              }}/>
             </View>
             <View>
               <Input props={{secureTextEntry:true,placeholder:"Enter secure password", label:"Password",value:user.password,autoFocus:false}}/>
