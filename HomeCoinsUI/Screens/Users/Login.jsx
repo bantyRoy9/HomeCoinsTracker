@@ -5,81 +5,89 @@ import { StatusBar } from 'react-native';
 import { TextInput } from 'react-native';
 import { Image } from 'react-native';
 import Input from '../../Components/Input';
+import { darkColorProps, lightColorProps } from '../../src/Utils/colorProp';
 
-
-function Section({ children, title }){
-    const isDarkMode = useColorScheme() === 'dark';
-    return (
-      <View style={styles.sectionContainer}>
-        <Text style={[styles.sectionTitle,{ color: isDarkMode ? Colors.white : Colors.black}]}>
-          {title}
-        </Text>
-        <Text style={[styles.sectionDescription,{color: isDarkMode ? Colors.light : Colors.dark,},]}>
-          {children}
-        </Text>
-      </View>
-    );
-  }
-  
 const Login = () => {
-    const isDarkMode = useColorScheme() === 'dark';
-    Colors.darker = "#201A31";
-    const backgroundStyle = {
-      backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    };
+  const isDarkMode = useColorScheme() === 'dark';
+  Colors.darker = darkColorProps.background;
+  Colors.lighter = lightColorProps.background;
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    color:isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
+  };
+  const btnStyle = {
+    backgroundColor: isDarkMode ? darkColorProps.btnBackground : lightColorProps.btnBackground,
+    color: isDarkMode ? darkColorProps.btnPrimary : lightColorProps.btnPrimary
+  }
+  const [user, setUser] = useState({ email: "", password: "" });
 
-    const [user,setUser] = useState({email:"",password:""});
-
-    return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor}/>
+  return (
+    <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
       <ScrollView showsHorizontalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
-        <View style={{padding:20}}>
+        <View style={{
+          flex:1,
+          height:800,
+          marginHorizontal:15
+        }}>
+          <View style={styles.loginContainer}>
             <View style={{
-              alignItems:'center'
+              alignItems: 'center',
+              marginVertical:10
             }}>
               <Image source={require('../../Assets/Icons/login.webp')}
-              style={{
-                width:200,
-                height:200
-              }}
+                style={{
+                  width: 210,
+                  height: 210
+                }}
               />
             </View>
             <View>
               <Text style={{
-                fontSize:50,
-                fontWeight:600,
-                color:'#FFF'
-              }}>
-                LogIn
-              </Text>
-              <Text>
-                Please sign in to continue
-              </Text>
+                fontSize: 35,
+                fontWeight: 700,
+                color: backgroundStyle.color,
+                marginVertical:10
+              }}>Login</Text>
+              <Text>Please sign in to continue</Text>
             </View>
-            <View>
+            <View style={{marginVertical:5}}>
               <Input props={{
-                placeholder:"Email", 
-                label:"Email :",
-                value:user.email,
-                autoFocus:false
-              }}/>
+                placeholder: "Email",
+                label: "Email :",
+                isLabel: false,
+                value: user.email,
+                autoFocus: false,
+                icons: 'envelope-o'
+              }} />
             </View>
-            <View>
-              <Input props={{secureTextEntry:true,placeholder:"Enter secure password", label:"Password",value:user.password,autoFocus:false}}/>
+            <View style={{marginVertical:5}}>
+              <Input props={{
+                secureTextEntry: true,
+                placeholder: "Enter secure password",
+                label: "Password",
+                isLabel: false,
+                value: user.password,
+                autoFocus: false,
+                icons: 'lock'
+              }} />
             </View>
-            <View style={{width:"auto"}}>
-              <Pressable style={styles.button} onPress={""}>
-                <Text style={styles.text}>{"LOGIN"}</Text>
+            <View style={{ width: "auto", alignItems: 'center' }}>
+              <Pressable style={{...styles.button,...btnStyle}} onPress={""}>
+                <Text style={{...styles.text,...btnStyle.color}}>{"LOGIN"}</Text>
               </Pressable>
+              <Text style={btnStyle.color}>
+                Forget Password?
+              </Text>
             </View>
-            <View style={{height:100}}>
-              <View>
-
-              </View>
+          </View>
+          <View style={{height:100,position:'relative'}}>
+            <View style={{ display: 'flex', flexDirection: 'row',position:'absolute',bottom:10,left:60 }}>
+              <Text style={{ fontSize: 16 }}>Don't have an account? </Text><Text style={{ color: btnStyle.color, fontSize: 16, fontWeight: 600,textDecorationLine:'underline' }}>Sing up</Text>
             </View>
+          </View>
         </View>
-      </ScrollView>     
+      </ScrollView>
     </SafeAreaView>
   )
 }
@@ -88,43 +96,40 @@ export default Login
 
 
 const styles = StyleSheet.create({
+  loginContainer: {
+    paddingHorizontal: 8,
+    flex: 1
+  },
   button: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 18,
     paddingHorizontal: 40,
-    borderRadius: 15,
+    borderRadius: 50,
     elevation: 3,
-    backgroundColor: '#0DF5E3',
-    width:"40%",
-    marginLeft:'28%',
-    marginVertical:15
+    width: "70%",
+    marginVertical: 15
   },
   text: {
     fontSize: 16,
     lineHeight: 21,
     fontWeight: 'bold',
     letterSpacing: 0.25,
-    color: 'white',
   },
-    inputBox:{
-      backgroundColor:"#38304D"
-    },
-    sectionContainer: {
-      marginTop: 32,
-      paddingHorizontal: 24,
-    },
-    sectionTitle: {
-      fontSize: 24,
-      fontWeight: '600',
-    },
-    sectionDescription: {
-      marginTop: 8,
-      fontSize: 18,
-      fontWeight: '400',
-    },
-    highlight: {
-      fontWeight: '700',
-    },
-  });
-  
+  sectionContainer: {
+    marginTop: 32,
+    paddingHorizontal: 24,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+  },
+  sectionDescription: {
+    marginTop: 8,
+    fontSize: 18,
+    fontWeight: '400',
+  },
+  highlight: {
+    fontWeight: '700',
+  },
+});

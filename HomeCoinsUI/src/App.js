@@ -6,7 +6,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 
 import React from 'react';
-import Login from './Screens/Users/Login';
+import Login from '../Screens/Users/Login';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 function App(){  
   const Stack = createNativeStackNavigator();
