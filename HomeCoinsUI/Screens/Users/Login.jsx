@@ -2,12 +2,13 @@ import { Button, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View, us
 import React, { useState } from 'react'
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { StatusBar } from 'react-native';
-import { TextInput } from 'react-native';
 import { Image } from 'react-native';
 import Input from '../../Components/Input';
 import { darkColorProps, lightColorProps } from '../../src/Utils/colorProp';
-
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 const Login = () => {
+  const navigation = useNavigation();
   const isDarkMode = useColorScheme() === 'dark';
   Colors.darker = darkColorProps.background;
   Colors.lighter = lightColorProps.background;
@@ -17,9 +18,28 @@ const Login = () => {
   };
   const btnStyle = {
     backgroundColor: isDarkMode ? darkColorProps.btnBackground : lightColorProps.btnBackground,
-    color: isDarkMode ? darkColorProps.btnPrimary : lightColorProps.btnPrimary
+    color: isDarkMode ? darkColorProps.btnBackground : "#FFF"
   }
   const [user, setUser] = useState({ email: "", password: "" });
+
+  const changeHandler = (name,value) =>{
+    setUser({...user, [name]:  value})
+  }
+  
+  const submitHandler = async(e) => {
+      e.preventDefault()
+      try{
+        const header = {
+          'Accept':'application/json',
+          'Content-Type':'application/json'
+        }
+        console.log(user)
+        const res = await axios.post('http://192.168.1.5:8000/api/v1/userController/loginUser',user,header);
+        console.log(res);
+      }catch(err){
+        console.log(err)
+      }
+  }
 
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
@@ -27,7 +47,7 @@ const Login = () => {
       <ScrollView showsHorizontalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
         <View style={{
           flex:1,
-          height:800,
+          height:700,
           marginHorizontal:15
         }}>
           <View style={styles.loginContainer}>
@@ -37,8 +57,8 @@ const Login = () => {
             }}>
               <Image source={require('../../Assets/Icons/login.webp')}
                 style={{
-                  width: 210,
-                  height: 210
+                  width: 200,
+                  height: 200
                 }}
               />
             </View>
@@ -49,45 +69,49 @@ const Login = () => {
                 color: backgroundStyle.color,
                 marginVertical:10
               }}>Login</Text>
-              <Text>Please sign in to continue</Text>
+              <Text style={{color: backgroundStyle.color}}>Please sign in to continue</Text>
             </View>
             <View style={{marginVertical:5}}>
-              <Input props={{
-                placeholder: "Email",
-                label: "Email :",
-                isLabel: false,
-                value: user.email,
-                autoFocus: false,
-                icons: 'envelope-o'
-              }} />
+              <Input
+                placeholder= {"Email"}
+                label= {"Email :"}
+                isLabel= {false}
+                name={"email"}
+                autoFocus={true}
+                icons= {'envelope-o'}
+                value={user.email}
+                onChangeText={(text)=>changeHandler("email",text)}
+              />
             </View>
             <View style={{marginVertical:5}}>
-              <Input props={{
-                secureTextEntry: true,
-                placeholder: "Enter secure password",
-                label: "Password",
-                isLabel: false,
-                value: user.password,
-                autoFocus: false,
-                icons: 'lock'
-              }} />
+              <Input 
+                secureTextEntry= {true}
+                placeholder= {"Enter secure password"}
+                label= {"Password"}
+                isLabel= {false}
+                name={'email'}
+                autoFocus={false}
+                icons= {'lock'}
+                value={user.password}
+                onChangeText={(text)=>changeHandler("password",text)}
+              />
             </View>
             <View style={{ width: "auto", alignItems: 'center' }}>
-              <Pressable style={{...styles.button,...btnStyle}} onPress={""}>
+              <Pressable style={{...styles.button,...btnStyle}} onPress={submitHandler}>
                 <Text style={{...styles.text,...btnStyle.color}}>{"LOGIN"}</Text>
               </Pressable>
-              <Text style={btnStyle.color}>
+              <Text style={{color:btnStyle.color}}>
                 Forget Password?
               </Text>
             </View>
           </View>
-          <View style={{height:100,position:'relative'}}>
-            <View style={{ display: 'flex', flexDirection: 'row',position:'absolute',bottom:10,left:60 }}>
-              <Text style={{ fontSize: 16 }}>Don't have an account? </Text><Text style={{ color: btnStyle.color, fontSize: 16, fontWeight: 600,textDecorationLine:'underline' }}>Sing up</Text>
-            </View>
-          </View>
         </View>
       </ScrollView>
+      <View style={{position:'absolute',left:0,right:0,bottom:10}}>
+            <View style={{ display: 'flex', flexDirection: 'row',justifyContent:'center',alignContent:'center' }}>
+              <Text style={{ fontSize: 16,color:backgroundStyle.color }}>Don't have an account? </Text><Text onPress={()=> navigation.navigate('Signup')} style={{ color: btnStyle.color, fontSize: 16, fontWeight: 600,textDecorationLine:'underline' }}>Sing up</Text>
+            </View>
+          </View>
     </SafeAreaView>
   )
 }

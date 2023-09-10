@@ -2,7 +2,7 @@ import { StyleSheet, Text, TextInput, View, useColorScheme } from 'react-native'
 import React, { useState } from 'react'
 import Icons from 'react-native-vector-icons/FontAwesome'
 import { darkColorProps, lightColorProps } from '../src/Utils/colorProp';
-const Input = ({props}) => {
+const Input = (props) => {
   const isDarkMode = useColorScheme() == 'dark';
   const [isFocuse, setIsFocuse] = useState(defualtProperty);
   
@@ -14,7 +14,8 @@ const Input = ({props}) => {
   const onFocuse = () =>{
     setIsFocuse({
       backgroundColor: isDarkMode ? darkColorProps.inputFocusBackground : lightColorProps.inputFocusBackground,
-      color: isDarkMode ? darkColorProps.inputTextColorOnFocus : lightColorProps.inputTextColorOnFocus
+      color: isDarkMode ? darkColorProps.inputTextColorOnFocus : lightColorProps.inputTextColorOnFocus,
+      borderBottomWidth:0
     })
   };
   const onBlur =()=>{
@@ -32,13 +33,15 @@ const Input = ({props}) => {
         <TextInput 
                 onBlur={onBlur}
                 onFocus={onFocuse}
-                value= {props.email}
-                style={props?.styles?? { ...styles.inputBox, ...isFocuse}}
+                value= {props.value}
+                style={props?.styles?? { ...styles.inputBox, ...isFocuse,borderColor: isDarkMode? lightColorProps.inputBackground : darkColorProps.inputBackground}}
                 autoFocus={props.autoFocus}
                 label={props.label}
+                name={props.name}
                 cursorColor= {backgroundStyle.color}
                 secureTextEntry={props?.secureTextEntry??false}
                 placeholder={props.placeholder}
+                onChangeText={props.onChangeText}
               />
     </View>
   )
@@ -69,7 +72,6 @@ const styles = StyleSheet.create({
         borderRadius:15,
         padding:15,
         paddingLeft:40,
-        fontSize:18,
-        borderBottomWidth:.6
+        fontSize:18
     }
 })

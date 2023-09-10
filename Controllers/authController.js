@@ -41,7 +41,7 @@ exports.createrUser = catchAsync(async (req, res, next) => {
  
 exports.loginUser = catchAsync(async (req, res, next) => {
     const { email, password, phone } = req.body;
-
+    console.log(email,password)
     // loging with phone
     if (!Object.keys(req.body).includes('email')) {
         if (!phone || !password) {

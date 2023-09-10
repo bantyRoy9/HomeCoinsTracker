@@ -1,15 +1,15 @@
 export const lightColorProps = {
-    background:"",
+    background:"#F2F2F2",
     primery :"",
     secondery:"",
-    btnBackground:"",
-    btnPrimary:"",
+    btnBackground:"#38304C",
+    btnPrimary:"#38304C",
     btnSecondery:"",
-    textColor:"#F2F2F3",
-    inputBackground:"",
-    inputFocusBackground:"",
-    inputTextColor:"",
-    inputTextColorOnFocus:""
+    textColor:"#38304C",
+    inputBackground:"#F2F2F2",
+    inputFocusBackground:"#FFFF",
+    inputTextColor:"#38304C",
+    inputTextColorOnFocus:"#38304C"
 }
 
 export const darkColorProps ={
@@ -17,11 +17,11 @@ export const darkColorProps ={
     primery :"",
     secondery:"",
     btnBackground:"#0DF5E3",
-    btnPrimary:"rgb(28 54 71)",
+    btnPrimary:"#fff",
     btnSecondery:"",
-    textColor:"#F2F2F3",
-    inputBackground:"#38304C",
-    inputFocusBackground:"#201A31",
-    inputTextColor:"#F2F2F3",
-    inputTextColorOnFocus:"#F2F2F3"
+    textColor:"#fff",
+    inputBackground:"#201A31",
+    inputFocusBackground:"#38304C",
+    inputTextColor:"#fff",
+    inputTextColorOnFocus:"#fff"
 }
