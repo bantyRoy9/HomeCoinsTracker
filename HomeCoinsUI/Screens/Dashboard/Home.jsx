@@ -1,5 +1,5 @@
 import { ScrollView, SafeAreaView, Dimensions, StyleSheet, Text, View, useColorScheme, StatusBar } from 'react-native'
-import React from 'react'
+import React, { useState,useEffect } from 'react'
 import { } from 'react-native';
 import { darkColorProps, lightColorProps } from '../../src/Utils/colorProp';
 import Header from '../../Components/Header';
@@ -12,8 +12,21 @@ import {
   StackedBarChart
 } from "react-native-chart-kit";
 import Icons from 'react-native-vector-icons/FontAwesome';
+import axios from 'axios';
 
 const Home = () => {
+  const [getErns,setGetErns] = useState({});
+  const [graphData,setGraphData] = useState(null);
+  useEffect(()=>{
+    const fetchDate = async()=>{
+      const { data } = await axios.get('http://192.168.1.12:8000/api/v1/accountController/earn');
+      if(data.status && data.data){
+        
+        setGraphData(data.graphData)
+      };
+    };
+    fetchDate();
+  },[])
   const isDarkMode = useColorScheme() == "dark";
   const backgroundStyle = {
     backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
@@ -23,8 +36,8 @@ const Home = () => {
     <SafeAreaView style={{ ...backgroundStyle, height: '100%'}}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
       <ScrollView contentContainerStyle={{ flex: 1 }} showsHorizontalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
-        <View style={{ flex: 1}}>
-          <View style={styles.filterContainer}>
+        <View style={{ flex: 1,marginHorizontal:18}}>
+          <View style={styles.toHeaderContainer}>
             <View>
               <Text style={{fontSize:20,fontWeight:'600'}}>Dashbord</Text>
             </View>
@@ -35,34 +48,21 @@ const Home = () => {
           </View>
           <View>
             <Text>
+              
 
             </Text>
-            <LineChart
-              data={{
-                labels: ["January", "February", "March", "April", "May", "June"],
-                datasets: [
-                  {
-                    data: [
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100
-                    ]
-                  }
-                ]
-              }}
-              width={Dimensions.get("window").width}
+           {graphData && <LineChart
+              data={graphData}
+              width={Dimensions.get("window").width-30}
               height={220}
-              yAxisLabel="$"
-              yAxisSuffix="k"
+              yAxisLabel="₹"
+              yAxisSuffix=""
               yAxisInterval={1} // optional, defaults to 1
               chartConfig={{
                 backgroundColor: "#000",
                 backgroundGradientFrom: "#000",
                 backgroundGradientTo: "#ffa726",
-                decimalPlaces: 2, // optional, defaults to 2dp
+                decimalPlaces: 0, // optional, defaults to 2dp
                 color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 style: {
@@ -76,10 +76,9 @@ const Home = () => {
               }}
               bezier
               style={{
-                margin: 8,
                 borderRadius: 16
               }}
-            />
+            />}
           </View>
         </View>
       </ScrollView>
@@ -93,13 +92,12 @@ const Home = () => {
 export default Home
 
 const styles = StyleSheet.create({
-  filterContainer:{
+  toHeaderContainer:{
     justifyContent:'space-between',
     alignItems:'center',
     flexDirection:'row',
     marginTop:20,
     paddingBottom:10,
-    marginHorizontal:20
   },
 
 })

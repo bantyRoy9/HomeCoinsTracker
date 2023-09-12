@@ -1,6 +1,7 @@
 const EarnModel = require("../Model/AccountModels/earnSchema");
 const HomeAccSchemaModel = require("../Model/AccountModels/homeAcc");
 const User = require("../Model/UserModels/userSchema");
+const { graphData } = require("../Utils/appFeature");
 const catchAsync = require("../Utils/catchAsync");
 
 
@@ -27,9 +28,11 @@ exports.totalEarnByUser = catchAsync(async(req,res,next) =>{
     });
 });
 exports.getTotalEarns = catchAsync(async(req,res,next) =>{
-    const totalErans = await EarnModel.find().populate({path:"earnBy"});
+    const totalErans = await EarnModel.find().populate("earnBy","_id, name");
+    let graphDataJson= graphData(totalErans);
     res.status(200).json({
         status:true,
+        graphData:graphDataJson,
         length:totalErans.length,
         data:totalErans
     });
