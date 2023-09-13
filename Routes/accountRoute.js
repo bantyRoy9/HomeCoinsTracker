@@ -1,13 +1,13 @@
 const express = require('express');
-const { saveDailyEarns,getTotalEarns, totalEarnByUser } = require('../Controllers/accountController');
+const { saveDailyEarns,getTotalEarns, totalEarnByUser,getTotalExpend,saveDailyExped } = require('../Controllers/accountController');
 const { protect, getUserId } = require('../Controllers/authController');
 const router = express.Router();
 
-//router.route('/').get
+router.route('/getEarnExpend').get(getTotalEarns,getTotalExpend)
 router.route('/earn').get(getTotalEarns).post(protect,getUserId('earnBy'), saveDailyEarns);
 router.route('/getEarnByUser').get(protect,totalEarnByUser);
+router.route('/expend').get(getTotalExpend).post(protect,getUserId('expendBy'), saveDailyExped);
 // router.route('')
-// router.post('/dailyEarn',protect,getUserIds, saveDailyEarns);
 
 
 module.exports = router

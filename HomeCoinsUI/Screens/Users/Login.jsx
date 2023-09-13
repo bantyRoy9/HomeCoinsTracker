@@ -48,11 +48,10 @@ const Login = () => {
         'Content-Type': 'application/json'
       }
       
-      const res = await axios.post('http://192.168.1.73:8000/api/v1/userController/loginUser', user, header);
-      console.log(res.data);
+      const res = await axios.post('http://192.168.1.12:8000/api/v1/userController/loginUser', user, header);
       if(res.status){
         await AsyncStorage.setItem('cookie',res.data.token);
-       // await AsyncStorage.setItem("userDetails", res.data.data?.user);
+        navigation.navigate('Home');
       }
     } catch (err) {
       console.log(err)
@@ -69,9 +68,7 @@ const Login = () => {
               marginVertical: 10
             }}>
               <Image source={require('../../Assets/Icons/login.webp')}
-                style={{
-                  width: 200,
-                  height: 200
+                style={{width: 200,height: 200
                 }}
               />
             </View>

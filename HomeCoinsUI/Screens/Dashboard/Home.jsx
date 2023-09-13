@@ -39,7 +39,7 @@ const Home = () => {
         <View style={{ flex: 1,marginHorizontal:18}}>
           <View style={styles.toHeaderContainer}>
             <View>
-              <Text style={{fontSize:20,fontWeight:'600'}}>Dashbord</Text>
+              <Text style={{fontSize:20,fontWeight:'600',color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor}}>Dashbord</Text>
             </View>
             <View style={{position:'relative'}}>
               <Icons name='bell' color={backgroundStyle.color} size={20}/>
@@ -52,7 +52,21 @@ const Home = () => {
 
             </Text>
            {graphData && <LineChart
-              data={graphData}
+              data={{
+                labels: [' jan', ' feb', ' mar', ' apr','may', 'june', ' july'],
+                datasets: [
+                                    
+                            {
+                                        data: [10,14, 16, 18,0,11,22],
+                                        strokeWidth: 2,
+                            },
+                            {
+                                        data: [15,18,16,19,18,22,12],
+                                        strokeWidth: 2,
+                            },
+                        ],
+                legend: ['car', 'bike'],
+                }}
               width={Dimensions.get("window").width-30}
               height={220}
               yAxisLabel="₹"
