@@ -19,10 +19,9 @@ const Home = () => {
   const [graphData,setGraphData] = useState(null);
   useEffect(()=>{
     const fetchDate = async()=>{
-      const { data } = await axios.get('http://192.168.1.12:8000/api/v1/accountController/earn');
+      const { data } = await axios.get('http://192.168.1.12:8000/api/v1/accountController/getEarnExpend?type=both');
       if(data.status && data.data){
-        
-        setGraphData(data.graphData)
+        setGraphData(data.graphData);
       };
     };
     fetchDate();
@@ -52,21 +51,7 @@ const Home = () => {
 
             </Text>
            {graphData && <LineChart
-              data={{
-                labels: [' jan', ' feb', ' mar', ' apr','may', 'june', ' july'],
-                datasets: [
-                                    
-                            {
-                                        data: [10,14, 16, 18,0,11,22],
-                                        strokeWidth: 2,
-                            },
-                            {
-                                        data: [15,18,16,19,18,22,12],
-                                        strokeWidth: 2,
-                            },
-                        ],
-                legend: ['car', 'bike'],
-                }}
+              data={graphData}
               width={Dimensions.get("window").width-30}
               height={220}
               yAxisLabel="₹"

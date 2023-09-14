@@ -85,7 +85,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
     }
-    else if (req.cookies.jwt) {
+    else if (req.cookies?.jwt) {
         token = req.cookies.jwt;
     }
     if (!token) {
@@ -104,7 +104,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     if (currentUser.changePasswordAfter(decoder.iat)) {
         return next(new AppError('User recently changed password! please login again!!', 401))
     }
-
+    
     req.user = currentUser
     // send data into pug
     res.locals.user = currentUser;

@@ -18,7 +18,7 @@ exports.saveDailyEarns = catchAsync(async(req,res,next) => {
 });
 
 exports.saveDailyExped = catchAsync(async(req,res,next)=>{
-    const saveExpend = await EarnModel.create(req.body);
+    const saveExpend = await ExpendModel.create(req.body);
     const expendByuser = await User.findById({_id:req.body.expendBy});
     expendByuser.totalExpend = [...expendByuser.totalExpend, saveExpend._id];
     await expendByuser.save();
@@ -41,28 +41,33 @@ exports.totalEarnByUser = catchAsync(async(req,res,next) =>{
     });
 });
 exports.getTotalEarns = catchAsync(async(req,res,next) =>{
-    console.log(req.query)
     const totalErans = await EarnModel.find().populate("earnBy","_id, name");
-    let graphDataJson= graphData(totalErans);
     if(req.query?.type == 'both'){
-        req.earnGraphData = graphData;
+        req.totalErans = totalErans;
         next();
-    }
+    }else{
+    let graphDataJson= graphData([totalErans],['Earn']);
     res.status(200).json({
         status:true,
         graphData:graphDataJson,
         length:totalErans.length,
         data:totalErans
     });
+}
 });
 
 exports.getTotalExpend = catchAsync(async(req,res,next)=>{
     const totalExpend = await ExpendModel.find().populate("expendBy","_id, name");
-    const graphDataJson = graphData(totalExpend);
+    let graphDataJson = null;
+    if(req.totalErans){
+        graphDataJson = graphData([req.totalErans,totalExpend],['Earn','Expend']);
+    }else{
+        graphDataJson = graphData([totalExpend],['Expend']);
+    }
     res.status(200).json({
         status:true,
         graphData:graphDataJson,
-        length:totalErans.length,
+        length:totalExpend.length,
         data:totalExpend
     });
 })
