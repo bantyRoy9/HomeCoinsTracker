@@ -13,6 +13,7 @@ import {
 } from "react-native-chart-kit";
 import Icons from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
+import { Card } from 'react-native-elements';
 
 const Home = () => {
   const [getErns,setGetErns] = useState({});
@@ -46,6 +47,24 @@ const Home = () => {
             </View>
           </View>
           <View>
+            <Card containerStyle={{...styles.cardContainer, backgroundColor: isDarkMode? darkColorProps.cardBackground:lightColorProps.cardBackground}}>
+              <Card.Title style={{position:'relative',textAlign:'left',color:isDarkMode?darkColorProps.textColor:lightColorProps.textColor,fontSize:18}}>
+                <View style={{flexDirection:'row',position:'relative'}}>
+                  <View><Text style={{fontSize:16}}>Analytics</Text></View>
+                  {/* ?<View style={{position:'absolute',right:0,borderWidth:1,borderColor:'blue'}}><Text>Last 7 Days</Text></View> */}
+                </View>
+              </Card.Title>
+              <View>
+                <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                  <View><Text>Total Earn</Text></View>
+                  <View><Text>10000</Text></View>
+                </View>
+                <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                  <View><Text>Total Expend</Text></View>
+                  <View><Text>5000</Text></View>
+                </View>
+              </View>
+            </Card>
             <Text>
               
 
@@ -98,5 +117,7 @@ const styles = StyleSheet.create({
     marginTop:20,
     paddingBottom:10,
   },
-
+  cardContainer:{
+    padding:10,margin:0,borderRadius:10,borderWidth:0
+  }
 })

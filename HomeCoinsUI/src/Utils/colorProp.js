@@ -9,7 +9,8 @@ export const lightColorProps = {
     inputBackground:"#F2F2F2",
     inputFocusBackground:"#FFFF",
     inputTextColor:"#38304C",
-    inputTextColorOnFocus:"#38304C"
+    inputTextColorOnFocus:"#38304C",
+    cardBackground:"#3d3d3d"
 }
 
 export const darkColorProps ={
@@ -23,5 +24,6 @@ export const darkColorProps ={
     inputBackground:"#201A31",
     inputFocusBackground:"#38304C",
     inputTextColor:"#fff",
-    inputTextColorOnFocus:"#fff"
+    inputTextColorOnFocus:"#fff",
+    cardBackground:"#3d3d3d"
 }
