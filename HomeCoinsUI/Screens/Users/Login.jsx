@@ -1,7 +1,7 @@
 import { Button, StatusBar,Image ,Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View, useColorScheme } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-import Input from '../../Components/Input';
+import Input from '../../src/Components/Input';
 import { darkColorProps, lightColorProps } from '../../src/Utils/colorProp';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
@@ -49,6 +49,7 @@ const Login = () => {
       }
       
       const res = await axios.post('http://192.168.1.12:8000/api/v1/userController/loginUser', user, header);
+      console.log(res);
       if(res.status){
         await AsyncStorage.setItem('cookie',res.data.token);
         navigation.navigate('Home');

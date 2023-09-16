@@ -14,7 +14,7 @@ const filterJsonForGraph =(jsonData)=>{
     return {dataObj,dateList};
 };
 
-exports.graphData = (data,legendNameArr) =>{
+exports.graphData = (data,legendNameArr,svgColorArr) =>{
     let graphdata = {
         labels:[],
         datasets:[],
@@ -27,8 +27,12 @@ exports.graphData = (data,legendNameArr) =>{
         graphdata.labels = [...new Set([...graphdata?.labels, ...filterDataObj.dateList])];
     });
     // console.log(filterData,'ssss');
-    filterData.forEach((ele)=>{
-        let dataSet ={data:[]},objectKeys = Object.keys(ele);
+    filterData.forEach((ele,idx)=>{
+        let dataSet ={
+            data:[],
+            colorCode: "",
+            strokeWidth: 2
+        },objectKeys = Object.keys(ele);
         graphdata.labels.forEach((date,idx)=>{
             if(objectKeys.includes(date)){
                 dataSet.data.push(ele[`${date}`].reduce((a,b)=> a+b,0));
@@ -36,6 +40,7 @@ exports.graphData = (data,legendNameArr) =>{
                 dataSet.data.push(0);
             }
         });
+        dataSet.colorCode= svgColorArr[idx]
         graphdata.datasets.push(dataSet);
     });
     return graphdata

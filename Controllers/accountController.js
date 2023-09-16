@@ -46,7 +46,7 @@ exports.getTotalEarns = catchAsync(async(req,res,next) =>{
         req.totalErans = totalErans;
         next();
     }else{
-    let graphDataJson= graphData([totalErans],['Earn']);
+    let graphDataJson= graphData([totalErans],['Earn'],['#5aa16d']);
     res.status(200).json({
         status:true,
         graphData:graphDataJson,
@@ -60,9 +60,9 @@ exports.getTotalExpend = catchAsync(async(req,res,next)=>{
     const totalExpend = await ExpendModel.find().populate("expendBy","_id, name");
     let graphDataJson = null;
     if(req.totalErans){
-        graphDataJson = graphData([req.totalErans,totalExpend],['Earn','Expend']);
+        graphDataJson = graphData([req.totalErans,totalExpend],['Earn','Expend'],['#5aa16d','#a15a76']);
     }else{
-        graphDataJson = graphData([totalExpend],['Expend']);
+        graphDataJson = graphData([totalExpend],['Expend'],['#5aa16d']);
     }
     res.status(200).json({
         status:true,

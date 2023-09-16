@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TextInput, View, useColorScheme } from 'react-native'
 import React, { useState } from 'react'
 import Icons from 'react-native-vector-icons/FontAwesome'
-import { darkColorProps, lightColorProps } from '../src/Utils/colorProp';
+import { darkColorProps, lightColorProps } from '../Utils/colorProp';
 const Input = (props) => {
   const isDarkMode = useColorScheme() == 'dark';
   const [isFocuse, setIsFocuse] = useState(defualtProperty);

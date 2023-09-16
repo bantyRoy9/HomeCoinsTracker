@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, useColorScheme } from 'react-native'
 import React from 'react'
 import Icons from 'react-native-vector-icons/FontAwesome'
-import { darkColorProps, lightColorProps } from '../src/Utils/colorProp';
+import { darkColorProps, lightColorProps } from '../Utils/colorProp';
 
 const Header = () => {
     const isDarkMode = useColorScheme() == 'dark';
