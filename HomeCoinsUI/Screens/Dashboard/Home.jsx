@@ -1,36 +1,24 @@
-import { ScrollView, SafeAreaView, Dimensions, StyleSheet, Text, View, useColorScheme, StatusBar } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import { } from 'react-native';
+import { ScrollView, SafeAreaView, StyleSheet, Pressable, Text, View, useColorScheme, StatusBar } from 'react-native'
 import { darkColorProps, lightColorProps } from '../../src/Utils/colorProp';
-import Header from '../../src/Components/Header';
-import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart
-} from "react-native-chart-kit";
-
-import Icons from 'react-native-vector-icons/FontAwesome';
 import FeatherIcons from 'react-native-vector-icons/Feather';
-import axios from 'axios';
-import { Card } from 'react-native-elements';
+import Icons from 'react-native-vector-icons/FontAwesome';
+import Icons6 from 'react-native-vector-icons/FontAwesome6';
 import { homeNavList } from '../../src/Utils/homeNavList';
-import { MultipleLinesChartDecorator } from '../../src/Components/Chart/MultipleLinesChartDecorator';
-import { Rect, Svg, Text as TextSVG } from 'react-native-svg';
-const analyticsJson = {
-  Earn: 1000,
-  Expend: 400,
-  Saving: 600
-}
-
+import Chart from '../../src/Components/Chart/Chart';
+import React, { useState, useEffect } from 'react'
+import Header from '../../src/Components/Header';
+import { Card } from 'react-native-elements';
+import axios from 'axios';
+import moment from 'moment';
+import { defaultStyle } from '../../src/Utils/defaultCss';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import { URL } from 'react-native-dotenv'
+const analyticsJson = {}
 const Home = () => {
-  const [getErns, setGetErns] = useState({});
+  const navigation = useNavigation();
   const [graphData, setGraphData] = useState(null);
-  const [tooltip, setTooltip] = useState({
-    x: 0, y: 0, visible: false, value: 0,color:''
-  })
+  const [dateRange, setDateRange] = useState({})
   const isDarkMode = useColorScheme() == "dark";
   const backgroundStyle = {
     backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
@@ -38,12 +26,17 @@ const Home = () => {
   };
 
   useEffect(() => {
+    
     const fetchDate = async () => {
       try {
-        const { data } = await axios.get('http://192.168.1.12:8000/api/v1/accountController/getEarnExpend?type=both');
-        if (data.status && data.data) {
+        const dateRange = homeNavList.filter(el => el.active == true);
+        console.log(`http://192.168.1.73:8000/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
+        const { data } = await axios.get(`http://192.168.1.73:8000/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
+          console.log(data);
+        if (data.status && data.data && data.graphData) {
           getAnalyticsDetails(data.graphData)
           data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })
+          data.graphData.labels = data.graphData.labels.map(el => moment(el, 'DD-MM-YYYY').format('DD MMM'));
           setGraphData(data.graphData);
         };
       } catch (err) {
@@ -51,18 +44,28 @@ const Home = () => {
       }
     };
     fetchDate();
-  }, [])
-  const setColorProperty = (color) => { color }
+  }, [dateRange]);
   const getAnalyticsDetails = (resData) => {
     analyticsJson.Earn = resData.datasets[0].data.reduce((a, b) => a + b, 0);
     analyticsJson.Expend = resData.datasets[1].data.reduce((a, b) => a + b, 0);
     analyticsJson.Saving = analyticsJson.Earn - analyticsJson.Expend;
   }
+  
+  const navPressHandle = (navPress) =>{
+    homeNavList.map(el=>{
+      if(el.label == navPress.label){
+        el.active = true
+      }else{
+        el.active = false
+      }
+    });
+    setDateRange(navPress);
+  }
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
-      <ScrollView contentContainerStyle={{ flex: 1 }} showsHorizontalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
-        <View style={{ flex: 1, marginHorizontal: 18 }}>
+      <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
+        <View style={defaultStyle.screenContainer}>
           <View style={styles.toHeaderContainer}>
             <View>
               <Text style={{ fontSize: 20, fontWeight: '600', color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor }}>Dashbord</Text>
@@ -74,13 +77,12 @@ const Home = () => {
           </View>
           <View style={styles.navigationContainer}>
             {homeNavList.map((ele, idx) => (
-              <View key={`${idx}`}>
+              <Pressable key={`${idx}`} onPress={()=>navPressHandle(ele)}>
                 <Text style={ele.active ? styles.activeNavText : styles.navText}>{ele.label}</Text>
-              </View>
+              </Pressable>
             ))}
           </View>
-          <Text></Text>
-          <View>
+          <View style={defaultStyle.viewSection}>
             <Card containerStyle={{ ...styles.cardContainer, backgroundColor: isDarkMode ? darkColorProps.cardBackground : lightColorProps.cardBackground }}>
               <View style={styles.cardTitle}>
                 <View>
@@ -106,74 +108,27 @@ const Home = () => {
                 </>}
               </View>
             </Card>
-            <Text></Text>
-            {graphData && <LineChart
-              data={graphData}
-              width={Dimensions.get("window").width - 30}
-              height={220}
-              yAxisLabel="₹"
-              yAxisSuffix=""
-
-              yAxisInterval={1} // optional, defaults to 1
-              chartConfig={{
-                backgroundColor: "#000",
-                backgroundGradientFrom: "#000",
-                backgroundGradientTo: darkColorProps.cardBackground,
-                decimalPlaces: 0, // optional, defaults to 2dp
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                style: {
-                  borderRadius: 16
-                },
-                // propsForDots: {
-                //   r: "5",
-                //   strokeWidth: "1",
-                //   stroke: "red"
-                // }
-              }}
-              bezier
-              style={{
-                borderRadius: 16
-              }}
-              decorator={() => {
-                return tooltip.visible ? <View>
-                  <Svg>
-                    <Rect x={tooltip.x - 15}
-                      y={tooltip.y + 10}
-                      width="40"
-                      height="30"
-                      fill={tooltip.color} />
-                    <TextSVG
-                      x={tooltip.x + 5}
-                      y={tooltip.y + 30}
-                      fill="white"
-                      fontSize="16"
-                      fontWeight="bold"
-                      textAnchor="middle">
-                      {tooltip.value}
-                    </TextSVG>
-                  </Svg>
-                </View> : null
-              }}
-              onDataPointClick={(data) => {
-                let isSamePoint = (tooltip.x === data.x && tooltip.y === data.y)
-                isSamePoint ? setTooltip((previousState) => {
-                  return {
-                    ...previousState,
-                    value: data.value,
-                    visible: !previousState.visible,
-                    color:data.colorCode
-                  }
-                })
-                  :
-                  setTooltip({ x: data.x, value: data.value, y: data.y, visible: true ,color:data.getColor()});
-              }}
-
-            />}
+            <View style={defaultStyle.viewSection}>
+              {graphData && graphData.labels && graphData.labels.length>0 && <Chart graphData={graphData} />}
+            </View>
+            
+            <View style={defaultStyle.viewSection}>
+              {graphData && graphData.labels && graphData.labels.length>0 && <Chart graphData={graphData} />}
+            </View>
           </View>
         </View>
       </ScrollView>
       <View>
+        <View style={{...defaultStyle.viewSection}}>
+          <View style={{...styles.expensEarnBtn,...defaultStyle.screenWidth}}>
+            <Pressable style={{...defaultStyle.earnExpensBtn,...styles.earnBtn}} onPress={()=>navigation.navigate('EarnExpens')}>
+              <Text style={defaultStyle.earnExpensBtnText}><Icons6 name='hand-holding-dollar' size={16}/> Add Earn</Text>
+            </Pressable>
+            <Pressable style={{...defaultStyle.earnExpensBtn,...styles.expensBtn}} onPress={()=>navigation.navigate('EarnExpens')}>
+              <Text style={defaultStyle.earnExpensBtnText}><Icons6 name='money-check-dollar' size={16}/> Add Expens</Text>
+            </Pressable>
+          </View>
+        </View>
         <Header />
       </View>
     </SafeAreaView>
@@ -249,5 +204,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     lineHeight: 30
+  },
+  expensEarnBtn: {
+    zIndex:1,
+    flexDirection: 'row',
+    position: 'absolute',
+    justifyContent:'space-between',
+    bottom: 0,
+    marginHorizontal:22
+  },
+  
+  earnBtn:{
+    backgroundColor:'green'
+  },
+  expensBtn:{
+    backgroundColor:'red',
   }
 })

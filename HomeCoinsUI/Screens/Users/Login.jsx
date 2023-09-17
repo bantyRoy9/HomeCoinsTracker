@@ -47,9 +47,8 @@ const Login = () => {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
+      const res = await axios.post(`${process.env.URL}/api/v1/userController/loginUser`, user, header);
       
-      const res = await axios.post('http://192.168.1.12:8000/api/v1/userController/loginUser', user, header);
-      console.log(res);
       if(res.status){
         await AsyncStorage.setItem('cookie',res.data.token);
         navigation.navigate('Home');

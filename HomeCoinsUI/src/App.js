@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Login from '../Screens/Users/Login';
 import Signup from '../Screens/Users/Signup'
 import Home from '../Screens/Dashboard/Home';
+import AddEarnExpens from '../Screens/AddEarnExpens/AddEarnExpens';
 function App(){  
   const Stack = createNativeStackNavigator();
   const [initialRoute,setInitialRouteName] = useState('Login');
@@ -28,6 +29,7 @@ function App(){
           <Stack.Screen name='Login' component={Login} options={{headerShown:false}}/>
           <Stack.Screen name='Signup' component={Signup} options={{headerShown:false}}/>
           <Stack.Screen name='Home' component={Home} options={{headerShown:false}}/>
+          <Stack.Screen name='EarnExpens' component={AddEarnExpens} options={{headerShown:true}}/>
         </Stack.Navigator>
     </NavigationContainer>
   );

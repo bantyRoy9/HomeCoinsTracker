@@ -2,7 +2,7 @@ const moment = require("moment/moment");
 const filterJsonForGraph =(jsonData)=>{
     let dataObj ={},dateList=[];
     if(jsonData){
-        dateList = jsonData.map(el=> moment(new Date(el.date)).format('DD-MM-YYYY')).sort();
+        dateList = jsonData.map(el=> moment(new Date(el.date)).format('DD-MM-YYYY'));
         dateList.forEach(function(date,idx){
             if(Object.keys(dataObj).includes(date)){
                 dataObj[date] = [...dataObj[`${date}`], jsonData[idx].amount]

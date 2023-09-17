@@ -2,9 +2,9 @@ const EarnModel = require("../Model/AccountModels/earnSchema");
 const ExpendModel = require("../Model/AccountModels/expendSchema");
 const HomeAccSchemaModel = require("../Model/AccountModels/homeAcc");
 const User = require("../Model/UserModels/userSchema");
-const { graphData } = require("../Utils/appFeature");
+const { graphData } = require("../Utils/commonFunction");
 const catchAsync = require("../Utils/catchAsync");
-
+const ApiFeature = require("../Utils/apiFeature");
 
 exports.saveDailyEarns = catchAsync(async(req,res,next) => {
     const saveEarn = await EarnModel.create(req.body);
@@ -40,8 +40,21 @@ exports.totalEarnByUser = catchAsync(async(req,res,next) =>{
         data:toatalErn
     });
 });
+
+exports.getQuery= catchAsync(async(req,res,next)=>{
+    let { dateRange } = req.query;
+   if(dateRange && dateRange.split('_') && dateRange.split('_').length){
+        req.query.date={
+            gte: new Date(dateRange.split('_')[0]),
+            lte: new Date(dateRange.split('_')[1]),
+        };
+        delete req.query.dateRange;
+   }; 
+   next()
+});
 exports.getTotalEarns = catchAsync(async(req,res,next) =>{
-    const totalErans = await EarnModel.find().populate("earnBy","_id, name");
+    const filterData = new ApiFeature(EarnModel.find({}),req.query).filter();
+    const totalErans = await filterData.modal
     if(req.query?.type == 'both'){
         req.totalErans = totalErans;
         next();
@@ -57,8 +70,9 @@ exports.getTotalEarns = catchAsync(async(req,res,next) =>{
 });
 
 exports.getTotalExpend = catchAsync(async(req,res,next)=>{
-    const totalExpend = await ExpendModel.find().populate("expendBy","_id, name");
-    let graphDataJson = null;
+    const filterData = new ApiFeature(ExpendModel.find({}),req.query).filter();
+    const totalExpend = await filterData.modal;
+   let graphDataJson = null;
     if(req.totalErans){
         graphDataJson = graphData([req.totalErans,totalExpend],['Earn','Expend'],['#5aa16d','#a15a76']);
     }else{

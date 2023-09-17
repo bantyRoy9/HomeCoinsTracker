@@ -1,14 +1,21 @@
-import { StyleSheet, Text, View, useColorScheme } from 'react-native'
+import { StyleSheet, Text, View, useColorScheme,Pressable } from 'react-native'
 import React from 'react'
 import Icons from 'react-native-vector-icons/FontAwesome'
 import { darkColorProps, lightColorProps } from '../Utils/colorProp';
-
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Header = () => {
+    const navigation = useNavigation();
     const isDarkMode = useColorScheme() == 'dark';
     const backgroundStyle = {
         backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
         color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
     }
+    const logout = async() =>{
+        console.log('click');
+        await AsyncStorage.clear();
+        navigation.navigate('Login')
+      }
     return (
         <View style={styles.headerContainer}>
             <View style={styles.headerIcons}>
@@ -30,10 +37,10 @@ const Header = () => {
                 </View>
             </View>
             <View style={styles.headerIcons}>
-                <View style={styles.headerIcon}>
+                <Pressable style={styles.headerIcon} onPress={logout}>
                     <Icons name='user' size={25} color={backgroundStyle.color} />
                     <Text>Account</Text>
-                </View>
+                </Pressable>
             </View>
         </View>
     )
