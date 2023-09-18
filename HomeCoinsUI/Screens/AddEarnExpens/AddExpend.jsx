@@ -7,8 +7,7 @@ import Input from '../../src/Components/Input';
 import ModalDatePicker from 'react-native-datepicker-modal'
 import moment from 'moment';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getAxiosHeader, getStoredCookie } from '../../src/Utils/CommonAuthFunction';
+import { getAxiosHeader } from '../../src/Utils/CommonAuthFunction';
 const AddEarnExpens = () => {
   const isDarkMode = useColorScheme() == 'dark';
   const [details, setDetails] = useState({date:moment().format('YYYY-MM-DD')})
@@ -65,7 +64,7 @@ const AddEarnExpens = () => {
             icons={'money'}
             value={details?.amount}
             secureTextEntry={false}
-            autoFocus={true}
+            autoFocus={false}
             keyboardType={'numeric'}
             onChangeText={(text) => changeHandler("amount", text)}
           />

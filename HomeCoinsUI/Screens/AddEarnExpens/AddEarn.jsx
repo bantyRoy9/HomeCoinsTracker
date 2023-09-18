@@ -8,6 +8,7 @@ import ModalDatePicker from 'react-native-datepicker-modal'
 import moment from 'moment';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getAxiosHeader } from '../../src/Utils/CommonAuthFunction';
 const AddEarnExpens = () => {
   const isDarkMode = useColorScheme() == 'dark';
   const [details, setDetails] = useState({date:moment().format('YYYY-MM-DD')})
@@ -39,30 +40,10 @@ const AddEarnExpens = () => {
         onDismiss: () =>{},
       },
     );
-    const getStoredSessionID = async () => {
-      try {
-        const value = await AsyncStorage.getItem('cookie');
-        return value;
-      } catch (e) {
-        Alert.alert("Async storage error",[{text:'OK',style:'cancel'}])
-      }
-    };
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      const cookies =await AsyncStorage.getItem('cookie');
-      const headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'authorization':`Bearer ${cookies}`
-      };
-      const res = await axios.post('https://homecoinstracker.onrender.com/api/v1/accountController/earn', details, 
-      {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        headers:{ authorization:"Bearer " + cookies },
-        withCredentials:true
-      });
+      const res = await axios.post('https://homecoinstracker.onrender.com/api/v1/accountController/earn', details, getAxiosHeader);
       if (res.data.status == 'true') {
         showAlert();
       }
@@ -83,7 +64,7 @@ const AddEarnExpens = () => {
             icons={'money'}
             value={details?.amount}
             secureTextEntry={false}
-            autoFocus={true}
+            autoFocus={false}
             keyboardType={'numeric'}
             onChangeText={(text) => changeHandler("amount", text)}
           />

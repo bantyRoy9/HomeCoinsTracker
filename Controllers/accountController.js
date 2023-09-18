@@ -5,7 +5,7 @@ const User = require("../Model/UserModels/userSchema");
 const { graphData } = require("../Utils/commonFunction");
 const catchAsync = require("../Utils/catchAsync");
 const ApiFeature = require("../Utils/apiFeature");
-
+const moment = require('moment')
 exports.saveDailyEarns = catchAsync(async(req,res,next) => {
     const saveEarn = await EarnModel.create(req.body);
     const earnByuser = await User.findById({_id:req.body.earnBy});
@@ -45,8 +45,8 @@ exports.getQuery= catchAsync(async(req,res,next)=>{
     let { dateRange } = req.query;
    if(dateRange && dateRange.split('_') && dateRange.split('_').length){
         req.query.date={
-            gte: new Date(dateRange.split('_')[0]),
-            lte: new Date(dateRange.split('_')[1]),
+            gte: moment(new Date(dateRange.split('_')[0])),
+            lte: moment(new Date(dateRange.split('_')[1])),
         };
         delete req.query.dateRange;
    }; 
