@@ -30,9 +30,7 @@ const Home = () => {
     const fetchDate = async () => {
       try {
         const dateRange = homeNavList.filter(el => el.active == true);
-        console.log(`http://192.168.1.73:8000/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
-        const { data } = await axios.get(`http://192.168.1.73:8000/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
-          console.log(data);
+        const { data } = await axios.get(`https://homecoinstracker.onrender.com/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
         if (data.status && data.data && data.graphData) {
           getAnalyticsDetails(data.graphData)
           data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })
@@ -121,10 +119,10 @@ const Home = () => {
       <View>
         <View style={{...defaultStyle.viewSection}}>
           <View style={{...styles.expensEarnBtn,...defaultStyle.screenWidth}}>
-            <Pressable style={{...defaultStyle.earnExpensBtn,...styles.earnBtn}} onPress={()=>navigation.navigate('EarnExpens')}>
+            <Pressable style={{...defaultStyle.earnExpensBtn,...styles.earnBtn}} onPress={()=>navigation.navigate('AddEarn')}>
               <Text style={defaultStyle.earnExpensBtnText}><Icons6 name='hand-holding-dollar' size={16}/> Add Earn</Text>
             </Pressable>
-            <Pressable style={{...defaultStyle.earnExpensBtn,...styles.expensBtn}} onPress={()=>navigation.navigate('EarnExpens')}>
+            <Pressable style={{...defaultStyle.earnExpensBtn,...styles.expensBtn}} onPress={()=>navigation.navigate('AddExpend')}>
               <Text style={defaultStyle.earnExpensBtnText}><Icons6 name='money-check-dollar' size={16}/> Add Expens</Text>
             </Pressable>
           </View>

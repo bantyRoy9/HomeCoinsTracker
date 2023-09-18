@@ -30,7 +30,8 @@ const Input = (props) => {
     <View style={styles.inputContainer}>
       {props.isLabel && <Text style={styles.inputLabel}>{props.label}</Text>}
       {props.icons && <Icons style={styles.inputIcons} name={props.icons} size={20} />}  
-        <TextInput 
+        <TextInput
+                keyboardType={props?.keyboardType}
                 onBlur={onBlur}
                 onFocus={onFocuse}
                 value= {props.value}

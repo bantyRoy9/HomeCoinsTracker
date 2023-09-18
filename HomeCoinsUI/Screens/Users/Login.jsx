@@ -47,7 +47,7 @@ const Login = () => {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
-      const res = await axios.post(`${process.env.URL}/api/v1/userController/loginUser`, user, header);
+      const res = await axios.post(`https://homecoinstracker.onrender.com/api/v1/userController/loginUser`, user, header);
       
       if(res.status){
         await AsyncStorage.setItem('cookie',res.data.token);

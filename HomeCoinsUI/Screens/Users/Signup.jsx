@@ -34,7 +34,7 @@ const Signup = () => {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
-      const res = await axios.post('http://192.168.1.5:8000/api/v1/userController/createUser', user, header);
+      const res = await axios.post('https://homecoinstracker.onrender.com/api/v1/userController/createUser', user, header);
       if(res.status)
       console.log(res);
     } catch (err) {
