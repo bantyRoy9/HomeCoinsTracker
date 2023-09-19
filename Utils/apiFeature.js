@@ -10,7 +10,7 @@ class ApiFeature {
         removeObjKey.forEach(el=> delete queryObj[el]);
 
         let queryStr = JSON.stringify(queryObj).replace(/\b(gt|gte|lte|lt)\b/g, match=> `$${match}`);
-        console.log(JSON.parse(queryStr));
+        //console.log(JSON.parse(queryStr));
         this.modal = this.modal.find(JSON.parse(queryStr));
 
         return this
