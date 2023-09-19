@@ -30,7 +30,12 @@ const Home = () => {
     const fetchDate = async () => {
       try {
         const dateRange = homeNavList.filter(el => el.active == true);
-        const { data } = await axios.get(`https://homecoinstracker.onrender.com/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
+        var UrlDomain = 'https://homecoinstracker.onrender.com'
+        if(process.env.NODE_ENV == 'development'){
+          UrlDomain = 'http:192.168.1.12:8000'
+        }
+        console.log(`${UrlDomain}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
+        const { data } = await axios.get(`${UrlDomain}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
         if (data.status && data.data && data.graphData) {
           getAnalyticsDetails(data.graphData)
           data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })

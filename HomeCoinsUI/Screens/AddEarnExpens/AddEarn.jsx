@@ -9,6 +9,7 @@ import moment from 'moment';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getAxiosHeader } from '../../src/Utils/CommonAuthFunction';
+import DatePicker from '../../src/Components/DatePicker';
 const AddEarnExpens = () => {
   const isDarkMode = useColorScheme() == 'dark';
   const [details, setDetails] = useState({date:moment().format('YYYY-MM-DD')})
@@ -95,19 +96,10 @@ const AddEarnExpens = () => {
             onChangeText={(text) => changeHandler("description", text)}
           />
         </View>
-        <View pointerEvents='none'>
-          <Input
-            placeholder={"Date"}
-            label={"Enter Date"}
-            isLabel={false}
-            name={'date'}
-            icons={'calendar'}
-            value={details?.date}
-            secureTextEntry={false}
-            autoFocus={false}
-            onChangeText={(text) => changeHandler("date", text)}
-          />
+        <View>
+          <DatePicker />
         </View>
+        
         <View style={{ width: "auto", alignItems: 'center' }}>
           <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler}>
             <Text style={{ ...styles.text, ...btnStyle.color }}>{"ADD EARN"}</Text>

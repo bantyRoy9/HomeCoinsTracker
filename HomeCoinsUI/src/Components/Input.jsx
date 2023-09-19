@@ -5,7 +5,7 @@ import { darkColorProps, lightColorProps } from '../Utils/colorProp';
 const Input = (props) => {
   const isDarkMode = useColorScheme() == 'dark';
   const [isFocuse, setIsFocuse] = useState(defualtProperty);
-  
+  console.log(props);
   const defualtProperty = {
     backgroundColor: isDarkMode ? darkColorProps.inputBackground : lightColorProps.inputBackground,
     color: isDarkMode ? darkColorProps.inputTextColor : lightColorProps.inputTextColor
@@ -34,15 +34,15 @@ const Input = (props) => {
                 keyboardType={props?.keyboardType}
                 onBlur={onBlur}
                 onFocus={onFocuse}
-                value= {props.value}
+                value= {props?.value}
                 style={props?.styles?? { ...styles.inputBox, ...isFocuse,borderColor: isDarkMode? lightColorProps.inputBackground : darkColorProps.inputBackground}}
                 autoFocus={props.autoFocus}
                 label={props.label}
                 name={props.name}
                 cursorColor= {backgroundStyle.color}
                 secureTextEntry={props?.secureTextEntry??false}
-                placeholder={props.placeholder}
-                onChangeText={props.onChangeText}
+                placeholder={props?.placeholder}
+                onChangeText={props?.onChangeText}
               />
     </View>
   )
