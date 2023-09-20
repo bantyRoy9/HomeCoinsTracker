@@ -1,16 +1,31 @@
-const moment = require("moment/moment");
+const moment = require("moment");
+const getContinousesDate = (startDateStr,endDateStr) =>{
+    const startDate = moment(startDateStr);
+    const endDate=moment(endDateStr);
+    const dateArr=[];
+    let currentDate = startDate.clone();
+
+    while(currentDate.isSameOrBefore(endDate,'days')){
+        dateArr.push(currentDate.format('DD-MM-YYYY'));
+        currentDate.add(1,'days');
+    };
+   // console.log(dateArr,'end');
+    return dateArr;
+}
 const filterJsonForGraph =(jsonData)=>{
     let dataObj ={},dateList=[];
     if(jsonData){
-        dateList = jsonData.map(el=> moment(new Date(el.date)).format('DD-MM-YYYY'));
-        dateList.forEach(function(date,idx){
+        dateList = jsonData.map(el=> new Date(el.date).setHours(0,0,0)).sort();
+        dateList = getContinousesDate(moment(new Date(dateList[0])).format('YYYY-MM-DD'),moment(new Date(dateList[dateList?.length-1])).format('YYYY-MM-DD'));
+        dateList.forEach((date,idx)=>{
             if(Object.keys(dataObj).includes(date)){
-                dataObj[date] = [...dataObj[`${date}`], jsonData[idx].amount]
+                dataObj[date] = [...dataObj[`${date}`], jsonData[idx]?.amount??0]
             }else{
-                dataObj[date] = [ jsonData[idx].amount];    
+                dataObj[date] = [jsonData[idx]?.amount??0];    
             }
         });
     };
+    //console.log(dataObj,dateList);
     return {dataObj,dateList};
 };
 
@@ -32,7 +47,9 @@ exports.graphData = (data,legendNameArr,svgColorArr) =>{
             data:[],
             colorCode: "",
             strokeWidth: 2
-        },objectKeys = Object.keys(ele);
+        },
+        objectKeys = Object.keys(ele);
+
         graphdata.labels.forEach((date,idx)=>{
             if(objectKeys.includes(date)){
                 dataSet.data.push(ele[`${date}`].reduce((a,b)=> a+b,0));

@@ -31,7 +31,7 @@ const createSendToken = (user, statusCode, res) => {
 }
 
 exports.createrUser = catchAsync(async (req, res, next) => {
-    console.log(req.body);
+    
     const newUser = await User.create(req.body);
     // const url = `${req.protocol}://${req.get('host')}/me`;
     // console.log(url);
