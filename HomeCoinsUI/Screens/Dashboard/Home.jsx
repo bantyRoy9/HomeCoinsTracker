@@ -34,9 +34,10 @@ const Home = () => {
         if(process.env.NODE_ENV == 'development'){
           UrlDomain = 'http:192.168.1.12:8000'
         }
-        console.log(`${UrlDomain}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
+        //console.log(`${UrlDomain}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
         const { data } = await axios.get(`${UrlDomain}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
         if (data.status && data.data && data.graphData) {
+          console.log(data.graphData.datasets[0].data);
           getAnalyticsDetails(data.graphData)
           data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })
           data.graphData.labels = data.graphData.labels.map(el => moment(el, 'DD-MM-YYYY').format('DD MMM'));
