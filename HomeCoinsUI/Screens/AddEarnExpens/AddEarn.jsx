@@ -10,6 +10,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getAxiosHeader } from '../../src/Utils/CommonAuthFunction';
 import DatePicker from '../../src/Components/DatePicker';
+import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
 const AddEarnExpens = () => {
   const isDarkMode = useColorScheme() == 'dark';
   const [details, setDetails] = useState({date:moment().format('YYYY-MM-DD')})
@@ -44,7 +45,7 @@ const AddEarnExpens = () => {
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post('https://homecoinstracker.onrender.com/api/v1/accountController/earn', details, getAxiosHeader);
+      const res = await axios.post(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/earn`, details, getAxiosHeader);
       if (res.data.status == 'true') {
         showAlert();
       }

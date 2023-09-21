@@ -7,6 +7,7 @@ import { darkColorProps, lightColorProps } from '../../src/Utils/colorProp';
 import Icons from 'react-native-vector-icons/Ionicons'
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
 
 const Signup = () => {
   const navigation = useNavigation();
@@ -34,7 +35,7 @@ const Signup = () => {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
-      const res = await axios.post('https://homecoinstracker.onrender.com/api/v1/userController/createUser', user, header);
+      const res = await axios.post(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/userController/createUser`, user, header);
       if(res.status)
       console.log(res);
     } catch (err) {

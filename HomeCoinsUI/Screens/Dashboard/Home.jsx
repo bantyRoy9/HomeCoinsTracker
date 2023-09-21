@@ -13,7 +13,7 @@ import moment from 'moment';
 import { defaultStyle } from '../../src/Utils/defaultCss';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import { URL } from 'react-native-dotenv'
+import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
 const analyticsJson = {}
 const Home = () => {
   const navigation = useNavigation();
@@ -30,12 +30,8 @@ const Home = () => {
     const fetchDate = async () => {
       try {
         const dateRange = homeNavList.filter(el => el.active == true);
-        var UrlDomain = 'https://homecoinstracker.onrender.com'
-        if(process.env.NODE_ENV == 'development'){
-          UrlDomain = 'http:192.168.1.12:8000'
-        }
-        //console.log(`${UrlDomain}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
-        const { data } = await axios.get(`${UrlDomain}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
+        console.log(NODE_ENV,REACT_PROD_URL,`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
+        const { data } = await axios.get(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
         if (data.status && data.data && data.graphData) {
           console.log(data.graphData.datasets[0].data);
           getAnalyticsDetails(data.graphData)

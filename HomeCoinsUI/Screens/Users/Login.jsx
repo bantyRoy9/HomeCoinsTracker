@@ -4,6 +4,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Input from '../../src/Components/Input';
 import { darkColorProps, lightColorProps } from '../../src/Utils/colorProp';
 import axios from 'axios';
+import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const Login = () => {
@@ -47,14 +48,15 @@ const Login = () => {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
-      const res = await axios.post(`https://homecoinstracker.onrender.com/api/v1/userController/loginUser`, user, header);
+      console.log(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/userController/loginUser`);
+      const res = await axios.post(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/userController/loginUser`, user, header);
       
       if(res.status){
         await AsyncStorage.setItem('cookie',res.data.token);
         navigation.navigate('Home');
       }
     } catch (err) {
-      console.log(err)
+      console.log(err.data)
     }
   }
 

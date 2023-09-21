@@ -7,6 +7,7 @@ import Input from '../../src/Components/Input';
 import ModalDatePicker from 'react-native-datepicker-modal'
 import moment from 'moment';
 import axios from 'axios';
+import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
 import { getAxiosHeader } from '../../src/Utils/CommonAuthFunction';
 const AddEarnExpens = () => {
   const isDarkMode = useColorScheme() == 'dark';
@@ -43,7 +44,7 @@ const AddEarnExpens = () => {
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post('https://homecoinstracker.onrender.com/api/v1/accountController/expend', details, getAxiosHeader);
+      const res = await axios.post(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/expend`, details, getAxiosHeader);
       if (res.data.status == 'true') {
         showAlert();
       }
