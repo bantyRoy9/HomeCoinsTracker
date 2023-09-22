@@ -5,7 +5,7 @@ import { darkColorProps, lightColorProps } from '../Utils/colorProp';
 const Input = (props) => {
   const isDarkMode = useColorScheme() == 'dark';
   const [isFocuse, setIsFocuse] = useState(defualtProperty);
-  console.log(props);
+//  console.log(props);
   const defualtProperty = {
     backgroundColor: isDarkMode ? darkColorProps.inputBackground : lightColorProps.inputBackground,
     color: isDarkMode ? darkColorProps.inputTextColor : lightColorProps.inputTextColor
