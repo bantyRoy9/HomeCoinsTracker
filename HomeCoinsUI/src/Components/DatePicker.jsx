@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { SafeAreaView, View, Text, Button } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Input from './Input';
-
+import moment from 'moment';
 const DatePicker = (props) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
@@ -19,7 +19,6 @@ const DatePicker = (props) => {
     setSelectedDate(date);
     hideDatePicker();
   };
-
   return (
     
       <View>
@@ -30,7 +29,7 @@ const DatePicker = (props) => {
             isLabel={false}
             name={'date'}
             icons={'calendar'}
-            value={selectedDate}
+            value={moment(selectedDate).format('YYYY-MM-DD')}
             secureTextEntry={false}
             autoFocus={false}
           />}

@@ -19,9 +19,26 @@ export const getAxiosHeader = async()=>{
         const value = await AsyncStorage.getItem('cookie');
         header.headers = { authorization:"Bearer " + value };
         header.withCredentials=true
+        console.log(header);
         return header;
       }catch(e){
         console.log(e);
         return header;
       }
-}
+};
+
+export const showAlert = (firstMsg,secondMsg) =>{
+Alert.alert(firstMsg,secondMsg,
+  [
+    {
+      text: 'OK',
+      onPress: () =>{return true},
+      style: 'cancel',
+    },
+  ],
+  {
+    cancelable: true,
+    onDismiss: () =>{return false},
+  },
+);
+};

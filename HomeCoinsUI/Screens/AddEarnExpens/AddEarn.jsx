@@ -45,7 +45,7 @@ const AddEarnExpens = () => {
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/earn`, details, getAxiosHeader);
+      const res = await axios.post(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/earn`, details, getAxiosHeader());
       if (res.data.status == 'true') {
         showAlert();
       }

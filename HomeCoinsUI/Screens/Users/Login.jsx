@@ -25,6 +25,7 @@ const Login = () => {
   useEffect(() => {
     async function fetchAsync(){
       try{
+        console.log(NODE_ENV);
         const cookies =await AsyncStorage.getItem('cookie');
         if(cookies !== null){
            navigation.navigate('Home');
