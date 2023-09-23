@@ -8,7 +8,8 @@ import ModalDatePicker from 'react-native-datepicker-modal'
 import moment from 'moment';
 import axios from 'axios';
 import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
-import { getAxiosHeader } from '../../src/Utils/CommonAuthFunction';
+import { getAxiosHeader, showAlert } from '../../src/Utils/CommonAuthFunction';
+import DatePicker from '../../src/Components/DatePicker';
 const AddEarnExpens = () => {
   const isDarkMode = useColorScheme() == 'dark';
   const [details, setDetails] = useState({date:moment().format('YYYY-MM-DD')})
@@ -24,32 +25,17 @@ const AddEarnExpens = () => {
   const changeHandler = (name, value) => {
     setDetails({ ...details, [name]: value })
   }
-  const showAlert = () =>
-    Alert.alert(
-      'Done',
-      `${details?.amount} save successfull.`,
-      [
-        {
-          text: 'OK',
-          onPress: () =>{setDetails({})},
-          style: 'cancel',
-        },
-      ],
-      {
-        cancelable: true,
-        onDismiss: () =>{},
-      },
-    );
-    
+
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/expend`, details, getAxiosHeader);
+      console.log(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/expend`);
+      const res = await axios.post(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/expend`, details, getAxiosHeader());
       if (res.data.status == 'true') {
-        showAlert();
+        showAlert('Done',`${details?.amount} save successfull.`);
       }
     } catch (err) {
-      console.log(err)
+      console.warn(err)
     }
   }
   return (
@@ -83,18 +69,8 @@ const AddEarnExpens = () => {
             onChangeText={(text) => changeHandler("description", text)}
           />
         </View>
-        <View pointerEvents='none'>
-          <Input
-            placeholder={"Date"}
-            label={"Enter Date"}
-            isLabel={false}
-            name={'date'}
-            icons={'calendar'}
-            value={details?.date}
-            secureTextEntry={false}
-            autoFocus={false}
-            onChangeText={(text) => changeHandler("date", text)}
-          />
+        <View>
+          <DatePicker />
         </View>
         <View style={{ width: "auto", alignItems: 'center' }}>
           <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler}>

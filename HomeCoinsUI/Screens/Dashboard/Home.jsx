@@ -30,7 +30,7 @@ const Home = () => {
     const fetchDate = async () => {
       try {
         const dateRange = homeNavList.filter(el => el.active == true);
-        // console.log(NODE_ENV,REACT_PROD_URL,`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
+        console.log(NODE_ENV,REACT_PROD_URL,`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
         const { data } = await axios.get(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
         if (data.status && data.data && data.graphData) {
           console.log(data.graphData.datasets[0].data);

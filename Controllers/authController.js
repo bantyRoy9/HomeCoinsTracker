@@ -86,8 +86,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
     }
-    else if (req.cookies?.jwt) {
-        token = req.cookies.jwt;
+    else if (req.headers.cookie && req.headers.cookie.startsWith('jwt')) {
+        token = req.headers.cookie.split('=')[1];
     }
     if (!token) {
         return next(new AppError('you are not login! please Login', 401))
