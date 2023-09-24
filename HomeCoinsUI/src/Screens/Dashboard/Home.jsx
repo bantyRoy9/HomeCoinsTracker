@@ -1,19 +1,20 @@
 import { ScrollView, SafeAreaView, StyleSheet, Pressable, Text, View, useColorScheme, StatusBar } from 'react-native'
-import { darkColorProps, lightColorProps } from '../../src/Utils/colorProp';
+import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
 import FeatherIcons from 'react-native-vector-icons/Feather';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import Icons6 from 'react-native-vector-icons/FontAwesome6';
-import { homeNavList } from '../../src/Utils/homeNavList';
-import Chart from '../../src/Components/Chart/Chart';
+import { homeNavList } from '../../Utils/homeNavList';
+import Chart from '../../Components/Chart/Chart';
 import React, { useState, useEffect } from 'react'
-import Header from '../../src/Components/Header';
+import Header from '../../Components/Header';
 import { Card } from 'react-native-elements';
 import axios from 'axios';
 import moment from 'moment';
-import { defaultStyle } from '../../src/Utils/defaultCss';
+import { defaultStyle } from '../../Utils/defaultCss';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
+import { useSelector } from 'react-redux';
 const analyticsJson = {}
 const Home = () => {
   const navigation = useNavigation();
@@ -24,16 +25,17 @@ const Home = () => {
     backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
     color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
   };
-
+  const  {user} = useSelector(state=>state.user);
+  
   useEffect(() => {
     
+    console.log(user,'user');
     const fetchDate = async () => {
       try {
         const dateRange = homeNavList.filter(el => el.active == true);
-        console.log(NODE_ENV,REACT_PROD_URL,`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
+        console.log(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
         const { data } = await axios.get(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
         if (data.status && data.data && data.graphData) {
-          console.log(data.graphData.datasets[0].data);
           getAnalyticsDetails(data.graphData)
           data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })
           data.graphData.labels = data.graphData.labels.map(el => moment(el, 'DD-MM-YYYY').format('DD MMM'));

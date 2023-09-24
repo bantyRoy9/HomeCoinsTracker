@@ -6,13 +6,15 @@ import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Login from '../Screens/Users/Login';
-import Signup from '../Screens/Users/Signup'
-import Home from '../Screens/Dashboard/Home';
-import AddEarn from '../Screens/AddEarnExpens/AddEarn';
+import Login from './Screens/Users/Login';
+import Signup from './Screens/Users/Signup'
+import Home from './Screens/Dashboard/Home';
+import AddEarn from './Screens/AddEarnExpens/AddEarn';
 import { darkColorProps, lightColorProps } from './Utils/colorProp';
 import { useColorScheme } from 'react-native';
-import AddExpend from '../Screens/AddEarnExpens/AddExpend';
+import AddExpend from './Screens/AddEarnExpens/AddExpend';
+import { Provider } from 'react-redux';
+import { store } from './Redux/Store';
 function App(){  
   const Stack = createNativeStackNavigator();
   const isDarkMode = useColorScheme() =='dark'
@@ -43,6 +45,7 @@ function App(){
     addEarn: {title:'Add Earn'},
   }
   return (
+    <Provider store={store}>
     <NavigationContainer>
         <Stack.Navigator initialRouteName={initialRoute}>
           <Stack.Screen name='Login' component={Login} options={{headerShown:false}} na/>
@@ -52,6 +55,7 @@ function App(){
           <Stack.Screen name='AddExpend' component={AddExpend} options={{...navigationOptions, ...headerTitle.addExpend}} />
         </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }
 

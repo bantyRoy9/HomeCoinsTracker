@@ -2,8 +2,8 @@ import { Button, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View, us
 import React, { useState } from 'react'
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { StatusBar } from 'react-native';
-import Input from '../../src/Components/Input';
-import { darkColorProps, lightColorProps } from '../../src/Utils/colorProp';
+import Input from '../../Components/Input';
+import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
 import Icons from 'react-native-vector-icons/Ionicons'
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
