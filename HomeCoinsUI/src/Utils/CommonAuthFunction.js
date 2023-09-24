@@ -6,24 +6,29 @@ export const getStoredCookie = async () => {
       const value = await AsyncStorage.getItem('cookie');
       return value;
     } catch (e) {
-      Alert.alert("Async storage error",[{text:'OK',style:'cancel'}])
+      showAlert("Async storage error");
     }
   };
-
-export const getAxiosHeader = async()=>{
-    const header = {
+  export const getAxiosHeaderWithoutCookie = async () => {
+    try {
+      const header = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       };
+      return header
+    } catch (e) {
+      showAlert("Async storage error");
+    }
+  };
+export const getAxiosHeader = async()=>{
+    
       try{
         const value = await AsyncStorage.getItem('cookie');
         header.headers = { authorization:"Bearer " + value };
         header.withCredentials=true
-        console.log(header);
         return header;
       }catch(e){
-        console.log(e);
-        return header;
+        showAlert("Async storage error");
       }
 };
 

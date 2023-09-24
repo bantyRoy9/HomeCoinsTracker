@@ -1,15 +1,16 @@
 import { StyleSheet, SafeAreaView, Text, View, useColorScheme, StatusBar, Pressable,Alert } from 'react-native'
 import React, { useState } from 'react'
 import Icons from 'react-native-vector-icons/FontAwesome';
-import { darkColorProps, lightColorProps } from '../../src/Utils/colorProp';
-import { defaultStyle } from '../../src/Utils/defaultCss';
-import Input from '../../src/Components/Input';
+import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
+import { defaultStyle } from '../../Utils/defaultCss';
+import Input from '../../Components/Input';
 import ModalDatePicker from 'react-native-datepicker-modal'
 import moment from 'moment';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getAxiosHeader } from '../../Utils/CommonAuthFunction';
+import DatePicker from '../../Components/DatePicker';
 import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
-import { getAxiosHeader, showAlert } from '../../src/Utils/CommonAuthFunction';
-import DatePicker from '../../src/Components/DatePicker';
 const AddEarnExpens = () => {
   const isDarkMode = useColorScheme() == 'dark';
   const [details, setDetails] = useState({date:moment().format('YYYY-MM-DD')})
@@ -25,17 +26,31 @@ const AddEarnExpens = () => {
   const changeHandler = (name, value) => {
     setDetails({ ...details, [name]: value })
   }
-
+  const showAlert = () =>
+    Alert.alert(
+      'Done',
+      `${details?.amount} save successfull.`,
+      [
+        {
+          text: 'OK',
+          onPress: () =>{setDetails({})},
+          style: 'cancel',
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () =>{},
+      },
+    );
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      console.log(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/expend`);
-      const res = await axios.post(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/expend`, details, getAxiosHeader());
+      const res = await axios.post(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/earn`, details, getAxiosHeader());
       if (res.data.status == 'true') {
-        showAlert('Done',`${details?.amount} save successfull.`);
+        showAlert();
       }
     } catch (err) {
-      console.warn(err)
+      console.log(err)
     }
   }
   return (
@@ -58,6 +73,19 @@ const AddEarnExpens = () => {
         </View>
         <View>
           <Input
+            placeholder={"Source"}
+            label={"Source"}
+            isLabel={false}
+            name={'source'}
+            icons={'soundcloud'}
+            value={details?.source}
+            secureTextEntry={false}
+            autoFocus={false}
+            onChangeText={(text) => changeHandler("source", text)}
+          />
+        </View>
+        <View>
+          <Input
             placeholder={"Description"}
             label={"Enter Description"}
             isLabel={false}
@@ -72,9 +100,10 @@ const AddEarnExpens = () => {
         <View>
           <DatePicker />
         </View>
+        
         <View style={{ width: "auto", alignItems: 'center' }}>
           <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler}>
-            <Text style={{ ...styles.text, ...btnStyle.color }}>{"ADD EXPEND"}</Text>
+            <Text style={{ ...styles.text, ...btnStyle.color }}>{"ADD EARN"}</Text>
           </Pressable>
         </View>
       </View>

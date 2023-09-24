@@ -45,25 +45,25 @@ exports.loginUser = catchAsync(async (req, res, next) => {
     // loging with phone
     if (!Object.keys(req.body).includes('email')) {
         if (!phone || !password) {
-            return next(new AppError('please fill both Mobile no & password ', 401))
+            return next(new AppError('Please fill both Mobile no & password ', 401))
         }
         const user = await User.findOne({ phone }).select('+password');
 
         if (!user || !(await user.correctPassword(password, user.password))) {
-            return next(new AppError('incorrect user phone or password', 401))
+            return next(new AppError('Incorrect user Moble or Password', 401))
         }
 
         createSendToken(user, 200, res);
     } else {
 
         if (!email || !password) {
-            return next(new AppError('please fill both email & password ', 401))
+            return next(new AppError('Please fill both email & password ', 401))
         };
 
         const user = await User.findOne({ email }).select('+password');
 
         if (!user || !(await user.correctPassword(password, user.password))) {
-            return next(new AppError('incorrect user email or password', 401))
+            return next(new AppError('Incorrect user email or password', 401))
         }
 
         createSendToken(user, 200, res);

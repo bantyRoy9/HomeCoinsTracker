@@ -1,14 +1,19 @@
-import { Button, StatusBar,Image ,Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View, useColorScheme } from 'react-native'
+import { Button, StatusBar,Image ,Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View, useColorScheme, Alert } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-import Input from '../../src/Components/Input';
-import { darkColorProps, lightColorProps } from '../../src/Utils/colorProp';
+import Input from '../../Components/Input';
+import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
 import axios from 'axios';
 import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { showAlert } from '../../Utils/CommonAuthFunction';
+import { useDispatch,useSelector} from 'react-redux';
+import { loging } from '../../Redux/Action/userAction';
 const Login = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {loading,isAuthenticated} = useSelector(state=>state.user);
   const isDarkMode = useColorScheme() === 'dark';
   Colors.darker = darkColorProps.background;
   Colors.lighter = lightColorProps.background;
@@ -23,41 +28,31 @@ const Login = () => {
   const [user, setUser] = useState({ email: "", password: "" });
 
   useEffect(() => {
-    async function fetchAsync(){
-      try{
-        console.log(NODE_ENV);
-        const cookies =await AsyncStorage.getItem('cookie');
-        if(cookies !== null){
-           navigation.navigate('Home');
-        };
-      }catch(err){
-        console.log(err);
-      }
-    };
     fetchAsync();
   }, [])
-  
+  const fetchAsync= async()=>{
+    try{
+      const cookies =await AsyncStorage.getItem('cookie');
+      if(cookies !== null){
+        console.log('cookie');
+         navigation.navigate('Home');
+      };
+    }catch(err){
+      showAlert('Something Wrong happend!');
+    }
+  };
 
   const changeHandler = (name, value) => {
     setUser({ ...user, [name]: value })
   }
 
-  const submitHandler = async (e) => {
+  const submitHandler = async(e) => {
     e.preventDefault()
     try {
-      const header = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-      console.log(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/userController/loginUser`);
-      const res = await axios.post(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/userController/loginUser`, user, header);
-      
-      if(res.status){
-        await AsyncStorage.setItem('cookie',res.data.token);
-        navigation.navigate('Home');
-      }
+      await dispatch(loging(user));
+      fetchAsync();
     } catch (err) {
-      console.log(err.data)
+      console.log(err);
     }
   }
 
@@ -70,7 +65,7 @@ const Login = () => {
               alignItems: 'center',
               marginVertical: 10
             }}>
-              <Image source={require('../../Assets/Icons/login.webp')}
+              <Image source={require('../../../Assets/Icons/login.webp')}
                 style={{width: 200,height: 200
                 }}
               />
