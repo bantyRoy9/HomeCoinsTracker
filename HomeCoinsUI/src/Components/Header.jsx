@@ -11,11 +11,10 @@ const Header = () => {
         backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
         color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
     }
-    const logout = async() =>{
-        console.log('click');
-        await AsyncStorage.clear();
-        navigation.navigate('Login')
-      }
+    const navigatePage=(pageLink)=>{
+        console.log(pageLink);
+        navigation.navigate(pageLink);
+    }
     return (
         <View style={styles.headerContainer}>
             <View style={styles.headerIcons}>
@@ -37,7 +36,7 @@ const Header = () => {
                 </View>
             </View>
             <View style={styles.headerIcons}>
-                <Pressable style={styles.headerIcon} onPress={logout}>
+                <Pressable style={styles.headerIcon} onPress={()=>navigatePage('Profile')}>
                     <Icons name='user' size={25} color={backgroundStyle.color} />
                     <Text>Account</Text>
                 </Pressable>
@@ -60,9 +59,11 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20,
     },
     headerIcon:{
-        alignItems:'center'
+        alignItems:'center',
+        // borderColor:'red',
+        // borderWidth:1,
+        paddingVertical: 15,
     },
     headerIcons: {
-        paddingVertical: 15,
     }
 })

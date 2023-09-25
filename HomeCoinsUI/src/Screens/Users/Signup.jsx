@@ -49,7 +49,7 @@ const Signup = () => {
       <ScrollView contentContainerStyle={{ flex: 1 }} showsHorizontalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
         <View style={styles.signupContainer}>
           <View style={styles.arrowBack}>
-            <Icons name='arrow-back' size={30} onPress={() => navigation.navigate('Login')} color={'#3d3d3d'} />
+            <Icons name='arrow-back' size={30} onPress={() => navigation.navigate('Login')} color={isDarkMode?darkColorProps.textColor:lightColorProps.textColor} />
           </View>
           <View style={styles.pageTitle}>
             <Text style={styles.headerTitle}>Create Account</Text>

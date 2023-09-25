@@ -14,12 +14,13 @@ import { defaultStyle } from '../../Utils/defaultCss';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
-import { useSelector } from 'react-redux';
-const analyticsJson = {}
+import { useDispatch, useSelector } from 'react-redux';
+const analyticsJson = {Earn : 0,Expend :0,Saving:0}
 const Home = () => {
   const navigation = useNavigation();
   const [graphData, setGraphData] = useState(null);
-  const [dateRange, setDateRange] = useState({})
+  const [dateRange, setDateRange] = useState({});
+  const dispatch = useDispatch();
   const isDarkMode = useColorScheme() == "dark";
   const backgroundStyle = {
     backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
@@ -28,13 +29,12 @@ const Home = () => {
   const  {user} = useSelector(state=>state.user);
   
   useEffect(() => {
-    
-    console.log(user,'user');
     const fetchDate = async () => {
       try {
         const dateRange = homeNavList.filter(el => el.active == true);
-        console.log(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
-        const { data } = await axios.get(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
+       // dispatch()
+        console.log(`${NODE_ENV != 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
+        const { data } = await axios.get(`${NODE_ENV != 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
         if (data.status && data.data && data.graphData) {
           getAnalyticsDetails(data.graphData)
           data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })
@@ -104,7 +104,7 @@ const Home = () => {
                   {Object.keys(analyticsJson).map((el, idx) => (
                     <View key={`${idx}`} style={styles.analyticsDetails}>
                       <View><Text style={styles.analyticsText}>{el}</Text></View>
-                      <View><Text style={styles.analyticsText}>₹{analyticsJson[el].toFixed(2)}</Text></View>
+                      <View><Text style={styles.analyticsText}>₹{analyticsJson[el]?.toFixed(2)}</Text></View>
                     </View>
                   ))}
                 </>}

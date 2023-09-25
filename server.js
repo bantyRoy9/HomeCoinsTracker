@@ -7,7 +7,6 @@ if(process.env.NODE_ENV == 'development'){
     DB = process.env.DB_URL_LOCAL;
 }
 const PORT = process.env.PORT || 8000;
-console.log(process.env.NODE_ENV);
 mongoose.connect(DB).then( connection =>{
     console.log('DB Connected');
 }).catch( err=>{

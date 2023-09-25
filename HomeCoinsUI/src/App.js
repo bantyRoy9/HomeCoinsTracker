@@ -15,20 +15,24 @@ import { useColorScheme } from 'react-native';
 import AddExpend from './Screens/AddEarnExpens/AddExpend';
 import { Provider } from 'react-redux';
 import { store } from './Redux/Store';
+import Profile from './Screens/Users/Profile';
+import FontIcons from 'react-native-vector-icons/FontAwesome5'
+import EditProfile from './Screens/Users/EditProfile';
+//import { useNavigation } from '@react-navigation/native';
 function App(){  
   const Stack = createNativeStackNavigator();
   const isDarkMode = useColorScheme() =='dark'
-  const [initialRoute,setInitialRouteName] = useState('Login');
+  const [isAuthenticated,setIsAuthenticated] = useState(false);
+ // const navigation = useNavigation();
   useEffect(()=>{
     async function getCookie(){
       const cookie = await AsyncStorage.getItem('cookie');
       if(cookie !== null){
-     //   console.log(cookie);
-        setInitialRouteName("Home");
+        setIsAuthenticated(true);
       }
     };
     getCookie();
-  },[])
+  },[]);
   const  navigationOptions = {
     headerTintColor: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor,
     headerStyle: {
@@ -38,21 +42,29 @@ function App(){
     },
     headerTitleStyle: {
       fontSize: 18,
-    },
+    }
   };
   const headerTitle = {
     addExpend: {title:'Add Expend'},
     addEarn: {title:'Add Earn'},
+    profile:{title:'Profile'},
+    editProfile:{title:'Edit Profile'},
   }
+  const editProfile =()=>{
+   // navigation.navigate('EditProfile');
+  }
+  
   return (
     <Provider store={store}>
     <NavigationContainer>
-        <Stack.Navigator initialRouteName={initialRoute}>
+        <Stack.Navigator initialRouteName={AsyncStorage.getItem('cookie') ? "Home" : "Login"}>
           <Stack.Screen name='Login' component={Login} options={{headerShown:false}} na/>
           <Stack.Screen name='Signup' component={Signup} options={{headerShown:false}}/>
           <Stack.Screen name='Home' component={Home} options={{headerShown:false}}/>
           <Stack.Screen name='AddEarn' component={AddEarn} options={{...navigationOptions, ...headerTitle.addEarn}} />
           <Stack.Screen name='AddExpend' component={AddExpend} options={{...navigationOptions, ...headerTitle.addExpend}} />
+          <Stack.Screen name='Profile' component={Profile} options={{...navigationOptions, ...headerTitle.profile,headerRight:()=><FontIcons name='user-edit' size={25} onPress={editProfile}/>}} />
+          <Stack.Screen name='EditProfile' component={EditProfile} options={{...navigationOptions, ...headerTitle.editProfile}} />
         </Stack.Navigator>
     </NavigationContainer>
     </Provider>
