@@ -10,7 +10,7 @@ export const lightColorProps = {
     inputFocusBackground:"#FFFF",
     inputTextColor:"#38304C",
     inputTextColorOnFocus:"#38304C",
-    cardBackground:"#3d3d3d",
+    cardBackground:"'#3d3d3d'",
 }
 
 export const darkColorProps ={
@@ -20,10 +20,10 @@ export const darkColorProps ={
     btnBackground:"#0DF5E3",
     btnPrimary:"#fff",
     btnSecondery:"",
-    textColor:"#fff",
+    textColor:"#fffff",
     inputBackground:"#201A31",
     inputFocusBackground:"#38304C",
     inputTextColor:"#fff",
     inputTextColorOnFocus:"#fff",
-    cardBackground:"#3d3d3d"
+    cardBackground:"'#3d3d3d'"
 }

@@ -3,7 +3,7 @@ import { NODE_ENV, REACT_LOCAL_URL,REACT_PROD_URL} from '@env';
 import { getAxiosHeader, getAxiosHeaderWithoutCookie, showAlert } from "../../Utils/CommonAuthFunction"
 import { USER_REQUIEST, USER_SUCCCESS } from "../userConstants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const URL = NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL;
+const URL = NODE_ENV != 'production' ? REACT_PROD_URL:REACT_LOCAL_URL;
 
 export const loging = (userDetails) => async(dispatch) =>{
     try{
@@ -12,7 +12,7 @@ export const loging = (userDetails) => async(dispatch) =>{
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
-      console.log(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/userController/loginUser`);
+      console.log(`${NODE_ENV != 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/userController/loginUser`);
       const res = await axios.post(`${URL}/api/v1/userController/loginUser`, userDetails, header);
       if(res.status){
         await AsyncStorage.setItem('cookie',res.data.token);
