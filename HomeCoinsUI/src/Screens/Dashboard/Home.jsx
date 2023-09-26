@@ -15,6 +15,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
 import { useDispatch, useSelector } from 'react-redux';
+import { getEarnExpendData } from '../../Redux/Action/accountAction';
+import { getStoredCookie } from '../../Utils/CommonAuthFunction';
+import { getMe } from '../../Redux/Action/userAction';
 const analyticsJson = {Earn : 0,Expend :0,Saving:0}
 const Home = () => {
   const navigation = useNavigation();
@@ -26,33 +29,24 @@ const Home = () => {
     backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
     color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
   };
-  const  {user} = useSelector(state=>state.user);
+  const  {isLoading, account} = useSelector(state=>state.account);
   
   useEffect(() => {
-    const fetchDate = async () => {
-      try {
-        const dateRange = homeNavList.filter(el => el.active == true);
-       // dispatch()
-        console.log(`${NODE_ENV != 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
-        const { data } = await axios.get(`${NODE_ENV != 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
-        if (data.status && data.data && data.graphData) {
-          getAnalyticsDetails(data.graphData)
-          data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })
-          data.graphData.labels = data.graphData.labels.map(el => moment(el, 'DD-MM-YYYY').format('DD MMM'));
-          setGraphData(data.graphData);
-        };
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    const cookie = getStoredCookie(); 
+    if(cookie){
+      dispatch(getMe())
+    }
     fetchDate();
-  }, [dateRange]);
-  const getAnalyticsDetails = (resData) => {
-    analyticsJson.Earn = resData.datasets[0].data.reduce((a, b) => a + b, 0);
-    analyticsJson.Expend = resData.datasets[1].data.reduce((a, b) => a + b, 0);
-    analyticsJson.Saving = analyticsJson.Earn - analyticsJson.Expend;
-  }
-  
+  }, [dateRange,dispatch]);
+
+  const fetchDate = async () => {
+    try {
+     const dateRange = homeNavList.filter(el => el.active == true);
+     dispatch(getEarnExpendData(dateRange));
+   } catch (err) {
+     console.log(err);
+   }
+ };
   const navPressHandle = (navPress) =>{
     homeNavList.map(el=>{
       if(el.label == navPress.label){
@@ -100,22 +94,18 @@ const Home = () => {
                 </View>
               </View>
               <View>
-                {analyticsJson && <>
-                  {Object.keys(analyticsJson).map((el, idx) => (
+              {!isLoading ?<View><Text>Loading..</Text></View> : account && account.analyticsDetail &&  <>
+                  {Object.keys(account?.analyticsDetail).map((el, idx) => (
                     <View key={`${idx}`} style={styles.analyticsDetails}>
                       <View><Text style={styles.analyticsText}>{el}</Text></View>
-                      <View><Text style={styles.analyticsText}>₹{analyticsJson[el]?.toFixed(2)}</Text></View>
+                      <View><Text style={styles.analyticsText}>₹{account.analyticsDetail[el]?.toFixed(2)}</Text></View>
                     </View>
                   ))}
                 </>}
               </View>
             </Card>
             <View style={defaultStyle.viewSection}>
-              {graphData && graphData.labels && graphData.labels.length>0 && <Chart graphData={graphData} />}
-            </View>
-            
-            <View style={defaultStyle.viewSection}>
-              {graphData && graphData.labels && graphData.labels.length>0 && <Chart graphData={graphData} />}
+              {isLoading && account.graphData && account.graphData.labels && account.graphData.labels.length>0 && <Chart graphData={account?.graphData} />}
             </View>
           </View>
         </View>

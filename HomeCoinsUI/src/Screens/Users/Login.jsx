@@ -34,7 +34,6 @@ const Login = () => {
     try{
       const cookies =await AsyncStorage.getItem('cookie');
       if(cookies !== null){
-        console.log('cookie');
          navigation.navigate('Home');
       };
     }catch(err){

@@ -2,11 +2,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 
 export const getStoredCookie = async () => {
+    let cookie = null;
     try {
-      const value = await AsyncStorage.getItem('cookie');
-      return value;
-    } catch (e) {
-      showAlert("Async storage error");
+      const cookie = await AsyncStorage.getItem('cookie');
+      return cookie;
+    } catch (err) {
+      showAlert("Async storage error",err);
+      return cookie;
     }
   };
   export const getAxiosHeaderWithoutCookie = async () => {
@@ -21,14 +23,15 @@ export const getStoredCookie = async () => {
     }
   };
 export const getAxiosHeader = async()=>{
-    
       try{
         const value = await AsyncStorage.getItem('cookie');
-        header.headers = { authorization:"Bearer " + value };
-        header.withCredentials=true
+        const header ={
+          headers:{ authorization:"Bearer " + value },
+          withCredentials:true
+        }
         return header;
-      }catch(e){
-        showAlert("Async storage error");
+      }catch(err){
+        showAlert("Async storage error",err);
       }
 };
 

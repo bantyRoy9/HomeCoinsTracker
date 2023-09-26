@@ -1,7 +1,7 @@
 import axios from "axios";
 import { NODE_ENV, REACT_LOCAL_URL,REACT_PROD_URL} from '@env';
 import { getAxiosHeader, getAxiosHeaderWithoutCookie, showAlert } from "../../Utils/CommonAuthFunction"
-import { USER_REQUIEST, USER_SUCCCESS } from "../userConstants";
+import { USER_FAIL, USER_REQUIEST, USER_SUCCCESS } from "../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const URL = NODE_ENV != 'production' ? REACT_PROD_URL:REACT_LOCAL_URL;
 
@@ -24,5 +24,16 @@ export const loging = (userDetails) => async(dispatch) =>{
         }else{
             showAlert(err);
         }
+    }
+};
+
+export const getMe = () =>async(dispatch)=>{
+    try{
+        dispatch({type:USER_REQUIEST})
+        const { data } = await axios.get(`${NODE_ENV != 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/userController/getUserDetailById`,getAxiosHeader());
+        console.log(data);
+        dispatch({type:USER_SUCCCESS,payload:data.data})
+    }catch(err){
+        dispatch({type:USER_FAIL,payload:err?.response.data.msg})
     }
 }

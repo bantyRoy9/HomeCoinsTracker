@@ -10,3 +10,9 @@ exports.getUserDetails = catchAsync(async(req,res,next)=>{
         })
 
     });
+exports.getLoginUserDetails = catchAsync(async(req,res,next)=>{
+    res.status(200).json({
+        status:true,
+        data:req?.user
+    })
+})
