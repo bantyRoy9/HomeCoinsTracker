@@ -41,7 +41,9 @@ const Profile = () => {
         color:isDarkMode?darkColorProps.textColor:lightColorProps.textColor
     };
     useEffect(()=>{
-        console.log(user);
+        if(user){
+            setUserDetails(user)
+        }
     },[])
     const changeHandler =(name,value)=>{
         setUserDetails({ ...userDetails,[name]:value});
@@ -69,8 +71,8 @@ const Profile = () => {
                         
                     </View>
                     <View style={styles.profileDetail}>
-                        <View><Text style={{...styles.profileText, ...styles.profileDetailText}}>Name</Text></View>
-                        <View><Text style={styles.profileText}>mr.bantikumar9716@gmail.com</Text></View>
+                        <View><Text style={{...styles.profileText, ...styles.profileDetailText}}>{userDetails?.name?.toUpperCase()??'NA'}</Text></View>
+                        <View><Text style={styles.profileText}>UsedId: {userDetails?.userId??'NA'}</Text></View>
                     </View>
                     {/* <View style={styles.profileEditIcon}><FontIcons name={'edit'} size={25}/></View> */}
                 </View>
@@ -80,7 +82,7 @@ const Profile = () => {
                             <FontIcons name='phone' size={25}/>
                         </View>
                         <View>
-                            <Text style={{...styles.profileText,...styles.profileContactDetailText}}>+91 7050193635</Text>
+                            <Text style={{...styles.profileText,...styles.profileContactDetailText}}>+91 {userDetails?.phone??'NA'}</Text>
                         </View>
                     </View>
                     <View style={styles.profileContactDetail}>
@@ -88,7 +90,7 @@ const Profile = () => {
                             <FontIcons name='envelope-o' size={25}/>
                         </View>
                         <View>
-                            <Text style={{...styles.profileText,...styles.profileContactDetailText}}>Mr.bantikumar9716@gmail.com</Text>
+                            <Text style={{...styles.profileText,...styles.profileContactDetailText}}>{userDetails?.email??'NA'}</Text>
                         </View>
                     </View>
                 </View>

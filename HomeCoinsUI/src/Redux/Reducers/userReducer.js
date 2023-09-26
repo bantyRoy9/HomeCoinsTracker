@@ -1,4 +1,4 @@
-import { USER_FAIL, USER_REGISTER_FAIL, USER_REGISTER_REQUIEST, USER_REGISTER_SUCCESS, USER_REQUIEST, USER_SUCCCESS } from "../userConstants";
+import { USER_FAIL, USER_REGISTER_FAIL, USER_REGISTER_REQUIEST, USER_REGISTER_SUCCESS, USER_REQUIEST, USER_SUCCCESS } from "../constants";
 
 export const userReducer = (state = {user:{}},action) => {
     switch(action.type){

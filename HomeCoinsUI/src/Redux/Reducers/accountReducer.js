@@ -1,17 +1,19 @@
-import { USER_FAIL, USER_REGISTER_FAIL, USER_REGISTER_REQUIEST, USER_REGISTER_SUCCESS, USER_REQUIEST, USER_SUCCCESS } from "../userConstants";
+import { ACCOUNT_FAIL,  ACCOUNT_REQUIEST, ACCOUNT_SUCCCESS} from "../constants";
 
-export const accountReducer = (state = {accountDetails:{}},action) => {
+export const accountReducer = (state = {account:{}},action) => {
+    
     switch(action.type){
-        case USER_REQUIEST:
-        return{
-            isLoading:true,
-        };
-        case USER_SUCCCESS:
+        case ACCOUNT_REQUIEST:
         return{
             isLoading:false,
-            account:state.payload
+            account:null,
         };
-        case USER_FAIL:
+        case ACCOUNT_SUCCCESS:
+        return{
+            isLoading:true,
+            account:action.payload
+        };
+        case ACCOUNT_FAIL:
         return{
             isLoading:false,
             account:null

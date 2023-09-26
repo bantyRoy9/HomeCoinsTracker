@@ -81,7 +81,6 @@ exports.logout = async (req, res, next) => {
 };
 
 exports.protect = catchAsync(async (req, res, next) => {
-    console.log(req.headers);
     let token;
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
@@ -115,24 +114,26 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 
 exports.isLoggedIn = async (req, res, next) => {
-    if (req.cookies.jwt) {
-        try {
-            const decoder = await promisify(jwt.verify)(req.cookies.jwt, process.env.jwt_secret);
-            // console.log(decoder);
-            const currentUser = await User.findById(decoder.id)
-            if (!currentUser) {
-                return next()
-            }
-            if (currentUser.changePasswordAfter(decoder.iat)) {
-                return next()
-            }
-
-            res.locals.user = currentUser
-            return next();
-        } catch (err) {
-            return next();
-        }
+    let token;
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        token = req.headers.authorization.split(' ')[1];
     }
+    else if (req.headers.cookie && req.headers.cookie.startsWith('jwt')) {
+        token = req.headers.cookie.split('=')[1];
+    }
+    if (!token) {
+        return next(new AppError('you are not login! please Login', 401))
+    }
+    const decoder = await promisify(jwt.verify)(req.cookies.jwt, process.env.jwt_secret);
+    // console.log(decoder);
+    const currentUser = await User.findById(decoder.id)
+    if (!currentUser) {
+        return next(new AppError('The user belongs to this Id token is no longer exist', 401))
+    }
+    if (currentUser.changePasswordAfter(decoder.iat)) {
+        return next(new AppError('User recently changed password! please login again!!', 401))
+    }
+    res.user = currentUser
     next();
 };
 
