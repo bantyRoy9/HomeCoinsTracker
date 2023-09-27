@@ -33,5 +33,9 @@ export const defaultStyle = StyleSheet.create({
       earnExpensBtnText:{
         fontSize:16,
         fontWeight:'600'
-      }
+      },
+      activityIndicator:{
+        flex:1,
+        justifyContent:'center',
+    }
 })

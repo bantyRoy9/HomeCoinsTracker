@@ -1,5 +1,5 @@
 const express = require('express');
-const { createrUser, loginUser, protect, isLoggedIn } = require('../Controllers/authController');
+const { createrUser, loginUser, protect, isLoggedIn, logout } = require('../Controllers/authController');
 const { getUserDetails,getLoginUserDetails  } = require('../Controllers/userController');
 // const { createrUser, loginUser } = require('../Controllers/userController');
 const router = express.Router();
@@ -7,6 +7,7 @@ const router = express.Router();
 router.post('/createUser', createrUser);
 router.post('/loginUser', loginUser);
 router.get('/getUserDetailById', protect , getUserDetails);
-router.get('/getMe',isLoggedIn,getLoginUserDetails)
+router.get('/getMe',isLoggedIn,getLoginUserDetails);
+router.get('/logout',logout);
 
 module.exports = router

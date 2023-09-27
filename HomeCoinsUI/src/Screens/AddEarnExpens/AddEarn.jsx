@@ -11,8 +11,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getAxiosHeader } from '../../Utils/CommonAuthFunction';
 import DatePicker from '../../Components/DatePicker';
 import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
+import { useDispatch } from 'react-redux';
+import { addEarn } from '../../Redux/Action/accountAction';
 const AddEarnExpens = () => {
   const isDarkMode = useColorScheme() == 'dark';
+  const dispatch = useDispatch();
   const [details, setDetails] = useState({date:moment().format('YYYY-MM-DD')})
   const backgroundStyle = {
     backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
@@ -26,29 +29,12 @@ const AddEarnExpens = () => {
   const changeHandler = (name, value) => {
     setDetails({ ...details, [name]: value })
   }
-  const showAlert = () =>
-    Alert.alert(
-      'Done',
-      `${details?.amount} save successfull.`,
-      [
-        {
-          text: 'OK',
-          onPress: () =>{setDetails({})},
-          style: 'cancel',
-        },
-      ],
-      {
-        cancelable: true,
-        onDismiss: () =>{},
-      },
-    );
+  
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/earn`, details, getAxiosHeader());
-      if (res.data.status == 'true') {
-        showAlert();
-      }
+      console.log(details,'1');
+      dispatch(addEarn(details))
     } catch (err) {
       console.log(err)
     }

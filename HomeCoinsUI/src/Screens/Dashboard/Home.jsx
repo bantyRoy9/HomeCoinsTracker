@@ -1,10 +1,10 @@
-import { ScrollView, SafeAreaView, StyleSheet, Pressable, Text, View, useColorScheme, StatusBar } from 'react-native'
+import { ScrollView,ActivityIndicator, SafeAreaView, StyleSheet, Pressable, Text, View, useColorScheme, StatusBar } from 'react-native'
 import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
 import FeatherIcons from 'react-native-vector-icons/Feather';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import Icons6 from 'react-native-vector-icons/FontAwesome6';
 import { homeNavList } from '../../Utils/homeNavList';
-import Chart from '../../Components/Chart/Chart';
+import Chart from '../../Components/Chart';
 import React, { useState, useEffect } from 'react'
 import Header from '../../Components/Header';
 import { Card } from 'react-native-elements';
@@ -21,8 +21,7 @@ import { getMe } from '../../Redux/Action/userAction';
 const analyticsJson = {Earn : 0,Expend :0,Saving:0}
 const Home = () => {
   const navigation = useNavigation();
-  const [graphData, setGraphData] = useState(null);
-  const [dateRange, setDateRange] = useState({});
+  const [dateRange, setDateRange] = useState({label:'Last 7 days'});
   const dispatch = useDispatch();
   const isDarkMode = useColorScheme() == "dark";
   const backgroundStyle = {
@@ -32,17 +31,12 @@ const Home = () => {
   const  {isLoading, account} = useSelector(state=>state.account);
   
   useEffect(() => {
-    const cookie = getStoredCookie(); 
-    if(cookie){
-      dispatch(getMe())
-    }
-    fetchDate();
+    const dateRange = homeNavList.filter(el => el.active == true);
+    dispatch(getEarnExpendData(dateRange));
   }, [dateRange,dispatch]);
 
   const fetchDate = async () => {
     try {
-     const dateRange = homeNavList.filter(el => el.active == true);
-     dispatch(getEarnExpendData(dateRange));
    } catch (err) {
      console.log(err);
    }
@@ -56,6 +50,9 @@ const Home = () => {
       }
     });
     setDateRange(navPress);
+  }
+  if(!isLoading){
+   // console.log(account,isLoading);
   }
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
@@ -78,6 +75,7 @@ const Home = () => {
               </Pressable>
             ))}
           </View>
+          {isLoading ?<View style={defaultStyle.activityIndicator}><ActivityIndicator  size="large" color={isDarkMode?darkColorProps.loaderColor:lightColorProps.loaderColor}/></View> : <>
           <View style={defaultStyle.viewSection}>
             <Card containerStyle={{ ...styles.cardContainer, backgroundColor: isDarkMode ? darkColorProps.cardBackground : lightColorProps.cardBackground }}>
               <View style={styles.cardTitle}>
@@ -86,28 +84,28 @@ const Home = () => {
                 </View>
                 <View style={styles.cardRightTitle}>
                   <View>
-                    <Text style={styles.cardRightText}>Last 7 days</Text>
+                    <Text style={styles.cardRightText}>{dateRange.label}</Text>
                   </View>
                   <View style={{ ...styles.cardRightIconCont, borderColor: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor }}>
-                    <FeatherIcons name='filter' style={{ ...styles.cardRightIcon, borderColor: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor }} color={isDarkMode ? darkColorProps.textColor : lightColorProps.textColor} />
+                    <FeatherIcons name='filter' color={isDarkMode ? darkColorProps.textColor : lightColorProps.textColor} size={15}/>
                   </View>
                 </View>
               </View>
               <View>
-              {!isLoading ?<View><Text>Loading..</Text></View> : account && account.analyticsDetail &&  <>
+              {!isLoading && account && account?.analyticsDetail &&  <>
                   {Object.keys(account?.analyticsDetail).map((el, idx) => (
                     <View key={`${idx}`} style={styles.analyticsDetails}>
                       <View><Text style={styles.analyticsText}>{el}</Text></View>
-                      <View><Text style={styles.analyticsText}>₹{account.analyticsDetail[el]?.toFixed(2)}</Text></View>
+                      <View><Text style={styles.analyticsText}>₹{account?.analyticsDetail[el]?.toFixed(2)}</Text></View>
                     </View>
                   ))}
                 </>}
               </View>
             </Card>
             <View style={defaultStyle.viewSection}>
-              {isLoading && account.graphData && account.graphData.labels && account.graphData.labels.length>0 && <Chart graphData={account?.graphData} />}
+              {!isLoading && account?.graphData && account?.graphData.labels && account?.graphData.labels.length>0 && <Chart graphData={account?.graphData} />}
             </View>
-          </View>
+          </View></>}
         </View>
       </ScrollView>
       <View>
@@ -180,13 +178,9 @@ const styles = StyleSheet.create({
     fontWeight: '500'
   },
   cardRightIconCont: {
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderRadius: 5,
-    padding: 2
-  },
-  cardRightIcon: {
-    fontSize: 15,
-    fontWeight: '800',
+    padding: 4
   },
   analyticsDetails: {
     flexDirection: 'row',
