@@ -15,14 +15,17 @@ const getContinousesDate = (startDateStr,endDateStr) =>{
 const filterJsonForGraph =(jsonData)=>{
     let dataObj ={},dateList=[];
     if(jsonData){
-        dateList = jsonData.map(el=> new Date(el.date).setHours(0,0,0)).sort();
-        dateList = getContinousesDate(moment(new Date(dateList[0])).format('YYYY-MM-DD'),moment(new Date(dateList[dateList?.length-1])).format('YYYY-MM-DD'));
+        var dateListSort = jsonData.map(el=> new Date(el.date).setHours(0,0,0)).sort();
+        dateList = getContinousesDate(moment(new Date(dateListSort[0])).format('YYYY-MM-DD'),moment(new Date(dateListSort[dateListSort?.length-1])).format('YYYY-MM-DD'));
         dateList.forEach((date,idx)=>{
-            if(Object.keys(dataObj).includes(date)){
-                dataObj[date] = [...dataObj[`${date}`], jsonData[idx]?.amount??0]
+            var totalAmount = jsonData.filter(el=> moment(new Date(el.date)).format('DD-MM-YYYY') == date).map(ele=> ele.amount);
+            dataObj[date] = totalAmount;    
+           /* if(Object.keys(dataObj).includes(date)){
+                //dataObj[date] = [...dataObj[`${date}`], ...jsonData[idx]?.amount??0]
+                dataObj[date] = [...dataObj[`${date}`], ...totalAmount]
             }else{
-                dataObj[date] = [jsonData[idx]?.amount??0];    
-            }
+                dataObj[date] = totalAmount;    
+            }*/
         });
     };
     //console.log(dataObj,dateList);

@@ -28,13 +28,13 @@ const Login = () => {
   const [user, setUser] = useState({ email: "", password: "" });
 
   useEffect(() => {
-    fetchAsync();
+   // fetchAsync();
   }, [])
   const fetchAsync= async()=>{
     try{
       const cookies =await AsyncStorage.getItem('cookie');
       if(cookies !== null){
-         navigation.navigate('Home');
+       //  navigation.navigate('Home');
       };
     }catch(err){
       showAlert('Something Wrong happend!');
@@ -48,8 +48,8 @@ const Login = () => {
   const submitHandler = async(e) => {
     e.preventDefault()
     try {
-      await dispatch(loging(user));
-      fetchAsync();
+      dispatch(loging(user));
+     // fetchAsync();
     } catch (err) {
       console.log(err);
     }

@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View, useColorScheme,Dimensions } from 'react-native'
 import React, {useState} from 'react'
 import { LineChart } from 'react-native-chart-kit'
-import { darkColorProps,lightColorProps } from '../../Utils/colorProp'
+import { darkColorProps,lightColorProps } from '../Utils/colorProp'
 import { Rect, Svg, Text as TextSVG } from 'react-native-svg'
 
 const Chart = ({graphData}) => {

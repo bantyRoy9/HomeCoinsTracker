@@ -5,10 +5,11 @@ import Input from '../../Components/Input';
 import Header from '../../Components/Header';
 import { defaultStyle } from '../../Utils/defaultCss';
 import FontIcons from 'react-native-vector-icons/FontAwesome'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesome } from '../../Utils/VectorIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { logoutUser } from '../../Redux/Action/userAction';
 const profileNavList=[{
         label:'User Dashboard',
         onPress:'userDashboard',
@@ -33,6 +34,7 @@ const profileNavList=[{
 ]
 const Profile = () => {
     const isDarkMode = useColorScheme() == 'dark';
+    const dispatch = useDispatch();
     const [userDetails,setUserDetails] = useState({});
     const navigation = useNavigation();
     const { user } = useSelector(state=>state.user);
@@ -42,6 +44,7 @@ const Profile = () => {
     };
     useEffect(()=>{
         if(user){
+            console.log(user,'ddd');
             setUserDetails(user)
         }
     },[])
@@ -50,7 +53,7 @@ const Profile = () => {
     };
     const logout = async()=>{
         await AsyncStorage.clear();
-        navigation.navigate('Login')
+        dispatch(logoutUser())
     }
     const onPressprofileNav = (forPress) =>{
         console.log(forPress);
@@ -72,7 +75,7 @@ const Profile = () => {
                     </View>
                     <View style={styles.profileDetail}>
                         <View><Text style={{...styles.profileText, ...styles.profileDetailText}}>{userDetails?.name?.toUpperCase()??'NA'}</Text></View>
-                        <View><Text style={styles.profileText}>UsedId: {userDetails?.userId??'NA'}</Text></View>
+                        <View><Text style={styles.profileText}>UserId: {userDetails?.userId??'NA'}</Text></View>
                     </View>
                     {/* <View style={styles.profileEditIcon}><FontIcons name={'edit'} size={25}/></View> */}
                 </View>
@@ -82,7 +85,7 @@ const Profile = () => {
                             <FontIcons name='phone' size={25}/>
                         </View>
                         <View>
-                            <Text style={{...styles.profileText,...styles.profileContactDetailText}}>+91 {userDetails?.phone??'NA'}</Text>
+                            <Text style={{...styles.profileText,...styles.profileContactDetailText}}>+91 {userDetails?.mobile??'NA'}</Text>
                         </View>
                     </View>
                     <View style={styles.profileContactDetail}>
@@ -96,16 +99,25 @@ const Profile = () => {
                 </View>
                 <View style={styles.profileAccountDetails}>
                     <View style={styles.profileAccountDetail}>
-                        <View><Text style={{...styles.profileText,...styles.profileAccountText}}>1234</Text></View>
-                        <View><Text style={{...styles.profileText,...styles.profileAccountText}}>12</Text></View>
-                        <View><Text style={{...styles.profileText,...styles.profileAccountText}}>12</Text></View>
+                        <View style={styles.profileAccountTests}>
+                            <Text style={{...styles.profileText,...styles.profileAccountText}}>1234</Text>
+                            <Text>Total Earn</Text>
+                        </View>
+                        <View style={styles.profileAccountTests}>
+                            <Text style={{...styles.profileText,...styles.profileAccountText}}>12</Text>
+                            <Text>Total Expend</Text>
+                        </View>
+                        <View style={styles.profileAccountTests}>
+                            <Text style={{...styles.profileText,...styles.profileAccountText}}>12</Text>
+                            <Text>Total Savings</Text>
+                        </View>
                     </View>
                 </View>
             </View>
             <ScrollView showsHorizontalScrollIndicator={false}>
                 <View>
                 {profileNavList.map(nav=>(
-                    <Pressable style={styles.profileNavLists} onPress={()=>onPressprofileNav(nav.onPress)}>
+                    <Pressable key={nav.label} style={{...styles.profileNavLists,borderColor:isDarkMode?darkColorProps.borderColor:lightColorProps.borderColor}} onPress={()=>onPressprofileNav(nav.onPress)}>
                         <View style={styles.profileNavList}>
                             <View><FontAwesome name={nav?.Icons[0]} size={25}/></View>
                             <View><Text style={{...styles.profileText,...styles.profileContactDetailText}}>{nav?.label}</Text></View>
@@ -172,6 +184,9 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'space-around'
     },
+    profileAccountTests:{
+        alignItems:'center'
+    },
     profileAccountText:{
         fontWeight:'800',
         fontSize:25
@@ -182,8 +197,7 @@ const styles = StyleSheet.create({
     //     right:0
     // }
     profileNavLists:{
-        borderColor:'#3d3000',
-        borderBottomWidth:1,
+        borderBottomWidth:.1,
         padding:15
     },
     profileNavList:{
