@@ -25,14 +25,14 @@ function App() {
   const dispatch = useDispatch();
   const isDarkMode = useColorScheme() == 'dark'
   const { isLoading, isAuthenticated } = useSelector(state => state.user);
-  useEffect(() => {
-    dispatch(getMe());
-  }, []);
+//  useEffect(() => {
+   // dispatch(getMe());
+  //}, []);
   const navigationOptions = {
     headerTintColor: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor,
     headerStyle: {
       backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
-      borderBottomColor: '#ffffff',
+      borderBottomColor: '#f0f',
       borderBottomWidth: 0,
     },
     headerTitleStyle: {

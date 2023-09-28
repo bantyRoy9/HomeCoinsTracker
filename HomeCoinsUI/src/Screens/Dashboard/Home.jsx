@@ -8,17 +8,12 @@ import Chart from '../../Components/Chart';
 import React, { useState, useEffect } from 'react'
 import Header from '../../Components/Header';
 import { Card } from 'react-native-elements';
-import axios from 'axios';
-import moment from 'moment';
 import { defaultStyle } from '../../Utils/defaultCss';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
 import { useDispatch, useSelector } from 'react-redux';
 import { getEarnExpendData } from '../../Redux/Action/accountAction';
-import { getStoredCookie } from '../../Utils/CommonAuthFunction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getMe } from '../../Redux/Action/userAction';
-const analyticsJson = {Earn : 0,Expend :0,Saving:0}
 const Home = () => {
   const navigation = useNavigation();
   const [dateRange, setDateRange] = useState({label:'Last 7 days'});
@@ -28,19 +23,14 @@ const Home = () => {
     backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
     color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
   };
-  const  {isLoading, account} = useSelector(state=>state.account);
+  const  { isLoading, account } = useSelector(state=>state.account);
+  const { isAuthenticated } = useSelector(state=>state.user);
   
   useEffect(() => {
     const dateRange = homeNavList.filter(el => el.active == true);
-    dispatch(getEarnExpendData(dateRange));
+    dispatch(getEarnExpendData(dateRange,isAuthenticated));
   }, [dateRange,dispatch]);
 
-  const fetchDate = async () => {
-    try {
-   } catch (err) {
-     console.log(err);
-   }
- };
   const navPressHandle = (navPress) =>{
     homeNavList.map(el=>{
       if(el.label == navPress.label){

@@ -60,7 +60,7 @@ exports.loginUser = catchAsync(async (req, res, next) => {
             return next(new AppError('Please fill both email & password ', 401))
         };
 
-        const user = await User.findOne({ email }).select('+password');
+        const user = await User.findOne({ email }).select('+password').populate('totalEarn totalExpend','amount -_id');
 
         if (!user || !(await user.correctPassword(password, user.password))) {
             return next(new AppError('Incorrect user email or password', 401))

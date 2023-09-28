@@ -31,6 +31,7 @@ const Input = (props) => {
       {props.isLabel && <Text style={styles.inputLabel}>{props.label}</Text>}
       {props.icons && <Icons style={styles.inputIcons} name={props.icons} size={20} />}  
         <TextInput
+                pointerEvents={props?.pointerEvents}
                 keyboardType={props?.keyboardType}
                 onBlur={onBlur}
                 onFocus={onFocuse}
