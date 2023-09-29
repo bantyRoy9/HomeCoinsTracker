@@ -1,4 +1,4 @@
-import { USER_FAIL, USER_REGISTER_FAIL, USER_REGISTER_REQUIEST, USER_LOGOUT_SUCCCESS,USER_REGISTER_SUCCESS, USER_REQUIEST, USER_SUCCCESS } from "../constants";
+import { USER_FAIL, USER_REGISTER_FAIL, USER_REGISTER_REQUIEST,USER_GETME_REQUIEST, USER_LOGOUT_SUCCCESS,USER_REGISTER_SUCCESS, USER_REQUIEST, USER_SUCCCESS, USER_GETME_SUCCCESS } from "../constants";
 
 export const userReducer = (state = {user:{}},action) => {
     switch(action.type){
@@ -8,17 +8,26 @@ export const userReducer = (state = {user:{}},action) => {
             isLoading:true,
             isAuthenticated:false
         };
+        case USER_GETME_REQUIEST:
+            return{
+                ...state,
+                isLoading:true
+            };
+        case USER_GETME_SUCCCESS:
+            return{
+                isLoading:false,
+                isAuthenticated:true,
+                user:action.payload
+            }
         case USER_REGISTER_SUCCESS:
         case USER_SUCCCESS:
         return{
-            ...state,
             isLoading:false,
             isAuthenticated:true,
             user:action.payload
         };
         case USER_LOGOUT_SUCCCESS:
             return{
-            ...state,
             isLoading:false,
             isAuthenticated:false,
             user:action.payload

@@ -14,7 +14,13 @@ const profileNavList=[{
         label:'User Dashboard',
         onPress:'userDashboard',
         Icons:["dashboard"]
-    },{
+    },
+    {
+        label:'Add Members',
+        onPress:'addMember',
+        Icons:["users"]
+    },
+    {
         label:'Email Setting',
         onPress:'emailSetting',
         Icons:["envelope-o"]
@@ -44,7 +50,6 @@ const Profile = () => {
     };
     useEffect(()=>{
         if(user){
-            console.log(user,'ddd');
             setUserDetails(user)
         }
     },[])
@@ -56,7 +61,6 @@ const Profile = () => {
         dispatch(logoutUser())
     }
     const onPressprofileNav = (forPress) =>{
-        console.log(forPress);
         switch(forPress){
             case 'Logout':
             logout();
@@ -100,15 +104,15 @@ const Profile = () => {
                 <View style={styles.profileAccountDetails}>
                     <View style={styles.profileAccountDetail}>
                         <View style={styles.profileAccountTests}>
-                            <Text style={{...styles.profileText,...styles.profileAccountText}}>1234</Text>
+                            <Text style={{...styles.profileText,...styles.profileAccountText}}>{user?.totalEarn.reduce((a,b)=>a + b?.amount,0)}</Text>
                             <Text>Total Earn</Text>
                         </View>
                         <View style={styles.profileAccountTests}>
-                            <Text style={{...styles.profileText,...styles.profileAccountText}}>12</Text>
+                            <Text style={{...styles.profileText,...styles.profileAccountText}}>{user?.totalExpend.reduce((a,b)=>a + b?.amount,0)}</Text>
                             <Text>Total Expend</Text>
                         </View>
                         <View style={styles.profileAccountTests}>
-                            <Text style={{...styles.profileText,...styles.profileAccountText}}>12</Text>
+                            <Text style={{...styles.profileText,...styles.profileAccountText}}>{user?.totalEarn.reduce((a,b)=>a + b?.amount,0) - user?.totalExpend.reduce((a,b)=>a + b?.amount,0)}</Text>
                             <Text>Total Savings</Text>
                         </View>
                     </View>
