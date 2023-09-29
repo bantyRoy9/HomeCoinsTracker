@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getEarnExpendData } from '../../Redux/Action/accountAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getMe } from '../../Redux/Action/userAction';
+import Table from '../../Components/DataTable';
 const Home = () => {
   const navigation = useNavigation();
   const [dateRange, setDateRange] = useState({label:'Last 7 days'});
@@ -96,6 +97,9 @@ const Home = () => {
               {!isLoading && account?.graphData && account?.graphData.labels && account?.graphData.labels.length>0 && <Chart graphData={account?.graphData} />}
             </View>
           </View></>}
+        </View>
+        <View>
+          <Table />
         </View>
       </ScrollView>
       <View>
