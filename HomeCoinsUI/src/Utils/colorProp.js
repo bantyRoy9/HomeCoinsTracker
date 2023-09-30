@@ -10,7 +10,12 @@ export const lightColorProps = {
     inputTextColorOnFocus:"#38304C",
     cardBackground:"#3d3d3d",
     loaderColor:"#38304C",
-    borderColor:"#38304C"
+    borderColor:"#38304C",
+
+    tableHeaderBackground:'',
+    tableHeaderColor:'',
+    tableBodyBackground:'',
+    tableBodyColor:''
 }
 
 export const darkColorProps ={
@@ -25,5 +30,10 @@ export const darkColorProps ={
     inputTextColorOnFocus:"#fff",
     cardBackground:"#3d3d3d",
     loaderColor:"#fff",
-    borderColor:"#fff"
+    borderColor:"#fff",
+
+    tableHeaderBackground:'#000',
+    tableHeaderColor:'',
+    tableBodyBackground:'',
+    tableBodyColor:''
 }

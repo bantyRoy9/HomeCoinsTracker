@@ -1,10 +1,10 @@
-import { NODE_ENV, REACT_LOCAL_URL,REACT_PROD_URL} from '@env';
+
 import { ACCOUNT_ADD_FAIL, ACCOUNT_ADD_REQUIEST, ACCOUNT_ADD_SUCCESS, ACCOUNT_FAIL, ACCOUNT_REQUIEST, ACCOUNT_REQUIEST_ADD, ACCOUNT_SUCCCESS} from "../constants";
 import axios from 'axios';
 import moment from 'moment';
 import { getAxiosHeader, showAlert } from '../../Utils/CommonAuthFunction';
-let URL = `${NODE_ENV != 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController`;
-//URL = 'http://192.168.1.12:8000/api/v1/accountController'
+import { accountControllerURL, userControllerURL } from '../../Utils/urlProperties';
+
 const getAnalyticsDetails = (resData) => {
     const analyticsJson ={};
     analyticsJson.Earn = resData.datasets[0].data.reduce((a, b) => a + b, 0);
@@ -16,12 +16,14 @@ const getAnalyticsDetails = (resData) => {
 export const getEarnExpendData = (dateRange,isAuthenticated)=> async(dispatch)=>{
     try{
         dispatch({type:ACCOUNT_REQUIEST});
-        console.log(`${URL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
-        const { data } = await axios.get(`${URL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
+        console.log(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
+        const {data} = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
         let response={};
         if(isAuthenticated){
-            response = await axios.get(`${URL}/getUserDetailById`,getAxiosHeader());
+            console.log(userControllerURL,getAxiosHeader());
+            response = await axios.get(`${userControllerURL}/getUserDetailById`,getAxiosHeader());
         }
+        
         if (data.status && data.data && data.graphData) {
             data.analyticsDetail = getAnalyticsDetails(data.graphData)
             data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })
@@ -37,8 +39,8 @@ export const getEarnExpendData = (dateRange,isAuthenticated)=> async(dispatch)=>
 export const addEarn = (details) => async(dispatch) =>{
     try{
         dispatch({type:ACCOUNT_ADD_REQUIEST});
-        console.log(`${URL}/earn`,'2222');
-        const { data } = await axios.post(`${URL}/earn`,details,getAxiosHeader());
+        console.log(`${accountControllerURL}/earn`,'2222');
+        const { data } = await axios.post(`${accountControllerURL}/earn`,details,getAxiosHeader());
         if(data){
             showAlert(`${details.amount} add successfully.`);
             dispatch({type:ACCOUNT_ADD_SUCCESS,payload:data});

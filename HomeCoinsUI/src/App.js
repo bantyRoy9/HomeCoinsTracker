@@ -25,9 +25,9 @@ function App() {
   const dispatch = useDispatch();
   const isDarkMode = useColorScheme() == 'dark'
   const { isLoading, isAuthenticated } = useSelector(state => state.user);
-//  useEffect(() => {
-   // dispatch(getMe());
-  //}, []);
+ useEffect(() => {
+   dispatch(getMe());
+  }, []);
   const navigationOptions = {
     headerTintColor: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor,
     headerStyle: {
