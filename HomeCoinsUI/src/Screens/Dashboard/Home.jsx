@@ -96,10 +96,11 @@ const Home = () => {
             <View style={defaultStyle.viewSection}>
               {!isLoading && account?.graphData && account?.graphData.labels && account?.graphData.labels.length>0 && <Chart graphData={account?.graphData} />}
             </View>
-          </View></>}
-        </View>
-        <View>
-          <Table />
+          </View>
+          <View>
+            <Table tableData={account.graphData}/>
+          </View>
+          </>}
         </View>
       </ScrollView>
       <View>
