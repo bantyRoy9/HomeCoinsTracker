@@ -3,7 +3,7 @@ import { NODE_ENV, REACT_LOCAL_URL,REACT_PROD_URL} from '@env';
 import { getAxiosHeader, getAxiosHeaderWithoutCookie, showAlert } from "../../Utils/CommonAuthFunction"
 import { USER_FAIL, USER_REQUIEST, USER_GETME_REQUIEST,USER_GETME_SUCCCESS,USER_SUCCCESS,USER_LOGOUT_SUCCCESS } from "../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { userControllerURL } from "../../Utils/urlProperties";
+import { userControllerURL } from "../../Utils/URLProperties";
 
 export const loging = (userDetails) => async(dispatch) =>{
     try{
@@ -30,7 +30,7 @@ export const logoutUser = () => async(dispatch)=>{
         const { data } = await axios.get(`${userControllerURL}/logout`);
         if(data){
             console.log(data);
-            AsyncStorage.clear();
+            await AsyncStorage.clear();
         }
         dispatch({type:USER_LOGOUT_SUCCCESS,payload:data});
     }catch(err){

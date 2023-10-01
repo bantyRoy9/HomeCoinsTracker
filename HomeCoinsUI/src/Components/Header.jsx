@@ -3,7 +3,6 @@ import React from 'react'
 import Icons from 'react-native-vector-icons/FontAwesome'
 import { darkColorProps, lightColorProps } from '../Utils/colorProp';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 const Header = () => {
     const navigation = useNavigation();
     const isDarkMode = useColorScheme() == 'dark';

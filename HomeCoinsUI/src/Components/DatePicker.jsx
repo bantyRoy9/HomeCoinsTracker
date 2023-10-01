@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, Button } from 'react-native';
+import { SafeAreaView, View, Text, Button,Pressable } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Input from './Input';
 import moment from 'moment';
@@ -21,7 +21,7 @@ const DatePicker = (props) => {
   };
   return (
     
-      <View>
+      <View style={{position:'relative'}}>
         <View pointerEvents='none'>
         {selectedDate && <Input
             placeholder={"Date"}
@@ -29,14 +29,16 @@ const DatePicker = (props) => {
             isLabel={false}
             name={'date'}
             icons={'calendar'}
-            value={moment(selectedDate).format('YYYY-MM-DD')}
+            value={moment(props?.value)?.format('YYYY-MM-DD')}
             secureTextEntry={false}
             autoFocus={false}
           />}
         </View>
-        <Button title="Select a date" onPress={showDatePicker} />
+        <View style={{position:'absolute',width:'100%',height:50,top:12}}>
+          <Pressable onPress={props?.onPress??showDatePicker} style={{height:'100%',alignItems:'center',borderRadius:10}}></Pressable>
+        </View>
         <DateTimePickerModal
-          date={selectedDate}
+          date={props?.date??selectedDate}
           isVisible={datePickerVisible}
           mode="date"
           onConfirm={handleConfirm}

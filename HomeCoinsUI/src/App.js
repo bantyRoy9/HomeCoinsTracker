@@ -5,7 +5,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Login from './Screens/Users/Login';
 import Signup from './Screens/Users/Signup'
 import Home from './Screens/Dashboard/Home';
@@ -13,8 +12,7 @@ import AddEarn from './Screens/AddEarnExpens/AddEarn';
 import { darkColorProps, lightColorProps } from './Utils/colorProp';
 import { useColorScheme, ActivityIndicator,View } from 'react-native';
 import AddExpend from './Screens/AddEarnExpens/AddExpend';
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import { store } from './Redux/Store';
+import { useDispatch, useSelector } from 'react-redux';
 import Profile from './Screens/Users/Profile';
 import FontIcons from 'react-native-vector-icons/FontAwesome5'
 import EditProfile from './Screens/Users/EditProfile';

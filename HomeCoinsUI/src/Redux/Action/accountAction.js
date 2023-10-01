@@ -3,7 +3,7 @@ import { ACCOUNT_ADD_FAIL, ACCOUNT_ADD_REQUIEST, ACCOUNT_ADD_SUCCESS, ACCOUNT_FA
 import axios from 'axios';
 import moment from 'moment';
 import { getAxiosHeader, showAlert } from '../../Utils/CommonAuthFunction';
-import { accountControllerURL, userControllerURL } from '../../Utils/urlProperties';
+import { accountControllerURL, userControllerURL } from '../../Utils/URLProperties';
 
 const getAnalyticsDetails = (resData) => {
     const analyticsJson ={};
