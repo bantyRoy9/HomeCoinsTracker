@@ -1,13 +1,9 @@
-import { Button, StatusBar,Image ,Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View, useColorScheme, Alert,ActivityIndicator } from 'react-native'
-import React, { useState,useEffect } from 'react'
+import { StatusBar,Image ,Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View, useColorScheme,ActivityIndicator } from 'react-native'
+import React, { useState } from 'react'
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Input from '../../Components/Input';
 import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
-import axios from 'axios';
-import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { showAlert } from '../../Utils/CommonAuthFunction';
 import { useDispatch,useSelector} from 'react-redux';
 import { loging } from '../../Redux/Action/userAction';
 import { defaultStyle } from '../../Utils/defaultCss';

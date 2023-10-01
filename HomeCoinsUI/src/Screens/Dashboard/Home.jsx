@@ -1,4 +1,4 @@
-import { ScrollView,ActivityIndicator, SafeAreaView, StyleSheet, Pressable, Text, View, useColorScheme, StatusBar } from 'react-native'
+import { ScrollView, ActivityIndicator, SafeAreaView, StyleSheet, Pressable, Text, View, useColorScheme, StatusBar } from 'react-native'
 import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
 import FeatherIcons from 'react-native-vector-icons/Feather';
 import Icons from 'react-native-vector-icons/FontAwesome';
@@ -17,33 +17,33 @@ import { getMe } from '../../Redux/Action/userAction';
 import Table from '../../Components/DataTable';
 const Home = () => {
   const navigation = useNavigation();
-  const [dateRange, setDateRange] = useState({label:'Last 7 days'});
+  const [dateRange, setDateRange] = useState({ label: 'Last 7 days' });
   const dispatch = useDispatch();
   const isDarkMode = useColorScheme() == "dark";
   const backgroundStyle = {
     backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
     color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
   };
-  const  { isLoading, account } = useSelector(state=>state.account);
-  const { isAuthenticated } = useSelector(state=>state.user);
-  
+  const { isLoading, account } = useSelector(state => state.account);
+  const { isAuthenticated } = useSelector(state => state.user);
+
   useEffect(() => {
     const dateRange = homeNavList.filter(el => el.active == true);
-    dispatch(getEarnExpendData(dateRange,isAuthenticated));
-  }, [dateRange,dispatch]);
+    dispatch(getEarnExpendData(dateRange, isAuthenticated));
+  }, [dateRange, dispatch]);
 
-  const navPressHandle = (navPress) =>{
-    homeNavList.map(el=>{
-      if(el.label == navPress.label){
+  const navPressHandle = (navPress) => {
+    homeNavList.map(el => {
+      if (el.label == navPress.label) {
         el.active = true
-      }else{
+      } else {
         el.active = false
       }
     });
     setDateRange(navPress);
   }
-  if(!isLoading){
-   // console.log(account,isLoading);
+  if (!isLoading) {
+    // console.log(account,isLoading);
   }
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
@@ -61,56 +61,56 @@ const Home = () => {
           </View>
           <View style={styles.navigationContainer}>
             {homeNavList.map((ele, idx) => (
-              <Pressable key={`${idx}`} onPress={()=>navPressHandle(ele)}>
+              <Pressable key={`${idx}`} onPress={() => navPressHandle(ele)}>
                 <Text style={ele.active ? styles.activeNavText : styles.navText}>{ele.label}</Text>
               </Pressable>
             ))}
           </View>
-          {isLoading ?<View style={defaultStyle.activityIndicator}><ActivityIndicator  size="large" color={isDarkMode?darkColorProps.loaderColor:lightColorProps.loaderColor}/></View> : <>
-          <View style={defaultStyle.viewSection}>
-            <Card containerStyle={{ ...styles.cardContainer, backgroundColor: isDarkMode ? darkColorProps.cardBackground : lightColorProps.cardBackground }}>
-              <View style={styles.cardTitle}>
-                <View>
-                  <Text style={styles.cardLeftTitle}>Analytics</Text>
-                </View>
-                <View style={styles.cardRightTitle}>
-                  <View>
-                    <Text style={styles.cardRightText}>{dateRange.label}</Text>
-                  </View>
-                  <View style={{ ...styles.cardRightIconCont, borderColor: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor }}>
-                    <FeatherIcons name='filter' color={isDarkMode ? darkColorProps.textColor : lightColorProps.textColor} size={15}/>
-                  </View>
-                </View>
-              </View>
-              <View>
-              {!isLoading && account && account?.analyticsDetail &&  <>
-                  {Object.keys(account?.analyticsDetail).map((el, idx) => (
-                    <View key={`${idx}`} style={styles.analyticsDetails}>
-                      <View><Text style={styles.analyticsText}>{el}</Text></View>
-                      <View><Text style={styles.analyticsText}>₹{account?.analyticsDetail[el]?.toFixed(2)}</Text></View>
-                    </View>
-                  ))}
-                </>}
-              </View>
-            </Card>
+          {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={isDarkMode ? darkColorProps.loaderColor : lightColorProps.loaderColor} /></View> : <>
             <View style={defaultStyle.viewSection}>
-              {!isLoading && account?.graphData && account?.graphData.labels && account?.graphData.labels.length>0 && <Chart graphData={account?.graphData} />}
-            </View>
-          </View>
-          <View>
-            <Table tableData={account.graphData}/>
-          </View>
-          </>}
+              <Card containerStyle={{ ...styles.cardContainer, backgroundColor: isDarkMode ? darkColorProps.cardBackground : lightColorProps.cardBackground }}>
+                <View style={styles.cardTitle}>
+                  <View>
+                    <Text style={styles.cardLeftTitle}>Analytics</Text>
+                  </View>
+                  <View style={styles.cardRightTitle}>
+                    <View>
+                      <Text style={styles.cardRightText}>{dateRange.label}</Text>
+                    </View>
+                    <View style={{ ...styles.cardRightIconCont, borderColor: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor }}>
+                      <FeatherIcons name='filter' color={isDarkMode ? darkColorProps.textColor : lightColorProps.textColor} size={15} />
+                    </View>
+                  </View>
+                </View>
+                <View>
+                  {!isLoading && account && account?.analyticsDetail && <>
+                    {Object.keys(account?.analyticsDetail).map((el, idx) => (
+                      <View key={`${idx}`} style={styles.analyticsDetails}>
+                        <View><Text style={styles.analyticsText}>{el}</Text></View>
+                        <View><Text style={styles.analyticsText}>₹{account?.analyticsDetail[el]?.toFixed(2)}</Text></View>
+                      </View>
+                    ))}
+                  </>}
+                </View>
+              </Card>
+              {!isLoading && account?.graphData && account?.graphData.labels && account?.graphData.labels.length > 0 && <>
+                <View style={defaultStyle.viewSection}>
+                  <Chart graphData={account?.graphData} />
+                </View>
+                <View>
+                  <Table tableData={account.graphData} />
+                </View></>}
+            </View></>}
         </View>
       </ScrollView>
       <View>
-        <View style={{...defaultStyle.viewSection}}>
-          <View style={{...styles.expensEarnBtn,...defaultStyle.screenWidth}}>
-            <Pressable style={{...defaultStyle.earnExpensBtn,...styles.earnBtn}} onPress={()=>navigation.navigate('AddEarn')}>
-              <Text style={defaultStyle.earnExpensBtnText}><Icons6 name='hand-holding-dollar' size={16}/> Add Earn</Text>
+        <View style={{ ...defaultStyle.viewSection }}>
+          <View style={{ ...styles.expensEarnBtn, ...defaultStyle.screenWidth }}>
+            <Pressable style={{ ...defaultStyle.earnExpensBtn, ...styles.earnBtn }} onPress={() => navigation.navigate('AddEarn')}>
+              <Text style={defaultStyle.earnExpensBtnText}><Icons6 name='hand-holding-dollar' size={16} /> Add Earn</Text>
             </Pressable>
-            <Pressable style={{...defaultStyle.earnExpensBtn,...styles.expensBtn}} onPress={()=>navigation.navigate('AddExpend')}>
-              <Text style={defaultStyle.earnExpensBtnText}><Icons6 name='money-check-dollar' size={16}/> Add Expens</Text>
+            <Pressable style={{ ...defaultStyle.earnExpensBtn, ...styles.expensBtn }} onPress={() => navigation.navigate('AddExpend')}>
+              <Text style={defaultStyle.earnExpensBtnText}><Icons6 name='money-check-dollar' size={16} /> Add Expens</Text>
             </Pressable>
           </View>
         </View>
@@ -187,18 +187,18 @@ const styles = StyleSheet.create({
     lineHeight: 30
   },
   expensEarnBtn: {
-    zIndex:1,
+    zIndex: 1,
     flexDirection: 'row',
     position: 'absolute',
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
     bottom: 0,
-    marginHorizontal:22
+    marginHorizontal: 22
   },
-  
-  earnBtn:{
-    backgroundColor:'green'
+
+  earnBtn: {
+    backgroundColor: 'green'
   },
-  expensBtn:{
-    backgroundColor:'red',
+  expensBtn: {
+    backgroundColor: 'red',
   }
 })

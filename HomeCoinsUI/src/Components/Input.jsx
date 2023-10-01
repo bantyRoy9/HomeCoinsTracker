@@ -1,7 +1,8 @@
-import { StyleSheet, Text, TextInput, View, useColorScheme } from 'react-native'
+import { StyleSheet, Text, View, useColorScheme } from 'react-native'
 import React, { useState } from 'react'
 import Icons from 'react-native-vector-icons/FontAwesome'
 import { darkColorProps, lightColorProps } from '../Utils/colorProp';
+import { TextInput } from 'react-native-paper';
 const Input = (props) => {
   const isDarkMode = useColorScheme() == 'dark';
   const [isFocuse, setIsFocuse] = useState(defualtProperty);
@@ -36,15 +37,28 @@ const Input = (props) => {
                 onBlur={onBlur}
                 onFocus={onFocuse}
                 value= {props?.value}
-                style={props?.styles?? { ...styles.inputBox, ...isFocuse,borderColor: isDarkMode? lightColorProps.inputBackground : darkColorProps.inputBackground}}
+                // textColor={backgroundStyle.color}
+                
+                style={{
+                  ...styles.inputBox,
+                  ...isFocuse,
+                  // borderBottomWidth:1,
+                  borderColor: isDarkMode? lightColorProps.inputBackground : darkColorProps.inputBackground,
+                  ...backgroundStyle
+                }}
+                // style={{backgroundColor:backgroundStyle.backgroundColor}}
                 autoFocus={props.autoFocus}
                 label={props.label}
                 name={props.name}
+                mode='flat'
                 cursorColor= {backgroundStyle.color}
                 secureTextEntry={props?.secureTextEntry??false}
                 placeholder={props?.placeholder}
                 onChangeText={props?.onChangeText}
+                onPressIn={props?.onPress}
+                editable={props?.editable}
               />
+
     </View>
   )
 }
@@ -71,8 +85,9 @@ const styles = StyleSheet.create({
       fontSize:20
     },
     inputBox:{
-        borderRadius:15,
-        padding:15,
+        borderTopLeftRadius:10,
+        borderTopRightRadius:10,
+        padding:1,
         paddingLeft:40,
         fontSize:18
     }

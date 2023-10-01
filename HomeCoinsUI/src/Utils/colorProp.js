@@ -26,7 +26,7 @@ export const darkColorProps ={
     textColor:"#fff",
     inputBackground:"#201A31",
     inputFocusBackground:"#38304C",
-    inputTextColor:"#fff",
+    inputTextColor:"red",
     inputTextColorOnFocus:"#fff",
     cardBackground:"#3d3d3d",
     loaderColor:"#fff",

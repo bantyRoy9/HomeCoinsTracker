@@ -1,16 +1,10 @@
-import { StyleSheet, SafeAreaView, Text, View, useColorScheme, StatusBar, Pressable,Alert } from 'react-native'
+import { StyleSheet, SafeAreaView, Text, View, useColorScheme, StatusBar, Pressable } from 'react-native'
 import React, { useState } from 'react'
-import Icons from 'react-native-vector-icons/FontAwesome';
 import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
 import { defaultStyle } from '../../Utils/defaultCss';
 import Input from '../../Components/Input';
-import ModalDatePicker from 'react-native-datepicker-modal'
 import moment from 'moment';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getAxiosHeader } from '../../Utils/CommonAuthFunction';
 import DatePicker from '../../Components/DatePicker';
-import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
 import { useDispatch } from 'react-redux';
 import { addEarn } from '../../Redux/Action/accountAction';
 const AddEarnExpens = () => {
@@ -33,7 +27,6 @@ const AddEarnExpens = () => {
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      console.log(details,'1');
       dispatch(addEarn(details))
     } catch (err) {
       console.log(err)
