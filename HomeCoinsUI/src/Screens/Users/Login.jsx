@@ -58,22 +58,20 @@ const Login = () => {
               }}>Login</Text>
               <Text style={{ color: backgroundStyle.color }}>Please sign in to continue</Text>
             </View>
-            <View style={{ marginVertical: 5 }}>
+            <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
               <Input
-                pointerEvents={isLoading ? 'none' : 'auto'}
                 placeholder={"Email"}
-                label={"Email :"}
+                label={"Email"}
                 isLabel={false}
                 name={"email"}
-                autoFocus={true}
+                autoFocus={false}
                 icons={'envelope-o'}
                 value={user.email}
                 onChangeText={(text) => changeHandler("email", text)}
               />
             </View>
-            <View style={{ marginVertical: 5 }}>
+            <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
               <Input
-                pointerEvents={isLoading ? 'none' : 'auto'}
                 secureTextEntry={true}
                 placeholder={"Enter secure password"}
                 label={"Password"}

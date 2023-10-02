@@ -36,11 +36,11 @@ export const getEarnExpendData = (dateRange,isAuthenticated)=> async(dispatch)=>
     }
 };
 
-export const addEarn = (details) => async(dispatch) =>{
+export const addEarnExpend = (details,urlType) => async(dispatch) =>{
     try{
         dispatch({type:ACCOUNT_ADD_REQUIEST});
-        console.log(`${accountControllerURL}/earn`,'2222');
-        const { data } = await axios.post(`${accountControllerURL}/earn`,details,getAxiosHeader());
+        console.log(`${accountControllerURL}/${urlType}`,details);
+        const { data } = await axios.post(`${accountControllerURL}/${urlType}`,details,getAxiosHeader());
         if(data){
             showAlert(`${details.amount} add successfully.`);
             dispatch({type:ACCOUNT_ADD_SUCCESS,payload:data});
