@@ -32,6 +32,7 @@ const DatePicker = (props) => {
             value={moment(props?.value)?.format('YYYY-MM-DD')}
             secureTextEntry={false}
             autoFocus={false}
+            onChangeText={props?.onChangeText}
           />}
         </View>
         <View style={{position:'absolute',width:'100%',height:50,top:12}}>
@@ -39,10 +40,11 @@ const DatePicker = (props) => {
         </View>
         <DateTimePickerModal
           date={props?.date??selectedDate}
-          isVisible={datePickerVisible}
-          mode="date"
-          onConfirm={handleConfirm}
-          onCancel={hideDatePicker}
+          isVisible={props?.isVisible??datePickerVisible}
+          mode={props?.mode??"date"}
+          onConfirm={props?.onConfirm??handleConfirm}
+          onCancel={props?.onCancel??hideDatePicker}
+          maximumDate={new Date()}
         />
       </View>
   );

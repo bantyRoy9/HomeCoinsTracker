@@ -12,9 +12,8 @@ import { defaultStyle } from '../../Utils/defaultCss';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEarnExpendData } from '../../Redux/Action/accountAction';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getMe } from '../../Redux/Action/userAction';
 import Table from '../../Components/DataTable';
+import FloatingActionBtn from '../../Components/FloatingActionBtn';
 const Home = () => {
   const navigation = useNavigation();
   const [dateRange, setDateRange] = useState({ label: 'Last 7 days' });
@@ -104,14 +103,14 @@ const Home = () => {
         </View>
       </ScrollView>
       <View>
+          <View>
+          </View>
         <View style={{ ...defaultStyle.viewSection }}>
           <View style={{ ...styles.expensEarnBtn, ...defaultStyle.screenWidth }}>
-            <Pressable style={{ ...defaultStyle.earnExpensBtn, ...styles.earnBtn }} onPress={() => navigation.navigate('AddEarn')}>
-              <Text style={defaultStyle.earnExpensBtnText}><Icons6 name='hand-holding-dollar' size={16} /> Add Earn</Text>
+            <Pressable style={{ ...defaultStyle.earnExpensBtn }}>
+              {/* <Text style={defaultStyle.earnExpensBtnText}><Icons6 name='hand-holding-dollar' size={16} /> Add Earn</Text> */}
             </Pressable>
-            <Pressable style={{ ...defaultStyle.earnExpensBtn, ...styles.expensBtn }} onPress={() => navigation.navigate('AddExpend')}>
-              <Text style={defaultStyle.earnExpensBtnText}><Icons6 name='money-check-dollar' size={16} /> Add Expens</Text>
-            </Pressable>
+            <FloatingActionBtn/>
           </View>
         </View>
         <Header />

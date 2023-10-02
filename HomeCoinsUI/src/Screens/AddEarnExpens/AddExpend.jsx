@@ -10,9 +10,14 @@ import axios from 'axios';
 import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
 import { getAxiosHeader, showAlert } from '../../Utils/CommonAuthFunction';
 import DatePicker from '../../Components/DatePicker';
+import { addEarnExpend } from '../../Redux/Action/accountAction';
+import { useDispatch } from 'react-redux';
 const AddEarnExpens = () => {
   const isDarkMode = useColorScheme() == 'dark';
-  const [details, setDetails] = useState({date:moment().format('YYYY-MM-DD')})
+  const dispatch = useDispatch();
+  const [details, setDetails] = useState({date:moment().format('YYYY-MM-DD')});
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
   const backgroundStyle = {
     backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
     color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
@@ -29,15 +34,25 @@ const AddEarnExpens = () => {
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      console.log(`${NODE_ENV != 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/expend`);
-      const res = await axios.post(`${NODE_ENV != 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController/expend`, details, getAxiosHeader());
-      if (res.data.status == 'true') {
-        showAlert('Done',`${details?.amount} save successfull.`);
-      }
+      dispatch(addEarnExpend(details,'expend'))
     } catch (err) {
       console.warn(err)
     }
-  }
+  };
+  const showDatePicker = () => {
+    setDatePickerVisible(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisible(false);
+  };
+
+  const handleConfirm = (date) => {
+    hideDatePicker();
+    setSelectedDate(date);
+    setDetails({ ...details, ["date"]: moment(new Date(date)).format('YYYY-MM-DD')});
+  };
+  
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar backgroundColor={isDarkMode ? darkColorProps.background : lightColorProps.background}></StatusBar>
@@ -70,7 +85,15 @@ const AddEarnExpens = () => {
           />
         </View>
         <View>
-          <DatePicker />
+          <DatePicker 
+          value ={selectedDate}
+          onPress={showDatePicker}
+          date={selectedDate}
+          isVisible={datePickerVisible}
+          mode={'date'}
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+          onChangeText={(text)=>changeHandler("date", text)}/>
         </View>
         <View style={{ width: "auto", alignItems: 'center' }}>
           <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler}>

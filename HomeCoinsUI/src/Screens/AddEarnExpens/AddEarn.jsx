@@ -6,11 +6,13 @@ import Input from '../../Components/Input';
 import moment from 'moment';
 import DatePicker from '../../Components/DatePicker';
 import { useDispatch } from 'react-redux';
-import { addEarn } from '../../Redux/Action/accountAction';
+import { addEarnExpend } from '../../Redux/Action/accountAction';
 const AddEarnExpens = () => {
   const isDarkMode = useColorScheme() == 'dark';
   const dispatch = useDispatch();
-  const [details, setDetails] = useState({date:moment().format('YYYY-MM-DD')})
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [details, setDetails] = useState({date:moment(new Date()).format('YYYY-MM-DD')});
   const backgroundStyle = {
     backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
     color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
@@ -21,17 +23,34 @@ const AddEarnExpens = () => {
   }
 
   const changeHandler = (name, value) => {
-    setDetails({ ...details, [name]: value })
+    setDetails({ ...details, [name]: value });
+    console.log(details);
   }
   
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      dispatch(addEarn(details))
+      dispatch(addEarnExpend(details,'earn'))
+      setDetails({date:moment(new Date()).format('YYYY-MM-DD')})
     } catch (err) {
       console.log(err)
     }
-  }
+  };
+
+  const showDatePicker = () => {
+    setDatePickerVisible(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisible(false);
+  };
+
+  const handleConfirm = (date) => {
+    hideDatePicker();
+    setSelectedDate(date);
+    setDetails({ ...details, ["date"]: moment(new Date(date)).format('YYYY-MM-DD')});
+  };
+  
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar backgroundColor={isDarkMode ? darkColorProps.background : lightColorProps.background}></StatusBar>
@@ -77,7 +96,16 @@ const AddEarnExpens = () => {
           />
         </View>
         <View>
-          <DatePicker />
+          <DatePicker 
+            value ={selectedDate}
+            onPress={showDatePicker}
+            date={selectedDate}
+            isVisible={datePickerVisible}
+            mode={'date'}
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+            onChangeText={(text)=>changeHandler("date", text)}
+          />
         </View>
         
         <View style={{ width: "auto", alignItems: 'center' }}>
