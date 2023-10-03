@@ -24,14 +24,14 @@ const AddEarnExpens = () => {
 
   const changeHandler = (name, value) => {
     setDetails({ ...details, [name]: value });
-    console.log(details);
   }
   
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      dispatch(addEarnExpend(details,'earn'))
+      await dispatch(addEarnExpend(details,'earn'))
       setDetails({date:moment(new Date()).format('YYYY-MM-DD')})
+      navigation.navigate('Home');
     } catch (err) {
       console.log(err)
     }
