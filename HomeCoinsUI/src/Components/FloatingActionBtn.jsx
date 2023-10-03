@@ -22,9 +22,9 @@ const FloatingActionBtn = () => {
             label: 'Add Earn',
             labelStyle:{
               backgroundColor:'green',
-              marginRight:-34,
+              marginRight:-37,
               marginBottom:-30,
-              padding:6,
+              padding:8,
               borderTopLeftRadius:10,
               borderBottomLeftRadius:10
             },
@@ -38,15 +38,15 @@ const FloatingActionBtn = () => {
             label: 'Add Expend',
             labelStyle:{
               backgroundColor:'red',
-              marginRight:-34,
+              marginRight:-37,
               marginBottom:-30,
-              padding:6,
+              padding:8,
               borderTopLeftRadius:10,
-              borderBottomLeftRadius:10
+              borderBottomLeftRadius:10,
             },
             style: {
               backgroundColor:'red',
-              marginBottom:-30
+              marginBottom:-30,
             },
             onPress: () => navigation.navigate('AddExpend'),
           },

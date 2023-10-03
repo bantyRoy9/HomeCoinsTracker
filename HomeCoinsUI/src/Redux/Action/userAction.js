@@ -27,12 +27,12 @@ export const logoutUser = () => async(dispatch)=>{
     try{
         dispatch({type:USER_REQUIEST});
         console.log(`${userControllerURL}/logout`);
-        const { data } = await axios.get(`${userControllerURL}/logout`);
-        if(data){
-            console.log(data);
+        const response = await axios.get(`${userControllerURL}/logout`);
+        if(response){
+            console.log(response);
             await AsyncStorage.clear();
         }
-        dispatch({type:USER_LOGOUT_SUCCCESS,payload:data});
+        dispatch({type:USER_LOGOUT_SUCCCESS,payload:response.data});
     }catch(err){
         dispatch({type:USER_FAIL,payload:err.response.data.msg})
     }

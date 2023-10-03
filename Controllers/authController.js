@@ -5,6 +5,7 @@ const { promisify } = require('util')
 const jwt = require('jsonwebtoken')
 const catchAsync = require('../Utils/catchAsync');
 
+
 const signToken = id => {
     return jwt.sign({ id }, process.env.jwt_secret, {
         expiresIn: process.env.jwt_expire
@@ -211,4 +212,4 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
     await user.save();
 
     createSendToken(user, 200, res);
-})
+});
