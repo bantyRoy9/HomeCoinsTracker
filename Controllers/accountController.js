@@ -5,9 +5,13 @@ const User = require("../Model/UserModels/userSchema");
 const { graphData } = require("../Utils/commonFunction");
 const catchAsync = require("../Utils/catchAsync");
 const ApiFeature = require("../Utils/apiFeature");
-const moment = require('moment')
+const moment = require('moment');
+const ActivityModels = require("../Model/ActivityModels/activityModel");
 exports.saveDailyEarns = catchAsync(async(req,res,next) => {
     const saveEarn = await EarnModel.create(req.body);
+    let reBody ={};
+
+    const addActivity = await ActivityModels.create()
     const earnByuser = await User.findById({_id:req.body.earnBy});
     earnByuser.totalEarn = [...earnByuser.totalEarn, saveEarn._id];
     await earnByuser.save();
@@ -85,5 +89,14 @@ exports.getTotalExpend = catchAsync(async(req,res,next)=>{
         length:totalExpend.length,
         data:totalExpend
     });
-})
+});
 
+exports.deleteDailyEarns = catchAsync(async(req,res,next)=>{
+    const params = req.params.id;
+    const response = await EarnModel.findByIdAndDelete(req.params.id);
+    res.status(200).json({
+        status:true,
+        msg:'delete successfull',
+        data:null
+    })
+})
