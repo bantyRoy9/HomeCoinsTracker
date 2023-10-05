@@ -12,9 +12,11 @@ import { getAxiosHeader, showAlert } from '../../Utils/CommonAuthFunction';
 import DatePicker from '../../Components/DatePicker';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
 import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 const AddEarnExpens = () => {
   const isDarkMode = useColorScheme() == 'dark';
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const [details, setDetails] = useState({date:moment().format('YYYY-MM-DD')});
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
@@ -34,7 +36,8 @@ const AddEarnExpens = () => {
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      dispatch(addEarnExpend(details,'expend'))
+      await dispatch(addEarnExpend(details,'expend'));
+      navigation.navigate('Home');
     } catch (err) {
       console.warn(err)
     }

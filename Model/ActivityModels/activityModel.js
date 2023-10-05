@@ -16,7 +16,8 @@ const activityModel = new mongoose.Schema({
     },
     methodType:String,
     date:{
-        type:Date
+        type:Date,
+        default:new Date()
     },
     Url:String
 });

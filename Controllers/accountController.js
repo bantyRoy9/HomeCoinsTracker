@@ -7,13 +7,14 @@ const catchAsync = require("../Utils/catchAsync");
 const ApiFeature = require("../Utils/apiFeature");
 const moment = require('moment');
 const ActivityModels = require("../Model/ActivityModels/activityModel");
+const { addUsersActivity } = require("./activityController");
+const AppError = require("../Utils/appError");
+const { responseSend } = require("./authController");
 exports.saveDailyEarns = catchAsync(async(req,res,next) => {
     const saveEarn = await EarnModel.create(req.body);
-    let reBody ={};
-
-    const addActivity = await ActivityModels.create()
     const earnByuser = await User.findById({_id:req.body.earnBy});
     earnByuser.totalEarn = [...earnByuser.totalEarn, saveEarn._id];
+    await addUsersActivity(req,'addEarn',saveEarn._id);
     await earnByuser.save();
     res.status(201).json({
         status:'true',
@@ -26,6 +27,8 @@ exports.saveDailyExped = catchAsync(async(req,res,next)=>{
     const expendByuser = await User.findById({_id:req.body.expendBy});
     expendByuser.totalExpend = [...expendByuser.totalExpend, saveExpend._id];
     await expendByuser.save();
+    await addUsersActivity(req,'addExpend',saveExpend._id);
+    // next(responseSend(res,201,true,saveExpend,"Expend saved successfully"));
     res.status(201).json({
         status:'true',
         saveExpend,
