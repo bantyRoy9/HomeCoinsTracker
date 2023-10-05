@@ -213,3 +213,9 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
     createSendToken(user, 200, res);
 });
+
+exports.responseSend = async(res,statusCode,status,data,msg)=>{
+    res.status(statusCode).json({
+        status,length:data?.length??0,msg,data
+    });
+};
