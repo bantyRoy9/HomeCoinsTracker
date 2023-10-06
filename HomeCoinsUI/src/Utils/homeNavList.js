@@ -8,7 +8,6 @@ export const homeNavList = [
     },{
         label:'Last 7 days',
         dateRange:`${moment().subtract(7,'days').format('YYYY-MM-DD')}_${moment().format('YYYY-MM-DD')}`,
-        //dateRange:'2023-08-23_2023-08-21',
         active:true
     },{
         label:'Last Month',
@@ -19,4 +18,27 @@ export const homeNavList = [
         dateRange:`${moment().subtract(1,'years').format('YYYY-MM-DD')}_${moment().format('YYYY-MM-DD')}`,
         active:false
     }        
+];
+
+export const bottomHeaderList = [
+    {
+        iconName:"bank",
+        title:"Home",
+        navUrl:"Home"
+    },
+    {
+        iconName:"users",
+        title:"Member",
+        navUrl:"Members"
+    },
+    {
+        iconName:"list-ul",
+        title:"Activity",
+        navUrl:"Activity"
+    },
+    {
+        iconName:"user",
+        title:"Account",
+        navUrl:"Profile"
+    }
 ]

@@ -3,6 +3,8 @@ import React from 'react'
 import Icons from 'react-native-vector-icons/FontAwesome'
 import { darkColorProps, lightColorProps } from '../Utils/colorProp';
 import { useNavigation } from '@react-navigation/native';
+import { bottomHeaderList } from '../Utils/homeNavList';
+
 const Header = () => {
     const navigation = useNavigation();
     const isDarkMode = useColorScheme() == 'dark';
@@ -13,16 +15,19 @@ const Header = () => {
     const navigatePage=(pageLink)=>{
         console.log(pageLink);
         navigation.navigate(pageLink);
-    }
+    };
+    
     return (
         <View style={styles.headerContainer}>
-            <View style={styles.headerIcons}>
-                <View style={styles.headerIcon}>
-                    <Icons name='bank' size={25} color={backgroundStyle.color} />
-                    <Text>Home</Text>
+            {bottomHeaderList && bottomHeaderList.map(headerLists=>(
+                <View style={styles.headerIcons}>
+                    <Pressable style={styles.headerIcon} onPress={()=>navigatePage(headerLists.navUrl)}>
+                        <Icons name={headerLists.iconName} size={25} color={backgroundStyle.color} />
+                        <Text>{headerLists.title}</Text>
+                    </Pressable>
                 </View>
-            </View>
-            <View style={styles.headerIcons}>
+            ))}
+            {/* <View style={styles.headerIcons}>
                 <View style={styles.headerIcon}>
                     <Icons name='address-book-o' size={25} color={backgroundStyle.color} />
                     <Text>Record</Text>
@@ -39,7 +44,7 @@ const Header = () => {
                     <Icons name='user' size={25} color={backgroundStyle.color} />
                     <Text>Account</Text>
                 </Pressable>
-            </View>
+            </View> */}
         </View>
     )
 }
