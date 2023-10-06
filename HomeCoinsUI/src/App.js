@@ -17,6 +17,8 @@ import Profile from './Screens/Users/Profile';
 import FontIcons from 'react-native-vector-icons/FontAwesome5'
 import EditProfile from './Screens/Users/EditProfile';
 import { getMe } from './Redux/Action/userAction';
+import Activity from './Screens/Activity/Activity';
+import Members from './Screens/Members/Members';
 //import { useNavigation } from '@react-navigation/native';
 function App() {
   const Stack = createNativeStackNavigator();
@@ -42,6 +44,8 @@ function App() {
     addEarn: { title: 'Add Earn' },
     profile: { title: 'Profile' },
     editProfile: { title: 'Edit Profile' },
+    activity:{ title: 'Activity'},
+    members:{ title:'Members'}
   }
   const editProfile = () => {
     // navigation.navigate('EditProfile');
@@ -54,6 +58,8 @@ function App() {
             <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
             <Stack.Screen name='AddEarn' component={AddEarn} options={{ ...navigationOptions, ...headerTitle.addEarn }} />
             <Stack.Screen name='AddExpend' component={AddExpend} options={{ ...navigationOptions, ...headerTitle.addExpend }} />
+            <Stack.Screen name='Activity' component={Activity} options={{ ...navigationOptions,...headerTitle.activity}} />
+            <Stack.Screen name='Members' component={Members} options={{ ...navigationOptions,...headerTitle.members}} />
             <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () => <FontIcons name='user-edit' size={25} onPress={editProfile} /> }} />
             <Stack.Screen name='EditProfile' component={EditProfile} options={{ ...navigationOptions, ...headerTitle.editProfile }} />
           </> : <>

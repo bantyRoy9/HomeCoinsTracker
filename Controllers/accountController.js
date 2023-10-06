@@ -28,11 +28,7 @@ exports.saveDailyExped = catchAsync(async(req,res,next)=>{
     expendByuser.totalExpend = [...expendByuser.totalExpend, saveExpend._id];
     await expendByuser.save();
     await addUsersActivity(req,'addExpend',saveExpend._id);
-    // next(responseSend(res,201,true,saveExpend,"Expend saved successfully"));
-    res.status(201).json({
-        status:'true',
-        saveExpend,
-    })
+    next(responseSend(res,201,true,saveExpend,"Expend saved successfully"));
 });
 
 
