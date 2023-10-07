@@ -26,18 +26,25 @@ const Activity = () => {
             {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={isDarkMode ? darkColorProps.loaderColor : lightColorProps.loaderColor} /></View> :
                 <ScrollView  showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
                     <View style={defaultStyle.screenContainer}>
-                        {activity && activity.data && activity?.data.map(el=>(
+                        {activity && activity.data && activity?.data.map((el,idx)=>(
                             <>
-                            <Pressable key={el._id} style={{flexDirection:'row',alignItems:'center',gap:10}}>
-                                <View style={{width:30,height:30,borderRadius:50,backgroundColor:"#3d3d3d"}}>
+                            <Pressable key={el._id} style={styles.activityList}>
+                                <View style={styles.activityProfileList}>
 
                                 </View>
-                                <View>
-                                    <Text>{`${el.user.name.toUpperCase()} ${el.methodType === 'POST'?'Add':'Type - NA'} ${el.addExpend && el.addExpend.amount ? el.addExpend.amount+' ₹ Expend':''} ${el.addEarn && el.addEarn.amount ? el.addEarn.amount+' ₹ Earn':''}`}</Text>
-                                    <Text>{el.date?moment(el.date).format('DD MMM HH:MM'):'NA'}</Text>
+                                <View style={styles.activityListTexts}>
+                                    <View style={styles.activityText}>
+                                        <View><Text>{`${el.user.name.toUpperCase()}`}</Text></View>
+                                        <View><Text>{`${el.methodType === 'POST'?'Add':'Type - NA'}`}</Text></View>
+                                        <View><Text>{`${el.addExpend && el.addExpend.amount ?'₹'+el.addExpend.amount+'Expend':''} `}</Text></View>
+                                        <View><Text>{`${el.addEarn && el.addEarn.amount ? el.addEarn.amount+' ₹ Earn':''}`}</Text></View>
+                                    </View>
+                                    <View>
+                                        <Text>{el.date?moment(el.date).format('DD MMM HH:MM'):'NA'}</Text>
+                                    </View>
                                 </View>
                             </Pressable>
-                            <Divider/>
+                            {activity.data.length-1>idx && <Divider style={{borderBottomColor:backgroundStyle.color}}/>}
                             </>
                         ))}
                     </View>
@@ -49,4 +56,24 @@ const Activity = () => {
 
 export default Activity
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    activityList:{
+        flexDirection:'row',
+        alignItems:'center',
+        gap:10,
+        paddingVertical:15,
+        // borderColor:'red',
+        // borderWidth:1
+    },
+    activityProfileList:{
+        width:30,height:30,borderRadius:50,backgroundColor:"#3d3d3d"
+    },
+    activityText:{
+        flexDirection:'row',
+        flexWrap:'wrap'
+    },
+    activityListTexts:{
+        flexDirection:'column',
+        gap:10
+    }
+})
