@@ -18,6 +18,7 @@ export const getEarnExpendData = (dateRange,isAuthenticated)=> async(dispatch)=>
         dispatch({type:ACCOUNT_REQUIEST});
         console.log(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
         const {data} = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
+        console.log(data);
         let response={};
         if(isAuthenticated){
             console.log(userControllerURL,getAxiosHeader());
@@ -32,6 +33,8 @@ export const getEarnExpendData = (dateRange,isAuthenticated)=> async(dispatch)=>
             dispatch({type:USER_GETME_SUCCCESS,payload:response?.data.data});
           };
     }catch(err){
+        console.log(err);
+        showAlert(err.response.data.msg)
         dispatch({type:ACCOUNT_FAIL,payload:err.response.data.msg});
     }
 };
