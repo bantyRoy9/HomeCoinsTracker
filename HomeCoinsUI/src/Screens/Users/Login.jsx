@@ -23,30 +23,54 @@ const Login = () => {
     color: isDarkMode ? darkColorProps.btnBackground : "#FFF"
   }
   const [user, setUser] = useState({ email: "", password: "" });
+  const [errors,setErrors] = useState({});
   const changeHandler = (name, value) => {
-    setUser({ ...user, [name]: value })
+    updateErrors(name);
+    setUser({ ...user, [name]: value });
+  };
+
+  const updateErrors = (key) =>{
+    if(errors[key]){
+      delete errors[key]
+    }
+    setErrors(errors)
   }
+  const validateForm = () => {
+    let valid = true,error={};
+    if(!user.email){
+      valid =false;
+      error.email = '*Enter valid email'
+    };
+    if(!user.password){
+      valid = false;
+      error.password = '*Enter password'
+    }
+    setErrors(error);
+    return valid
+  };
+
 
   const submitHandler = async(e) => {
     e.preventDefault()
+    if(validateForm()){
     try {
-      dispatch(loging(user));
-    } catch (err) {
-      console.log(err);
+        dispatch(loging(user));
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
-      <ScrollView contentContainerStyle={{ flex: 1 }} showsHorizontalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
+      <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
           <View style={styles.loginContainer}>
             <View style={{
               alignItems: 'center',
               marginVertical: 10
             }}>
               <Image source={require('../../../Assets/Icons/login.webp')}
-                style={{width: 200,height: 200
-                }}
+                style={{width: 200,height: 200}}
               />
             </View>
             <View>
@@ -58,6 +82,7 @@ const Login = () => {
               }}>Login</Text>
               <Text style={{ color: backgroundStyle.color }}>Please sign in to continue</Text>
             </View>
+            <ScrollView contentContainerStyle={{ flex: 1 }} showsVerticalScrollIndicator={false}>
             <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
               <Input
                 placeholder={"Email"}
@@ -68,6 +93,9 @@ const Login = () => {
                 icons={'envelope-o'}
                 value={user.email}
                 onChangeText={(text) => changeHandler("email", text)}
+                isHelper={errors.email?true:false}
+                errorMsg={errors?.email}
+                helperType={'error'}
               />
             </View>
             <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
@@ -76,13 +104,17 @@ const Login = () => {
                 placeholder={"Enter secure password"}
                 label={"Password"}
                 isLabel={false}
-                name={'email'}
+                name={'password'}
                 autoFocus={false}
                 icons={'lock'}
                 value={user.password}
                 onChangeText={(text) => changeHandler("password", text)}
+                isHelper={errors.password?true:false}
+                errorMsg={errors.password}
+                helperType={'error'}
               />
             </View>
+            </ScrollView>
             <View style={{ width: "auto", alignItems: 'center' }} pointerEvents={isLoading ? 'none' : 'auto'}>
               <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler}>
                 <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'large'} color={isDarkMode?darkColorProps.loaderColor:lightColorProps.loaderColor}/> : "LOGIN"}</Text>
@@ -94,7 +126,7 @@ const Login = () => {
           <View style={{ position: 'relative', height: 50 }}>
             <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
               <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignContent: 'center' }}>
-                <Text style={{ fontSize: 16, color: backgroundStyle.color }}>Don't have an account? </Text><Text onPress={() => navigation.navigate('Signup')} style={{ color: btnStyle.color, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Sing up</Text>
+                <Text style={{ fontSize: 16, color: backgroundStyle.color }}>Don't have an account? </Text><Text onPress={() => navigation.navigate('Signup')} style={{ color: btnStyle.color, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Sign up</Text>
               </View>
             </View>
           </View>

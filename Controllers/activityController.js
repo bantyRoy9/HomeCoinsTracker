@@ -23,6 +23,6 @@ exports.addUsersActivity = async(req,idType,addId,date)=>{
 };
 
 exports.getActivity=catchAsync(async(req,res,next)=>{
-    const response = await ActivityModels.find({}).lean().populate('user','name').populate('addEarn','amount source').populate('addExpend','amount source');
+    const response = await ActivityModels.find({}).lean().populate('user','name').populate('addEarn','amount source').populate('addExpend','amount source description');
     next(responseSend(res,200,true,response,""));
 });

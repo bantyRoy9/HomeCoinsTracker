@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, useColorScheme } from 'react-native'
 import React, { useState } from 'react'
 import Icons from 'react-native-vector-icons/FontAwesome'
 import { darkColorProps, lightColorProps } from '../Utils/colorProp';
-import { TextInput } from 'react-native-paper';
+import { HelperText, TextInput } from 'react-native-paper';
 const Input = (props) => {
   const isDarkMode = useColorScheme() == 'dark';
   const [isFocuse, setIsFocuse] = useState(defualtProperty);
@@ -26,7 +26,7 @@ const Input = (props) => {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
     color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
-  }
+  };
   return (
     <View style={styles.inputContainer}>
       {props.isLabel && <Text style={styles.inputLabel}>{props.label}</Text>}
@@ -58,6 +58,7 @@ const Input = (props) => {
                 onPressIn={props?.onPress}
                 editable={props?.editable}
               />
+              {props.isHelper && <HelperText type={props.helperType}>{props.errorMsg}</HelperText>}
 
     </View>
   )
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     inputIcons:{
       position:'absolute',
       zIndex:1,
-      top:18,
+      top:21,
       left:12,
       fontSize:20
     },
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius:10,
         borderTopRightRadius:10,
         padding:1,
-        paddingLeft:40,
+        paddingLeft:30,
         fontSize:18
     }
 })
