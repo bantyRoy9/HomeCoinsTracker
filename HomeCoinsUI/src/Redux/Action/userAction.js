@@ -1,7 +1,7 @@
 import axios from "axios";
 import { NODE_ENV, REACT_LOCAL_URL,REACT_PROD_URL} from '@env';
 import { getAxiosHeader, getAxiosHeaderWithoutCookie, showAlert } from "../../Utils/CommonAuthFunction"
-import { USER_FAIL, USER_REQUIEST, USER_GETME_REQUIEST,USER_GETME_SUCCCESS,USER_SUCCCESS,USER_LOGOUT_SUCCCESS } from "../constants";
+import { USER_FAIL, USER_REQUIEST, USER_GETME_REQUIEST,USER_GETME_SUCCCESS,USER_SUCCCESS,USER_LOGOUT_SUCCCESS, USER_REGISTER_SUCCESS, USER_REGISTER_REQUIEST, USER_REGISTER_FAIL } from "../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { userControllerURL } from "../../Utils/URLProperties";
 
@@ -46,5 +46,17 @@ export const getMe = () =>async(dispatch)=>{
         dispatch({type:USER_GETME_SUCCCESS,payload:data.data})
     }catch(err){
         dispatch({type:USER_FAIL,payload:err?.response.data.msg})
+    }
+};
+
+export const createUser =(userDetails)=> async(dispatch) => {
+    try{
+        dispatch({type:USER_REGISTER_REQUIEST})
+        const { data } = await axios.post(`${userControllerURL}/createUser`,userDetails,getAxiosHeaderWithoutCookie());
+        if(data){
+            dispatch({type:USER_REGISTER_SUCCESS,payload:data})
+        }
+    }catch(err){
+        dispatch({type:USER_REGISTER_FAIL,payload:err?.response.data.msg})
     }
 }

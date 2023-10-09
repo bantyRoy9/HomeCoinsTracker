@@ -20,15 +20,8 @@ const filterJsonForGraph =(jsonData)=>{
         dateList.forEach((date,idx)=>{
             var totalAmount = jsonData.filter(el=> moment(new Date(el.date)).format('DD-MM-YYYY') == date).map(ele=> ele.amount);
             dataObj[date] = totalAmount;    
-           /* if(Object.keys(dataObj).includes(date)){
-                //dataObj[date] = [...dataObj[`${date}`], ...jsonData[idx]?.amount??0]
-                dataObj[date] = [...dataObj[`${date}`], ...totalAmount]
-            }else{
-                dataObj[date] = totalAmount;    
-            }*/
         });
     };
-    //console.log(dataObj,dateList);
     return {dataObj,dateList};
 };
 
@@ -44,7 +37,6 @@ exports.graphData = (data,legendNameArr,svgColorArr) =>{
         filterData.push(filterDataObj.dataObj);
         graphdata.labels = [...new Set([...graphdata?.labels, ...filterDataObj.dateList])];
     });
-    // console.log(filterData,'ssss');
     filterData.forEach((ele,idx)=>{
         let dataSet ={
             data:[],
@@ -65,3 +57,17 @@ exports.graphData = (data,legendNameArr,svgColorArr) =>{
     });
     return graphdata
 };
+exports.sortArrayDataByDate = (data,keyName)=>{
+    data.sort((a,b)=>{
+        let firstItem = new Date(a[keyName]).setHours(0,0,0);
+        let secondItem = new Date(b[keyName]).setHours(0,0,0);
+        if(firstItem < secondItem){
+            return 1
+        }
+        if(firstItem > secondItem){
+            return -1
+        }
+        return 0
+    });
+    return data
+}

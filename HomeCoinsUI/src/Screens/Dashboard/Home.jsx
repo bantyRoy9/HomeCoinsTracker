@@ -60,7 +60,7 @@ const Home = () => {
           </View>
           <View style={styles.navigationContainer}>
             {homeNavList.map((ele, idx) => (
-              <Pressable key={`${idx}`} onPress={() => navPressHandle(ele)}>
+              <Pressable key={`${idx}${ele}`} onPress={() => navPressHandle(ele)}>
                 <Text style={ele.active ? styles.activeNavText : styles.navText}>{ele.label}</Text>
               </Pressable>
             ))}
@@ -84,7 +84,7 @@ const Home = () => {
                 <View>
                   {!isLoading && account && account?.analyticsDetail && <>
                     {Object.keys(account?.analyticsDetail).map((el, idx) => (
-                      <View key={`${idx}`} style={styles.analyticsDetails}>
+                      <View key={`${idx}${el}`} style={styles.analyticsDetails}>
                         <View><Text style={styles.analyticsText}>{el}</Text></View>
                         <View><Text style={styles.analyticsText}>₹{account?.analyticsDetail[el]?.toFixed(2)}</Text></View>
                       </View>

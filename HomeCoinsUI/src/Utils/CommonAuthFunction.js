@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import { Alert } from "react-native";
 
 export const getStoredCookie = async () => {
@@ -50,3 +51,10 @@ Alert.alert(firstMsg,secondMsg,
   },
 );
 };
+
+export const getLocalIP = async()=>{
+  try{
+    const data = await axios.get("https://api.ipify.org?format=json");
+    return data.ip
+  }catch(err){}
+}

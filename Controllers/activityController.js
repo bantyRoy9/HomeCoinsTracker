@@ -1,5 +1,6 @@
 const ActivityModels = require("../Model/ActivityModels/activityModel");
 const catchAsync = require("../Utils/catchAsync");
+const { sortArrayDataByDate } = require("../Utils/commonFunction");
 const { responseSend } = require("./authController");
 
 exports.addUsersActivity = async(req,idType,addId,date)=>{
@@ -23,6 +24,7 @@ exports.addUsersActivity = async(req,idType,addId,date)=>{
 };
 
 exports.getActivity=catchAsync(async(req,res,next)=>{
-    const response = await ActivityModels.find({}).lean().populate('user','name').populate('addEarn','amount source').populate('addExpend','amount source');
+    let response = await ActivityModels.find({}).lean().populate('user','name').populate('addEarn','amount source').populate('addExpend','amount source description');
+    response = sortArrayDataByDate(response,'date')
     next(responseSend(res,200,true,response,""));
 });

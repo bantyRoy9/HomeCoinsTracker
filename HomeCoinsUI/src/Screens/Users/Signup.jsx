@@ -7,10 +7,14 @@ import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
 import Icons from 'react-native-vector-icons/Ionicons'
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
+import { REACT_LOCAL_URL, REACT_PROD_URL, NODE_ENV } from '@env'
+import { useDispatch } from 'react-redux';
+import { createUser } from '../../Redux/Action/userAction';
+import { showAlert } from '../../Utils/CommonAuthFunction';
 
 const Signup = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const isDarkMode = useColorScheme() === 'dark';
   Colors.darker = darkColorProps.background;
   Colors.lighter = lightColorProps.background;
@@ -22,39 +26,72 @@ const Signup = () => {
     backgroundColor: isDarkMode ? darkColorProps.btnBackground : lightColorProps.btnBackground,
     color: isDarkMode ? darkColorProps.btnBackground : "#FFF"
   }
-  const [user, setUser] = useState({ email: "", password: "", confirmPassword: "" });
+  const [user, setUser] = useState({ name:"",email: "", password: "", confirmPassword: "" });
+  const [errors, setErrors] = useState({});
+  const changeHandler = (key, value) => {
+    updateErrors(key);
+    setUser({ ...user, [key]: value })
+  };
 
-  const changeHandler = (name, value) => {
-    setUser({ ...user, [name]: value })
-  }
+  const updateErrors = (key) =>{
+    if(errors[key]){
+      delete errors[key]
+    };
+    setErrors(errors);
+  };
+  const validateForm = () => {
+    let valid = true,error={};
+    if(!user.name){
+      valid =false;
+      error.name = '*Enter your full name'
+    };
+    if(!user.email){
+      valid =false;
+      error.email = '*Enter valid email'
+    };
+    if(!user.mobile){
+      valid =false;
+      error.mobile = '*Enter valid mobile no'
+    };
+    if(!user.password){
+      valid = false;
+      error.password = '*Enter password'
+    }
+    if(!user.confirmPassword){
+      valid = false;
+      error.password = '*Enter password';
+      if(user.password !== user.confirmPassword){
+        valid = false;
+        error.password = '*Confirm password should be match with password';
+      }
+    }
+    setErrors(error);
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      const header = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-      const res = await axios.post(`${NODE_ENV == 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/userController/createUser`, user, header);
-      if(res.status)
-      console.log(res);
+      if(validateForm()){
+        dispatch(createUser(user));
+      };
     } catch (err) {
-      console.log(err)
-    }
-  }
+      showAlert(err);
+    };
+  };
 
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
-      <ScrollView contentContainerStyle={{ flex: 1 }} showsHorizontalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
+      <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
         <View style={styles.signupContainer}>
           <View style={styles.arrowBack}>
-            <Icons name='arrow-back' size={30} onPress={() => navigation.navigate('Login')} color={isDarkMode?darkColorProps.textColor:lightColorProps.textColor} />
+            <Icons name='arrow-back' size={30} onPress={() => navigation.navigate('Login')} color={isDarkMode ? darkColorProps.textColor : lightColorProps.textColor} />
           </View>
           <View style={styles.pageTitle}>
             <Text style={styles.headerTitle}>Create Account</Text>
             <Text style={styles.subHeaderTitle}>Please fill the input below here</Text>
           </View>
+          <ScrollView contentContainerStyle={{flex:1}} showsVerticalScrollIndicator={falsemr}>
           <View>
             <Input
               placeholder={"Full Name"}
@@ -64,8 +101,11 @@ const Signup = () => {
               icons={'user'}
               value={user.name}
               secureTextEntry={false}
-              autoFocus={true}
+              autoFocus={false}
               onChangeText={(text) => changeHandler("name", text)}
+              isHelper={errors.name ? true : false}
+              errorMsg={errors?.name}
+              helperType={'error'}
             />
           </View>
           <View>
@@ -79,6 +119,9 @@ const Signup = () => {
               secureTextEntry={false}
               autoFocus={false}
               onChangeText={(text) => changeHandler("mobile", text)}
+              isHelper={errors.mobile ? true : false}
+              errorMsg={errors?.mobile}
+              helperType={'error'}
             />
           </View>
           <View>
@@ -92,6 +135,9 @@ const Signup = () => {
               secureTextEntry={false}
               autoFocus={false}
               onChangeText={(text) => changeHandler("email", text)}
+              isHelper={errors.email ? true : false}
+              errorMsg={errors?.email}
+              helperType={'error'}
             />
           </View>
           <View>
@@ -105,6 +151,9 @@ const Signup = () => {
               secureTextEntry={true}
               autoFocus={false}
               onChangeText={(text) => changeHandler("password", text)}
+              isHelper={errors.email ? true : false}
+              errorMsg={errors?.email}
+              helperType={'error'}
             />
           </View>
           <View>
@@ -118,19 +167,25 @@ const Signup = () => {
               secureTextEntry={true}
               autoFocus={false}
               onChangeText={(text) => changeHandler("confirmPassword", text)}
+              isHelper={errors.confirmPassword ? true : false}
+              errorMsg={errors?.confirmPassword}
+              helperType={'error'}
             />
           </View>
+          </ScrollView>
+          <View style={{width:'100%'}}>
           <View style={{ width: "auto", alignItems: 'center' }}>
             <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler}>
               <Text style={{ ...styles.text, ...btnStyle.color }}>{"SIGN UP"}</Text>
             </Pressable>
           </View>
-          <View style={{ position: 'relative', height: 50 }}>
+          <View style={{ position: 'relative', height: 30 }}>
             <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
               <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignContent: 'center' }}>
                 <Text style={{ fontSize: 16, color: backgroundStyle.color }}>Allready have an accounts? </Text><Text onPress={() => navigation.navigate('Login')} style={{ color: btnStyle.color, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Login</Text>
               </View>
             </View>
+          </View>
           </View>
         </View>
 

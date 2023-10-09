@@ -34,13 +34,13 @@ const Activity = () => {
                                 </View>
                                 <View style={styles.activityListTexts}>
                                     <View style={styles.activityText}>
-                                        <View><Text>{`${el.user.name.toUpperCase()}`}</Text></View>
-                                        <View><Text>{`${el.methodType === 'POST'?'Add':'Type - NA'}`}</Text></View>
-                                        <View><Text>{`${el.addExpend && el.addExpend.amount ?'₹'+el.addExpend.amount+'Expend':''} `}</Text></View>
-                                        <View><Text>{`${el.addEarn && el.addEarn.amount ? el.addEarn.amount+' ₹ Earn':''}`}</Text></View>
+                                        <View><Text>{`${el.user.name.charAt(0).toUpperCase()+el.user.name.slice(1)} `}</Text></View>
+                                        <View><Text>{`${el.methodType === 'POST'?'add':'Type - NA'} `}</Text></View>
+                                        <View><Text>{`${el.addExpend && el.addExpend.amount ?'₹'+el.addExpend.amount+' expend':''} `}</Text></View>
+                                        <View><Text>{`${el.addEarn && el.addEarn.amount ? '₹'+el.addEarn.amount+' earn':''} `}</Text></View>
                                     </View>
                                     <View>
-                                        <Text>{el.date?moment(el.date).format('DD MMM HH:MM'):'NA'}</Text>
+                                        <Text>{el.date?moment(el.date).format('DD MMM YY hh:mm a'):'NA'}</Text>
                                     </View>
                                 </View>
                             </Pressable>
@@ -70,7 +70,8 @@ const styles = StyleSheet.create({
     },
     activityText:{
         flexDirection:'row',
-        flexWrap:'wrap'
+        flexWrap:'wrap',
+        gap:5
     },
     activityListTexts:{
         flexDirection:'column',
