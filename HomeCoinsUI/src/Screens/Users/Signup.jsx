@@ -91,7 +91,7 @@ const Signup = () => {
             <Text style={styles.headerTitle}>Create Account</Text>
             <Text style={styles.subHeaderTitle}>Please fill the input below here</Text>
           </View>
-          <ScrollView contentContainerStyle={{flex:1}} showsVerticalScrollIndicator={false}>
+          <ScrollView contentContainerStyle={{flex:1}} showsVerticalScrollIndicator={falsemr}>
           <View>
             <Input
               placeholder={"Full Name"}

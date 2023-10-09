@@ -1,5 +1,5 @@
 
-import { ACCOUNT_ADD_FAIL, ACCOUNT_ADD_REQUIEST, ACCOUNT_ADD_SUCCESS, ACCOUNT_FAIL, ACCOUNT_REQUIEST, ACCOUNT_REQUIEST_ADD, ACCOUNT_SUCCCESS} from "../constants";
+import { ACCOUNT_ADD_FAIL, ACCOUNT_ADD_REQUIEST, ACCOUNT_ADD_SUCCESS, ACCOUNT_FAIL, ACCOUNT_REQUIEST, ACCOUNT_REQUIEST_ADD, ACCOUNT_SUCCCESS, USER_GETME_SUCCCESS} from "../constants";
 import axios from 'axios';
 import moment from 'moment';
 import { getAxiosHeader, showAlert } from '../../Utils/CommonAuthFunction';
@@ -33,9 +33,8 @@ export const getEarnExpendData = (dateRange,isAuthenticated)=> async(dispatch)=>
             dispatch({type:USER_GETME_SUCCCESS,payload:response?.data.data});
           };
     }catch(err){
-        console.log(err);
-        showAlert(err.response.data.msg)
-        dispatch({type:ACCOUNT_FAIL,payload:err.response.data.msg});
+        showAlert(err?.response.data.msg??err)
+        dispatch({type:ACCOUNT_FAIL,payload:err?.response.data.msg??err});
     }
 };
 

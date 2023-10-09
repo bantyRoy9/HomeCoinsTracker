@@ -7,12 +7,14 @@ import moment from 'moment';
 import DatePicker from '../../Components/DatePicker';
 import { useDispatch } from 'react-redux';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
+const initalState = {amount:'',source:'',description:'',date:moment(new Date()).format('YYYY-MM-DD')}
 const AddEarnExpens = () => {
   const isDarkMode = useColorScheme() == 'dark';
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [details, setDetails] = useState({date:moment(new Date()).format('YYYY-MM-DD')});
+  const [details, setDetails] = useState(initalState);
+  const [errors,setErrors] = useState({});
   const backgroundStyle = {
     backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
     color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
@@ -22,16 +24,38 @@ const AddEarnExpens = () => {
     color: isDarkMode ? darkColorProps.btnBackground : "#FFF"
   }
 
-  const changeHandler = (name, value) => {
-    setDetails({ ...details, [name]: value });
+  const changeHandler = (key, value) => {
+    updateErrors(key);
+    setDetails({ ...details, [key]: value });
   }
-  
+  const updateErrors = (key) =>{
+    if(errors[key]){
+      delete errors[key]
+    };
+    setErrors(errors);
+  };
+  const validateForm = (details) => {
+    let valid = true,error={};
+    if(details && Object.keys(details).length>0){
+      Object.keys(details).forEach((el,idx)=>{
+        if(!details[el]){
+          valid=false;
+          error[el]=`*Enter ${el} value`
+        };
+      });
+    };
+    return {valid, error};
+  };
   const submitHandler = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    let validation = validateForm(details);
+    setErrors(validation.error);
     try {
-      await dispatch(addEarnExpend(details,'earn'))
-      setDetails({date:moment(new Date()).format('YYYY-MM-DD')})
-      navigation.navigate('Home');
+      if(validation.valid){
+        dispatch(addEarnExpend(details,'earn'))
+        setDetails({date:moment(new Date()).format('YYYY-MM-DD')})
+        navigation.navigate('Home');
+      }
     } catch (err) {
       console.log(err)
     }
@@ -67,6 +91,9 @@ const AddEarnExpens = () => {
             autoFocus={false}
             keyboardType={'numeric'}
             onChangeText={(text) => changeHandler("amount", text)}
+            isHelper={errors.amount ? true : false}
+            errorMsg={errors?.amount}
+            helperType={'error'}
           />
         </View>
         <View>
@@ -80,6 +107,9 @@ const AddEarnExpens = () => {
             secureTextEntry={false}
             autoFocus={false}
             onChangeText={(text) => changeHandler("source", text)}
+            isHelper={errors.source ? true : false}
+            errorMsg={errors?.source}
+            helperType={'error'}
           />
         </View>
         <View>
@@ -93,6 +123,9 @@ const AddEarnExpens = () => {
             secureTextEntry={false}
             autoFocus={false}
             onChangeText={(text) => changeHandler("description", text)}
+            isHelper={errors.description ? true : false}
+            errorMsg={errors?.description}
+            helperType={'error'}
           />
         </View>
         <View>
