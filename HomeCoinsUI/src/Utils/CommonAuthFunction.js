@@ -57,4 +57,24 @@ export const getLocalIP = async()=>{
     const data = await axios.get("https://api.ipify.org?format=json");
     return data.ip
   }catch(err){}
-}
+};
+
+export const updateErrors = (errors,key) =>{
+  if(errors[key]){
+    delete errors[key]
+  };
+  return errors;
+};
+
+export const validateForm = (details) => {
+  let valid = true,error={};
+  if(details && Object.keys(details).length>0){
+    Object.keys(details).forEach((el,idx)=>{
+      if(!details[el]){
+        valid=false;
+        error[el]=`*Enter ${el} value`
+      };
+    });
+  };
+  return {valid, error};
+};
