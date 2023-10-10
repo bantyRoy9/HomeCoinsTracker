@@ -1,25 +1,24 @@
 import { StyleSheet, SafeAreaView, Text, View, useColorScheme, StatusBar, Pressable,Alert } from 'react-native'
 import React, { useState } from 'react'
-import Icons from 'react-native-vector-icons/FontAwesome';
 import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
 import { defaultStyle } from '../../Utils/defaultCss';
 import Input from '../../Components/Input';
-import ModalDatePicker from 'react-native-datepicker-modal'
 import moment from 'moment';
-import axios from 'axios';
-import { REACT_LOCAL_URL,REACT_PROD_URL,NODE_ENV } from '@env'
-import { getAxiosHeader, showAlert } from '../../Utils/CommonAuthFunction';
+import { updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import DatePicker from '../../Components/DatePicker';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+
+const initialState = {amount:"",description:"",date:moment().format('YYYY-MM-DD')}
 const AddEarnExpens = () => {
   const isDarkMode = useColorScheme() == 'dark';
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [details, setDetails] = useState({date:moment().format('YYYY-MM-DD')});
+  const [details, setDetails] = useState(initialState);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [errors,setErrors] = useState({});
   const backgroundStyle = {
     backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
     color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
@@ -30,14 +29,20 @@ const AddEarnExpens = () => {
   }
 
   const changeHandler = (name, value) => {
+    setErrors(updateErrors(name));
     setDetails({ ...details, [name]: value })
   }
 
   const submitHandler = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    let validation = validateForm(details);
+    setErrors(validation.error);
     try {
-      await dispatch(addEarnExpend(details,'expend'));
-      navigation.navigate('Home');
+      if(validation.valid){
+        dispatch(addEarnExpend(details,'expend'));
+        setDetails(initialState);
+        //navigation.navigate('Home');
+      }
     } catch (err) {
       console.warn(err)
     }
@@ -72,6 +77,9 @@ const AddEarnExpens = () => {
             autoFocus={false}
             keyboardType={'numeric'}
             onChangeText={(text) => changeHandler("amount", text)}
+            isHelper={errors.amount ? true : false}
+            errorMsg={errors?.amount}
+            helperType={'error'}
           />
         </View>
         <View>
@@ -85,6 +93,9 @@ const AddEarnExpens = () => {
             secureTextEntry={false}
             autoFocus={false}
             onChangeText={(text) => changeHandler("description", text)}
+            isHelper={errors.description ? true : false}
+            errorMsg={errors?.description}
+            helperType={'error'}
           />
         </View>
         <View>
@@ -96,7 +107,12 @@ const AddEarnExpens = () => {
           mode={'date'}
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
-          onChangeText={(text)=>changeHandler("date", text)}/>
+          onChangeText={(text)=>changeHandler("date", text)}
+          isHelper={errors.date ? true : false}
+          errorMsg={errors?.date}
+          helperType={'error'}
+          />
+          
         </View>
         <View style={{ width: "auto", alignItems: 'center' }}>
           <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler}>

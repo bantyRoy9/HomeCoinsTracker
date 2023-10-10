@@ -7,6 +7,7 @@ import moment from 'moment';
 import DatePicker from '../../Components/DatePicker';
 import { useDispatch } from 'react-redux';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
+import { updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 const initalState = {amount:'',source:'',description:'',date:moment(new Date()).format('YYYY-MM-DD')}
 const AddEarnExpens = () => {
   const isDarkMode = useColorScheme() == 'dark';
@@ -25,35 +26,18 @@ const AddEarnExpens = () => {
   }
 
   const changeHandler = (key, value) => {
-    updateErrors(key);
+    setErrors(updateErrors(key));
     setDetails({ ...details, [key]: value });
   }
-  const updateErrors = (key) =>{
-    if(errors[key]){
-      delete errors[key]
-    };
-    setErrors(errors);
-  };
-  const validateForm = (details) => {
-    let valid = true,error={};
-    if(details && Object.keys(details).length>0){
-      Object.keys(details).forEach((el,idx)=>{
-        if(!details[el]){
-          valid=false;
-          error[el]=`*Enter ${el} value`
-        };
-      });
-    };
-    return {valid, error};
-  };
+  
   const submitHandler = async (e) => {
     e.preventDefault();
     let validation = validateForm(details);
     setErrors(validation.error);
     try {
       if(validation.valid){
-        dispatch(addEarnExpend(details,'earn'))
-        setDetails({date:moment(new Date()).format('YYYY-MM-DD')})
+        dispatch(addEarnExpend(details,'earn'));
+        setDetails({date:moment(new Date()).format('YYYY-MM-DD')});
         navigation.navigate('Home');
       }
     } catch (err) {

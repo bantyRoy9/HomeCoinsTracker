@@ -36,8 +36,8 @@ const Activity = () => {
                                     <View style={styles.activityText}>
                                         <View><Text>{`${el.user.name.charAt(0).toUpperCase()+el.user.name.slice(1)} `}</Text></View>
                                         <View><Text>{`${el.methodType === 'POST'?'add':'Type - NA'} `}</Text></View>
-                                        <View><Text>{`${el.addExpend && el.addExpend.amount ?'₹'+el.addExpend.amount+' expend':''} `}</Text></View>
-                                        <View><Text>{`${el.addEarn && el.addEarn.amount ? '₹'+el.addEarn.amount+' earn':''} `}</Text></View>
+                                        <View><Text>{`${el.addExpend && el.addExpend.amount ?'₹'+el.addExpend.amount+' expend to '+el.addExpend?.description??'':''} `}</Text></View>
+                                        <View><Text>{`${el.addEarn && el.addEarn.amount ? '₹'+el.addEarn.amount+' earn by '+el.addEarn.source:''} `}</Text></View>
                                     </View>
                                     <View>
                                         <Text>{el.date?moment(el.date).format('DD MMM YY hh:mm a'):'NA'}</Text>
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     },
     activityText:{
         flexDirection:'row',
-        flexWrap:'wrap',
+        flexWrap:'nowrap',
         gap:5
     },
     activityListTexts:{
