@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema({
         required:[true, 'Name is requiredd']
     },
     userId:String,
+    photo:{
+        type:String,
+        default:'default.png'
+    },
     email:{
         type:String,
         // unique:true 
