@@ -149,7 +149,12 @@ exports.restrictTo = (...role) => {
     }
 };
 exports.getUserId = (keyName) => async(req,res,next)=>{
-    if(!req.body[keyName]) req.body[keyName] = req.user.id;
+    const keyNames = keyName.split(',');
+    if(keyNames && keyNames.length>0){
+        keyNames.forEach((keyName)=>{
+            if(!req.body[keyName]) req.body[keyName] = req.user.id;
+        });
+    };
     next();
 };
 

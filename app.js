@@ -13,6 +13,7 @@ app.use('/api/v1/accountController', accountRoute);
 app.use('/api/v1/sourceController', sourceRoute);
 app.use('/api/v1/activityController', activityRoute);
 app.use('/api/v1/groupController', groupRoute);
+
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't found ${req.originalUrl} on this server`, 404));
 })
