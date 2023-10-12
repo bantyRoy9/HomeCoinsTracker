@@ -5,14 +5,15 @@ const groupSchema = new mongoose.Schema({
         type:String,
         required:[true,'Group name required']
     },
-    members:{
+    members:[{
         type:mongoose.Schema.ObjectId,
         ref:'User'
-    },
+    }
+    ],
     role:{
         type:String,
         enum:['user','admin'],
-        default:'user'
+        default:'admin'
     },
     createdDate:{
         type:Date,
@@ -23,5 +24,5 @@ const groupSchema = new mongoose.Schema({
         ref:'User'
     },
 });
-
-module.exports = mongoose.model('Group',groupSchema)
+const GroupModels = mongoose.model('Group',groupSchema)
+module.exports = GroupModels;
