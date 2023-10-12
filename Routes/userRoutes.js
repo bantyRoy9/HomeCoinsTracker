@@ -1,14 +1,19 @@
 const express = require('express');
-const { createrUser, loginUser, protect, isLoggedIn, logout } = require('../Controllers/authController');
+const { createrUser, loginUser, protect, isLoggedIn, logout, restrictTo } = require('../Controllers/authController');
 const { getUserDetails,getLoginUserDetails,getUsers  } = require('../Controllers/userController');
 // const { createrUser, loginUser } = require('../Controllers/userController');
 const router = express.Router();
 
 router.post('/createUser', createrUser);
 router.post('/loginUser', loginUser);
-router.get('/getUserDetailById', protect , getUserDetails);
-router.get('/getMe',isLoggedIn,getLoginUserDetails);
 router.get('/logout',logout);
-router.route('/users').get(getUsers)
+router.get('/getMe',isLoggedIn,getLoginUserDetails);
+
+router.use(protect);
+router.get('/getUserDetailById', getUserDetails);
+
+router.use(restrictTo('admin'));
+router.route('/users').get(getUsers);
+router.route('/users/:id').patch(getUsers)
 
 module.exports = router
