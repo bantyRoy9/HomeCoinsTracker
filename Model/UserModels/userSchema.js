@@ -12,9 +12,10 @@ const userSchema = new mongoose.Schema({
         type:String,
         default:'default.png'
     },
+    groupId:String,
     email:{
         type:String,
-        // unique:true 
+        unique:true,
         required:[true, 'Email is requiredd'],
         validate:[validator.isEmail, 'Provide Valide Email']
     },

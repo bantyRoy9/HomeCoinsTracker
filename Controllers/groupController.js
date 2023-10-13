@@ -5,29 +5,29 @@ const catchAsync = require("../Utils/catchAsync");
 const { responseSend } = require("./authController");
 
 exports.createGroup = catchAsync(async(req,res,next)=>{
-    const response = await GroupModels.create(req.body);
-    next(responseSend(res,201,true,response,'Group created successfully.'))
+    let reqBody = {
+        name:req.body.name,
+        members:{member:req.user.id}
+    };
+    const response = await GroupModels.create(reqBody);
+    return next(responseSend(res,201,true,response,'Group created successfully.'))
 });
 exports.getGroupList = catchAsync(async(req,res,next)=>{
     const groupList = await GroupModels.find({});
-    next(responseSend(res,200,true,groupList,''))
+    return next(responseSend(res,200,true,groupList,''))
 })
 exports.addMembers = catchAsync(async(req,res,next)=>{
-    let user = await User.findById(req.user.id);
-    if(user.role !== 'admin'){
-        next(new AppError('Permission Denied!',403))
-    };
+    let user={};
     if(req.body && (req.body.email||req.body.mobile)){
         user = await User.findOne(req.body);
         if(!user){
-            next(new AppError('user not found',401))
+           return next(new AppError('user not found',401))
         }
     };
-    const group = await GroupModels.findByIdAndUpdate(
-        req.params.id,{ 
-            $push: { members: user.id }
-        },
-        { new: true }
-    );
+    const group = await GroupModels.findById(req.params.id);
+    if(!group) return next(new AppError('Group not found',404))
+    if(group.members.includes(user.id)) return next(new AppError('User already exist in this group',403));
+    group.members.push({member:user.id,role:'user'});
+    await group.save();
     responseSend(res,200,true,group,'user added successfully.')
 })

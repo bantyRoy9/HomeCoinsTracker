@@ -6,8 +6,15 @@ const groupSchema = new mongoose.Schema({
         required:[true,'Group name required']
     },
     members:[{
-        type:mongoose.Schema.ObjectId,
-        ref:'User'
+        member:{
+            type:mongoose.Schema.ObjectId,
+            ref:'User'
+        },
+        role:{
+            type:String,
+            enum:['user','admin'],
+            default:'admin'
+        }
     }
     ],
     role:{
