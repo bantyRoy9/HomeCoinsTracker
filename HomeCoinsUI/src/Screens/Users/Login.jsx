@@ -6,7 +6,8 @@ import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch,useSelector} from 'react-redux';
 import { loging } from '../../Redux/Action/userAction';
-import { defaultStyle } from '../../Utils/defaultCss';
+import { PaperProvider } from 'react-native-paper';
+import Modals from '../../Components/Modal';
 const Login = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -24,11 +25,18 @@ const Login = () => {
   }
   const [user, setUser] = useState({ email: "", password: "" });
   const [errors,setErrors] = useState({});
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const showModal = () => {
+   setModalVisible(true)
+  };
+  const hideModal = () => setModalVisible(false);
+  
   const changeHandler = (name, value) => {
     updateErrors(name);
     setUser({ ...user, [name]: value });
   };
-
+  
   const updateErrors = (key) =>{
     if(errors[key]){
       delete errors[key]
@@ -54,13 +62,14 @@ const Login = () => {
     e.preventDefault()
     if(validateForm()){
     try {
-        dispatch(loging(user));
+       dispatch(loging(user));
       } catch (err) {
         console.log(err);
       }
     }
   };
   return (
+    <PaperProvider>
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
       <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
@@ -115,13 +124,15 @@ const Login = () => {
               />
             </View>
             </ScrollView>
-            <View style={{ width: "auto", alignItems: 'center' }} pointerEvents={isLoading ? 'none' : 'auto'}>
-              <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler}>
+            <View style={{ width: "auto", alignItems: 'center' }} >
+              <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} >
                 <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'large'} color={isDarkMode?darkColorProps.loaderColor:lightColorProps.loaderColor}/> : "LOGIN"}</Text>
               </Pressable>
-              <Text style={{ color: btnStyle.color }}>
+              <Pressable onPress={showModal}>
+              <Text style={{ color: btnStyle.color }} >
                 Forget Password?
               </Text>
+              </Pressable>
             </View>
           <View style={{ position: 'relative', height: 50 }}>
             <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
@@ -132,7 +143,9 @@ const Login = () => {
           </View>
           </View>
       </ScrollView>
+      {modalVisible && <Modals />}
     </SafeAreaView>
+    </PaperProvider>
   )
 }
 

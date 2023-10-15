@@ -46,7 +46,6 @@ exports.totalEarnByUser = catchAsync(async(req,res,next) =>{
 
 exports.getQuery= catchAsync(async(req,res,next)=>{
     let { dateRange } = req.query;
-    console.log(dateRange);
    if(dateRange && dateRange.split('_') && dateRange.split('_').length){
         req.query.date={
             gte: moment(new Date(dateRange.split('_')[0])),

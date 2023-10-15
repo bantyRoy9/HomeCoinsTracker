@@ -17,11 +17,9 @@ export const getEarnExpendData = (dateRange,isAuthenticated)=> async(dispatch)=>
     try{
         dispatch({type:ACCOUNT_REQUIEST});
         console.log(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
-        const {data} = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
-        console.log(data);
+        const {data} = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`)
         let response={};
         if(isAuthenticated){
-            console.log(userControllerURL,getAxiosHeader());
             response = await axios.get(`${userControllerURL}/getUserDetailById`,getAxiosHeader());
         }
         
@@ -41,7 +39,6 @@ export const getEarnExpendData = (dateRange,isAuthenticated)=> async(dispatch)=>
 export const addEarnExpend = (details,urlType) => async(dispatch) =>{
     try{
         dispatch({type:ACCOUNT_ADD_REQUIEST});
-        console.log(`${accountControllerURL}/${urlType}`,details);
         const { data } = await axios.post(`${accountControllerURL}/${urlType}`,details,getAxiosHeader());
         if(data){
             showAlert(`${details.amount} add successfully.`);
