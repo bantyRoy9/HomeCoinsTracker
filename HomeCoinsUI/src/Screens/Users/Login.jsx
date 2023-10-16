@@ -6,8 +6,10 @@ import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch,useSelector} from 'react-redux';
 import { loging } from '../../Redux/Action/userAction';
-import { PaperProvider } from 'react-native-paper';
+import { Divider, Modal, PaperProvider, Portal } from 'react-native-paper';
 import Modals from '../../Components/Modal';
+import { defaultStyle } from '../../Utils/defaultCss';
+import { Ionicons } from '../../Utils/VectorIcons';
 const Login = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -143,8 +145,38 @@ const Login = () => {
           </View>
           </View>
       </ScrollView>
-      {modalVisible && <Modals />}
     </SafeAreaView>
+      <Portal>
+        <Modal onDismiss={hideModal} visible={modalVisible} contentContainerStyle={{...backgroundStyle,...styles.modalView}}>
+          <View style={styles.modalHeader}>
+              <View><Text style={styles.modalHeaderText}>Forget Password</Text></View>
+          </View>
+          <Divider/>
+          <View Style={styles.modalBody}>
+          <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
+              <Input
+                placeholder={"Enter your email"}
+                label={"Enter your email"}
+                isLabel={false}
+                name={"email"}
+                autoFocus={false}
+                icons={'envelope-o'}
+                value={user.email}
+                onChangeText={(text) => changeHandler("email", text)}
+                isHelper={errors.email?true:false}
+                errorMsg={errors?.email}
+                helperType={'error'}
+              />
+            </View>
+          </View>
+          <View style={{...btnStyle,...styles.modalFooter}}>
+              <Pressable style={styles.modalFooterBtn}>
+                <Text style={styles.modalFooterBtnText}>Next  </Text>
+                <Ionicons name='send' size={20}/>
+              </Pressable>
+          </View>
+        </Modal>
+      </Portal>
     </PaperProvider>
   )
 }
@@ -189,4 +221,40 @@ const styles = StyleSheet.create({
   highlight: {
     fontWeight: '700',
   },
+  
+  modalView: {
+    margin: 20,
+    // borderColor:'white',
+    // borderWidth:1,
+    paddingHorizontal:20,
+    paddingVertical:15,
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {width: 0,height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalHeader:{
+    paddingVertical:10,
+  },
+  modalHeaderText:{
+    fontSize:18,
+    fontWeight: 'bold',
+  },
+  modalFooter: {
+    paddingVertical:10,
+    marginBottom: 15,
+    borderRadius:4,
+  },
+  modalFooterBtn:{
+    flexDirection:'row',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  modalFooterBtnText:{
+    fontSize:15,
+    fontWeight:'bold'
+  }
 });
+
