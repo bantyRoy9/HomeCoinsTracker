@@ -29,7 +29,7 @@ const Home = () => {
   useEffect(() => {
     const dateRange = homeNavList.filter(el => el.active == true);
     dispatch(getEarnExpendData(dateRange, isAuthenticated));
-  }, [dateRange, dispatch]);
+  }, [dateRange]);
 
   const navPressHandle = (navPress) => {
     homeNavList.map(el => {

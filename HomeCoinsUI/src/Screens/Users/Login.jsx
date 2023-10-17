@@ -6,7 +6,10 @@ import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch,useSelector} from 'react-redux';
 import { loging } from '../../Redux/Action/userAction';
+import { Divider, Modal, PaperProvider, Portal } from 'react-native-paper';
+import Modals from '../../Components/Modal';
 import { defaultStyle } from '../../Utils/defaultCss';
+import { Ionicons } from '../../Utils/VectorIcons';
 const Login = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -24,11 +27,18 @@ const Login = () => {
   }
   const [user, setUser] = useState({ email: "", password: "" });
   const [errors,setErrors] = useState({});
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const showModal = () => {
+   setModalVisible(true)
+  };
+  const hideModal = () => setModalVisible(false);
+  
   const changeHandler = (name, value) => {
     updateErrors(name);
     setUser({ ...user, [name]: value });
   };
-
+  
   const updateErrors = (key) =>{
     if(errors[key]){
       delete errors[key]
@@ -54,13 +64,14 @@ const Login = () => {
     e.preventDefault()
     if(validateForm()){
     try {
-        dispatch(loging(user));
+       dispatch(loging(user));
       } catch (err) {
         console.log(err);
       }
     }
   };
   return (
+    <PaperProvider>
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
       <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
@@ -115,13 +126,15 @@ const Login = () => {
               />
             </View>
             </ScrollView>
-            <View style={{ width: "auto", alignItems: 'center' }} pointerEvents={isLoading ? 'none' : 'auto'}>
-              <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler}>
+            <View style={{ width: "auto", alignItems: 'center' }} >
+              <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} >
                 <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'large'} color={isDarkMode?darkColorProps.loaderColor:lightColorProps.loaderColor}/> : "LOGIN"}</Text>
               </Pressable>
-              <Text style={{ color: btnStyle.color }}>
+              <Pressable onPress={showModal}>
+              <Text style={{ color: btnStyle.color }} >
                 Forget Password?
               </Text>
+              </Pressable>
             </View>
           <View style={{ position: 'relative', height: 50 }}>
             <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
@@ -133,6 +146,38 @@ const Login = () => {
           </View>
       </ScrollView>
     </SafeAreaView>
+      <Portal>
+        <Modal onDismiss={hideModal} visible={modalVisible} contentContainerStyle={{...backgroundStyle,...styles.modalView}}>
+          <View style={styles.modalHeader}>
+              <View><Text style={styles.modalHeaderText}>Forget Password</Text></View>
+          </View>
+          <Divider/>
+          <View Style={styles.modalBody}>
+          <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
+              <Input
+                placeholder={"Enter your email"}
+                label={"Enter your email"}
+                isLabel={false}
+                name={"email"}
+                autoFocus={false}
+                icons={'envelope-o'}
+                value={user.email}
+                onChangeText={(text) => changeHandler("email", text)}
+                isHelper={errors.email?true:false}
+                errorMsg={errors?.email}
+                helperType={'error'}
+              />
+            </View>
+          </View>
+          <View style={{...btnStyle,...styles.modalFooter}}>
+              <Pressable style={styles.modalFooterBtn}>
+                <Text style={styles.modalFooterBtnText}>Next  </Text>
+                <Ionicons name='send' size={20}/>
+              </Pressable>
+          </View>
+        </Modal>
+      </Portal>
+    </PaperProvider>
   )
 }
 
@@ -176,4 +221,40 @@ const styles = StyleSheet.create({
   highlight: {
     fontWeight: '700',
   },
+  
+  modalView: {
+    margin: 20,
+    // borderColor:'white',
+    // borderWidth:1,
+    paddingHorizontal:20,
+    paddingVertical:15,
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {width: 0,height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalHeader:{
+    paddingVertical:10,
+  },
+  modalHeaderText:{
+    fontSize:18,
+    fontWeight: 'bold',
+  },
+  modalFooter: {
+    paddingVertical:10,
+    marginBottom: 15,
+    borderRadius:4,
+  },
+  modalFooterBtn:{
+    flexDirection:'row',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  modalFooterBtnText:{
+    fontSize:15,
+    fontWeight:'bold'
+  }
 });
+

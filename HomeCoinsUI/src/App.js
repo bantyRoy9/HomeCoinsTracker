@@ -50,7 +50,7 @@ function App() {
   const editProfile = () => {
     // navigation.navigate('EditProfile');
   }
-  console.log(isAuthenticated);
+  console.log(isAuthenticated,'app.js');
   return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName={isAuthenticated?"Home":"Login"}>
