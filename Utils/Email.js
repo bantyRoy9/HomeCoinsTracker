@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer')
+const htmlToText = require('html-to-text')
 module.exports = class Email{
     constructor(user,url){
         this.to= user.email,
@@ -15,5 +16,15 @@ module.exports = class Email{
                 pass:process.env.SENDGRID_PASSWORD
             }
         })
+    }
+    async send(subject,template){
+        const mailOption = {
+            from:this.from,
+            to:this.to,
+            subject,
+            html,
+            text: htmlToText.fromString(html)
+        }
+        await this.newTransport().sendMail(mailOption)
     }
 }

@@ -8,21 +8,21 @@ const handleCaseErrorDB = err => {
 
 const sendErrorDev = (err,req,res,next)=>{
     if(req.originalUrl.startsWith('/api')){
-        res.status(err.statusCode).json({
+        return res.status(err.statusCode).json({
             status: err.status,
             statusCode : err.statusCode,
             msg: err.message,
             stack: err.stack
         });
     }else{
-        res.status(err.statusCode).render('error',{
+        return res.status(err.statusCode).render('error',{
             title:'Something Went Wrong!',
             msg:err.message
         });
     }
 };
 module.exports = (err,req,res,next)=>{
-    console.log("err",process.env.NODE_ENV,'process.env.NODE_ENV');
+    console.log("err",process.env.NODE_ENV,'process.env.NODE_ENV',err);
     err.statusCode = err.statusCode || 500;
     err.status = err.status || false;
 
