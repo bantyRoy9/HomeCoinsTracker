@@ -79,7 +79,7 @@ userSchema.methods.changePasswordAfter = function(JWTTimeStamp){
     return false;
 };
 userSchema.methods.createPasswordResetToken = function(){
-    const resetToken = otpGenerator.generate(4,{ alphabets:false,upperCaseAlphabets:false,specialChars:false});
+    const resetToken = otpGenerator.generate(4,{lowerCaseAlphabets:false,upperCaseAlphabets:false,specialChars:false,digits:true});
     this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
     this.passwordResetExpire = Date.now() + 10*60*1000
     return resetToken
