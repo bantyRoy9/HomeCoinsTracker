@@ -24,6 +24,7 @@
     "mongoose": "^7.5.2",
     "nodemailer": "^6.9.6",
     "nodemon": "^2.0.22",
+    "otp-generator": "^4.0.1",
     "validator": "^13.11.0"
   },
   "engines": {
