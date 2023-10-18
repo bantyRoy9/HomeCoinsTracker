@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const crypto = require('crypto')
+const crypto = require('crypto');
+const otpGenerator = require('otp-generator')
 const userSchema = new mongoose.Schema({
     name:{
         type:String,
@@ -77,8 +78,8 @@ userSchema.methods.changePasswordAfter = function(JWTTimeStamp){
     }
     return false;
 };
-userSchema.method.createPasswordResetToken = function(){
-    const resetToken = crypto.randomBytes(32).toString('hex');
+userSchema.methods.createPasswordResetToken = function(){
+    const resetToken = otpGenerator.generate(4,{lowerCaseAlphabets:false,upperCaseAlphabets:false,specialChars:false,digits:true});
     this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
     this.passwordResetExpire = Date.now() + 10*60*1000
     return resetToken
