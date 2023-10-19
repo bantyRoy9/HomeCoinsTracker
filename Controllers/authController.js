@@ -5,6 +5,7 @@ const { promisify } = require('util')
 const jwt = require('jsonwebtoken')
 const catchAsync = require('../Utils/catchAsync');
 const Email = require('../Utils/Email');
+const SendSMS = require('../Utils/SendSMS');
 
 
 const signToken = id => {
@@ -169,15 +170,16 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
     const resetToken = user.createPasswordResetToken();
 
     await user.save({ validateBeforeSave: false })
-
+    console.log(user);
     try {
         // const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`
         const resetURL = resetToken
-        await new Email(user, resetURL).resetPassword();
+        // await new Email(user, resetURL).resetPassword();
+        await new SendSMS(user,resetURL).resetPassword();
 
         res.status(200).json({
             status: 'success',
-            message: 'token send to email!!'
+            message: 'verification code send to your registerd mobile or email!!'
         })
     } catch (err) {
         user.passwordResetToken = undefined,
