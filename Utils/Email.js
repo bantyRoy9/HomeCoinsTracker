@@ -10,12 +10,13 @@ module.exports = class Email{
 
     newTransport(){
         return nodemailer.createTransport({
-            host:'gmail',
+            service:'SendGrid',
+            host:'smtp.gmail.com',
             port: 465,
-            secure: true,
+            secure: false,
       auth:{
-        user: 'mr.bantikumar9716@gmail.com',
-        pass:'banti@9716'
+        user: process.env.SENDGRID_USERNAMR,
+        pass: process.env.SENDGRID_PASSWORD,
       }
         })
     }
@@ -28,7 +29,6 @@ module.exports = class Email{
            // text:this.otp
         };
         console.log(mailOption);
-        await transporter.verify();
         await this.newTransport().sendMail(mailOption)
     }
 
