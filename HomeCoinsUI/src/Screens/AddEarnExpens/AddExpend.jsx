@@ -29,7 +29,7 @@ const AddEarnExpens = () => {
   }
 
   const changeHandler = (name, value) => {
-    setErrors(updateErrors(name));
+    setErrors(updateErrors(errors,name));
     setDetails({ ...details, [name]: value })
   }
 
@@ -41,7 +41,7 @@ const AddEarnExpens = () => {
       if(validation.valid){
         dispatch(addEarnExpend(details,'expend'));
         setDetails(initialState);
-        //navigation.navigate('Home');
+        navigation.navigate('Home');
       }
     } catch (err) {
       console.warn(err)

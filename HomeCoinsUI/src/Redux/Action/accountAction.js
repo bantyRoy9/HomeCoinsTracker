@@ -22,7 +22,7 @@ export const getEarnExpendData = (dateRange,isAuthenticated)=> async(dispatch)=>
         if(isAuthenticated){
             response = await axios.get(`${userControllerURL}/getUserDetailById`,getAxiosHeader());
         }
-        console.log(data,response);
+        // console.log(data,response);
         if (data.status && data.data && data.graphData) {
             data.analyticsDetail = getAnalyticsDetails(data.graphData)
             data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })

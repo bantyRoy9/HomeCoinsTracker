@@ -26,7 +26,7 @@ const AddEarnExpens = () => {
   }
 
   const changeHandler = (key, value) => {
-    setErrors(updateErrors(key));
+    setErrors(updateErrors(errors,key));
     setDetails({ ...details, [key]: value });
   }
   
