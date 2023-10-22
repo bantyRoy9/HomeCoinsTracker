@@ -10,6 +10,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/v1/userController',userRoutes);
 app.use('/api/v1/accountController', accountRoute);
+
 app.use('/api/v1/sourceController', sourceRoute);
 app.use('/api/v1/activityController', activityRoute);
 app.use('/api/v1/groupController', groupRoute);

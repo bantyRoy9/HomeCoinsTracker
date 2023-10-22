@@ -1,21 +1,21 @@
 import { StyleSheet, SafeAreaView, Text, View, useColorScheme, StatusBar, Pressable } from 'react-native'
 import React, { useState } from 'react'
-import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
-import { defaultStyle } from '../../Utils/defaultCss';
-import Input from '../../Components/Input';
 import moment from 'moment';
-import DatePicker from '../../Components/DatePicker';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
+import {Input, DatePicker} from '../../Components';
 import { updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
+import { darkColorProps, lightColorProps,defaultStyle } from '../../Utils';
+import { ActivityIndicator } from 'react-native-paper';
 const initalState = {amount:'',source:'',description:'',date:moment(new Date()).format('YYYY-MM-DD')}
-const AddEarnExpens = () => {
+const AddEarn = ({navigation}) => {
   const isDarkMode = useColorScheme() == 'dark';
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [details, setDetails] = useState(initalState);
   const [errors,setErrors] = useState({});
+  const { isLoading } = useSelector(state=> state.account);
   const backgroundStyle = {
     backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
     color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
@@ -37,7 +37,7 @@ const AddEarnExpens = () => {
     try {
       if(validation.valid){
         dispatch(addEarnExpend(details,'earn'));
-        setDetails({date:moment(new Date()).format('YYYY-MM-DD')});
+        setDetails(initalState);
         navigation.navigate('Home');
       }
     } catch (err) {
@@ -58,7 +58,6 @@ const AddEarnExpens = () => {
     setSelectedDate(date);
     setDetails({ ...details, ["date"]: moment(new Date(date)).format('YYYY-MM-DD')});
   };
-  
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar backgroundColor={isDarkMode ? darkColorProps.background : lightColorProps.background}></StatusBar>
@@ -74,6 +73,7 @@ const AddEarnExpens = () => {
             secureTextEntry={false}
             autoFocus={false}
             keyboardType={'numeric'}
+            pointerEvents={isLoading ? "none" : "auto"}
             onChangeText={(text) => changeHandler("amount", text)}
             isHelper={errors.amount ? true : false}
             errorMsg={errors?.amount}
@@ -90,6 +90,7 @@ const AddEarnExpens = () => {
             value={details?.source}
             secureTextEntry={false}
             autoFocus={false}
+            pointerEvents={isLoading ? "none" : "auto"}
             onChangeText={(text) => changeHandler("source", text)}
             isHelper={errors.source ? true : false}
             errorMsg={errors?.source}
@@ -106,6 +107,7 @@ const AddEarnExpens = () => {
             value={details?.description}
             secureTextEntry={false}
             autoFocus={false}
+            pointerEvents={isLoading ? "none" : "auto"}
             onChangeText={(text) => changeHandler("description", text)}
             isHelper={errors.description ? true : false}
             errorMsg={errors?.description}
@@ -118,6 +120,7 @@ const AddEarnExpens = () => {
             onPress={showDatePicker}
             date={selectedDate}
             isVisible={datePickerVisible}
+            pointerEvents={isLoading ? "none" : "auto"}
             mode={'date'}
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
@@ -126,8 +129,8 @@ const AddEarnExpens = () => {
         </View>
         
         <View style={{ width: "auto", alignItems: 'center' }}>
-          <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler}>
-            <Text style={{ ...styles.text, ...btnStyle.color }}>{"ADD EARN"}</Text>
+          <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} pointerEvents={isLoading?"none":"auto"}>
+            <Text style={{ ...styles.text, ...btnStyle.color }}>{ isLoading ? <ActivityIndicator size={'small'} color={isDarkMode?darkColorProps.loaderColor:lightColorProps.loaderColor}/> : "ADD EARN"}</Text>
           </Pressable>
         </View>
       </View>
@@ -135,7 +138,7 @@ const AddEarnExpens = () => {
   )
 }
 
-export default AddEarnExpens
+export default AddEarn
 
 const styles = StyleSheet.create({
 

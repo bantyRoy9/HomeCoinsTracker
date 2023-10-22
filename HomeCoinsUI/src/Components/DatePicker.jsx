@@ -35,7 +35,7 @@ const DatePicker = (props) => {
             onChangeText={props?.onChangeText}
           />}
         </View>
-        <View style={{position:'absolute',width:'100%',height:50,top:12}}>
+        <View style={{position:'absolute',width:'100%',height:50,top:12}} pointerEvents={props?.pointerEvents}>
           <Pressable onPress={props?.onPress??showDatePicker} style={{height:'100%',alignItems:'center',borderRadius:10}}></Pressable>
         </View>
         <DateTimePickerModal
