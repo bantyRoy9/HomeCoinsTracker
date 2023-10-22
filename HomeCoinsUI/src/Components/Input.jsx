@@ -6,7 +6,6 @@ import { HelperText, TextInput } from 'react-native-paper';
 const Input = (props) => {
   const isDarkMode = useColorScheme() == 'dark';
   const [isFocuse, setIsFocuse] = useState(defualtProperty);
-//  console.log(props);
   const defualtProperty = {
     backgroundColor: isDarkMode ? darkColorProps.inputBackground : lightColorProps.inputBackground,
     color: isDarkMode ? darkColorProps.inputTextColor : lightColorProps.inputTextColor
@@ -28,11 +27,10 @@ const Input = (props) => {
     color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
   };
   return (
-    <View style={styles.inputContainer}>
+    <View style={styles.inputContainer} pointerEvents={props?.pointerEvents}>
       {props.isLabel && <Text style={styles.inputLabel}>{props.label}</Text>}
       {props.icons && <Icons style={styles.inputIcons} name={props.icons} size={20} />}  
         <TextInput
-                pointerEvents={props?.pointerEvents}
                 keyboardType={props?.keyboardType}
                 onBlur={onBlur}
                 onFocus={onFocuse}

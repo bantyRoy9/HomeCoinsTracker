@@ -3,23 +3,13 @@
  * @BANTI
  */
 import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from './Screens/Users/Login';
-import Signup from './Screens/Users/Signup'
-import Home from './Screens/Dashboard/Home';
-import AddEarn from './Screens/AddEarnExpens/AddEarn';
-import { darkColorProps, lightColorProps } from './Utils/colorProp';
-import { useColorScheme, ActivityIndicator,View } from 'react-native';
-import AddExpend from './Screens/AddEarnExpens/AddExpend';
 import { useDispatch, useSelector } from 'react-redux';
-import Profile from './Screens/Users/Profile';
-import FontIcons from 'react-native-vector-icons/FontAwesome5'
-import EditProfile from './Screens/Users/EditProfile';
+import { useColorScheme } from 'react-native';
 import { getMe } from './Redux/Action/userAction';
-import Activity from './Screens/Activity/Activity';
-import Members from './Screens/Members/Members';
-//import { useNavigation } from '@react-navigation/native';
+import { Activity, AddEarn, AddExpend, EditProfile, Home, Login, Members, Profile, Signup } from './Screens';
+import { FontAwesome5, darkColorProps, lightColorProps } from './Utils';
 function App() {
   const Stack = createNativeStackNavigator();
   const dispatch = useDispatch();
@@ -49,8 +39,7 @@ function App() {
   }
   const editProfile = () => {
     // navigation.navigate('EditProfile');
-  }
-  console.log(isAuthenticated,'app.js');
+  }   
   return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName={isAuthenticated?"Home":"Login"}>
@@ -60,7 +49,7 @@ function App() {
             <Stack.Screen name='AddExpend' component={AddExpend} options={{ ...navigationOptions, ...headerTitle.addExpend }} />
             <Stack.Screen name='Activity' component={Activity} options={{ ...navigationOptions,...headerTitle.activity}} />
             <Stack.Screen name='Members' component={Members} options={{ ...navigationOptions,...headerTitle.members}} />
-            <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () => <FontIcons name='user-edit' size={25} onPress={editProfile} /> }} />
+            <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () => <FontAwesome5 name='user-edit' size={25} onPress={editProfile} /> }} />
             <Stack.Screen name='EditProfile' component={EditProfile} options={{ ...navigationOptions, ...headerTitle.editProfile }} />
           </> : <>
             <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />

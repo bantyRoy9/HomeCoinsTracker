@@ -1,21 +1,11 @@
 import { ScrollView, ActivityIndicator, SafeAreaView, StyleSheet, Pressable, Text, View, useColorScheme, StatusBar } from 'react-native'
-import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
-import FeatherIcons from 'react-native-vector-icons/Feather';
-import Icons from 'react-native-vector-icons/FontAwesome';
-import Icons6 from 'react-native-vector-icons/FontAwesome6';
-import { homeNavList } from '../../Utils/homeNavList';
-import Chart from '../../Components/Chart';
 import React, { useState, useEffect } from 'react'
-import Header from '../../Components/Header';
 import { Card } from 'react-native-elements';
-import { defaultStyle } from '../../Utils/defaultCss';
-import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEarnExpendData } from '../../Redux/Action/accountAction';
-import Table from '../../Components/DataTable';
-import FloatingActionBtn from '../../Components/FloatingActionBtn';
+import { Chart, DataTable, FloatingActionBtn, Header } from '../../Components';
+import { darkColorProps, lightColorProps,homeNavList,defaultStyle,FeatherIcons,FontAwesome } from '../../Utils';
 const Home = () => {
-  const navigation = useNavigation();
   const [dateRange, setDateRange] = useState({ label: 'Last 7 days' });
   const dispatch = useDispatch();
   const isDarkMode = useColorScheme() == "dark";
@@ -41,9 +31,7 @@ const Home = () => {
     });
     setDateRange(navPress);
   }
-  if (!isLoading) {
-    // console.log(account,isLoading);
-  }
+  
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
@@ -54,7 +42,7 @@ const Home = () => {
               <Text style={{ fontSize: 20, fontWeight: '600', color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor }}>Dashbord</Text>
             </View>
             <View style={{ position: 'relative' }}>
-              <Icons name='bell' color={backgroundStyle.color} size={20} />
+              <FontAwesome name='bell' color={backgroundStyle.color} size={20} />
               <View style={{ position: 'absolute', width: 10, height: 10, borderRadius: 50, backgroundColor: 'red', right: 0 }}></View>
             </View>
           </View>
@@ -97,7 +85,7 @@ const Home = () => {
                   <Chart graphData={account?.graphData} />
                 </View>
                 <View>
-                  <Table tableData={account.graphData} />
+                  <DataTable tableData={account.graphData} />
                 </View></>}
             </View></>}
         </View>
