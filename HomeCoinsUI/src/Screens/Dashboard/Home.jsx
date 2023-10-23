@@ -31,7 +31,7 @@ const Home = () => {
     });
     setDateRange(navPress);
   }
-  
+
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
@@ -74,7 +74,7 @@ const Home = () => {
                     {Object.keys(account?.analyticsDetail).map((el, idx) => (
                       <View key={`${idx}${el}`} style={styles.analyticsDetails}>
                         <View><Text style={styles.analyticsText}>{el}</Text></View>
-                        <View><Text style={styles.analyticsText}>₹{account?.analyticsDetail[el]?.toFixed(2)}</Text></View>
+                        <View><Text style={styles.analyticsText}>₹{account.analyticsDetail[el] ? account.analyticsDetail[el]:'NA'}</Text></View>
                       </View>
                     ))}
                   </>}

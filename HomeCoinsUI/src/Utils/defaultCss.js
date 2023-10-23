@@ -44,5 +44,9 @@ export const defaultStyle = StyleSheet.create({
         backgroundColor:'white',
         marginHorizontal:18,
         marginVertical:1
+    },
+    textBold:{
+        fontWeight:'700',
+        fontSize:16
     }
 })

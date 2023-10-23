@@ -42,6 +42,7 @@ function App() {
   }   
   return (
       <NavigationContainer>
+        
         <Stack.Navigator initialRouteName={isAuthenticated?"Home":"Login"}>
           {isAuthenticated ? <>
             <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
