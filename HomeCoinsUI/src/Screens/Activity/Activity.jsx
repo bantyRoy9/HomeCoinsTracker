@@ -31,12 +31,12 @@ const Activity = () => {
                                 <Pressable key={el._id} style={styles.activityList}>
                                     <View style={styles.activityProfileList}>
                                         <Image source={require('../../../Assets/profiles/default.png')}
-                                            style={{ width: 30, height: 30,borderRadius:50 }}
+                                            style={{ width: 40, height: 40,borderRadius:50 }}
                                         />
                                     </View>
                                     <View style={styles.activityListTexts}>
                                         <View style={styles.activityText}>
-                                            <View><Text>{`${el.user.name.charAt(0).toUpperCase() + el.user.name.slice(1)} `}</Text></View>
+                                            <View><Text style={defaultStyle.textBold}>{`${el.user.name.charAt(0).toUpperCase() + el.user.name.slice(1)} `}</Text></View>
                                             <View><Text>{`${el.methodType === 'POST' ? 'add' : 'Type - NA'} `}</Text></View>
                                             <View><Text>{`${el.addExpend && el.addExpend.amount ? '₹' + el.addExpend.amount + ' expend to ' + el.addExpend?.description ?? '' : ''} `}</Text></View>
                                             <View><Text>{`${el.addEarn && el.addEarn.amount ? '₹' + el.addEarn.amount + ' earn by ' + el.addEarn.source : ''} `}</Text></View>
@@ -68,12 +68,15 @@ const styles = StyleSheet.create({
         // borderWidth:1
     },
     activityProfileList: {
-        width: 30, height: 30, borderRadius: 50, backgroundColor: "#3d3d3d"
+        width: 40,
+        height: 40,
+        borderRadius: 50, 
+        backgroundColor: "#3d3d3d"
     },
     activityText: {
         flexDirection: 'row',
         flexWrap: 'nowrap',
-        gap: 5
+        alignItems:'baseline'
     },
     activityListTexts: {
         flexDirection: 'column',
