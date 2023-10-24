@@ -1,5 +1,5 @@
 /**
- * @format
+ * @BANTI
  */
 
 import {AppRegistry} from 'react-native';
@@ -7,10 +7,17 @@ import App from './src/App';
 import {name as appName} from './app.json';
 import { Provider } from 'react-redux';
 import { store } from './src/Redux/Store';
+import { PaperProvider } from 'react-native-paper';
+import { useState } from 'react';
+import { darkTheme } from './src/Screens/Theme/DarkTheme';
+import { defaultTheme } from './src/Screens/Theme/DefaultTheme';
 const ReduxProvider = () => {
+    const [isDarkMode,setIsDarkMode] = useState(true);
     return(
         <Provider store={store}>
-            <App />
+            <PaperProvider theme={isDarkMode ? darkTheme : defaultTheme}>
+                <App />
+            </PaperProvider>
         </Provider>
     )
 }

@@ -1,11 +1,15 @@
 const nodemailer = require('nodemailer')
 const htmlToText = require('html-to-text')
+const sendGridMail = require('@sendgrid/mail');
 module.exports = class Email{
-    constructor(user,otp){
-        this.to= user.email,
+    constructor(user,msg){
+        this.to= [user.email],
         this.firstName = user.name,
-        this.otp = otp,
-        this.from = `HomeCoinsTracker <${process.env.EMAIL_FROM}>`
+        this.msg = msg,
+        this.from = {
+            name:'HomeCoinsTracker',
+            email:process.env.EMAIL_FROM
+        }
     }
 
     newTransport(){
@@ -20,19 +24,24 @@ module.exports = class Email{
       }
         })
     }
-    async send(subject){
-        
+    async send(subject,text){
         const mailOption = {
             from:this.from,
             to:this.to,
             subject,
-           // text:this.otp
+            text
         };
         console.log(mailOption);
-        await this.newTransport().sendMail(mailOption)
+        await sendGridMail.setApiKey(process.env.SENDGRID_PASSWORD);
+        const mailRes = await sendGridMail.send(mailOption);
+        console.log(mailRes);
+        return mailRes
     }
 
-    async resetPassword(){
-        await this.send('your reset otp valid for (10min)')
+    async resetPassword(){  
+        await this.send('your reset otp valid for (10min)',this.msg)
+    }
+    async sendRequestMail(){
+        await this.send('Memember Add Request',this.msg)
     }
 }

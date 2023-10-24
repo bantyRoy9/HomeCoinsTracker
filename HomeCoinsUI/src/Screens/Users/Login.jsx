@@ -4,7 +4,9 @@ import Input from '../../Components/Input';
 import { useDispatch,useSelector} from 'react-redux';
 import { loging } from '../../Redux/Action/userAction';
 import { Divider, Modal, PaperProvider, Portal, useTheme } from 'react-native-paper';
-import { FontAwesome, FontAwesome5, Ionicons } from '../../Utils/VectorIcons';
+import { FontAwesome, Ionicons } from '../../Utils/VectorIcons';
+import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
+const initialState = { email: "", password: "" }
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
   const {isLoading,isAuthenticated} = useSelector(state=>state.user);
@@ -18,7 +20,7 @@ const Login = ({navigation}) => {
     backgroundColor: colors.btnBackground,
     color:colors.text
   }
-  const [user, setUser] = useState({ email: "", password: "" });
+  const [user, setUser] = useState(initialState);
   const [errors,setErrors] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -28,38 +30,19 @@ const Login = ({navigation}) => {
   const hideModal = () => setModalVisible(false);
   
   const changeHandler = (name, value) => {
-    updateErrors(name);
+    setErrors(updateErrors(errors,name));
     setUser({ ...user, [name]: value });
   };
   
-  const updateErrors = (key) =>{
-    if(errors[key]){
-      delete errors[key]
-    }
-    setErrors(errors)
-  }
-  const validateForm = () => {
-    let valid = true,error={};
-    if(!user.email){
-      valid =false;
-      error.email = '*Enter valid email'
-    };
-    if(!user.password){
-      valid = false;
-      error.password = '*Enter password'
-    }
-    setErrors(error);
-    return valid
-  };
-
-
   const submitHandler = async(e) => {
     e.preventDefault()
-    if(validateForm()){
+    const validation = validateForm(user);
+    setErrors(validation.error);
+    if(validation.valid){
     try {
        dispatch(loging(user));
       } catch (err) {
-        console.log(err);
+        showAlert(err);
       }
     }
   };

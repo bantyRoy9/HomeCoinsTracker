@@ -16,6 +16,10 @@ const earnSchema = new mongoose.Schema({
     earnBy: {
         type:mongoose.Schema.ObjectId,
         ref:'User'
+    },
+    groupId:{
+        type:mongoose.Schema.ObjectId,
+        ref:'Group'
     }
 });
 

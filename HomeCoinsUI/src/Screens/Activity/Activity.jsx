@@ -3,28 +3,35 @@ import React, { useEffect } from 'react'
 import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
 import { useDispatch, useSelector } from 'react-redux';
 import { getActivity } from '../../Redux/Action/activityAction';
-import { ActivityIndicator, Divider } from 'react-native-paper';
+import { ActivityIndicator, Divider, useTheme } from 'react-native-paper';
 import { defaultStyle } from '../../Utils/defaultCss';
 import moment from 'moment';
 import { stringTransform } from '../../Utils/HomeCommon';
+import { colors as color } from 'react-native-elements';
+import { showAlert } from '../../Utils/CommonAuthFunction';
 
 
 const Activity = () => {
     const isDarkMode = useColorScheme() == 'dark';
     const dispatch = useDispatch();
+    const { colors } = useTheme();
     const backgroundStyle = {
-        backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
-        color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
+        backgroundColor: colors.background,
+        color: colors.text
     };
     const { isLoading, activity } = useSelector(state => state.activity);
     useEffect(() => {
-        dispatch(getActivity());
+        try{
+            dispatch(getActivity());
+        }catch(err){
+            showAlert(err);
+        }
     }, [dispatch]);
     console.log(isLoading, activity);
     return (
         <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
             <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
-            {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={isDarkMode ? darkColorProps.loaderColor : lightColorProps.loaderColor} /></View> :
+            {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> :
                 <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
                     <View style={defaultStyle.screenContainer}>
                         {activity && activity.data && activity?.data.map((el, idx) => (
@@ -39,25 +46,25 @@ const Activity = () => {
                                             </View>
                                             <View>
                                                 {el.Url == "/earn" && <>
-                                                    <View><Text>Earn By</Text></View>
-                                                    <View><Text>{stringTransform(el.addEarn.source,'c')}</Text></View>
+                                                    <View><Text style={{color:colors.text}}>Earn By</Text></View>
+                                                    <View><Text style={{color:colors.text}}>{stringTransform(el.addEarn?.source??"NA",'c')}</Text></View>
                                                 </>}
                                                 {el.Url == "/expend" && <>
-                                                    <View><Text>Expend to</Text></View>
-                                                    <View><Text>{el.addExpend?.description ?? ''}</Text></View>
+                                                    <View><Text style={{color:colors.text}}>Expend to</Text></View>
+                                                    <View><Text style={{color:colors.text}}>{el.addExpend?.description ?? 'NA'}</Text></View>
                                                 </>}
                                             </View>
                                         </View>
                                         <View style={styles.activityRightSec}>
-                                            <Text>{`${el.Url == "/expend" ? '- ₹' + el.addExpend?.amount ?? "NA" + '' : '- ₹' + el.addEarn?.amount ?? "NA" + ''} `}</Text>
+                                            <Text style={{color: el.Url == "/expend"? color.error: color.success}}>{`${el.Url == "/expend" ? '- ₹' + el.addExpend?.amount ?? "NA" + '' : '+ ₹' + el.addEarn?.amount ?? "NA" + ''} `}</Text>
                                         </View>
                                     </View>
                                     <View style={{flexDirection:'row',justifyContent:'space-between'}}>
                                         <View>
-                                            <Text>{el.date ? moment(el.date).format('DD MMM YY hh:mm a') : 'NA'}</Text>
+                                            <Text style={{color:colors.text}}>{el.date ? moment(el.date).format('DD MMM YY hh:mm a') : 'NA'}</Text>
                                         </View>
                                         <View>
-                                            <Text style={defaultStyle.textBold}>{`${stringTransform(el.user.name, 'C')} `}</Text>
+                                            <Text style={{color:colors.text}}>{`Add By ${stringTransform(el.user.name, 'C')} `}</Text>
                                         </View>
                                     </View>
                                 </Pressable>

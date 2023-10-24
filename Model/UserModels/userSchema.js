@@ -13,7 +13,13 @@ const userSchema = new mongoose.Schema({
         type:String,
         default:'default.png'
     },
-    groupId:String,
+    isGroupIncluded:{
+        type:Boolean,
+        default:false
+    },
+    groupId:{
+        type:String
+    },
     email:{
         type:String,
         unique:true,

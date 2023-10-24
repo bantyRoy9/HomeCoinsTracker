@@ -16,6 +16,10 @@ const expendSchema = new mongoose.Schema({
     expendBy: {
         type:mongoose.Schema.ObjectId,
         ref:'User'
+    },
+    groupId:{
+        type:mongoose.Schema.ObjectId,
+        ref:'Group'
     }
 });
 

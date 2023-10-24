@@ -34,7 +34,8 @@ const createSendToken = (user, statusCode, res) => {
 }
 
 exports.createrUser = catchAsync(async (req, res, next) => {
-    
+    const user = await User.find({email:req.body.email});
+    if(user.length) return next(new AppError('User already existed!',406));
     const newUser = await User.create(req.body);
     // let URL = `${req.protocol}://${req.get('host')}/me`;
     // console.log(url);
@@ -150,13 +151,15 @@ exports.restrictTo = (...role) => {
         next();
     }
 };
-exports.getUserId = (keyName) => async(req,res,next)=>{
+exports.setUserAndGroupId = (keyName) => async(req,res,next)=>{
     const keyNames = keyName.split(',');
     if(keyNames && keyNames.length>0){
         keyNames.forEach((keyName)=>{
             if(!req.body[keyName]) req.body[keyName] = req.user.id;
         });
     };
+    if(!req.user.isGroupIncluded) return next(new AppError('User not exist any group',404));
+    req.body['groupId'] = req.user.groupId
     next();
 };
 

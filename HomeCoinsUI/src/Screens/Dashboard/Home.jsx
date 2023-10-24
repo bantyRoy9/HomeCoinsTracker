@@ -39,15 +39,6 @@ const Home = () => {
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
       <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
         <View style={defaultStyle.screenContainer}>
-          <View style={styles.toHeaderContainer}>
-            <View>
-              <Text style={{ fontSize: 25, fontWeight: '500', color: colors.text }}>Dashbord</Text>
-            </View>
-            <View style={{ position: 'relative' }}>
-              <FontAwesome name='bell' color={backgroundStyle.color} size={20} />
-              <View style={{ position: 'absolute', width: 10, height: 10, borderRadius: 50, backgroundColor: colors.notification, right: 0 }}></View>
-            </View>
-          </View>
           <View style={styles.navigationContainer}>
             {homeNavList.map((ele, idx) => (
               <Pressable key={`${idx}${ele}`} onPress={() => navPressHandle(ele)}>
@@ -74,7 +65,7 @@ const Home = () => {
                 <View>
                   {!isLoading && account && account?.analyticsDetail && <>
                     {Object.keys(account?.analyticsDetail).map((el, idx) => (
-                      <View key={`${idx}${el}`} style={styles.analyticsDetails}>
+                      <View key={`${idx}`} style={styles.analyticsDetails}>
                         <View><Text style={{...styles.analyticsText,color:colors.text}}>{el}</Text></View>
                         <View><Text style={{...styles.analyticsText,color:colors.text}}>₹{account.analyticsDetail[el] ? account.analyticsDetail[el]:'NA'}</Text></View>
                       </View>
@@ -123,7 +114,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 6
+    marginTop: 15
   },
   navText: {
     fontSize: 14,
