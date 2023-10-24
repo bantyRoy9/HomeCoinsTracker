@@ -5,14 +5,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getEarnExpendData } from '../../Redux/Action/accountAction';
 import { Chart, DataTable, FloatingActionBtn, Header } from '../../Components';
 import { darkColorProps, lightColorProps,homeNavList,defaultStyle,FeatherIcons,FontAwesome } from '../../Utils';
+import { useTheme } from 'react-native-paper';
 const Home = () => {
   const [dateRange, setDateRange] = useState({ label: 'Last 7 days' });
   const dispatch = useDispatch();
   const isDarkMode = useColorScheme() == "dark";
+  const { colors } = useTheme();
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
-    color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
-  };
+    backgroundColor: colors.background,
+    color:colors.text
+  }
   const { isLoading, account } = useSelector(state => state.account);
   const { isAuthenticated } = useSelector(state => state.user);
 
@@ -39,33 +41,33 @@ const Home = () => {
         <View style={defaultStyle.screenContainer}>
           <View style={styles.toHeaderContainer}>
             <View>
-              <Text style={{ fontSize: 20, fontWeight: '600', color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor }}>Dashbord</Text>
+              <Text style={{ fontSize: 25, fontWeight: '500', color: colors.text }}>Dashbord</Text>
             </View>
             <View style={{ position: 'relative' }}>
               <FontAwesome name='bell' color={backgroundStyle.color} size={20} />
-              <View style={{ position: 'absolute', width: 10, height: 10, borderRadius: 50, backgroundColor: 'red', right: 0 }}></View>
+              <View style={{ position: 'absolute', width: 10, height: 10, borderRadius: 50, backgroundColor: colors.notification, right: 0 }}></View>
             </View>
           </View>
           <View style={styles.navigationContainer}>
             {homeNavList.map((ele, idx) => (
               <Pressable key={`${idx}${ele}`} onPress={() => navPressHandle(ele)}>
-                <Text style={ele.active ? styles.activeNavText : styles.navText}>{ele.label}</Text>
+                <Text style={ele.active ? {...styles.activeNavText,backgroundColor:colors.notification, color:colors.primary} : {...styles.navText,color:colors.text} }>{ele.label}</Text>
               </Pressable>
             ))}
           </View>
-          {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={isDarkMode ? darkColorProps.loaderColor : lightColorProps.loaderColor} /></View> : <>
+          {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> : <>
             <View style={defaultStyle.viewSection}>
-              <Card containerStyle={{ ...styles.cardContainer, backgroundColor: isDarkMode ? darkColorProps.cardBackground : lightColorProps.cardBackground }}>
+              <Card containerStyle={{ ...styles.cardContainer, backgroundColor: colors.card }}>
                 <View style={styles.cardTitle}>
                   <View>
-                    <Text style={styles.cardLeftTitle}>Analytics</Text>
+                    <Text style={{...styles.cardLeftTitle,color:colors.text}}>Analytics</Text>
                   </View>
                   <View style={styles.cardRightTitle}>
                     <View>
-                      <Text style={styles.cardRightText}>{dateRange.label}</Text>
+                      <Text style={{...styles.cardRightText,color:colors.text}}>{dateRange.label}</Text>
                     </View>
-                    <View style={{ ...styles.cardRightIconCont, borderColor: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor }}>
-                      <FeatherIcons name='filter' color={isDarkMode ? darkColorProps.textColor : lightColorProps.textColor} size={15} />
+                    <View style={{ ...styles.cardRightIconCont, borderColor: colors.text }}>
+                      <FeatherIcons name='filter' color={colors.text} size={15} />
                     </View>
                   </View>
                 </View>
@@ -73,8 +75,8 @@ const Home = () => {
                   {!isLoading && account && account?.analyticsDetail && <>
                     {Object.keys(account?.analyticsDetail).map((el, idx) => (
                       <View key={`${idx}${el}`} style={styles.analyticsDetails}>
-                        <View><Text style={styles.analyticsText}>{el}</Text></View>
-                        <View><Text style={styles.analyticsText}>₹{account.analyticsDetail[el] ? account.analyticsDetail[el]:'NA'}</Text></View>
+                        <View><Text style={{...styles.analyticsText,color:colors.text}}>{el}</Text></View>
+                        <View><Text style={{...styles.analyticsText,color:colors.text}}>₹{account.analyticsDetail[el] ? account.analyticsDetail[el]:'NA'}</Text></View>
                       </View>
                     ))}
                   </>}
@@ -129,10 +131,7 @@ const styles = StyleSheet.create({
   activeNavText: {
     paddingVertical: 7,
     paddingHorizontal: 10,
-    backgroundColor: 'red',
-    color: '#fff',
-    borderRadius: 7,
-    fontWeight: '600'
+    borderRadius: 7
   },
   cardContainer: {
     padding: 15,
@@ -148,7 +147,6 @@ const styles = StyleSheet.create({
   },
   cardLeftTitle: {
     fontSize: 18,
-    fontWeight: '500',
     fontSize: 20
   },
   cardRightTitle: {
@@ -157,7 +155,6 @@ const styles = StyleSheet.create({
   },
   cardRightText: {
     marginRight: 8,
-    fontWeight: '500'
   },
   cardRightIconCont: {
     borderWidth: 1.5,

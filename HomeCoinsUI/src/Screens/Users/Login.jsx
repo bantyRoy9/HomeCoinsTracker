@@ -1,29 +1,22 @@
 import { StatusBar,Image ,Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View, useColorScheme,ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Input from '../../Components/Input';
-import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
-import { useNavigation } from '@react-navigation/native';
 import { useDispatch,useSelector} from 'react-redux';
 import { loging } from '../../Redux/Action/userAction';
-import { Divider, Modal, PaperProvider, Portal } from 'react-native-paper';
-import Modals from '../../Components/Modal';
-import { defaultStyle } from '../../Utils/defaultCss';
-import { Ionicons } from '../../Utils/VectorIcons';
-const Login = () => {
-  const navigation = useNavigation();
+import { Divider, Modal, PaperProvider, Portal, useTheme } from 'react-native-paper';
+import { FontAwesome, FontAwesome5, Ionicons } from '../../Utils/VectorIcons';
+const Login = ({navigation}) => {
   const dispatch = useDispatch();
   const {isLoading,isAuthenticated} = useSelector(state=>state.user);
   const isDarkMode = useColorScheme() === 'dark';
-  Colors.darker = darkColorProps.background;
-  Colors.lighter = lightColorProps.background;
+  const { colors } = useTheme();
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
+    backgroundColor: colors.background,
+    color: colors.text
   };
   const btnStyle = {
-    backgroundColor: isDarkMode ? darkColorProps.btnBackground : lightColorProps.btnBackground,
-    color: isDarkMode ? darkColorProps.btnBackground : "#FFF"
+    backgroundColor: colors.btnBackground,
+    color:colors.text
   }
   const [user, setUser] = useState({ email: "", password: "" });
   const [errors,setErrors] = useState({});
@@ -128,10 +121,10 @@ const Login = () => {
             </ScrollView>
             <View style={{ width: "auto", alignItems: 'center' }} >
               <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} >
-                <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'large'} color={isDarkMode?darkColorProps.loaderColor:lightColorProps.loaderColor}/> : "LOGIN"}</Text>
+                <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'large'} color={colors.text}/> : "LOGIN"}</Text>
               </Pressable>
               <Pressable onPress={showModal}>
-              <Text style={{ color: btnStyle.color }} >
+              <Text style={{ color: colors.btnBackground }} >
                 Forget Password?
               </Text>
               </Pressable>
@@ -139,7 +132,7 @@ const Login = () => {
           <View style={{ position: 'relative', height: 50 }}>
             <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
               <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignContent: 'center' }}>
-                <Text style={{ fontSize: 16, color: backgroundStyle.color }}>Don't have an account? </Text><Text onPress={() => navigation.navigate('Signup')} style={{ color: btnStyle.color, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Sign up</Text>
+                <Text style={{ fontSize: 16, color: backgroundStyle.color }}>Don't have an account? </Text><Text onPress={() => navigation.navigate('Signup')} style={{ color: colors.btnBackground, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Sign up</Text>
               </View>
             </View>
           </View>
@@ -149,7 +142,10 @@ const Login = () => {
       <Portal>
         <Modal onDismiss={hideModal} visible={modalVisible} contentContainerStyle={{...backgroundStyle,...styles.modalView}}>
           <View style={styles.modalHeader}>
-              <View><Text style={styles.modalHeaderText}>Forget Password</Text></View>
+              <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                <Text style={styles.modalHeaderText}>Forget Password</Text>
+                <View><FontAwesome name='close' size={15} onPress={hideModal}/></View>
+          </View>
           </View>
           <Divider/>
           <View Style={styles.modalBody}>
@@ -171,7 +167,7 @@ const Login = () => {
           </View>
           <View style={{...btnStyle,...styles.modalFooter}}>
               <Pressable style={styles.modalFooterBtn}>
-                <Text style={styles.modalFooterBtnText}>Next  </Text>
+                <Text style={styles.modalFooterBtnText}>Next</Text>
                 <Ionicons name='send' size={20}/>
               </Pressable>
           </View>
@@ -192,11 +188,10 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 18,
-    paddingHorizontal: 40,
-    borderRadius: 50,
-    elevation: 3,
-    width: "70%",
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 10,
+    width: "100%",
     marginVertical: 15
   },
   text: {

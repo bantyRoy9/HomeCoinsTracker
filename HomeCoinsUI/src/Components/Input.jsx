@@ -1,20 +1,19 @@
 import { StyleSheet, Text, View, useColorScheme } from 'react-native'
 import React, { useState } from 'react'
 import Icons from 'react-native-vector-icons/FontAwesome'
-import { darkColorProps, lightColorProps } from '../Utils/colorProp';
-import { HelperText, TextInput } from 'react-native-paper';
+import { HelperText, TextInput, useTheme } from 'react-native-paper';
 const Input = (props) => {
-  const isDarkMode = useColorScheme() == 'dark';
+  const { colors } = useTheme();
   const [isFocuse, setIsFocuse] = useState(defualtProperty);
   const defualtProperty = {
-    backgroundColor: isDarkMode ? darkColorProps.inputBackground : lightColorProps.inputBackground,
-    color: isDarkMode ? darkColorProps.inputTextColor : lightColorProps.inputTextColor
+    backgroundColor: colors.surfaceVariant,
+    color: colors.text
   };
 
   const onFocuse = () =>{
     setIsFocuse({
-      backgroundColor: isDarkMode ? darkColorProps.inputFocusBackground : lightColorProps.inputFocusBackground,
-      color: isDarkMode ? darkColorProps.inputTextColorOnFocus : lightColorProps.inputTextColorOnFocus,
+      backgroundColor: colors.surfaceVariant,
+      color: colors.text,
       borderBottomWidth:0
     })
   };
@@ -23,28 +22,22 @@ const Input = (props) => {
   };
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
-    color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
+    backgroundColor:colors.surfaceVariant,
+    colors:colors.text
   };
   return (
     <View style={styles.inputContainer} pointerEvents={props?.pointerEvents}>
       {props.isLabel && <Text style={styles.inputLabel}>{props.label}</Text>}
-      {props.icons && <Icons style={styles.inputIcons} name={props.icons} size={20} />}  
+      {props.icons && <Icons style={{...styles.inputIcons,color:colors.text}} name={props.icons} size={20} />}  
         <TextInput
                 keyboardType={props?.keyboardType}
                 onBlur={onBlur}
                 onFocus={onFocuse}
                 value= {props?.value}
-                // textColor={backgroundStyle.color}
-                
                 style={{
                   ...styles.inputBox,
-                  ...isFocuse,
-                  // borderBottomWidth:1,
-                  borderColor: isDarkMode? lightColorProps.inputBackground : darkColorProps.inputBackground,
                   ...backgroundStyle
                 }}
-                // style={{backgroundColor:backgroundStyle.backgroundColor}}
                 autoFocus={props.autoFocus}
                 label={props.label}
                 name={props.name}
@@ -71,7 +64,6 @@ const styles = StyleSheet.create({
 
     },
     inputLabel:{
-        color: 'white',
         fontWeight: 'bold', 
         fontSize: 18,
         marginBottom: 5
@@ -84,8 +76,6 @@ const styles = StyleSheet.create({
       fontSize:20
     },
     inputBox:{
-        borderTopLeftRadius:10,
-        borderTopRightRadius:10,
         padding:1,
         paddingLeft:30,
         fontSize:18

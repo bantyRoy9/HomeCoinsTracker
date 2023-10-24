@@ -10,10 +10,14 @@ import { useColorScheme } from 'react-native';
 import { getMe } from './Redux/Action/userAction';
 import { Activity, AddEarn, AddExpend, EditProfile, Home, Login, Members, Profile, Signup } from './Screens';
 import { FontAwesome5, darkColorProps, lightColorProps } from './Utils';
+import { darkTheme } from './Screens/Theme/DarkTheme';
+import { defaultTheme } from './Screens/Theme/DefaultTheme';
+import { PaperProvider } from 'react-native-paper';
 function App() {
   const Stack = createNativeStackNavigator();
   const dispatch = useDispatch();
-  const isDarkMode = useColorScheme() == 'dark'
+  // const isDarkMode = useColorScheme() == 'dark'
+  const [isDarkMode,setIsDarkMode] = useState(true)
   const { isLoading, isAuthenticated } = useSelector(state => state.user);
  useEffect(() => {
    dispatch(getMe());
@@ -41,8 +45,8 @@ function App() {
     // navigation.navigate('EditProfile');
   }   
   return (
-      <NavigationContainer>
-        
+    <PaperProvider theme={isDarkMode ? darkTheme : defaultTheme}>
+      <NavigationContainer >
         <Stack.Navigator initialRouteName={isAuthenticated?"Home":"Login"}>
           {isAuthenticated ? <>
             <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
@@ -58,6 +62,7 @@ function App() {
           </>}
         </Stack.Navigator>
       </NavigationContainer>
+      </PaperProvider>
   );
 }
 
