@@ -5,26 +5,24 @@ import { StatusBar } from 'react-native';
 import Input from '../../Components/Input';
 import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
 import Icons from 'react-native-vector-icons/Ionicons'
-import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-import { REACT_LOCAL_URL, REACT_PROD_URL, NODE_ENV } from '@env'
 import { useDispatch } from 'react-redux';
 import { createUser } from '../../Redux/Action/userAction';
 import { showAlert } from '../../Utils/CommonAuthFunction';
+import { useTheme } from 'react-native-paper';
 
 const Signup = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const { colors } = useTheme();
   const isDarkMode = useColorScheme() === 'dark';
-  Colors.darker = darkColorProps.background;
-  Colors.lighter = lightColorProps.background;
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
+    backgroundColor: colors.background,
+    color: colors.text
   };
   const btnStyle = {
-    backgroundColor: isDarkMode ? darkColorProps.btnBackground : lightColorProps.btnBackground,
-    color: isDarkMode ? darkColorProps.btnBackground : "#FFF"
+    backgroundColor: colors.btnBackground,
+    color: colors.btnBackground
   }
   const [user, setUser] = useState({ name:"",email: "", password: "", confirmPassword: "" });
   const [errors, setErrors] = useState({});
@@ -81,15 +79,15 @@ const Signup = () => {
 
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
+      <StatusBar barStyle={colors.text} backgroundColor={backgroundStyle.backgroundColor} />
       <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
         <View style={styles.signupContainer}>
           <View style={styles.arrowBack}>
-            <Icons name='arrow-back' size={30} onPress={() => navigation.navigate('Login')} color={isDarkMode ? darkColorProps.textColor : lightColorProps.textColor} />
+            <Icons name='arrow-back' size={30} onPress={() => navigation.navigate('Login')} color={colors.text} />
           </View>
           <View style={styles.pageTitle}>
-            <Text style={styles.headerTitle}>Create Account</Text>
-            <Text style={styles.subHeaderTitle}>Please fill the input below here</Text>
+            <Text style={{...styles.headerTitle,color:colors.text}}>Create Account</Text>
+            <Text style={{...styles.subHeaderTitle,color:colors.text}}>Please fill the input below here</Text>
           </View>
           <ScrollView contentContainerStyle={{flex:1}} showsVerticalScrollIndicator={false}>
           <View>
@@ -118,6 +116,7 @@ const Signup = () => {
               value={user.mobile}
               secureTextEntry={false}
               autoFocus={false}
+              keyboardType={"numeric"}
               onChangeText={(text) => changeHandler("mobile", text)}
               isHelper={errors.mobile ? true : false}
               errorMsg={errors?.mobile}

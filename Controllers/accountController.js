@@ -10,6 +10,7 @@ const ActivityModels = require("../Model/ActivityModels/activityModel");
 const { addUsersActivity } = require("./activityController");
 const AppError = require("../Utils/appError");
 const { responseSend } = require("./authController");
+
 exports.saveDailyEarns = catchAsync(async(req,res,next) => {
     const saveEarn = await EarnModel.create(req.body);
     const earnByuser = await User.findById({_id:req.body.earnBy});
