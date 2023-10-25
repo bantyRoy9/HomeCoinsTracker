@@ -37,9 +37,9 @@ exports.createrUser = catchAsync(async (req, res, next) => {
     const user = await User.find({email:req.body.email});
     if(user.length) return next(new AppError('User already existed!',406));
     const newUser = await User.create(req.body);
-    // let URL = `${req.protocol}://${req.get('host')}/me`;
-    // console.log(url);
-    // await new Email(newUser, url).sendWelcome()
+    let URL = `${req.protocol}://${req.get('host')}/me`;
+    console.log(URL);
+    await new Email(newUser, URL).sendWelcome()
     createSendToken(newUser, 201, res)
 })
  
@@ -177,8 +177,8 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
     try {
         // const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`
         const resetURL = resetToken
-        // await new Email(user, resetURL).resetPassword();
-        await new SendSMS(user,resetURL).resetPassword();
+        await new Email(user, resetURL).resetPassword();
+        //await new SendSMS(user,resetURL).resetPassword();
 
         res.status(200).json({
             status: 'success',

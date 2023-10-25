@@ -31,9 +31,9 @@ exports.addMemberRequest = catchAsync(async(req,res,next)=>{
         const group = await GroupModels.findOne({_id:user.groupId});
         let member = group.members.filter(el=>el.member == user._id);
         if(member && member.length && menubar[0].role !== 'admin') return next(new AppError('Given User have not access to add memeber'),406);
-        const email = await new Email(user, 'testEmail').sendRequestMail();
+        const email = await new Email(req.user, 'testEmail').sendRequestMail();
         console.log(email,'email');
-        responseSend(res,200,true,email);
+        return responseSend(res,200,true,email);
     }else{
         next();
     };

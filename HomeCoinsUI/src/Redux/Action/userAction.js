@@ -4,7 +4,7 @@ import { getAxiosHeader, getAxiosHeaderWithoutCookie, showAlert } from "../../Ut
 import { USER_FAIL, USER_REQUIEST, USER_GETME_REQUIEST,USER_GETME_SUCCCESS,USER_SUCCCESS,USER_LOGOUT_SUCCCESS, USER_REGISTER_SUCCESS, USER_REGISTER_REQUIEST, USER_REGISTER_FAIL,ALL_USER_REQUIEST,ALL_USER_SUCCESS,ALL_USER_FAIL } from "../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { userControllerURL } from "../../Utils/URLProperties";
-
+console.log(userControllerURL);
 export const loging = (userDetails) => async(dispatch) =>{
     try{
         dispatch({type:USER_REQUIEST});

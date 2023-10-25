@@ -1,47 +1,49 @@
 const nodemailer = require('nodemailer')
 const htmlToText = require('html-to-text')
 const sendGridMail = require('@sendgrid/mail');
+
 module.exports = class Email{
     constructor(user,msg){
-        this.to= [user.email],
+        this.to= user.email,
         this.firstName = user.name,
         this.msg = msg,
-        this.from = {
-            name:'HomeCoinsTracker',
-            email:process.env.EMAIL_FROM
-        }
+        this.from = process.env.EMAIL_FROM
     }
 
     newTransport(){
         return nodemailer.createTransport({
-            service:'SendGrid',
-            host:'smtp.gmail.com',
-            port: 465,
-            secure: false,
-      auth:{
-        user: process.env.SENDGRID_USERNAMR,
-        pass: process.env.SENDGRID_PASSWORD,
-      }
+            service:'gmail',
+            auth:{
+                user: process.env.EMAIL_FROM,
+                pass: process.env.EMAIL_APP_PASSWORD,
+            }
         })
-    }
+    };
     async send(subject,text){
         const mailOption = {
-            from:this.from,
             to:this.to,
+            from:this.from,
             subject,
             text
         };
-        console.log(mailOption);
-        await sendGridMail.setApiKey(process.env.SENDGRID_PASSWORD);
-        const mailRes = await sendGridMail.send(mailOption);
-        console.log(mailRes);
-        return mailRes
+        try{
+            const response = await this.newTransport().sendMail(mailOption);
+            return response
+        }catch(err){
+            return err
+        }
+    }
+    async sendWelcome(){
+        const mailResponse = await this.send('Welcome to homeCoinTracker')
+        return mailResponse;
     }
 
     async resetPassword(){  
-        await this.send('your reset otp valid for (10min)',this.msg)
+        const mailResponse = await this.send('your reset otp valid for (10min)',this.msg)
+        return mailResponse;
     }
     async sendRequestMail(){
-        await this.send('Memember Add Request',this.msg)
+      const mailResponse = await this.send('Memember Add Request',this.msg);
+      return mailResponse
     }
 }
