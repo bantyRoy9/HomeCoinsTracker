@@ -3,8 +3,8 @@
  * @BANTI
  */
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { TouchableOpacity, View } from 'react-native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMe } from './Redux/Action/userAction';
@@ -15,6 +15,7 @@ function App() {
   const Stack = createNativeStackNavigator();
   const dispatch = useDispatch();
   const { colors } = useTheme();
+  const navigation = useNavigation();
   const { isLoading, isAuthenticated,user } = useSelector(state => state.user);
  useEffect(() => {
    dispatch(getMe());
@@ -52,8 +53,13 @@ function App() {
             </View>
           </>,
     profile: <>
-      <FontAwesome5 name='user-edit' size={25} onPress={editProfile} />
-    </>
+            <FontAwesome5 name='user-edit' size={25} onPress={editProfile} />
+          </>,
+    createProfile: <>
+          <TouchableOpacity >
+            <FontAwesome5 name='user' size={25} color={colors.text} onPress={()=> navigation.navigate('Profile')}/>
+          </TouchableOpacity>
+          </>
   }   
   
   return (
@@ -69,7 +75,27 @@ function App() {
             <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () =>  headerIcons.profile}} />
             <Stack.Screen name='EditProfile' component={EditProfile} options={{ ...navigationOptions, ...headerTitle.editProfile }} />
           </> : isAuthenticated ? <>
-            <Stack.Screen name='CreateGroup' component={CreateGroup} option={{ ...navigationOptions,...headerTitle.createGroup}} />
+            {/* <Stack.Screen name='CreateGroup' 
+                component={CreateGroup} 
+                options={({navigation})=>({
+                  title:'Home',
+                  headerRight: () => (
+                    <Pressable onPress={()=>navigation.navigate('Profile')}>
+                          <FontAwesome5 name='user' size={25} color={colors.text} />
+                    </Pressable>
+                  )
+                })} /> */}
+            <Stack.Screen name='CreateGroup' 
+          component={CreateGroup} 
+          options={({navigation}) => ({ 
+            title: 'Blogs', 
+            headerRight: () => (
+              <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+                <FontAwesome5 name='user' size={25} color={colors.text} />
+              </TouchableOpacity>
+            )   
+        })} />
+            <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () =>  headerIcons.profile}} />
           </> : <>
             <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />
             <Stack.Screen name='Signup' component={Signup} options={{ headerShown: false }} />
