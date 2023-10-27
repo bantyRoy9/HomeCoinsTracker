@@ -3,7 +3,7 @@
  * @BANTI
  */
 import React, { useEffect } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Pressable, TouchableOpacity, View } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,7 +15,7 @@ function App() {
   const Stack = createNativeStackNavigator();
   const dispatch = useDispatch();
   const { colors } = useTheme();
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
   const { isLoading, isAuthenticated,user } = useSelector(state => state.user);
  useEffect(() => {
    dispatch(getMe());
@@ -61,7 +61,9 @@ function App() {
           </TouchableOpacity>
           </>
   }   
-  
+  const pressEvent =(e)=>{
+    console.log(e,'');
+  }
   return (
     
       <NavigationContainer >
@@ -85,16 +87,22 @@ function App() {
                     </Pressable>
                   )
                 })} /> */}
-            <Stack.Screen name='CreateGroup' 
-          component={CreateGroup} 
-          options={({navigation}) => ({ 
-            title: 'Blogs', 
-            headerRight: () => (
-              <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-                <FontAwesome5 name='user' size={25} color={colors.text} />
-              </TouchableOpacity>
-            )   
-        })} />
+            <Stack.Screen 
+              name='CreateGroup' 
+              component={CreateGroup} 
+              options={({navigation}) => ({ 
+                  title: 'Blogs',
+                  ...navigationOptions,
+                  ...headerTitle.createGroup,
+                  headerRight: () => (
+                    <>
+                      <Pressable onPress={(navigation)=>pressEvent(navigation)}>
+                          <FontAwesome5 name='user' size={25} color={colors.text} />
+                      </Pressable>
+                    </>
+                  )   
+                })
+              }/>
             <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () =>  headerIcons.profile}} />
           </> : <>
             <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />

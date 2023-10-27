@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { darkTheme } from './src/Screens/Theme/DarkTheme';
 import { defaultTheme } from './src/Screens/Theme/DefaultTheme';
 const ReduxProvider = () => {
-    const [isDarkMode,setIsDarkMode] = useState(true);
+    const [isDarkMode,setIsDarkMode] = useState(false);
     return(
         <Provider store={store}>
             <PaperProvider theme={isDarkMode ? darkTheme : defaultTheme}>
