@@ -48,5 +48,8 @@ export const defaultStyle = StyleSheet.create({
     textBold:{
         fontWeight:'700',
         fontSize:16
+    },
+    textWhite:{
+        color:'#eeee'
     }
 })

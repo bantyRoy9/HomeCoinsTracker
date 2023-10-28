@@ -7,7 +7,7 @@ import { Pressable, TouchableOpacity, View } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMe } from './Redux/Action/userAction';
+import { getMe, logoutUser } from './Redux/Action/userAction';
 import { Activity, AddEarn, AddExpend, CreateGroup, EditProfile, Home, Login, Members, Profile, Signup } from './Screens';
 import { FontAwesome, FontAwesome5} from './Utils';
 import { useTheme } from 'react-native-paper';
@@ -15,12 +15,10 @@ function App() {
   const Stack = createNativeStackNavigator();
   const dispatch = useDispatch();
   const { colors } = useTheme();
-  // const navigation = useNavigation();
   const { isLoading, isAuthenticated,user } = useSelector(state => state.user);
  useEffect(() => {
    dispatch(getMe());
   }, []);
- 
   const navigationOptions = {
     headerTintColor: colors.text,
     headerStyle: {
@@ -62,7 +60,7 @@ function App() {
           </>
   }   
   const pressEvent =(e)=>{
-    console.log(e,'');
+    console.log(e.navigate('Profile'));
   }
   return (
     
@@ -77,32 +75,21 @@ function App() {
             <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () =>  headerIcons.profile}} />
             <Stack.Screen name='EditProfile' component={EditProfile} options={{ ...navigationOptions, ...headerTitle.editProfile }} />
           </> : isAuthenticated ? <>
-            {/* <Stack.Screen name='CreateGroup' 
-                component={CreateGroup} 
-                options={({navigation})=>({
-                  title:'Home',
-                  headerRight: () => (
-                    <Pressable onPress={()=>navigation.navigate('Profile')}>
-                          <FontAwesome5 name='user' size={25} color={colors.text} />
-                    </Pressable>
-                  )
-                })} /> */}
-            <Stack.Screen 
-              name='CreateGroup' 
-              component={CreateGroup} 
+            <Stack.Screen name='CreateGroup' component={CreateGroup} 
               options={({navigation}) => ({ 
-                  title: 'Blogs',
                   ...navigationOptions,
                   ...headerTitle.createGroup,
                   headerRight: () => (
                     <>
-                      <Pressable onPress={(navigation)=>pressEvent(navigation)}>
+                      <Pressable onPress={()=> dispatch(logoutUser())}>
                           <FontAwesome5 name='user' size={25} color={colors.text} />
                       </Pressable>
                     </>
                   )   
                 })
               }/>
+            <Stack.Screen name='CreateNewGroup' component={CreateGroup} options={navigationOptions}/>
+            <Stack.Screen name='ExistingGroup' component={CreateGroup} options={ navigationOptions}/>  
             <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () =>  headerIcons.profile}} />
           </> : <>
             <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />

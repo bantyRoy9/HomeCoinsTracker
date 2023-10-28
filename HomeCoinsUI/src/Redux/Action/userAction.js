@@ -41,6 +41,7 @@ export const logoutUser = () => async(dispatch)=>{
 export const getMe = () =>async(dispatch)=>{
     try{
         dispatch({type:USER_GETME_REQUIEST})
+        console.log('getme');
         const { data } = await axios.get(`${userControllerURL}/getUserDetailById`,getAxiosHeader());
         
         dispatch({type:USER_GETME_SUCCCESS,payload:data.data})

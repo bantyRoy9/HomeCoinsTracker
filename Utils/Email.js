@@ -2,48 +2,60 @@ const nodemailer = require('nodemailer')
 const htmlToText = require('html-to-text')
 const sendGridMail = require('@sendgrid/mail');
 
-module.exports = class Email{
-    constructor(user,msg){
-        this.to= user.email,
+module.exports = class Email {
+    constructor(user, msg) {
+        this.to = user.email,
         this.firstName = user.name,
         this.msg = msg,
         this.from = process.env.EMAIL_FROM
     }
 
-    newTransport(){
-        return nodemailer.createTransport({
-            service:'gmail',
-            auth:{
-                user: process.env.EMAIL_FROM,
-                pass: process.env.EMAIL_APP_PASSWORD,
-            }
-        })
+    newTransport() {
+        if (process.env.NODE_DEV == "production") {
+
+            return nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.EMAIL_FROM,
+                    pass: process.env.EMAIL_APP_PASSWORD,
+                }
+            })
+        } else {
+            return nodemailer.createTransport({
+                service: process.env.EMAIL_HOST,
+                port: process.env.EMAIL_PORT,
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS
+                }
+            })
+        }
     };
-    async send(subject,text){
+    async send(subject, text) {
         const mailOption = {
-            to:this.to,
-            from:this.from,
+            to: this.to,
+            from: this.from,
             subject,
             text
         };
-        try{
+        try {
             const response = await this.newTransport().sendMail(mailOption);
             return response
-        }catch(err){
+        } catch (err) {
             return err
         }
     }
-    async sendWelcome(){
+    async sendWelcome() {
         const mailResponse = await this.send('Welcome to homeCoinTracker')
         return mailResponse;
     }
 
-    async resetPassword(){  
-        const mailResponse = await this.send('your reset otp valid for (10min)',this.msg)
+    async resetPassword() {
+        const mailResponse = await this.send('your reset otp valid for (10min)', this.msg)
         return mailResponse;
     }
-    async sendRequestMail(){
-      const mailResponse = await this.send('Memember Add Request',this.msg);
-      return mailResponse
+    async sendRequestMail() {
+        const mailResponse = await this.send('Memember Add Request', this.msg);
+        return mailResponse
     }
 }
