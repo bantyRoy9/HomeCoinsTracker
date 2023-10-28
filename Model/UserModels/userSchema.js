@@ -60,7 +60,11 @@ const userSchema = new mongoose.Schema({
     }],
     passwordChangeAt: Date,
     passwordResetToken:String,
-    passwordResetExpire:Date
+    passwordResetExpire:Date,
+    verifyGroupToken:String,
+    verifyGroupTokenExpire:Date,
+    // verifyGroupId:String,
+    // verifyGroupUserId:String
 },
 {
     toJSON: { virtuals: true },
@@ -89,6 +93,15 @@ userSchema.methods.createPasswordResetToken = function(){
     this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
     this.passwordResetExpire = Date.now() + 10*60*1000
     return resetToken
+}
+
+userSchema.methods.createVerifyToken = function(groupId,userId){
+    const verifyToken = crypto.randomBytes(32).toString('hex');
+    this.verifyGroupToken = crypto.createHash('sha256').update(verifyToken).digest('hex');
+    // this.verifyGroupId = groupId;
+    // this.verifyGroupUserId = userId;
+    this.verifyGroupTokenExpire = Date.now() + 24*60*60*1000;
+    return verifyToken;
 }
 
 const User = mongoose.model('User',userSchema);
