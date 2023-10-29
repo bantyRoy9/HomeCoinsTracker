@@ -4,47 +4,32 @@ import Icons from 'react-native-vector-icons/FontAwesome'
 import { darkColorProps, lightColorProps } from '../Utils/colorProp';
 import { useNavigation } from '@react-navigation/native';
 import { bottomHeaderList } from '../Utils/homeNavList';
+import { useTheme } from 'react-native-paper';
 
 const Header = () => {
     const navigation = useNavigation();
-    const isDarkMode = useColorScheme() == 'dark';
+    const { colors,dark} = useTheme()
     const backgroundStyle = {
-        backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
-        color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
+        backgroundColor: colors.headerBg,
+        color: colors.text,
+        borderColor:colors.border
     }
     const navigatePage=(pageLink)=>{
-        console.log(pageLink);
         navigation.navigate(pageLink);
     };
     
     return (
-        <View style={styles.headerContainer}>
+        <View style={[styles.headerContainer,backgroundStyle]}>
+            
             {bottomHeaderList && bottomHeaderList.map(headerLists=>(
                 <View style={styles.headerIcons}>
                     <Pressable style={styles.headerIcon} onPress={()=>navigatePage(headerLists.navUrl)}>
                         <Icons name={headerLists.iconName} size={25} color={backgroundStyle.color} />
-                        <Text>{headerLists.title}</Text>
+                        <Text style={{color:backgroundStyle.color}}>{headerLists.title}</Text>
                     </Pressable>
                 </View>
             ))}
-            {/* <View style={styles.headerIcons}>
-                <View style={styles.headerIcon}>
-                    <Icons name='address-book-o' size={25} color={backgroundStyle.color} />
-                    <Text>Record</Text>
-                </View>
-            </View>
-            <View style={styles.headerIcons}>
-                <View style={styles.headerIcon}>
-                    <Icons name='list-ul' size={25} color={backgroundStyle.color} />
-                    <Text>Activity</Text>
-                </View>
-            </View>
-            <View style={styles.headerIcons}>
-                <Pressable style={styles.headerIcon} onPress={()=>navigatePage('Profile')}>
-                    <Icons name='user' size={25} color={backgroundStyle.color} />
-                    <Text>Account</Text>
-                </Pressable>
-            </View> */}
+            
         </View>
     )
 }
@@ -55,18 +40,14 @@ const styles = StyleSheet.create({
     headerContainer: {
         display: 'flex',
         flexDirection: 'row',
-        //borderWidth:1,
-        borderColor: 'red',
         justifyContent: 'space-around',
-        backgroundColor: '#000',
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
+        borderTopWidth:1,
+        // borderTopLeftRadius:12,
+        // borderTopRightRadius:12
     },
     headerIcon:{
         alignItems:'center',
-        // borderColor:'red',
-        // borderWidth:1,
-        paddingVertical: 15,
+        paddingVertical: 10,
     },
     headerIcons: {
     }

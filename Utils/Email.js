@@ -11,15 +11,15 @@ module.exports = class Email {
     }
 
     newTransport() {
-        if (process.env.NODE_DEV == "production") {
-
-            return nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: process.env.EMAIL_FROM,
-                    pass: process.env.EMAIL_APP_PASSWORD,
-                }
-            })
+        
+        return nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_FROM,
+                pass: process.env.EMAIL_APP_PASSWORD,
+            }
+        })
+        /*   if (process.env.NODE_DEV == "production") {
         } else {
             return nodemailer.createTransport({
                 service: process.env.EMAIL_HOST,
@@ -29,7 +29,7 @@ module.exports = class Email {
                     pass: process.env.EMAIL_PASS
                 }
             })
-        }
+         }*/
     };
     async send(subject, text) {
         const mailOption = {
@@ -38,6 +38,7 @@ module.exports = class Email {
             subject,
             text
         };
+        console.log(mailOption,'mailOption');
         try {
             const response = await this.newTransport().sendMail(mailOption);
             return response
@@ -55,7 +56,7 @@ module.exports = class Email {
         return mailResponse;
     }
     async sendRequestMail() {
-        const mailResponse = await this.send('Memember Add Request', this.msg);
+        const mailResponse = await this.send('Verify user Add Request', this.msg);
         return mailResponse
     }
 }

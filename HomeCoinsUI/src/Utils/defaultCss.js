@@ -24,16 +24,7 @@ export const defaultStyle = StyleSheet.create({
         fontSize: 20,
         fontWeight: '600'
     },
-    earnExpensBtn:{
-        flexDirection:'row',
-        alignItems:'center',
-        padding:10,
-        borderRadius:20
-      },
-      earnExpensBtnText:{
-        fontSize:16,
-        fontWeight:'600'
-      },
+    
       activityIndicator:{
         flex:1,
         justifyContent:'center',

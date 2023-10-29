@@ -11,6 +11,7 @@ import { getMe, logoutUser } from './Redux/Action/userAction';
 import { Activity, AddEarn, AddExpend, CreateGroup, EditProfile, Home, Login, Members, Profile, Signup } from './Screens';
 import { FontAwesome, FontAwesome5} from './Utils';
 import { useTheme } from 'react-native-paper';
+import OtpVerification from './Screens/Users/OtpVerification';
 function App() {
   const Stack = createNativeStackNavigator();
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ function App() {
   const navigationOptions = {
     headerTintColor: colors.text,
     headerStyle: {
-      backgroundColor: colors.darkHeaderBg,
+      backgroundColor: colors.headerBg,
       borderBottomColor: '#f0f',
       borderBottomWidth: 0,
     },
@@ -38,7 +39,8 @@ function App() {
     editProfile: { title: 'Edit Profile' },
     activity:{ title: 'Activity'},
     members:{ title:'Members'},
-    createGroup:{title:'CreateGroup'}
+    createGroup:{title:'Create Group'},
+    otpVerification:{title:'OTP Verification'}
   }
   const editProfile = () => {
     // navigation.navigate('EditProfile');
@@ -51,7 +53,7 @@ function App() {
             </View>
           </>,
     profile: <>
-            <FontAwesome5 name='user-edit' size={25} onPress={editProfile} />
+            <FontAwesome5 name='user-edit' size={25} onPress={editProfile} color={colors.text}/>
           </>,
     createProfile: <>
           <TouchableOpacity >
@@ -81,7 +83,7 @@ function App() {
                   ...headerTitle.createGroup,
                   headerRight: () => (
                     <>
-                      <Pressable onPress={()=> dispatch(logoutUser())}>
+                      <Pressable onPress={()=> navigation.navigate('Profile')}>
                           <FontAwesome5 name='user' size={25} color={colors.text} />
                       </Pressable>
                     </>
@@ -94,6 +96,7 @@ function App() {
           </> : <>
             <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />
             <Stack.Screen name='Signup' component={Signup} options={{ headerShown: false }} />
+            <Stack.Screen name='OtpVerification' component={OtpVerification} options={{...navigationOptions,...headerTitle.otpVerification}}/>
           </>}
         </Stack.Navigator>
       </NavigationContainer>

@@ -1,211 +1,192 @@
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, useColorScheme, Pressable } from 'react-native'
+import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, Pressable, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
-import Input from '../../Components/Input';
-import Header from '../../Components/Header';
-import { defaultStyle } from '../../Utils/defaultCss';
-import FontIcons from 'react-native-vector-icons/FontAwesome'
+import { darkColorProps, lightColorProps, defaultStyle, FontAwesome } from '../../Utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesome } from '../../Utils/VectorIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 import { logoutUser } from '../../Redux/Action/userAction';
-const profileNavList=[{
-        label:'User Dashboard',
-        onPress:'userDashboard',
-        Icons:["dashboard"]
-    },
-    {
-        label:'Add Members',
-        onPress:'addMember',
-        Icons:["users"]
-    },
-    {
-        label:'Email Setting',
-        onPress:'emailSetting',
-        Icons:["envelope-o"]
-    },{
-        label:'Notification Settings',
-        onPress:'notificationSetting',
-        Icons:["bell"]
-    },{
-        label:'Password',
-        onPress:'passwordSetting',
-        Icons:["lock"]
-    },{
-        label:'Logout',
-        onPress:'Logout',
-        Icons:["sign-out"]
-    },
+import { useTheme } from 'react-native-paper';
+const profileNavList = [{
+    label: 'User Dashboard',
+    onPress: 'userDashboard',
+    Icons: ["dashboard"]
+},
+{
+    label: 'Add Members',
+    onPress: 'addMember',
+    Icons: ["users"]
+},
+{
+    label: 'Email Setting',
+    onPress: 'emailSetting',
+    Icons: ["envelope-o"]
+}, {
+    label: 'Notification Settings',
+    onPress: 'notificationSetting',
+    Icons: ["bell"]
+}, {
+    label: 'Password',
+    onPress: 'passwordSetting',
+    Icons: ["lock"]
+}, {
+    label: 'Logout',
+    onPress: 'Logout',
+    Icons: ["sign-out"]
+},
 ]
 const Profile = () => {
-    const isDarkMode = useColorScheme() == 'dark';
     const dispatch = useDispatch();
-    const [userDetails,setUserDetails] = useState({});
-    const navigation = useNavigation();
-    const { user } = useSelector(state=>state.user);
+    const [userDetails, setUserDetails] = useState({});
+    const { colors,dark } = useTheme();
+    const { user } = useSelector(state => state.user);
     const backgroudStyle = {
-        backgroundColor:isDarkMode?darkColorProps.background:lightColorProps.background,
-        color:isDarkMode?darkColorProps.textColor:lightColorProps.textColor
+        backgroundColor: colors.background,
+        color: colors.text
     };
-    useEffect(()=>{
-        if(user){
+    useEffect(() => {
+        if (user) {
             setUserDetails(user)
         }
-    },[])
-    const changeHandler =(name,value)=>{
-        setUserDetails({ ...userDetails,[name]:value});
-    };
-    const logout = async()=>{
+    }, []);
+
+    const logout = async () => {
         await AsyncStorage.clear();
         dispatch(logoutUser())
-    }
-    const onPressprofileNav = (forPress) =>{
-        switch(forPress){
+    };
+    const onPressprofileNav = (forPress) => {
+        switch (forPress) {
             case 'Logout':
-            logout();
+                logout();
             default:
                 break;
         }
-      }
-  return (
-    <SafeAreaView style={{...backgroudStyle,height:'100%'}}>
-        <StatusBar barStyle={backgroudStyle.color} backgroundColor={backgroudStyle.backgroundColor}/>
-        <View style={defaultStyle.screenContainer}>
-            <View style={styles.profileViewSection}>
-                <View style={styles.profileDetails}>
-                    <View style={styles.profilePhoto}>
-                        
-                    </View>
-                    <View style={styles.profileDetail}>
-                        <View><Text style={{...styles.profileText, ...styles.profileDetailText}}>{userDetails?.name?.toUpperCase()??'NA'}</Text></View>
-                        <View><Text style={styles.profileText}>UserId: {userDetails?.userId??'NA'}</Text></View>
-                    </View>
-                    {/* <View style={styles.profileEditIcon}><FontIcons name={'edit'} size={25}/></View> */}
-                </View>
-                <View style={styles.profileContactDetails}>
-                    <View style={styles.profileContactDetail}>
-                        <View>
-                            <FontIcons name='phone' size={25}/>
+    }
+    return (
+        <SafeAreaView style={{ ...backgroudStyle, height: '100%' }}>
+            <StatusBar barStyle={dark?'light-content':'dark-content'} backgroundColor={backgroudStyle.backgroundColor} />
+            <View style={defaultStyle.screenContainer}>
+                <View style={{...styles.profileViewSection,borderColor:colors.border}}>
+                    <View style={styles.profileDetails}>
+                        <View style={styles.profilePhoto}>
+                            <Image source={require('../../../Assets/profiles/default.png')}
+                                style={{ width: '100%', height: '100%', borderRadius: 50 }}
+                            />
                         </View>
-                        <View>
-                            <Text style={{...styles.profileText,...styles.profileContactDetailText}}>+91 {userDetails?.mobile??'NA'}</Text>
+                        <View style={styles.profileDetail}>
+                            <View><Text style={{ ...styles.profileText, ...styles.profileDetailText, color: colors.text }}>{userDetails?.name?.toUpperCase() ?? 'NA'}</Text></View>
+                            <View><Text style={{ ...styles.profileText, color: colors.text }}>UserId: {userDetails?.userId ?? 'NA'}</Text></View>
                         </View>
                     </View>
-                    <View style={styles.profileContactDetail}>
-                        <View>
-                            <FontIcons name='envelope-o' size={25}/>
+                    <View style={styles.profileContactDetails}>
+                        <View style={styles.profileContactDetail}>
+                            <FontAwesome name='phone' size={25} color={colors.text}/>
+                            <Text style={{ ...styles.profileText, ...styles.profileContactDetailText,color:colors.text}}>+91 {userDetails?.mobile ?? 'NA'}</Text>
                         </View>
-                        <View>
-                            <Text style={{...styles.profileText,...styles.profileContactDetailText}}>{userDetails?.email??'NA'}</Text>
+                        <View style={styles.profileContactDetail}>
+                            <FontAwesome name='envelope-o' size={25} color={colors.text}/>
+                            <Text style={{ ...styles.profileText, ...styles.profileContactDetailText,color:colors.text }}>{userDetails?.email ?? 'NA'}</Text>
                         </View>
                     </View>
-                </View>
-                <View style={styles.profileAccountDetails}>
-                    <View style={styles.profileAccountDetail}>
-                        <View style={styles.profileAccountTests}>
-                            <Text style={{...styles.profileText,...styles.profileAccountText}}>{user?.totalEarn.reduce((a,b)=>a + b?.amount,0)}</Text>
-                            <Text>Total Earn</Text>
-                        </View>
-                        <View style={styles.profileAccountTests}>
-                            <Text style={{...styles.profileText,...styles.profileAccountText}}>{user?.totalExpend.reduce((a,b)=>a + b?.amount,0)}</Text>
-                            <Text>Total Expend</Text>
-                        </View>
-                        <View style={styles.profileAccountTests}>
-                            <Text style={{...styles.profileText,...styles.profileAccountText}}>{user?.totalEarn.reduce((a,b)=>a + b?.amount,0) - user?.totalExpend.reduce((a,b)=>a + b?.amount,0)}</Text>
-                            <Text>Total Savings</Text>
+                    <View style={styles.profileAccountDetails}>
+                        <View style={styles.profileAccountDetail}>
+                            <View style={styles.profileAccountTests}>
+                                <Text style={{ ...styles.profileText, ...styles.profileAccountText,color:colors.text }}>{user?.totalEarn?.reduce((a, b) => a + b?.amount, 0)}</Text>
+                                <Text style={{color:colors.text}}>Total Earn</Text>
+                            </View>
+                            <View style={styles.profileAccountTests}>
+                                <Text style={{ ...styles.profileText, ...styles.profileAccountText,color:colors.text }}>{user?.totalExpend?.reduce((a, b) => a + b?.amount, 0)}</Text>
+                                <Text style={{color:colors.text}}>Total Expend</Text>
+                            </View>
+                            <View style={styles.profileAccountTests}>
+                                <Text style={{ ...styles.profileText, ...styles.profileAccountText,color:colors.text }}>{user?.totalEarn?.reduce((a, b) => a + b?.amount, 0) - user?.totalExpend?.reduce((a, b) => a + b?.amount, 0)}</Text>
+                                <Text style={{color:colors.text}}>Total Savings</Text>
+                            </View>
                         </View>
                     </View>
                 </View>
+                <ScrollView showsHorizontalScrollIndicator={false}>
+                    <View>
+                        {profileNavList.map(nav => (
+                            <Pressable key={nav.label} style={{ ...styles.profileNavLists, borderColor: colors.border }} onPress={() => onPressprofileNav(nav.onPress)}>
+                                <View style={styles.profileNavList}>
+                                    <View><FontAwesome name={nav?.Icons[0]} size={25} color={colors.text}/></View>
+                                    <View><Text style={{ ...styles.profileText, ...styles.profileContactDetailText,color:colors.text }}>{nav?.label}</Text></View>
+                                </View>
+                            </Pressable>
+                        ))}
+                    </View>
+                </ScrollView>
             </View>
-            <ScrollView showsHorizontalScrollIndicator={false}>
-                <View>
-                {profileNavList.map(nav=>(
-                    <Pressable key={nav.label} style={{...styles.profileNavLists,borderColor:isDarkMode?darkColorProps.borderColor:lightColorProps.borderColor}} onPress={()=>onPressprofileNav(nav.onPress)}>
-                        <View style={styles.profileNavList}>
-                            <View><FontAwesome name={nav?.Icons[0]} size={25}/></View>
-                            <View><Text style={{...styles.profileText,...styles.profileContactDetailText}}>{nav?.label}</Text></View>
-                        </View>
-                    </Pressable>
-                ))}
-                    </View>
-            </ScrollView>
-        </View>
-    </SafeAreaView>
-  )
+        </SafeAreaView>
+    )
 }
 
 export default Profile
 
 const styles = StyleSheet.create({
-    profileViewSection:{
-        borderBottomWidth:1,
-        borderColor:'#3d3d3d',
-        paddingVertical:10
+    profileViewSection: {
+        borderBottomWidth: 1,
+        borderColor: '#3d3d3d',
+        paddingVertical: 10
     },
-    profileDetails:{
-        flexDirection:'row',
-        alignItems:'center',
-        position:'relative'
+    profileDetails: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        position: 'relative'
     },
-    profilePhoto:{
-        width:100,
-        height:100,
-        borderRadius:50,
-        backgroundColor:'#3d3d3d',
-        borderWidth:1
+    profilePhoto: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
     },
-    profileDetail:{
-        // borderWidth:1,
-        // borderColor:'green',
-        marginLeft:10,
+    profileDetail: {
+        marginLeft: 10,
     },
-    profileContactDetails:{
+    profileContactDetails: {
         // borderWidth:1,
         // borderColor:'red'
     },
-    profileContactDetail:{
-        flexDirection:'row',
-        paddingHorizontal:18,
-        marginVertical:15,
-        alignItems:'center',
+    profileContactDetail: {
+        flexDirection: 'row',
+        paddingHorizontal: 18,
+        marginVertical: 15,
+        alignItems: 'center',
     },
-    profileText:{
-        fontSize:16,
-    },  
-    profileDetailText:{
-        fontSize:25,
-        fontWeight:'600',
+    profileText: {
+        fontSize: 16,
     },
-    profileContactDetailText:{
-        marginHorizontal:15
+    profileDetailText: {
+        fontSize: 25,
+        fontWeight: '600',
     },
-    profileAccountDetails:{
-        padding:10,
+    profileContactDetailText: {
+        marginHorizontal: 15
     },
-    profileAccountDetail:{
-        justifyContent:'center',
-        flexDirection:'row',
-        justifyContent:'space-around'
+    profileAccountDetails: {
+        padding: 10,
     },
-    profileAccountTests:{
-        alignItems:'center'
+    profileAccountDetail: {
+        justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-around'
     },
-    profileAccountText:{
-        fontWeight:'800',
-        fontSize:25
+    profileAccountTests: {
+        alignItems: 'center'
+    },
+    profileAccountText: {
+        fontWeight: '800',
+        fontSize: 25
     },
     // profileEditIcon:{
     //     position:'absolute',
     //     padding:8,
     //     right:0
     // }
-    profileNavLists:{
-        borderBottomWidth:.1,
-        padding:15
+    profileNavLists: {
+        borderBottomWidth: .1,
+        padding: 15
     },
-    profileNavList:{
-        flexDirection:'row',
-        alignItems:'center'
+    profileNavList: {
+        flexDirection: 'row',
+        alignItems: 'center'
     }
 })
