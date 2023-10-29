@@ -14,8 +14,7 @@ import { useTheme } from 'react-native-paper';
 const Signup = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { colors } = useTheme();
-  const isDarkMode = useColorScheme() === 'dark';
+  const { colors,dark } = useTheme();
   const backgroundStyle = {
     backgroundColor: colors.background,
     color: colors.text
@@ -69,8 +68,9 @@ const Signup = () => {
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
+      navigation.navigate('OtpVerification')
       if(validateForm()){
-        dispatch(createUser(user));
+       // dispatch(createUser(user));
       };
     } catch (err) {
       showAlert(err);
@@ -79,7 +79,7 @@ const Signup = () => {
 
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
-      <StatusBar barStyle={colors.text} backgroundColor={backgroundStyle.backgroundColor} />
+      <StatusBar barStyle={dark? 'light-content': 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
       <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
         <View style={styles.signupContainer}>
           <View style={styles.arrowBack}>
@@ -108,8 +108,8 @@ const Signup = () => {
           </View>
           <View>
             <Input
-              placeholder={"Phone"}
-              label={"Phone"}
+              placeholder={"Mobile"}
+              label={"Moble"}
               isLabel={false}
               name={'mobile'}
               icons={'phone'}

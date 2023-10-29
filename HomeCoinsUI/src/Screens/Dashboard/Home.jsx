@@ -9,8 +9,7 @@ import { useTheme } from 'react-native-paper';
 const Home = () => {
   const [dateRange, setDateRange] = useState({ label: 'Last 7 days' });
   const dispatch = useDispatch();
-  const isDarkMode = useColorScheme() == "dark";
-  const { colors } = useTheme();
+  const { colors,dark } = useTheme();
   const backgroundStyle = {
     backgroundColor: colors.background,
     color:colors.text
@@ -36,7 +35,7 @@ const Home = () => {
 
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
+      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
       <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
         <View style={defaultStyle.screenContainer}>
           <View style={styles.navigationContainer}>
@@ -83,17 +82,10 @@ const Home = () => {
             </View></>}
         </View>
       </ScrollView>
-      <View>
-          <View>
-          </View>
-        <View style={{ ...defaultStyle.viewSection }}>
-          <View style={{ ...styles.expensEarnBtn, ...defaultStyle.screenWidth }}>
-            <Pressable style={{ ...defaultStyle.earnExpensBtn }}>
-              {/* <Text style={defaultStyle.earnExpensBtnText}><Icons6 name='hand-holding-dollar' size={16} /> Add Earn</Text> */}
-            </Pressable>
+          <View style={styles.expensEarnBtn}>
             <FloatingActionBtn/>
           </View>
-        </View>
+      <View>
         <Header />
       </View>
     </SafeAreaView>
@@ -162,14 +154,25 @@ const styles = StyleSheet.create({
     lineHeight: 30
   },
   expensEarnBtn: {
-    zIndex: 1,
-    flexDirection: 'row',
-    position: 'absolute',
-    justifyContent: 'space-between',
-    bottom: 0,
-    marginHorizontal: 22
+    width:'100%',
+    height:'90%',
+    position:'absolute',
+    // flexDirection: 'row',
+    // position: 'absolute',
+    // justifyContent: 'space-between',
+    // bottom: 0,
+    // marginHorizontal: 22
   },
-
+  earnExpensBtn:{
+    // flexDirection:'row',
+    // alignItems:'center',
+    padding:15,
+    // borderRadius:20
+  },
+  earnExpensBtnText:{
+    fontSize:16,
+    fontWeight:'600'
+  },
   earnBtn: {
     backgroundColor: 'green'
   },

@@ -1,11 +1,12 @@
-import React,{ useState } from 'react';
-import { FAB, Portal, PaperProvider } from 'react-native-paper';
+import React, { useState } from 'react';
+import { FAB, Portal, PaperProvider, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { defaultStyle } from '../Utils/defaultCss';
 
 const FloatingActionBtn = () => {
   const navigation = useNavigation();
   const [open, setOpen] = useState(false);
+  const { colors } = useTheme();
   const onStateChange = () => {
     setOpen(!open);
   };
@@ -13,40 +14,46 @@ const FloatingActionBtn = () => {
   return (
     <PaperProvider>
       <Portal>
-        <FAB.Group 
-        style={{
-          backgroundColor:'rgba(52, 52, 52, 0.1)'
-        }} open={open} visible icon={open ? 'close' : 'plus'}
+        <FAB.Group
+          style={{backgroundColor: 'rgba(52, 52, 52, 0)'}}
+          backdropColor='rgba(52, 52, 52, 0.1)'
+          open={open} visible icon={open ? 'close' : 'plus'}
           actions={[{
             icon: 'home-plus',
-            label: 'Add Earn',
-            labelStyle:{
-              backgroundColor:'green',
-              marginRight:-37,
-              marginBottom:-30,
-              padding:8,
-              borderTopLeftRadius:10,
-              borderBottomLeftRadius:10
+            label: 'Earn    ',
+            labelTextColor:colors.text,
+            color:colors.text,
+            labelStyle: {
+              backgroundColor: '#5aa16d',
+              marginRight: -50,
+              marginBottom: -30,
+              paddingVertical:8,
+              paddingHorizontal: 20,
+              borderTopLeftRadius: 10,
+              borderBottomLeftRadius: 10
             },
             style: {
-              backgroundColor:'green',
-              marginBottom:-30
+              backgroundColor: '#5aa16d',
+              marginBottom: -30
             },
             onPress: () => navigation.navigate('AddEarn')
-          },{
+          }, {
             icon: 'home-minus',
-            label: 'Add Expend',
-            labelStyle:{
-              backgroundColor:'red',
-              marginRight:-37,
-              marginBottom:-30,
-              padding:8,
-              borderTopLeftRadius:10,
-              borderBottomLeftRadius:10,
+            label: 'Expend   ',
+            labelTextColor:colors.text,
+            color:colors.text,
+            labelStyle: {
+              backgroundColor: '#a15a76',
+              marginRight: -50,
+              marginBottom: -30,
+              paddingVertical: 8,
+              paddingHorizontal:20,
+              borderTopLeftRadius: 10,
+              borderBottomLeftRadius: 10,
             },
             style: {
-              backgroundColor:'red',
-              marginBottom:-30,
+              backgroundColor: '#a15a76',
+              marginBottom: -30,
             },
             onPress: () => navigation.navigate('AddExpend'),
           },
