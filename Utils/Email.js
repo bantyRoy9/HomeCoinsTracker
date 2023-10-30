@@ -58,5 +58,8 @@ module.exports = class Email {
     async sendRequestMail() {
         const mailResponse = await this.send('Verify user Add Request', this.msg);
         return mailResponse
-    }
+    };
+    async sendUserVerifyOTP(){
+        const mailResponse = await this.send('One Time Password',this.msg);
+    };
 }
