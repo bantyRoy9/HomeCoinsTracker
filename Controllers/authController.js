@@ -38,8 +38,9 @@ exports.createrUser = catchAsync(async (req, res, next) => {
     if(user.length) return next(new AppError('User already existed!',406));
     const newUser = await User.create(req.body);
     let URL = `${req.protocol}://${req.get('host')}/me`;
-    console.log(URL);
-    await new Email(newUser, URL).sendWelcome()
+    const verifyUserOtp = newUser.createVerifyUserOtp();
+   // await new Email(newUser, URL).sendWelcome();
+    await new Email(newUser, verifyUserOtp).sendUserVerifyOTP();
     createSendToken(newUser, 201, res)
 })
  

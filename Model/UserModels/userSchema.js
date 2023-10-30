@@ -58,13 +58,16 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'Earn'
     }],
+    isActive:{
+        type:Boolean,
+        default:'false'
+    },
     passwordChangeAt: Date,
     passwordResetToken:String,
     passwordResetExpire:Date,
     verifyGroupToken:String,
     verifyGroupTokenExpire:Date,
-    // verifyGroupId:String,
-    // verifyGroupUserId:String
+    verifyUserOtp:String
 },
 {
     toJSON: { virtuals: true },
@@ -88,18 +91,23 @@ userSchema.methods.changePasswordAfter = function(JWTTimeStamp){
     }
     return false;
 };
+const generateOTP = () => otpGenerator.generate(4,{lowerCaseAlphabets:false,upperCaseAlphabets:false,specialChars:false,digits:true});
 userSchema.methods.createPasswordResetToken = function(){
-    const resetToken = otpGenerator.generate(4,{lowerCaseAlphabets:false,upperCaseAlphabets:false,specialChars:false,digits:true});
+    const resetToken = generateOTP();
     this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
     this.passwordResetExpire = Date.now() + 10*60*1000
     return resetToken
-}
+};
 
-userSchema.methods.createVerifyToken = function(groupId,userId){
+userSchema.methods.createVerifyUserOtp = function(){
+    const verifyUserOtp = generateOTP();
+    this.verifyUserOtp = verifyUserOtp;
+    return verifyUserOtp;
+};
+
+userSchema.methods.createVerifyToken = function(){
     const verifyToken = crypto.randomBytes(32).toString('hex');
     this.verifyGroupToken = crypto.createHash('sha256').update(verifyToken).digest('hex');
-    // this.verifyGroupId = groupId;
-    // this.verifyGroupUserId = userId;
     this.verifyGroupTokenExpire = Date.now() + 24*60*60*1000;
     return verifyToken;
 }
