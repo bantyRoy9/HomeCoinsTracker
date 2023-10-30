@@ -68,7 +68,7 @@ const Signup = () => {
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      navigation.navigate('OtpVerification')
+      navigation.navigate('OtpVerification',{emailAddress:user.email})
       if(validateForm()){
        // dispatch(createUser(user));
       };

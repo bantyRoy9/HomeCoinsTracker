@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, useColorScheme } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState,useRef } from 'react'
 import Icons from 'react-native-vector-icons/FontAwesome'
 import { HelperText, TextInput, useTheme } from 'react-native-paper';
 const Input = (props) => {
@@ -9,7 +9,6 @@ const Input = (props) => {
     backgroundColor: colors.surfaceVariant,
     color: colors.text
   };
-
   const onFocuse = () =>{
     setIsFocuse({
       backgroundColor: colors.surfaceVariant,
@@ -25,6 +24,11 @@ const Input = (props) => {
     backgroundColor:colors.surfaceVariant,
     colors:colors.text
   };
+  
+  const first = useRef();
+  const second = useRef();
+  const third = useRef();
+  const forth = useRef();
   return (
     <View style={styles.inputContainer} pointerEvents={props?.pointerEvents}>
       {props.isLabel && <Text style={styles.inputLabel}>{props.label}</Text>}
@@ -34,10 +38,12 @@ const Input = (props) => {
                 onBlur={onBlur}
                 onFocus={onFocuse}
                 value= {props?.value}
-                style={{
+                style={props.style?props.style:{
                   ...styles.inputBox,
                   ...backgroundStyle
                 }}
+                maxLength={props?.maxLength}
+                ref={props?.ref}
                 autoFocus={props.autoFocus}
                 label={props.label}
                 name={props.name}
