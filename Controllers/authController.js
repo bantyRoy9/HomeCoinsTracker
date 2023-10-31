@@ -31,17 +31,37 @@ const createSendToken = (user, statusCode, res) => {
             user
         }
     })
-}
+};
 
-exports.createrUser = catchAsync(async (req, res, next) => {
+exports.sendCreateUserOtp = catchAsync(async(req,res,next)=>{
     const user = await User.find({email:req.body.email});
     if(user.length) return next(new AppError('User already existed!',406));
     const newUser = await User.create(req.body);
     let URL = `${req.protocol}://${req.get('host')}/me`;
     const verifyUserOtp = newUser.createVerifyUserOtp();
+    await newUser.save({ validateBeforeSave: false })
    // await new Email(newUser, URL).sendWelcome();
     await new Email(newUser, verifyUserOtp).sendUserVerifyOTP();
-    createSendToken(newUser, 201, res)
+    res.status(200).json({
+        status:true,
+        msg:'OTP send to registed email address.',
+        data:{}
+    });
+});
+
+exports.createrUser = catchAsync(async (req, res, next) => {
+    const OTP = req.params.OTP;
+    console.log(OTP,req.body.email);
+    const user = await User.findOne({email:req.body.email,verifyUserOtp:OTP,verifyUserOtpExpire: { $gt: Date.now() }});
+    console.log(user);
+    if(!user){
+        return next(new AppError('OTP has expired or invalid',400));  
+    };
+    user.verifyUserOtp=undefined;
+    user.verifyUserOtpExpire=undefined;
+    user.isActive = true;
+    await user.save();
+    createSendToken(user, 201, res)
 })
  
 exports.loginUser = catchAsync(async (req, res, next) => {
