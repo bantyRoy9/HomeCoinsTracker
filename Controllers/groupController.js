@@ -52,7 +52,7 @@ exports.verifyGroupToken = catchAsync(async (req, res, next) => {
     if (!verifyToken && !verifyToken.length) return next(new AppError('Verification Token not found', 400));
 
     const resetToken = crypto.createHash('sha256').update(verifyToken[0]).digest('hex');
-
+    console.log(resetToken);
     const user = await User.findOne({ verifyGroupToken: resetToken, verifyGroupTokenExpire: { $gt: Date.now() } });
 
     if (!user) {
@@ -67,11 +67,11 @@ exports.verifyGroupToken = catchAsync(async (req, res, next) => {
 exports.addMembers = catchAsync(async (req, res, next) => {
     console.log(req.verifyToken);
     const verifyToken = req.verifyToken;
-
     const group = await GroupModels.findById(verifyToken[1]);
     if (!group) return next(new AppError('Group not found', 404))
     if (group.members.includes(verifyToken[2])) return next(new AppError('User already exist in this group', 403));
     group.members.push({ member: verifyToken[2], role: 'user' });
     await group.save();
+    await User.findByIdAndUpdate(verifyToken[2],{isGroupIncluded:true,groupId:verifyToken[1]});
     responseSend(res, 200, true, {}, 'User added successfully.');
 })

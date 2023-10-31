@@ -15,11 +15,11 @@ const Home = () => {
     color:colors.text
   }
   const { isLoading, account } = useSelector(state => state.account);
-  const { isAuthenticated } = useSelector(state => state.user);
+  const { isAuthenticated,user } = useSelector(state => state.user);
 
   useEffect(() => {
     const dateRange = homeNavList.filter(el => el.active == true);
-    dispatch(getEarnExpendData(dateRange, isAuthenticated));
+    dispatch(getEarnExpendData(dateRange, isAuthenticated,user?.groupId??""));
   }, [dateRange]);
 
   const navPressHandle = (navPress) => {

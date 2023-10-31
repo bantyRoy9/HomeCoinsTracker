@@ -57,7 +57,8 @@ exports.getQuery= catchAsync(async(req,res,next)=>{
    next()
 });
 exports.getTotalEarns = catchAsync(async(req,res,next) =>{
-    const filterData = new ApiFeature(EarnModel.find({}),req.query).filter();
+    const groupFilter = req.query.groupId ? {groupId:req.query.groupId}:{};
+    const filterData = new ApiFeature(EarnModel.find(groupFilter),req.query).filter();
     const totalErans = await filterData.modal
     if(req.query?.type == 'both'){
         req.totalErans = totalErans;
@@ -74,7 +75,8 @@ exports.getTotalEarns = catchAsync(async(req,res,next) =>{
 });
 
 exports.getTotalExpend = catchAsync(async(req,res,next)=>{
-    const filterData = new ApiFeature(ExpendModel.find({}),req.query).filter();
+    const groupFilter = req.query.groupId ? {groupId:req.query.groupId}:{};
+    const filterData = new ApiFeature(ExpendModel.find(groupFilter),req.query).filter();
     const totalExpend = await filterData.modal;
    let graphDataJson = null;
     if(req.totalErans){

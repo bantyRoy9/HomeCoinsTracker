@@ -48,16 +48,13 @@ module.exports = class Email {
     }
     async sendWelcome() {
         const mailResponse = await this.send('Welcome to homeCoinTracker')
-        return mailResponse;
     }
 
     async resetPassword() {
         const mailResponse = await this.send('your reset otp valid for (10min)', this.msg)
-        return mailResponse;
     }
     async sendRequestMail() {
         const mailResponse = await this.send('Verify user Add Request', this.msg);
-        return mailResponse
     };
     async sendUserVerifyOTP(){
         const mailResponse = await this.send('One Time Password',this.msg);

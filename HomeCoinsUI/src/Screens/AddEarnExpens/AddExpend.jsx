@@ -4,7 +4,7 @@ import { darkColorProps, lightColorProps,defaultStyle } from '../../Utils';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
 import { ActivityIndicator } from 'react-native-paper';
 import {Input,DatePicker} from '../../Components';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import React, { useState } from 'react'
 import moment from 'moment';
 

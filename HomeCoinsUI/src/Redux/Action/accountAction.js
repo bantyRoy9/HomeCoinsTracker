@@ -13,11 +13,11 @@ const getAnalyticsDetails = (resData) => {
     return analyticsJson;
   }
   
-export const getEarnExpendData = (dateRange,isAuthenticated)=> async(dispatch)=>{
+export const getEarnExpendData = (dateRange,isAuthenticated,groupId)=> async(dispatch)=>{
     try{
         dispatch({type:ACCOUNT_REQUIEST});
-        console.log(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`);
-        const {data} = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}`)
+        console.log(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}&groupId=${groupId}`);
+        const {data} = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}&groupId=${groupId}`)
         let response={};
         if(isAuthenticated){
             response = await axios.get(`${userControllerURL}/getUserDetailById`,getAxiosHeader());

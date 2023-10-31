@@ -67,7 +67,8 @@ const userSchema = new mongoose.Schema({
     passwordResetExpire:Date,
     verifyGroupToken:String,
     verifyGroupTokenExpire:Date,
-    verifyUserOtp:String
+    verifyUserOtp:String,
+    verifyUserOtpExpire:Date
 },
 {
     toJSON: { virtuals: true },
@@ -102,6 +103,7 @@ userSchema.methods.createPasswordResetToken = function(){
 userSchema.methods.createVerifyUserOtp = function(){
     const verifyUserOtp = generateOTP();
     this.verifyUserOtp = verifyUserOtp;
+    this.verifyUserOtpExpire = Date.now() + 10*60*60*1000;
     return verifyUserOtp;
 };
 
