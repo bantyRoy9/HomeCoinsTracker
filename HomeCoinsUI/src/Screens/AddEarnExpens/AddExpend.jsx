@@ -2,7 +2,7 @@ import { StyleSheet, SafeAreaView, Text, View, useColorScheme, StatusBar, Pressa
 import { updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { darkColorProps, lightColorProps,defaultStyle } from '../../Utils';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
 import {Input,DatePicker} from '../../Components';
 import { useDispatch,useSelector } from 'react-redux';
 import React, { useState } from 'react'
@@ -10,20 +10,20 @@ import moment from 'moment';
 
 const initialState = {amount:"",description:"",date:moment().format('YYYY-MM-DD')}
 const AddExpend = ({navigation}) => {
-  const isDarkMode = useColorScheme() == 'dark';
   const dispatch = useDispatch();
   const [details, setDetails] = useState(initialState);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [errors,setErrors] = useState({});
   const { isLoading } = useSelector(state=> state.account);
+  const { colors,dark} = useTheme();
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
-    color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
+    backgroundColor: colors.background,
+    color: colors.text
   };
   const btnStyle = {
-    backgroundColor: isDarkMode ? darkColorProps.btnBackground : lightColorProps.btnBackground,
-    color: isDarkMode ? darkColorProps.btnBackground : "#FFF"
+    backgroundColor: colors.btnBackground,
+    color: colors.btnBackground
   }
 
   const changeHandler = (name, value) => {
@@ -61,7 +61,7 @@ const AddExpend = ({navigation}) => {
   
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
-      <StatusBar backgroundColor={isDarkMode ? darkColorProps.background : lightColorProps.background}></StatusBar>
+      <StatusBar backgroundColor={colors.background}></StatusBar>
       <View style={defaultStyle.screenContainer}>
         <View>
           <Input
@@ -117,7 +117,7 @@ const AddExpend = ({navigation}) => {
         </View>
         <View style={{ width: "auto", alignItems: 'center' }}>
           <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} pointerEvents={isLoading?"none":"auto"}>
-            <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'small'} color={isDarkMode?darkColorProps.loaderColor:lightColorProps.loaderColor}/> :"ADD EXPEND"}</Text>
+            <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'small'} color={colors.loaderColor}/> :"ADD EXPEND"}</Text>
           </Pressable>
         </View>
       </View>

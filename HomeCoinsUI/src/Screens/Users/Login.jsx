@@ -10,8 +10,7 @@ const initialState = { email: "", password: "" }
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
   const {isLoading,isAuthenticated} = useSelector(state=>state.user);
-  const isDarkMode = useColorScheme() === 'dark';
-  const { colors } = useTheme();
+  const { colors,dark } = useTheme();
   const backgroundStyle = {
     backgroundColor: colors.background,
     color: colors.text
@@ -49,7 +48,7 @@ const Login = ({navigation}) => {
   return (
     <PaperProvider>
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
+      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
       <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
           <View style={styles.loginContainer}>
             <View style={{

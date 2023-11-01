@@ -3,10 +3,10 @@ import { ACTIVITY_REQUIEST, ACTIVITY_SUCCESS } from "../constants"
 import { activityControllerURL } from "../../Utils/URLProperties"
 import { getAxiosHeader } from "../../Utils/CommonAuthFunction"
 
-export const getActivity = () =>async(dispatch)=>{
+export const getActivity = (groupId) =>async(dispatch)=>{
     try{
     dispatch({type:ACTIVITY_REQUIEST})
-    const { data } = await axios.get(`${activityControllerURL}/activity`,getAxiosHeader());
+    const { data } = await axios.get(`${activityControllerURL}/activity/${groupId}`,getAxiosHeader());
     if(data){
         dispatch({type:ACTIVITY_SUCCESS,payload:data});
     }
