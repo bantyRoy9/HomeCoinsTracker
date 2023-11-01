@@ -11,5 +11,7 @@ export const defaultTheme ={
         card:"#EEE",
         btnBackground:"rgb(13, 245, 227)",
         inputFocusBackground:"rgb(255, 255, 255)",
+        loaderColor:"rgb(56, 48, 76)",
+        lightBackground:"#EEE"
     }
 };

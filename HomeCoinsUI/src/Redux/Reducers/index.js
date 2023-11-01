@@ -1,5 +1,6 @@
 import { accountReducer } from "./accountReducer";
 import { userReducer } from "./userReducer";
-import { groupReducer } from "./groupReducer"
+import { groupReducer } from "./groupReducer";
+import { activityReducer } from "./activityReducer";
 
-export default { accountReducer, userReducer,groupReducer}
+export { accountReducer, userReducer,groupReducer,activityReducer}

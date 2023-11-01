@@ -1,28 +1,28 @@
-import { StyleSheet, SafeAreaView, Text, View, useColorScheme, StatusBar, Pressable } from 'react-native'
+import { StyleSheet, SafeAreaView, Text, View, StatusBar, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
 import {Input, DatePicker} from '../../Components';
 import { updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
-import { darkColorProps, lightColorProps,defaultStyle } from '../../Utils';
-import { ActivityIndicator } from 'react-native-paper';
+import { defaultStyle } from '../../Utils';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
 const initalState = {amount:'',source:'',description:'',date:moment(new Date()).format('YYYY-MM-DD')}
 const AddEarn = ({navigation}) => {
-  const isDarkMode = useColorScheme() == 'dark';
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [details, setDetails] = useState(initalState);
   const [errors,setErrors] = useState({});
   const { isLoading } = useSelector(state=> state.account);
+  const { colors,dark} = useTheme();
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
-    color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
+    backgroundColor: colors.background,
+    color: colors.text
   };
   const btnStyle = {
-    backgroundColor: isDarkMode ? darkColorProps.btnBackground : lightColorProps.btnBackground,
-    color: isDarkMode ? darkColorProps.btnBackground : "#FFF"
+    backgroundColor: colors.btnBackground,
+    color: colors.text
   }
 
   const changeHandler = (key, value) => {
@@ -37,8 +37,8 @@ const AddEarn = ({navigation}) => {
     try {
       if(validation.valid){
         dispatch(addEarnExpend(details,'earn'));
-        setDetails(initalState);
-        navigation.navigate('Home');
+        // setDetails(initalState);
+        // navigation.navigate('Home');
       }
     } catch (err) {
       console.log(err)
@@ -60,7 +60,7 @@ const AddEarn = ({navigation}) => {
   };
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
-      <StatusBar backgroundColor={isDarkMode ? darkColorProps.background : lightColorProps.background}></StatusBar>
+      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={colors.background}></StatusBar>
       <View style={defaultStyle.screenContainer}>
         <View>
           <Input
@@ -130,7 +130,7 @@ const AddEarn = ({navigation}) => {
         
         <View style={{ width: "auto", alignItems: 'center' }}>
           <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} pointerEvents={isLoading?"none":"auto"}>
-            <Text style={{ ...styles.text, ...btnStyle.color }}>{ isLoading ? <ActivityIndicator size={'small'} color={isDarkMode?darkColorProps.loaderColor:lightColorProps.loaderColor}/> : "ADD EARN"}</Text>
+            <Text style={{ ...styles.text, ...btnStyle.color }}>{ isLoading ? <ActivityIndicator size={'small'} color={colors.loaderColor}/> : "ADD EARN"}</Text>
           </Pressable>
         </View>
       </View>

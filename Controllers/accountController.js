@@ -12,6 +12,7 @@ const AppError = require("../Utils/appError");
 const { responseSend } = require("./authController");
 
 exports.saveDailyEarns = catchAsync(async(req,res,next) => {
+    console.log(req.body);
     const saveEarn = await EarnModel.create(req.body);
     const earnByuser = await User.findById({_id:req.body.earnBy});
     earnByuser.totalEarn = [...earnByuser.totalEarn, saveEarn._id];

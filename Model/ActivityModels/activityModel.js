@@ -19,7 +19,11 @@ const activityModel = new mongoose.Schema({
         type:Date,
         default:new Date()
     },
-    Url:String
+    Url:String,
+    groupId:{
+        type:mongoose.Schema.ObjectId,
+        ref:'Group'
+    }
 });
 
 const ActivityModels = new mongoose.model('ActivityModel',activityModel);

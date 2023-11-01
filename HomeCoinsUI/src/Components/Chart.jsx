@@ -1,20 +1,14 @@
 import { ScrollView, StyleSheet, Text, View, useColorScheme,Dimensions } from 'react-native'
-import React, {useState} from 'react'
-import { LineChart } from 'react-native-chart-kit'
-import { darkColorProps,lightColorProps } from '../Utils/colorProp'
+import React, {useState} from 'react';
+import { LineChart } from 'react-native-chart-kit';
 import { Rect, Svg, Text as TextSVG } from 'react-native-svg'
-import { useTheme as nativePaperTheme} from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
 const Chart = ({graphData}) => {
     const [tooltip, setTooltip] = useState({
         x: 0, y: 0, visible: false, value: 0,color:''
       })
-      const { colors } = nativePaperTheme();
-      const isDarkMode = useColorScheme() == "dark";
-      // const backgroundStyle = {
-      //   backgroundColor: isDarkMode ? darkColorProps.background : lightColorProps.background,
-      //   color: isDarkMode ? darkColorProps.textColor : lightColorProps.textColor
-      // };
+      const { colors } = useTheme();
       const backgroundStyle = {
           backgroundColor:colors.card,
           color: colors.text

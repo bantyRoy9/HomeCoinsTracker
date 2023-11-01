@@ -18,11 +18,11 @@ exports.createGroup = catchAsync(async (req, res, next) => {
     req.user.isGroupIncluded = true;
     req.user.groupId = response._id;
     await req.user.save();
-    return next(responseSend(res, 201, true, response, 'Group created successfully.'))
+    responseSend(res, 201, true, response, 'Group created successfully.')
 });
 exports.getGroupList = catchAsync(async (req, res, next) => {
     const groupList = await GroupModels.find({}).populate('createdBy');
-    return next(responseSend(res, 200, true, groupList, ''))
+    responseSend(res, 200, true, groupList, '');
 });
 exports.addMemberRequest = catchAsync(async (req, res, next) => {
     if (req.body && (req.body.email || req.body.mobile) && !req.user.isGroupIncluded) {
@@ -41,7 +41,7 @@ exports.addMemberRequest = catchAsync(async (req, res, next) => {
 
         const verifyURL = `${req.protocol}://${req.get('host')}/api/v1/groupController/verifyUser/${verifyToken},${addMemberUser.groupId},${req.user.id}`
         await new Email(addMemberUser, verifyURL).sendRequestMail();
-        return responseSend(res, 200, true,{},"Email sended to admin");
+        responseSend(res, 200, true,{},"Request sended to group admin");
     } else {
         return next(new AppError('User already exist in another group', 406));
     };
@@ -65,7 +65,6 @@ exports.verifyGroupToken = catchAsync(async (req, res, next) => {
     next();
 });
 exports.addMembers = catchAsync(async (req, res, next) => {
-    console.log(req.verifyToken);
     const verifyToken = req.verifyToken;
     const group = await GroupModels.findById(verifyToken[1]);
     if (!group) return next(new AppError('Group not found', 404))
@@ -74,4 +73,12 @@ exports.addMembers = catchAsync(async (req, res, next) => {
     await group.save();
     await User.findByIdAndUpdate(verifyToken[2],{isGroupIncluded:true,groupId:verifyToken[1]});
     responseSend(res, 200, true, {}, 'User added successfully.');
+});
+
+exports.getGroupMember=catchAsync(async(req,res,next)=>{
+    const groupId = req.params.groupId;
+    if(!groupId) return next(new AppError('GroupId invalid',400));
+    const data = await User.find({groupId},'name email mobile role userId photo groupId');
+    console.log(data);
+    responseSend(res,200,true,data,"user find successfull");
 })

@@ -12,6 +12,9 @@ export const darkTheme = {
         card:"rgb(40, 40, 40)",
         surfaceVariant:"rgb(10, 6, 26)",
         btnBackground:"rgb(13, 245, 227)",
-        headerBg:"rgb(31, 27, 36)"
+        headerBg:"rgb(31, 27, 36)",
+        loaderColor:"rgb(255, 255, 255)",
+        tableHeaderBackground:'#000',
+        lightBackground:"rgb(31, 27, 36)"
     }
 }

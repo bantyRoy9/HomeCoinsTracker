@@ -11,7 +11,9 @@ const Group = ({ pageName,colors }) => {
     const [detail,setDetail]=useState({[fields]:""});
     const [errors,setErrors]=useState({});
     const dispatch = useDispatch();
-    const { isLoading,user,isAuthenticated } = useSelector(state=>state.user);
+    const { user } = useSelector(state=>state.user);
+    const { isLoading } = useSelector(state=>state.group);
+    console.log(isLoading);
     const changeHandler=(key,value)=>{
         updateErrors(errors,key);
         setDetail({...detail,[key]: value});
@@ -50,7 +52,7 @@ const Group = ({ pageName,colors }) => {
               helperType={'error'}
             />
             <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} >
-                <Text style={{ ...styles.text, ...btnStyle.color }}>{pageName == "CreateNewGroup" ? "DONE" : "SEND REQUEST"}</Text>
+                <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'small'} color={colors.text}/> : pageName == "CreateNewGroup" ? "DONE" : "SEND REQUEST"}</Text>
               </Pressable>
           </View>
   )

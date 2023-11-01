@@ -2,7 +2,7 @@
  * @BANTI
  */
 
-import {AppRegistry} from 'react-native';
+import {AppRegistry,useColorScheme} from 'react-native';
 import App from './src/App';
 import {name as appName} from './app.json';
 import { Provider } from 'react-redux';
@@ -12,7 +12,8 @@ import { useState } from 'react';
 import { darkTheme } from './src/Screens/Theme/DarkTheme';
 import { defaultTheme } from './src/Screens/Theme/DefaultTheme';
 const ReduxProvider = () => {
-    const [isDarkMode,setIsDarkMode] = useState(false);
+    const themeModeDark = useColorScheme() == 'light'
+    const [isDarkMode,setIsDarkMode] = useState(true);
     return(
         <Provider store={store}>
             <PaperProvider theme={isDarkMode ? darkTheme : defaultTheme}>

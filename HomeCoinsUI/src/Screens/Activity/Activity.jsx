@@ -1,6 +1,5 @@
-import { StatusBar, StyleSheet, Text, View, Pressable, useColorScheme, SafeAreaView, ScrollView, Image } from 'react-native'
+import { StatusBar, StyleSheet, Text, View, Pressable, SafeAreaView, ScrollView, Image } from 'react-native'
 import React, { useEffect } from 'react'
-import { darkColorProps, lightColorProps } from '../../Utils/colorProp';
 import { useDispatch, useSelector } from 'react-redux';
 import { getActivity } from '../../Redux/Action/activityAction';
 import { ActivityIndicator, Divider, useTheme } from 'react-native-paper';
@@ -11,18 +10,18 @@ import { colors as color } from 'react-native-elements';
 import { showAlert } from '../../Utils/CommonAuthFunction';
 
 
-const Activity = () => {
-    const isDarkMode = useColorScheme() == 'dark';
+const Activity = ({groupId}) => {
     const dispatch = useDispatch();
-    const { colors } = useTheme();
+    const { colors,dark } = useTheme();
     const backgroundStyle = {
         backgroundColor: colors.background,
         color: colors.text
     };
     const { isLoading, activity } = useSelector(state => state.activity);
+    const { user } = useSelector(state=> state.user);
     useEffect(() => {
         try{
-            dispatch(getActivity());
+            dispatch(getActivity(user?.groupId));
         }catch(err){
             showAlert(err);
         }
@@ -30,7 +29,7 @@ const Activity = () => {
     console.log(isLoading, activity);
     return (
         <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
-            <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
+            <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
             {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> :
                 <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
                     <View style={defaultStyle.screenContainer}>
