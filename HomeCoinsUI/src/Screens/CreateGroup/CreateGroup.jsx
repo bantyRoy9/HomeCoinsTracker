@@ -20,10 +20,10 @@ const CreateGroup = ({ navigation,route }) => {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flex:1}}>
         <View style={defaultStyle.screenContainer}>
           { route.name == "CreateGroup" && <View style={styles.createGroupSection}>
-            <Pressable style={{...styles.sectionCircle,backgroundColor:colors.lightBackground}} onPress={()=>navigatePage('CreateNewGroup')}>
+            <Pressable style={{...styles.sectionCircle,backgroundColor:colors.lightBackground,color:colors.text}} onPress={()=>navigatePage('CreateNewGroup')}>
               <View style={styles.sectionText}>
-                <FontAwesome5 name='user-plus' size={30} />
-                <Text style={[defaultStyle.textBold]}>Create New Group</Text>
+                <FontAwesome5 name='user-plus' size={30} color={colors.text}/>
+                <Text style={{...defaultStyle.textBold,color:colors.text}}>Create New Group</Text>
               </View>
             </Pressable>
             <View>
@@ -31,8 +31,8 @@ const CreateGroup = ({ navigation,route }) => {
             </View>
             <Pressable style={{...styles.sectionCircle,backgroundColor:colors.lightBackground}} onPress={()=>navigatePage('ExistingGroup')}>
               <View style={styles.sectionText}>
-                <FontAwesome5 name='users' size={30}  />
-                <Text style={defaultStyle.textBold}>Existing Group</Text>
+                <FontAwesome5 name='users' size={30}  color={colors.text}/>
+                <Text style={{...defaultStyle.textBold,color:colors.text}}>Existing Group</Text>
               </View>
             </Pressable>
           </View>}
