@@ -2,7 +2,8 @@ import { ACCOUNT_ADD_FAIL, ACCOUNT_ADD_REQUIEST, ACCOUNT_ADD_SUCCESS, ACCOUNT_FA
 const initialState = {
     account:{},
     addEarn:{},
-    addExpend:{}
+    addExpend:{},
+    isLoading:false
 }
 export const accountReducer = (state = {initialState},action) => {
     switch(action.type){

@@ -21,7 +21,6 @@ const OtpVerification = ({ navigation, route: { params: { emailAddress } } }) =>
     updateErrors(errors, key);
     setDetail({ ...detail, [key]: value });
   };
-console.log(detail);
   const submitHandler = () => {
     try {
       const validation = validateForm(detail);

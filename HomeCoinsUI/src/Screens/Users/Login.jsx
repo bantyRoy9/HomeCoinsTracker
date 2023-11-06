@@ -71,6 +71,7 @@ const Login = ({navigation}) => {
             <ScrollView contentContainerStyle={{ flex: 1 }} showsVerticalScrollIndicator={false}>
             <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
               <Input
+                key={"email"}
                 placeholder={"Email"}
                 label={"Email"}
                 isLabel={false}
@@ -86,6 +87,7 @@ const Login = ({navigation}) => {
             </View>
             <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
               <Input
+                key={"password"}
                 secureTextEntry={true}
                 placeholder={"Enter secure password"}
                 label={"Password"}
@@ -103,7 +105,7 @@ const Login = ({navigation}) => {
             </ScrollView>
             <View style={{ width: "auto", alignItems: 'center' }} >
               <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} >
-                <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'large'} color={colors.text}/> : "LOGIN"}</Text>
+                <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'small'} color={colors.text}/> : "LOGIN"}</Text>
               </Pressable>
               <Pressable onPress={showModal}>
               <Text style={{ color: colors.btnBackground }} >
@@ -133,6 +135,7 @@ const Login = ({navigation}) => {
           <View Style={styles.modalBody}>
           <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
               <Input
+                key={"forgetEmail"}
                 placeholder={"Enter your email"}
                 label={"Enter your email"}
                 isLabel={false}

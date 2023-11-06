@@ -6,7 +6,7 @@ export const darkTheme = {
         ...DefaultTheme.colors,
         background:"rgb(10, 6, 26)",
         secondary:"rgb(77, 20, 137)",
-        border:"#3d3d3d3d",
+        border:"rgb(61, 61, 61)",
         text:"rgb(254, 254, 254)",
         notification:"rgb(254, 103, 0)",
         card:"rgb(40, 40, 40)",
@@ -14,7 +14,7 @@ export const darkTheme = {
         btnBackground:"rgb(13, 245, 227)",
         headerBg:"rgb(31, 27, 36)",
         loaderColor:"rgb(255, 255, 255)",
-        tableHeaderBackground:'#000',
+        tableHeaderBackground:'rgb(0, 0, 0)',
         lightBackground:"rgb(31, 27, 36)"
     }
 }

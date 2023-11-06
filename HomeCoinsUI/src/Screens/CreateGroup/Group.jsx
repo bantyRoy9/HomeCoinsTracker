@@ -13,7 +13,6 @@ const Group = ({ pageName,colors }) => {
     const dispatch = useDispatch();
     const { user } = useSelector(state=>state.user);
     const { isLoading } = useSelector(state=>state.group);
-    console.log(isLoading);
     const changeHandler=(key,value)=>{
         updateErrors(errors,key);
         setDetail({...detail,[key]: value});

@@ -26,7 +26,6 @@ const Activity = ({groupId}) => {
             showAlert(err);
         }
     }, [dispatch]);
-    console.log(isLoading, activity);
     return (
         <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
             <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
@@ -35,8 +34,8 @@ const Activity = ({groupId}) => {
                     <View style={defaultStyle.screenContainer}>
                         {activity && activity.data && activity?.data.map((el, idx) => (
                             <>
-                                <Pressable key={el._id} style={styles.activityLists}>
-                                    <View style={styles.activityList}>
+                                <Pressable style={styles.activityLists}>
+                                    <View key={idx} style={styles.activityList}>
                                         <View style={styles.activityLeftSec}>
                                             <View style={styles.activityProfileList}>
                                                 <Image source={require('../../../Assets/profiles/default.png')}

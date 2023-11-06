@@ -37,12 +37,10 @@ const AddEarn = ({navigation}) => {
     try {
       if(validation.valid){
         dispatch(addEarnExpend(details,'earn'));
-        // setDetails(initalState);
-        // navigation.navigate('Home');
+        setDetails(initalState);
+        navigation.navigate('Home');
       }
-    } catch (err) {
-      console.log(err)
-    }
+    } catch (err) {}
   };
 
   const showDatePicker = () => {
@@ -64,6 +62,7 @@ const AddEarn = ({navigation}) => {
       <View style={defaultStyle.screenContainer}>
         <View>
           <Input
+            key={"Amount"}
             placeholder={"Amount"}
             label={"Enter Amount"}
             isLabel={false}
@@ -82,6 +81,7 @@ const AddEarn = ({navigation}) => {
         </View>
         <View>
           <Input
+            key={"source"}
             placeholder={"Source"}
             label={"Source"}
             isLabel={false}
@@ -99,6 +99,7 @@ const AddEarn = ({navigation}) => {
         </View>
         <View>
           <Input
+            key={"description"}
             placeholder={"Description"}
             label={"Enter Description"}
             isLabel={false}
@@ -116,6 +117,7 @@ const AddEarn = ({navigation}) => {
         </View>
         <View>
           <DatePicker 
+            key={"date"}
             value ={selectedDate}
             onPress={showDatePicker}
             date={selectedDate}

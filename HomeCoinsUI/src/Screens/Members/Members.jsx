@@ -29,8 +29,8 @@ const Members = ({ navigate }) => {
       <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} />
       <ScrollView style={defaultStyle.screenContainer}>
         {userList && userList.length > 0 && <>
-          {userList.map(el => (
-            <View style={{flexDirection:'row',gap:20}}>
+          {userList.map((el,idx) => (
+            <View key={idx} style={{flexDirection:'row',gap:20}}>
               <View>
                 <Image source={require(`../../../Assets/profiles/default.png`)}
                   style={{ width: 35, height: 35, borderRadius: 50 }}
