@@ -19,7 +19,7 @@ const Home = () => {
 
   useEffect(() => {
     const dateRange = homeNavList.filter(el => el.active == true);
-    dispatch(getEarnExpendData(dateRange, isAuthenticated,user?.groupId??""));
+   dispatch(getEarnExpendData(dateRange, isAuthenticated,user?.groupId??""));
   }, [dateRange]);
 
   const navPressHandle = (navPress) => {
@@ -40,8 +40,8 @@ const Home = () => {
         <View style={defaultStyle.screenContainer}>
           <View style={styles.navigationContainer}>
             {homeNavList.map((ele, idx) => (
-              <Pressable key={`${idx}${ele}`} onPress={() => navPressHandle(ele)}>
-                <Text style={ele.active ? {...styles.activeNavText,backgroundColor:colors.notification, color:colors.primary} : {...styles.navText,color:colors.text} }>{ele.label}</Text>
+              <Pressable onPress={() => navPressHandle(ele)}>
+                <Text key={`${idx}`} style={ele.active ? {...styles.activeNavText,backgroundColor:colors.notification, color:colors.primary} : {...styles.navText,color:colors.text} }>{ele.label}</Text>
               </Pressable>
             ))}
           </View>
@@ -64,7 +64,7 @@ const Home = () => {
                 <View>
                   {!isLoading && account && account?.analyticsDetail && <>
                     {Object.keys(account?.analyticsDetail).map((el, idx) => (
-                      <View key={`${idx}`} style={styles.analyticsDetails}>
+                      <View key={idx} style={styles.analyticsDetails}>
                         <View><Text style={{...styles.analyticsText,color:colors.text}}>{el}</Text></View>
                         <View><Text style={{...styles.analyticsText,color:colors.text}}>₹{account.analyticsDetail[el] ? account.analyticsDetail[el]:'NA'}</Text></View>
                       </View>

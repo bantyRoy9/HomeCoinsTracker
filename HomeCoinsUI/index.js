@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { darkTheme } from './src/Screens/Theme/DarkTheme';
 import { defaultTheme } from './src/Screens/Theme/DefaultTheme';
 const ReduxProvider = () => {
-    const themeModeDark = useColorScheme() !== 'dark'
+    const themeModeDark = useColorScheme() === 'dark'
     const [isDarkMode,setIsDarkMode] = useState(themeModeDark);
     return(
         <Provider store={store}>

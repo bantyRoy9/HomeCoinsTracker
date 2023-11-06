@@ -41,9 +41,7 @@ const AddExpend = ({navigation}) => {
         setDetails(initialState);
         navigation.navigate('Home');
       }
-    } catch (err) {
-      console.warn(err)
-    }
+    } catch (err) {}
   };
   const showDatePicker = () => {
     setDatePickerVisible(true);
@@ -65,6 +63,7 @@ const AddExpend = ({navigation}) => {
       <View style={defaultStyle.screenContainer}>
         <View>
           <Input
+            key={"Amount"}
             placeholder={"Amount"}
             label={"Enter Amount"}
             isLabel={false}
@@ -83,6 +82,7 @@ const AddExpend = ({navigation}) => {
         </View>
         <View>
           <Input
+            key={"Description"}
             placeholder={"Description"}
             label={"Enter Description"}
             isLabel={false}
@@ -100,6 +100,7 @@ const AddExpend = ({navigation}) => {
         </View>
         <View>
           <DatePicker 
+          key="Date"
           value ={selectedDate}
           onPress={showDatePicker}
           date={selectedDate}

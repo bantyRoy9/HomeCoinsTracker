@@ -3,14 +3,7 @@ const { saveDailyEarns, getTotalEarns, totalEarnByUser, getTotalExpend, saveDail
 const { protect, setUserAndGroupId } = require('../Controllers/authController');
 const router = express.Router();
 
-router.route('/getEarnExpend')
-    .get((req, res, next) => {
-        console.log('/getEarnExpend'); next();
-    },
-        getQuery,
-        getTotalEarns,
-        getTotalExpend
-    );
+router.route('/getEarnExpend').get(getQuery,getTotalEarns,getTotalExpend);
 router.route('/earn')
     .get((req, res, next) => {
         console.log('/earn'); next();

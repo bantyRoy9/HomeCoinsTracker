@@ -1,4 +1,4 @@
-import { USER_FAIL, USER_REGISTER_FAIL, USER_REGISTER_REQUIEST,USER_GETME_REQUIEST, USER_LOGOUT_SUCCCESS,USER_REGISTER_SUCCESS, USER_REQUIEST, USER_SUCCCESS, USER_GETME_SUCCCESS } from "../constants";
+import { USER_FAIL, USER_REGISTER_FAIL, USER_REGISTER_REQUIEST,USER_GETME_REQUIEST, USER_LOGOUT_SUCCCESS,USER_REGISTER_SUCCESS, USER_REQUIEST, USER_SUCCCESS, USER_GETME_SUCCCESS, USER_GETME_FAIL } from "../constants";
 
 export const userReducer = (state = {user:{}},action) => {
     switch(action.type){
@@ -36,6 +36,7 @@ export const userReducer = (state = {user:{}},action) => {
             }
         case USER_FAIL:
         case USER_REGISTER_FAIL:
+        case USER_GETME_FAIL :
         return{
             isLoading:false,
             isAuthenticated:false,

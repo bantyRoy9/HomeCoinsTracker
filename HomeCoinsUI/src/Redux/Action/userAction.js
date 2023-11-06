@@ -1,10 +1,8 @@
 import axios from "axios";
-import { NODE_ENV, REACT_LOCAL_URL,REACT_PROD_URL} from '@env';
 import { getAxiosHeader, getAxiosHeaderWithoutCookie, showAlert } from "../../Utils/CommonAuthFunction"
 import { USER_FAIL, USER_REQUIEST, USER_GETME_REQUIEST,USER_GETME_SUCCCESS,USER_SUCCCESS,USER_LOGOUT_SUCCCESS, USER_REGISTER_SUCCESS, USER_REGISTER_REQUIEST, USER_REGISTER_FAIL,ALL_USER_REQUIEST,ALL_USER_SUCCESS,ALL_USER_FAIL } from "../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { userControllerURL } from "../../Utils/URLProperties";
-console.log(userControllerURL);
 export const loging = (userDetails) => async(dispatch) =>{
     try{
         dispatch({type:USER_REQUIEST});
@@ -19,34 +17,36 @@ export const loging = (userDetails) => async(dispatch) =>{
         }else{
             showAlert(err);
         }
-        dispatch({type:USER_FAIL,payload:err.response.data.msg});
+        dispatch({type:USER_FAIL,payload:null});
     }
 };
 
 export const logoutUser = () => async(dispatch)=>{
     try{
         dispatch({type:USER_REQUIEST});
-        console.log(`${userControllerURL}/logout`);
         const response = await axios.get(`${userControllerURL}/logout`);
-        if(response){
-            console.log(response);
+        if(response && response.status === 200){
             await AsyncStorage.clear();
+            dispatch({type:USER_LOGOUT_SUCCCESS,payload:response.data});
+        }else{
+            dispatch({type:USER_FAIL,payload:null});
         }
-        dispatch({type:USER_LOGOUT_SUCCCESS,payload:response.data});
     }catch(err){
-        dispatch({type:USER_FAIL,payload:err.response.data.msg})
+        dispatch({type:USER_FAIL,payload:null});
     }
 }
 
 export const getMe = () =>async(dispatch)=>{
     try{
         dispatch({type:USER_GETME_REQUIEST})
-        console.log('getme');
-        const { data } = await axios.get(`${userControllerURL}/getUserDetailById`,getAxiosHeader());
-        
-        dispatch({type:USER_GETME_SUCCCESS,payload:data.data})
+        const res = await axios.get(`${userControllerURL}/getUserDetailById`,getAxiosHeader());
+        if(res && res.status == 200){
+            dispatch({type:USER_GETME_SUCCCESS,payload:res?.data.data});
+        }else{
+            dispatch({type:USER_FAIL,payload:null});
+        }
     }catch(err){
-        dispatch({type:USER_FAIL,payload:err?.response.data.msg})
+        dispatch({type:USER_FAIL,payload:null})
     }
 };
 
@@ -65,9 +65,13 @@ export const createUser =(userDetails)=> async(dispatch) => {
 export const getAllUser = async(dispatch)=>{
     try{
         dispatch({type:ALL_USER_REQUIEST});
-        const { data } = await axios.get(`${userControllerURL}/users`,getAxiosHeaderWithoutCookie());
-        dispatch({type:ALL_USER_SUCCESS,payload:data.data});
+        const resData = await axios.get(`${userControllerURL}/users`,getAxiosHeaderWithoutCookie());
+        if(resData && resData.status === 200){
+            dispatch({type:ALL_USER_SUCCESS,payload:data.data});
+        }else{
+        dispatch({type:ALL_USER_FAIL,payload:null});
+        }
     }catch(err){
-        dispatch({type:ALL_USER_FAIL,payload:err.response.data.msg})
+        dispatch({type:ALL_USER_FAIL,payload:null});
     }
 }

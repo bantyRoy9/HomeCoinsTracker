@@ -62,7 +62,7 @@ function App() {
           </>
   }   
   const pressEvent =(e)=>{
-    console.log(e.navigate('Profile'));
+    
   }
   return (
     

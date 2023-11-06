@@ -1,5 +1,5 @@
 import axios from "axios"
-import { ACTIVITY_REQUIEST, ACTIVITY_SUCCESS } from "../constants"
+import { ACCOUNT_ADD_FAIL, ACTIVITY_REQUIEST, ACTIVITY_SUCCESS } from "../constants"
 import { activityControllerURL } from "../../Utils/URLProperties"
 import { getAxiosHeader } from "../../Utils/CommonAuthFunction"
 
@@ -11,6 +11,7 @@ export const getActivity = (groupId) =>async(dispatch)=>{
         dispatch({type:ACTIVITY_SUCCESS,payload:data});
     }
     }catch(err){
-        console.log(err);
+        dispatch({type:ACCOUNT_ADD_FAIL,payload:null});
+
     }
 }
