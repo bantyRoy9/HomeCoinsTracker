@@ -12,7 +12,6 @@ const AppError = require("../Utils/appError");
 const { responseSend } = require("./authController");
 
 exports.saveDailyEarns = catchAsync(async(req,res,next) => {
-    console.log(req.body);
     const saveEarn = await EarnModel.create(req.body);
     const earnByuser = await User.findById({_id:req.body.earnBy});
     earnByuser.totalEarn = [...earnByuser.totalEarn, saveEarn._id];
@@ -32,7 +31,6 @@ exports.saveDailyExped = catchAsync(async(req,res,next)=>{
     await addUsersActivity(req,'addExpend',saveExpend._id);
     next(responseSend(res,201,true,saveExpend,"Expend saved successfully"));
 });
-
 
 exports.totalEarnByUser = catchAsync(async(req,res,next) =>{
     const toatalErn = await EarnModel.find({earnBy:req.user.id});
@@ -55,7 +53,7 @@ exports.getQuery= catchAsync(async(req,res,next)=>{
         };
         delete req.query.dateRange;
    }; 
-   next()
+   next();
 });
 exports.getTotalEarns = catchAsync(async(req,res,next) =>{
     const groupFilter = req.query.groupId ? {groupId:req.query.groupId}:{};

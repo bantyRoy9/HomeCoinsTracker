@@ -115,7 +115,7 @@ const Login = ({navigation}) => {
             </View>
           <View style={{ position: 'relative', height: 50 }}>
             <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
-              <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignContent: 'center' }}>
+              <View style={styles.btnSignup}>
                 <Text style={{ fontSize: 16, color: backgroundStyle.color }}>Don't have an account? </Text><Text onPress={() => navigation.navigate('Signup')} style={{ color: colors.btnBackground, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Sign up</Text>
               </View>
             </View>
@@ -126,7 +126,7 @@ const Login = ({navigation}) => {
       <Portal>
         <Modal onDismiss={hideModal} visible={modalVisible} contentContainerStyle={{...backgroundStyle,...styles.modalView}}>
           <View style={styles.modalHeader}>
-              <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+              <View style={styles.forgetBtn}>
                 <Text style={styles.modalHeaderText}>Forget Password</Text>
                 <View><FontAwesome name='close' size={15} onPress={hideModal}/></View>
           </View>
@@ -189,6 +189,8 @@ const styles = StyleSheet.create({
     marginTop: 32,
     paddingHorizontal: 24,
   },
+  forgetBtn:{flexDirection:'row',justifyContent:'space-between'},
+  btnSignup:{flexDirection: 'row', justifyContent: 'center', alignContent: 'center' },
   sectionTitle: {
     fontSize: 24,
     fontWeight: '600',

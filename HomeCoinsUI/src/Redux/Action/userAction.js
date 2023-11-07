@@ -6,10 +6,10 @@ import { userControllerURL } from "../../Utils/URLProperties";
 export const loging = (userDetails) => async(dispatch) =>{
     try{
         dispatch({type:USER_REQUIEST});
-        const res = await axios.post(`${userControllerURL}/loginUser`, userDetails, getAxiosHeaderWithoutCookie());
-        if(res.status){
-            await AsyncStorage.setItem('cookie',res.data.token);
-            dispatch({type:USER_SUCCCESS,payload:res.data.data.user});
+        const { data } = await axios.post(`${userControllerURL}/loginUser`, userDetails, getAxiosHeaderWithoutCookie());
+        if(data){
+            await AsyncStorage.setItem('cookie',data.token);
+            dispatch({type:USER_SUCCCESS,payload:data.data.user});
         };
     }catch(err){
         if(err.response){
