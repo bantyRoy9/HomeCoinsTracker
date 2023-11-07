@@ -16,11 +16,8 @@ const getAnalyticsDetails = (resData) => {
 export const getEarnExpendData = (dateRange,isAuthenticated,groupId)=> async(dispatch)=>{
     try{
         dispatch({type:ACCOUNT_REQUIEST});
-        const dataRes = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}&groupId=${groupId}`)
-        console.log(dataRes);
-        if (dataRes.data.status && dataRes.data.data && dataRes.data.graphData) {
-            let data = dataRes.data;
-            console.log(data);
+        const { data } = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}&groupId=${groupId}`)
+        if (data.status && data.data && data.graphData) {
             data.analyticsDetail = getAnalyticsDetails(data.graphData)
             data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })
             data.graphData.labels = data.graphData.labels.map(el => moment(el, 'DD-MM-YYYY').format('DD MMM'));

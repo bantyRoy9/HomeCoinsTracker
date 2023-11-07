@@ -41,7 +41,7 @@ const Home = () => {
           <View style={styles.navigationContainer}>
             {homeNavList.map((ele, idx) => (
               <Pressable onPress={() => navPressHandle(ele)}>
-                <Text key={`${idx}`} style={ele.active ? {...styles.activeNavText,backgroundColor:colors.notification, color:colors.primary} : {...styles.navText,color:colors.text} }>{ele.label}</Text>
+                <Text key={idx} style={ele.active ? {...styles.activeNavText,backgroundColor:colors.notification, color:colors.primary} : {...styles.navText,color:colors.text} }>{ele.label}</Text>
               </Pressable>
             ))}
           </View>
@@ -64,7 +64,7 @@ const Home = () => {
                 <View>
                   {!isLoading && account && account?.analyticsDetail && <>
                     {Object.keys(account?.analyticsDetail).map((el, idx) => (
-                      <View key={idx} style={styles.analyticsDetails}>
+                      <View key={idx+homeNavList.length} style={styles.analyticsDetails}>
                         <View><Text style={{...styles.analyticsText,color:colors.text}}>{el}</Text></View>
                         <View><Text style={{...styles.analyticsText,color:colors.text}}>₹{account.analyticsDetail[el] ? account.analyticsDetail[el]:'NA'}</Text></View>
                       </View>
