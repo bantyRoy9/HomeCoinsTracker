@@ -9,7 +9,8 @@ router.post('/verifyUserOtp/:OTP',createrUser);
 router.post('/loginUser', loginUser);
 router.get('/logout',logout);
 router.get('/getMe',isLoggedIn,getLoginUserDetails);
-router.post('/forgetPassword',forgetPassword)
+router.post('/forgetPassword',forgetPassword);
+router.get('/resetPassword/:token',resetPassword);
 
 router.use(protect);
 router.get('/getUserDetailById', getUserDetails);

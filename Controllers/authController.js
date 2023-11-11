@@ -41,17 +41,16 @@ exports.sendCreateUserOtp = catchAsync(async(req,res,next)=>{
     const verifyUserOtp = newUser.createVerifyUserOtp();
     await newUser.save({ validateBeforeSave: false })
    // await new Email(newUser, URL).sendWelcome();
-    await new Email(newUser, verifyUserOtp).sendUserVerifyOTP();
+    await new Email(newUser, verifyUserOtp).sendOTPEmail('Verify User Email (OTP)','activate your HomeCoinsTracker Account, please verify your email address. Your account will not be created until your email address is confirmed.');
     res.status(200).json({
         status:true,
-        msg:'OTP send to registed email address.',
+        msg:'OTP has sended to your registed email address.',
         data:{}
     });
 });
 
 exports.createrUser = catchAsync(async (req, res, next) => {
     const OTP = req.params.OTP;
-    console.log(OTP,req.body.email);
     const user = await User.findOne({email:req.body.email,verifyUserOtp:OTP,verifyUserOtpExpire: { $gt: Date.now() }});
     console.log(user);
     if(!user){
@@ -189,16 +188,13 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
         return next(new AppError('User Email is Not Found', 404))
-    }
-
+    };
     const resetToken = user.createPasswordResetToken();
-
     await user.save({ validateBeforeSave: false })
-    console.log(user);
     try {
         // const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`
         const resetURL = resetToken
-        await new Email(user, resetURL).resetPassword();
+        await new Email(user, resetURL).sendOTPEmail('HomeCoinsTracker account password reset',`Please use this code to reset the password for the HomeCoinsTracker account ${req.body.email.substring(0,4)}**@gmail.com.`);
         //await new SendSMS(user,resetURL).resetPassword();
 
         res.status(200).json({
@@ -214,22 +210,17 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
 })
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
-
     const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex')
-
     const user = await User.findOne({ passwordResetToken: hashedToken, passwordResetExpire: { $gt: Date.now() } })
-    // console.log(user);
     if (!user) {
         return next(new AppError('Token has Invalid or has expired', 400))
-    }
-
-    user.password = req.body.password
-    user.passwordconfirm = req.body.passwordconfirm
-    user.passwordResetExpire = undefined,
-        user.passwordResetToken = undefined
+    };
+    user.password = req.body.password;
+    user.passwordconfirm = req.body.passwordconfirm;
+    user.passwordResetExpire = undefined;
+    user.passwordResetToken = undefined;
     await user.save();
-
-    createSendToken(user, 200, res)
+    createSendToken(user, 200, res);
 })
 
 exports.updatePassword = catchAsync(async (req, res, next) => {

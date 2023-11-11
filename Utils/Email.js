@@ -1,13 +1,12 @@
-const nodemailer = require('nodemailer')
-const htmlToText = require('html-to-text')
-const sendGridMail = require('@sendgrid/mail');
-
+const nodemailer = require('nodemailer');
+const htmlToText = require('html-to-text');
+const pug = require('pug');
 module.exports = class Email {
     constructor(user, msg) {
         this.to = user.email,
         this.firstName = user.name,
         this.msg = msg,
-        this.from = process.env.EMAIL_FROM
+        this.from = `HomeCoinsTracker <${process.env.EMAIL_FROM}>`
     }
 
     newTransport() {
@@ -31,32 +30,40 @@ module.exports = class Email {
             })
          }*/
     };
-    async send(subject, text) {
+    async send(template,subject,messageToUser) {
+        let html = pug.renderFile(`${__dirname}/Templates/Email/${template}.pug`,{
+            firstName:this.firstName,
+            msg:this.msg,
+            messageToUser,
+            subject
+        })
         const mailOption = {
             to: this.to,
             from: this.from,
             subject,
-            text
+            html,
+            text:htmlToText.htmlToText(html)
         };
-        console.log(mailOption,'mailOption');
         try {
-            const response = await this.newTransport().sendMail(mailOption);
-            return response
+            await this.newTransport().sendMail(mailOption);
         } catch (err) {
             return err
         }
     }
     async sendWelcome() {
-        const mailResponse = await this.send('Welcome to homeCoinTracker')
+        await this.send('welcome','Welcome to homeCoinsTracker')
     }
 
     async resetPassword() {
-        const mailResponse = await this.send('your reset otp valid for (10min)', this.msg)
+        await this.send('resetPassword','your reset otp valid for (10min)', this.msg)
     }
     async sendRequestMail() {
-        const mailResponse = await this.send('Verify user Add Request', this.msg);
+        await this.send('verifyUser','Verify user Add Request', this.msg);
     };
     async sendUserVerifyOTP(){
-        const mailResponse = await this.send('One Time Password',this.msg);
+        await this.send('sendOTP','One Time Password',this.msg);
     };
+    async sendOTPEmail(subject,message){
+        await this.send('sendOTP',subject,message)
+    }
 }

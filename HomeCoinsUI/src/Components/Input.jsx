@@ -34,7 +34,6 @@ const Input = (props) => {
       {props.isLabel && <Text style={styles.inputLabel}>{props.label}</Text>}
       {props.icons && <Icons style={{...styles.inputIcons,color:colors.text}} name={props.icons} size={20} />}  
         <TextInput
-                key={props?.key??"key"}
                 keyboardType={props?.keyboardType}
                 onBlur={onBlur}
                 onFocus={onFocuse}

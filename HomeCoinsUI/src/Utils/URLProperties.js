@@ -1,4 +1,4 @@
-const NODE_ENV = "productio"
+const NODE_ENV = "production"
 const REACT_LOCAL_URL = "http://192.168.137.1:8000" //manikarn
 // const REACT_LOCAL_URL = "http://localhost:8000" //note7
 REACT_PROD_URL = "https://homecoinstracker.onrender.com"

@@ -30,10 +30,10 @@ export const logoutUser = () => async(dispatch)=>{
             dispatch({type:USER_LOGOUT_SUCCCESS,payload:response.data});
         }else{
             dispatch({type:USER_FAIL,payload:null});
-        }
+        };
     }catch(err){
         dispatch({type:USER_FAIL,payload:null});
-    }
+    };
 }
 
 export const getMe = () =>async(dispatch)=>{

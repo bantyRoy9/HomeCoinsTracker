@@ -39,7 +39,7 @@ const Login = ({navigation}) => {
     setErrors(validation.error);
     if(validation.valid){
     try {
-       dispatch(loging(user));
+        dispatch(loging(user));
       } catch (err) {
         showAlert(err);
       }
@@ -71,7 +71,6 @@ const Login = ({navigation}) => {
             <ScrollView contentContainerStyle={{ flex: 1 }} showsVerticalScrollIndicator={false}>
             <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
               <Input
-                key={"email"}
                 placeholder={"Email"}
                 label={"Email"}
                 isLabel={false}
@@ -87,7 +86,6 @@ const Login = ({navigation}) => {
             </View>
             <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
               <Input
-                key={"password"}
                 secureTextEntry={true}
                 placeholder={"Enter secure password"}
                 label={"Password"}
@@ -135,7 +133,6 @@ const Login = ({navigation}) => {
           <View Style={styles.modalBody}>
           <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
               <Input
-                key={"forgetEmail"}
                 placeholder={"Enter your email"}
                 label={"Enter your email"}
                 isLabel={false}
