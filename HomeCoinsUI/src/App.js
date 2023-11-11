@@ -24,8 +24,8 @@ function App() {
     headerTintColor: colors.text,
     headerStyle: {
       backgroundColor: colors.headerBg,
-      borderBottomColor: '#f0f',
-      borderBottomWidth: 0,
+      borderBottomColor: colors.headerBg,
+      borderBottomWidth: 1,
     },
     headerTitleStyle: {
       fontSize: 21,
@@ -61,9 +61,7 @@ function App() {
           </TouchableOpacity>
           </>
   }   
-  const pressEvent =(e)=>{
-    
-  }
+  
   return (
     
       <NavigationContainer >

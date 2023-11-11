@@ -4,7 +4,7 @@ import { Card } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEarnExpendData } from '../../Redux/Action/accountAction';
 import { Chart, DataTable, FloatingActionBtn, Header } from '../../Components';
-import { darkColorProps, lightColorProps,homeNavList,defaultStyle,FeatherIcons,FontAwesome } from '../../Utils';
+import { homeNavList,defaultStyle,FeatherIcons } from '../../Utils';
 import { useTheme } from 'react-native-paper';
 const Home = () => {
   const [dateRange, setDateRange] = useState({ label: 'Last 7 days' });
@@ -13,25 +13,25 @@ const Home = () => {
   const backgroundStyle = {
     backgroundColor: colors.background,
     color:colors.text
-  }
+  };
   const { isLoading, account } = useSelector(state => state.account);
   const { isAuthenticated,user } = useSelector(state => state.user);
 
   useEffect(() => {
     const dateRange = homeNavList.filter(el => el.active == true);
-   dispatch(getEarnExpendData(dateRange, isAuthenticated,user?.groupId??""));
-  }, [dateRange]);
+    dispatch(getEarnExpendData(dateRange, isAuthenticated,user?.groupId??""));
+  }, [dateRange,dispatch]);
 
   const navPressHandle = (navPress) => {
     homeNavList.map(el => {
       if (el.label == navPress.label) {
-        el.active = true
+        el.active = true;
       } else {
-        el.active = false
+        el.active = false;
       }
     });
     setDateRange(navPress);
-  }
+  };
 
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
