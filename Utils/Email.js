@@ -63,6 +63,9 @@ module.exports = class Email {
     async sendUserVerifyOTP(){
         await this.send('sendOTP','One Time Password',this.msg);
     };
+    async sendUrlEmail(subject,message){
+        await this.send('sendURL',subject,message)
+    }
     async sendOTPEmail(subject,message){
         await this.send('sendOTP',subject,message)
     }

@@ -38,9 +38,9 @@ exports.addMemberRequest = catchAsync(async (req, res, next) => {
 
         const verifyToken = req.user.createVerifyToken();
         await req.user.save({ validateBeforeSave: false });
+        const verifyURL = `${req.protocol}://${req.get('host')}/api/v1/groupController/verifyUser/${verifyToken},${addMemberUser.groupId},${req.user.id}`;
 
-        const verifyURL = `${req.protocol}://${req.get('host')}/api/v1/groupController/verifyUser/${verifyToken},${addMemberUser.groupId},${req.user.id}`
-        await new Email(addMemberUser, verifyURL).sendRequestMail();
+        await new Email(addMemberUser, verifyURL).sendUrlEmail('Send User Add Request','');
         responseSend(res, 200, true,{},"Request sended to group admin");
     } else {
         return next(new AppError('User already exist in another group', 406));

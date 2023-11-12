@@ -2,7 +2,7 @@ import { StatusBar,Image ,Pressable, SafeAreaView, ScrollView, StyleSheet, Text,
 import React, { useState } from 'react'
 import Input from '../../Components/Input';
 import { useDispatch,useSelector} from 'react-redux';
-import { loging } from '../../Redux/Action/userAction';
+import { forgotPassword, loging } from '../../Redux/Action/userAction';
 import { Divider, Modal, PaperProvider, Portal, useTheme } from 'react-native-paper';
 import { FontAwesome, Ionicons } from '../../Utils/VectorIcons';
 import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
@@ -24,9 +24,15 @@ const Login = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const showModal = () => {
-   setModalVisible(true)
+    setUser({});
+    setErrors({});
+    setModalVisible(true)
   };
-  const hideModal = () => setModalVisible(false);
+  const hideModal = () => {
+    setUser({});
+    setErrors({});
+    setModalVisible(false);
+  }
   
   const changeHandler = (name, value) => {
     setErrors(updateErrors(errors,name));
@@ -39,7 +45,7 @@ const Login = ({navigation}) => {
     setErrors(validation.error);
     if(validation.valid){
     try {
-        dispatch(loging(user));
+        modalVisible ? dispatch(forgotPassword(user)) : dispatch(loging(user));
       } catch (err) {
         showAlert(err);
       }
@@ -107,7 +113,7 @@ const Login = ({navigation}) => {
               </Pressable>
               <Pressable onPress={showModal}>
               <Text style={{ color: colors.btnBackground }} >
-                Forget Password?
+                Forgot Password?
               </Text>
               </Pressable>
             </View>

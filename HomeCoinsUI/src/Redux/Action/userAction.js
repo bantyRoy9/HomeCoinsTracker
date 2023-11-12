@@ -74,4 +74,13 @@ export const getAllUser = async(dispatch)=>{
     }catch(err){
         dispatch({type:ALL_USER_FAIL,payload:null});
     }
+};
+
+export const forgotPassword = async(user) =>{
+    try{
+        const { data } = axios.post(`${userControllerURL}/forgotPassword`,user);
+        
+    }catch(err){
+
+    }
 }
