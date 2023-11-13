@@ -38,9 +38,9 @@ exports.addMemberRequest = catchAsync(async (req, res, next) => {
 
         const verifyToken = req.user.createVerifyToken();
         await req.user.save({ validateBeforeSave: false });
+        const verifyURL = `${req.protocol}://${req.get('host')}/api/v1/groupController/verifyUser/${verifyToken},${addMemberUser.groupId},${req.user.id}`;
 
-        const verifyURL = `${req.protocol}://${req.get('host')}/api/v1/groupController/verifyUser/${verifyToken},${addMemberUser.groupId},${req.user.id}`
-        await new Email(addMemberUser, verifyURL).sendRequestMail();
+        await new Email(addMemberUser, verifyURL).sendUrlEmail('Send User Add Request','');
         responseSend(res, 200, true,{},"Request sended to group admin");
     } else {
         return next(new AppError('User already exist in another group', 406));
@@ -52,7 +52,6 @@ exports.verifyGroupToken = catchAsync(async (req, res, next) => {
     if (!verifyToken && !verifyToken.length) return next(new AppError('Verification Token not found', 400));
 
     const resetToken = crypto.createHash('sha256').update(verifyToken[0]).digest('hex');
-    console.log(resetToken);
     const user = await User.findOne({ verifyGroupToken: resetToken, verifyGroupTokenExpire: { $gt: Date.now() } });
 
     if (!user) {
@@ -79,6 +78,5 @@ exports.getGroupMember=catchAsync(async(req,res,next)=>{
     const groupId = req.params.groupId;
     if(!groupId) return next(new AppError('GroupId invalid',400));
     const data = await User.find({groupId},'name email mobile role userId photo groupId');
-    console.log(data);
     responseSend(res,200,true,data,"user find successfull");
 })

@@ -36,10 +36,10 @@ export const logoutUser = () => async(dispatch)=>{
     };
 }
 
-export const getMe = () =>async(dispatch)=>{
+export const getMe = (headers) =>async(dispatch)=>{
     try{
         dispatch({type:USER_GETME_REQUIEST})
-        const res = await axios.get(`${userControllerURL}/getUserDetailById`,getAxiosHeader());
+        const res = await axios.get(`${userControllerURL}/getUserDetailById`,headers);
         if(res && res.status == 200){
             dispatch({type:USER_GETME_SUCCCESS,payload:res?.data.data});
         }else{
@@ -52,11 +52,9 @@ export const getMe = () =>async(dispatch)=>{
 
 export const createUser =(userDetails)=> async(dispatch) => {
     try{
-        dispatch({type:USER_REGISTER_REQUIEST})
+        dispatch({type:USER_REGISTER_REQUIEST});
         const { data } = await axios.post(`${userControllerURL}/createUser`,userDetails,getAxiosHeaderWithoutCookie());
-        if(data){
-            dispatch({type:USER_REGISTER_SUCCESS,payload:data})
-        }
+        dispatch({type:USER_REGISTER_SUCCESS,payload:data});
     }catch(err){
         dispatch({type:USER_REGISTER_FAIL,payload:err?.response.data.msg})
     }
@@ -74,4 +72,26 @@ export const getAllUser = async(dispatch)=>{
     }catch(err){
         dispatch({type:ALL_USER_FAIL,payload:null});
     }
+};
+
+export const forgotPassword = (user) => async(dispatch)=>{
+    try{
+        dispatch({type:USER_REGISTER_REQUIEST})
+        const { data } = await axios.post(`${userControllerURL}/forgotPassword`,user);
+        dispatch({type:USER_REGISTER_SUCCESS,payload:data.data})
+    }catch(err){
+        showAlert(err.response.data.msg)
+        dispatch({type:USER_REGISTER_FAIL,payload:null})
+    }
+};
+
+export const verifyUserOTP = (OTP,user)=>async(dispatch) =>{
+    try{
+        dispatch({type:USER_REGISTER_REQUIEST});
+        const { data } = await axios.post(`${userControllerURL}/verifyUserOtp/${OTP}`,user);
+        dispatch({type:USER_REGISTER_SUCCESS,payload:data.data})
+    }catch(err){
+        showAlert(err.response.data.msg)
+        dispatch({type:USER_REGISTER_FAIL,payload:null})
+    };
 }

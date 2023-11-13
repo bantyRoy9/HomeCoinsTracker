@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ActivityIndicator } from 'react-native-paper';
 import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { createGroupAndRequest } from '../../Redux/Action/groupAction';
-
+import { useNavigation } from '@react-navigation/native';
 const Group = ({ pageName,colors }) => {
     let fields = pageName == "CreateNewGroup" ? "name" : "email";
+    const navigation = useNavigation();
     const [detail,setDetail]=useState({[fields]:""});
     const [errors,setErrors]=useState({});
     const dispatch = useDispatch();
@@ -24,6 +25,7 @@ const Group = ({ pageName,colors }) => {
             setErrors(validation.error);
             if(validation.valid){
                 dispatch(createGroupAndRequest(detail,fields=="email"?user.id:""));
+                navigation.navigate('CreateGroup');   
             }
         }catch(err){
             showAlert(err);

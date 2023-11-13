@@ -7,7 +7,6 @@ module.exports = class SendSMS{
     }
     sendSMS(SMS){
         textflow.sendSMS(`+91${this.mobileNo}`,SMS,(result)=>{
-            console.log(result)
         })
     };
     async resetPassword(){
