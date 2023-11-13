@@ -62,7 +62,7 @@ const Activity = ({groupId}) => {
                                             <Text style={{color:colors.text}}>{el.date ? moment(el.date).format('DD MMM YY hh:mm a') : 'NA'}</Text>
                                         </View>
                                         <View>
-                                            <Text style={{color:colors.text}}>{`Add By ${stringTransform(el.user.name, 'C')} `}</Text>
+                                            <Text style={{color:colors.text}}>{`Add By ${stringTransform(el.user?.name, 'C')} `}</Text>
                                         </View>
                                     </View>
                                 </Pressable>

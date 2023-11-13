@@ -6,6 +6,7 @@ import { getEarnExpendData } from '../../Redux/Action/accountAction';
 import { Chart, DataTable, FloatingActionBtn, Header } from '../../Components';
 import { homeNavList,defaultStyle,FeatherIcons } from '../../Utils';
 import { useTheme } from 'react-native-paper';
+import { showAlert } from '../../Utils/CommonAuthFunction';
 const Home = () => {
   const [dateRange, setDateRange] = useState({ label: 'Last 7 days' });
   const dispatch = useDispatch();
@@ -19,9 +20,9 @@ const Home = () => {
 
   useEffect(() => {
     const dateRange = homeNavList.filter(el => el.active == true);
-    dispatch(getEarnExpendData(dateRange, isAuthenticated,user?.groupId??""));
-  }, [dateRange,dispatch]);
-
+     dispatch(getEarnExpendData(dateRange, isAuthenticated,user?.groupId??""));
+  }, [dateRange]);
+  
   const navPressHandle = (navPress) => {
     homeNavList.map(el => {
       if (el.label == navPress.label) {

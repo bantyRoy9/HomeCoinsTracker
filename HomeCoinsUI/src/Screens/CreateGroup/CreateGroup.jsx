@@ -36,8 +36,8 @@ const CreateGroup = ({ navigation,route }) => {
               </View>
             </Pressable>
           </View>}
-          { route.name == "CreateNewGroup" && <Group pageName={route.name} colors={colors} />}
-          { route.name == "ExistingGroup" && <Group pageName={route.name} colors={colors} />}
+          { route.name === "CreateNewGroup" && <Group pageName={route.name} colors={colors} navigation/>}
+          { route.name === "ExistingGroup" && <Group pageName={route.name} colors={colors} navigation/>}
         </View>
       </ScrollView>
     </SafeAreaView>

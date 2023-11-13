@@ -8,13 +8,10 @@ class ApiFeature {
         let queryObj = {...this.query};
         const removeObjKey = ['page','filter','search','sort','type'];
         removeObjKey.forEach(el=> delete queryObj[el]);
-
         let queryStr = JSON.stringify(queryObj).replace(/\b(gt|gte|lte|lt)\b/g, match=> `$${match}`);
-        //console.log(JSON.parse(queryStr));
         this.modal = this.modal.find(JSON.parse(queryStr));
-
-        return this
-    }
-}
+        return this;
+    };
+};
 
 module.exports = ApiFeature

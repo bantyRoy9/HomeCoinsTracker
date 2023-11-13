@@ -54,14 +54,8 @@ module.exports = class Email {
         await this.send('welcome','Welcome to homeCoinsTracker')
     }
 
-    async resetPassword() {
-        await this.send('resetPassword','your reset otp valid for (10min)', this.msg)
-    }
     async sendRequestMail() {
         await this.send('verifyUser','Verify user Add Request', this.msg);
-    };
-    async sendUserVerifyOTP(){
-        await this.send('sendOTP','One Time Password',this.msg);
     };
     async sendUrlEmail(subject,message){
         await this.send('sendURL',subject,message)

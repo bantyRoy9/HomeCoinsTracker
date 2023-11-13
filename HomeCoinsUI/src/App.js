@@ -12,13 +12,21 @@ import { Activity, AddEarn, AddExpend, CreateGroup, EditProfile, Home, Login, Me
 import { FontAwesome, FontAwesome5} from './Utils';
 import { useTheme } from 'react-native-paper';
 import OtpVerification from './Screens/Users/OtpVerification';
+import { getAxiosHeader } from './Utils/CommonAuthFunction';
 function App() {
   const Stack = createNativeStackNavigator();
   const dispatch = useDispatch();
   const { colors } = useTheme();
   const { isLoading, isAuthenticated,user } = useSelector(state => state.user);
  useEffect(() => {
-   dispatch(getMe());
+  const fetchUserDetail = async()=>{
+    let header = await getAxiosHeader();
+    console.log(header);
+    if(header){
+      dispatch(getMe(header));
+    }
+  };
+  fetchUserDetail();
   }, []);
   const navigationOptions = {
     headerTintColor: colors.text,
@@ -40,7 +48,7 @@ function App() {
     activity:{ title: 'Activity'},
     members:{ title:'Members'},
     createGroup:{title:'Create Group'},
-    otpVerification:{title:'OTP Verification'}
+    otpVerification:{title:'User Verification'}
   }
   const editProfile = () => {
     // navigation.navigate('EditProfile');
@@ -60,13 +68,12 @@ function App() {
             <FontAwesome5 name='user' size={25} color={colors.text} onPress={()=> navigation.navigate('Profile')}/>
           </TouchableOpacity>
           </>
-  }   
-  
+  }
   return (
     
       <NavigationContainer >
-        <Stack.Navigator initialRouteName={(isAuthenticated && user && user?.isGroupIncluded)?"Home":isAuthenticated?"CreateGroup":"Login"}>
-          {(isAuthenticated && user && user?.isGroupIncluded) ? <>
+        <Stack.Navigator initialRouteName={(isAuthenticated && user && user.isActive && user?.isGroupIncluded)?"Home": (isAuthenticated && user && user.isActive) ? "CreateGroup": (isAuthenticated && user && !user.isActive) ? "OtpVerification" : "Login"}>
+          {(isAuthenticated && user && user.isActive && user.isGroupIncluded) ? <>
             <Stack.Screen name='Home' component={Home} options={{ ...navigationOptions, ...headerTitle.home, headerRight:()=> headerIcons.home }} />
             <Stack.Screen name='AddEarn' component={AddEarn} options={{ ...navigationOptions, ...headerTitle.addEarn }} />
             <Stack.Screen name='AddExpend' component={AddExpend} options={{ ...navigationOptions, ...headerTitle.addExpend }} />
@@ -74,7 +81,7 @@ function App() {
             <Stack.Screen name='Members' component={Members} options={{ ...navigationOptions,...headerTitle.members}} />
             <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () =>  headerIcons.profile}} />
             <Stack.Screen name='EditProfile' component={EditProfile} options={{ ...navigationOptions, ...headerTitle.editProfile }} />
-          </> : isAuthenticated ? <>
+          </> : (isAuthenticated && user && user.isActive) ? <>
             <Stack.Screen name='CreateGroup' component={CreateGroup} 
               options={({navigation}) => ({ 
                   ...navigationOptions,
@@ -91,10 +98,22 @@ function App() {
             <Stack.Screen name='CreateNewGroup' component={CreateGroup} options={navigationOptions}/>
             <Stack.Screen name='ExistingGroup' component={CreateGroup} options={ navigationOptions}/>  
             <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () =>  headerIcons.profile}} />
+          </> : (isAuthenticated && user && !user.isActive) ? <> 
+              <Stack.Screen name='OtpVerification' component={OtpVerification} options={({navigation})=>({
+                ...navigationOptions,
+                ...headerTitle.otpVerification,
+                headerRight:()=>(
+                  <>
+                      <Pressable onPress={()=> navigation.navigate('Profile')}>
+                          <FontAwesome5 name='user' size={25} color={colors.text} />
+                      </Pressable>
+                    </>
+                )
+              })}/>
+              <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () =>  headerIcons.profile}} />
           </> : <>
             <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />
             <Stack.Screen name='Signup' component={Signup} options={{ headerShown: false }} />
-            <Stack.Screen name='OtpVerification' component={OtpVerification} options={{...navigationOptions,...headerTitle.otpVerification}}/>
           </>}
         </Stack.Navigator>
       </NavigationContainer>

@@ -24,7 +24,6 @@ const DatePicker = (props) => {
       <View style={{position:'relative'}}>
         <View pointerEvents='none'>
         {selectedDate && <Input
-            key={props?.keys}
             placeholder={"Date"}
             label={"Enter Date"}
             isLabel={false}
@@ -40,7 +39,6 @@ const DatePicker = (props) => {
           <Pressable onPress={props?.onPress??showDatePicker} style={{height:'100%',alignItems:'center',borderRadius:10}}></Pressable>
         </View>
         <DateTimePickerModal
-          key={props?.key??"date"}
           date={props?.date??selectedDate}
           isVisible={props?.isVisible??datePickerVisible}
           mode={props?.mode??"date"}

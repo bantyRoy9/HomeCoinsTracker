@@ -45,14 +45,20 @@ exports.sendCreateUserOtp = catchAsync(async(req,res,next)=>{
     res.status(200).json({
         status:true,
         msg:'OTP has sended to your registed email address.',
-        data:{}
+        data:{
+            user:{
+                name:newUser.name,
+                isActive:newUser.isActive,
+                email:newUser.email,
+                isGroupIncluded:newUser.isGroupIncluded
+            }
+        }
     });
 });
 
 exports.createrUser = catchAsync(async (req, res, next) => {
     const OTP = req.params.OTP;
-    const user = await User.findOne({email:req.body.email,verifyUserOtp:OTP,verifyUserOtpExpire: { $gt: Date.now() }});
-    console.log(user);
+    const user = await User.findOne({email:req.body.email,verifyUserOtp:OTP,verifyUserOtpExpire: { $gt: Date.now() }},'name email isActive isGroupIncluded role useId');
     if(!user){
         return next(new AppError('OTP has expired or invalid',400));  
     };
@@ -65,13 +71,12 @@ exports.createrUser = catchAsync(async (req, res, next) => {
  
 exports.loginUser = catchAsync(async (req, res, next) => {
     const { email, password, phone } = req.body;
-    console.log(email,password)
     // loging with phone
     if (!Object.keys(req.body).includes('email')) {
         if (!phone || !password) {
             return next(new AppError('Please fill both Mobile no & password ', 401))
         }
-        const user = await User.findOne({ phone }).select('+password');
+        const user = await User.findOne({ phone },'name email isActive isGroupIncluded role useId').select('+password');
 
         if (!user || !(await user.correctPassword(password, user.password))) {
             return next(new AppError('Incorrect user Moble or Password', 401))
@@ -84,7 +89,7 @@ exports.loginUser = catchAsync(async (req, res, next) => {
             return next(new AppError('Please fill both email & password ', 401))
         };
 
-        const user = await User.findOne({ email }).select('+password').populate('totalEarn totalExpend','amount -_id');
+        const user = await User.findOne({ email },'name email isActive isGroupIncluded role useId totalEarn totalExpend groupId').select('+password').populate('totalEarn totalExpend','amount -_id');
 
         if (!user || !(await user.correctPassword(password, user.password))) {
             return next(new AppError('Incorrect user email or password', 401))
@@ -117,8 +122,6 @@ exports.protect = catchAsync(async (req, res, next) => {
     }
 
     const decoder = await promisify(jwt.verify)(token, process.env.jwt_secret);
-    // console.log(decoder);
-
     const currentUser = await User.findById(decoder.id)
     if (!currentUser) {
         return next(new AppError('The user belongs to this Id token is no longer exist', 401))
@@ -132,7 +135,6 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.user = currentUser
     // send data into pug
     res.locals.user = currentUser;
-    // console.log(res.user);
     next();
 })
 
@@ -149,7 +151,6 @@ exports.isLoggedIn = async (req, res, next) => {
         return next(new AppError('you are not login! please Login', 401))
     }
     const decoder = await promisify(jwt.verify)(req.cookies.jwt, process.env.jwt_secret);
-    // console.log(decoder);
     const currentUser = await User.findById(decoder.id)
     if (!currentUser) {
         return next(new AppError('The user belongs to this Id token is no longer exist', 401))
@@ -162,9 +163,7 @@ exports.isLoggedIn = async (req, res, next) => {
 };
 
 exports.restrictTo = (...role) => {
-     //console.log(...role);
     return (req, res, next) => {
-          //console.log(req.user.role);
         if (!role.includes(req.user.role)) {
             return next(new AppError('You do not have permission to perform this action', 403))
         }
@@ -184,7 +183,6 @@ exports.setUserAndGroupId = (keyName) => async(req,res,next)=>{
 };
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
-    //  console.log(req.body.email);
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
         return next(new AppError('User Email is Not Found', 404))

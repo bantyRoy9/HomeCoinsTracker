@@ -26,9 +26,12 @@ export const getStoredCookie = async () => {
 export const getAxiosHeader = async()=>{
       try{
         const value = await AsyncStorage.getItem('cookie');
-        const header ={
-          headers:{ authorization:"Bearer " + value },
-          withCredentials:true
+        let header = null;
+        if(value){
+          header ={
+            headers:{ authorization:"Bearer " + value },
+            withCredentials:true
+          }
         }
         return header;
       }catch(err){
@@ -37,7 +40,7 @@ export const getAxiosHeader = async()=>{
 };
 
 export const showAlert = (firstMsg,secondMsg) =>{
-Alert.alert(firstMsg,secondMsg,
+return Alert.alert(firstMsg,secondMsg,
   [
     {
       text: 'OK',

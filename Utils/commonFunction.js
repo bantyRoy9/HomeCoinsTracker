@@ -9,7 +9,6 @@ const getContinousesDate = (startDateStr,endDateStr) =>{
         dateArr.push(currentDate.format('DD-MM-YYYY'));
         currentDate.add(1,'days');
     };
-   // console.log(dateArr,'end');
     return dateArr;
 }
 const filterJsonForGraph =(jsonData)=>{
