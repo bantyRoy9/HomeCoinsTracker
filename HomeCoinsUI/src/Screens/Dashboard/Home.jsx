@@ -7,6 +7,7 @@ import { Chart, DataTable, FloatingActionBtn, Header } from '../../Components';
 import { homeNavList,defaultStyle,FeatherIcons } from '../../Utils';
 import { useTheme } from 'react-native-paper';
 import { showAlert } from '../../Utils/CommonAuthFunction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Home = () => {
   const [dateRange, setDateRange] = useState({ label: 'Last 7 days' });
   const dispatch = useDispatch();
@@ -16,11 +17,15 @@ const Home = () => {
     color:colors.text
   };
   const { isLoading, account } = useSelector(state => state.account);
-  const { isAuthenticated,user } = useSelector(state => state.user);
+  let { isAuthenticated,user } = useSelector(state => state.user);
 
-  useEffect(() => {
+  useEffect(async() => {
     const dateRange = homeNavList.filter(el => el.active == true);
-     dispatch(getEarnExpendData(dateRange, isAuthenticated,user?.groupId??""));
+    console.log(user,'home');
+    if(!user){
+        user = JSON.parse(await AsyncStorage.getItem('user'));
+    }
+     dispatch(getEarnExpendData(dateRange,user?.groupId??""));
   }, [dateRange]);
   
   const navPressHandle = (navPress) => {

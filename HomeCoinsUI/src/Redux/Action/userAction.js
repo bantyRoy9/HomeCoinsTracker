@@ -9,6 +9,8 @@ export const loging = (userDetails) => async(dispatch) =>{
         const { data } = await axios.post(`${userControllerURL}/loginUser`, userDetails, getAxiosHeaderWithoutCookie());
         if(data){
             await AsyncStorage.setItem('cookie',data.token);
+            await AsyncStorage.setItem('user',JSON.stringify(data.data.user));
+            await AsyncStorage.setItem('isGroupIncluded',`${data.data.user.isGroupIncluded}`)
             dispatch({type:USER_SUCCCESS,payload:data.data.user});
         };
     }catch(err){
@@ -24,13 +26,10 @@ export const loging = (userDetails) => async(dispatch) =>{
 export const logoutUser = () => async(dispatch)=>{
     try{
         dispatch({type:USER_REQUIEST});
-        const response = await axios.get(`${userControllerURL}/logout`);
-        if(response && response.status === 200){
-            await AsyncStorage.clear();
-            dispatch({type:USER_LOGOUT_SUCCCESS,payload:response.data});
-        }else{
-            dispatch({type:USER_FAIL,payload:null});
-        };
+        // const { data } = await axios.get(`${userControllerURL}/logout`);
+        await AsyncStorage.removeItem('cookie');
+        await AsyncStorage.removeItem('isGroupIncluded');
+        dispatch({type:USER_LOGOUT_SUCCCESS,payload:{}});
     }catch(err){
         dispatch({type:USER_FAIL,payload:null});
     };

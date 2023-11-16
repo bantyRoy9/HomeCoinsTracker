@@ -2,32 +2,34 @@
  *
  * @BANTI
  */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, TouchableOpacity, View } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMe, logoutUser } from './Redux/Action/userAction';
+import { getMe } from './Redux/Action/userAction';
 import { Activity, AddEarn, AddExpend, CreateGroup, EditProfile, Home, Login, Members, Profile, Signup } from './Screens';
 import { FontAwesome, FontAwesome5 } from './Utils';
 import { useTheme } from 'react-native-paper';
 import OtpVerification from './Screens/Users/OtpVerification';
-import { getAxiosHeader } from './Utils/CommonAuthFunction';
+import { fetchUserDetail } from './Utils/CommonAuthFunction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { USER_SUCCCESS } from './Redux/constants';
 function App() {
   const Stack = createNativeStackNavigator();
-  const dispatch = useDispatch();
   const { colors } = useTheme();
-  const { isLoading, isAuthenticated, user } = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const [userDetails, setUserDetails] = useState({});
+  const { user } = useSelector(state=>state.user)
   useEffect(() => {
     const fetchUserDetail = async () => {
-      let header = await getAxiosHeader();
-      console.log(header);
-      if (header) {
-        dispatch(getMe(header));
-      }
+      let cookie = await AsyncStorage.getItem('cookie');
+      let isGroupIncluded = await AsyncStorage.getItem("isGroupIncluded");
+      setUserDetails({ cookie, isGroupIncluded });
     };
     fetchUserDetail();
-  }, []);
+  }, [user]);
+  console.log(userDetails);
   const navigationOptions = {
     headerTintColor: colors.text,
     headerStyle: {
@@ -72,8 +74,9 @@ function App() {
   return (
 
     <NavigationContainer >
-      <Stack.Navigator initialRouteName={(isAuthenticated && user && user.isActive && user?.isGroupIncluded) ? "Home" : (isAuthenticated && user && user.isActive) ? "CreateGroup" : (isAuthenticated && user && !user.isActive) ? "OtpVerification" : "Login"}>
-        {(isAuthenticated && user && user.isActive && user.isGroupIncluded) ? <>
+      {/* <Stack.Navigator initialRouteName={(isAuthenticated && user && user.isActive && user?.isGroupIncluded) ? "Home" : (isAuthenticated && user && user.isActive) ? "CreateGroup" : (isAuthenticated && user && !user.isActive) ? "OtpVerification" : "Login"}> */}
+      <Stack.Navigator initialRouteName={(userDetails.cookie && userDetails.isGroupIncluded) ? "Home" : userDetails.cookie ? "CreateGroup" : "Login"}>
+        {(userDetails.cookie && userDetails.isGroupIncluded) ? <>
           <Stack.Screen name='Home' component={Home} options={{ ...navigationOptions, ...headerTitle.home, headerRight: () => headerIcons.home }} />
           <Stack.Screen name='AddEarn' component={AddEarn} options={{ ...navigationOptions, ...headerTitle.addEarn }} />
           <Stack.Screen name='AddExpend' component={AddExpend} options={{ ...navigationOptions, ...headerTitle.addExpend }} />
@@ -81,7 +84,7 @@ function App() {
           <Stack.Screen name='Members' component={Members} options={{ ...navigationOptions, ...headerTitle.members }} />
           <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () => headerIcons.profile }} />
           <Stack.Screen name='EditProfile' component={EditProfile} options={{ ...navigationOptions, ...headerTitle.editProfile }} />
-        </> : (isAuthenticated && user && user.isActive) ? <>
+        </> : userDetails.cookie ? <>
           <Stack.Screen name='CreateGroup' component={CreateGroup}
             options={({ navigation }) => ({
               ...navigationOptions,
@@ -98,22 +101,11 @@ function App() {
           <Stack.Screen name='CreateNewGroup' component={CreateGroup} options={navigationOptions} />
           <Stack.Screen name='ExistingGroup' component={CreateGroup} options={navigationOptions} />
           <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () => headerIcons.profile }} />
-        </> : (isAuthenticated && user && !user.isActive) ? <>
-          <Stack.Screen name='OtpVerification' component={OtpVerification} options={({ navigation }) => ({
-            ...navigationOptions,
-            ...headerTitle.otpVerification,
-            headerRight: () => (
-              <>
-                <Pressable onPress={() => navigation.navigate('Profile')}>
-                  <FontAwesome5 name='user' size={25} color={colors.text} />
-                </Pressable>
-              </>
-            )
-          })} />
-          <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () => headerIcons.profile }} />
+          <Stack.Screen name='OtpVerification' component={OtpVerification} options={{ ...navigationOptions, ...headerTitle.otpVerification }} />
         </> : <>
           <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />
           <Stack.Screen name='Signup' component={Signup} options={{ headerShown: false }} />
+          <Stack.Screen name='OtpVerification' component={OtpVerification} options={{ ...navigationOptions, ...headerTitle.otpVerification }} />
         </>}
       </Stack.Navigator>
     </NavigationContainer>
