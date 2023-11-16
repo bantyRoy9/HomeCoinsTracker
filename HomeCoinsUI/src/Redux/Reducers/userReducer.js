@@ -7,13 +7,14 @@ export const userReducer = (state = {user:{}},action) => {
         return{
             isLoading:true,
             isAuthenticated:false,
-            user:{}
+            user:null
         };
         case USER_GETME_REQUIEST:
             return{
                 ...state,
                 isLoading:true,
-                user:{}
+                isAuthenticated:false,
+                user:null
             };
         case USER_GETME_SUCCCESS:
             return{
@@ -40,7 +41,7 @@ export const userReducer = (state = {user:{}},action) => {
         return{
             isLoading:false,
             isAuthenticated:false,
-            user:{}
+            user:null
         };
         default:
         return state

@@ -3,7 +3,7 @@ import { ACCOUNT_ADD_FAIL, ACCOUNT_ADD_REQUIEST, ACCOUNT_ADD_SUCCESS, ACCOUNT_FA
 import axios from 'axios';
 import moment from 'moment';
 import { getAxiosHeader, showAlert } from '../../Utils/CommonAuthFunction';
-import { accountControllerURL, userControllerURL } from '../../Utils/URLProperties';
+import { accountControllerURL } from '../../Utils/URLProperties';
 
 const getAnalyticsDetails = (resData) => {
     const analyticsJson ={};
@@ -13,10 +13,11 @@ const getAnalyticsDetails = (resData) => {
     return analyticsJson;
   }
   
-export const getEarnExpendData = (dateRange,isAuthenticated,groupId)=> async(dispatch)=>{
+export const getEarnExpendData = (dateRange,groupId)=> async(dispatch)=>{
     try{
         dispatch({type:ACCOUNT_REQUIEST});
         const { data } = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}&groupId=${groupId}`)
+        console.log(data);
         if (data.status && data.data && data.graphData) {
             data.analyticsDetail = getAnalyticsDetails(data.graphData)
             data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })

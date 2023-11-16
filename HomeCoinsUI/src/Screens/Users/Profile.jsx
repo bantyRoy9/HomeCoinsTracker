@@ -49,7 +49,6 @@ const Profile = () => {
     }, []);
 
     const logout = async () => {
-        await AsyncStorage.clear();
         dispatch(logoutUser())
     };
     const onPressprofileNav = (forPress) => {
