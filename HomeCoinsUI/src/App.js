@@ -28,6 +28,7 @@ function App() {
       setUserDetails({ cookie, isGroupIncluded });
     };
     fetchUserDetail();
+
   }, [user]);
   console.log(userDetails);
   const navigationOptions = {

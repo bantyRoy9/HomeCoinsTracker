@@ -4,30 +4,31 @@ import { Card } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEarnExpendData } from '../../Redux/Action/accountAction';
 import { Chart, DataTable, FloatingActionBtn, Header } from '../../Components';
-import { homeNavList,defaultStyle,FeatherIcons } from '../../Utils';
+import { homeNavList, defaultStyle, FeatherIcons } from '../../Utils';
 import { useTheme } from 'react-native-paper';
 import { showAlert } from '../../Utils/CommonAuthFunction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { USER_SUCCCESS } from '../../Redux/constants';
 const Home = () => {
   const [dateRange, setDateRange] = useState({ label: 'Last 7 days' });
   const dispatch = useDispatch();
-  const { colors,dark } = useTheme();
+  const { colors, dark } = useTheme();
   const backgroundStyle = {
     backgroundColor: colors.background,
-    color:colors.text
+    color: colors.text
   };
   const { isLoading, account } = useSelector(state => state.account);
-  let { isAuthenticated,user } = useSelector(state => state.user);
+  let { isAuthenticated, user } = useSelector(state => state.user);
 
-  useEffect(async() => {
-    const dateRange = homeNavList.filter(el => el.active == true);
-    console.log(user,'home');
-    if(!user){
-        user = JSON.parse(await AsyncStorage.getItem('user'));
-    }
-     dispatch(getEarnExpendData(dateRange,user?.groupId??""));
+  useEffect(() => {
+    const fetchEarnExpendData = async () => {
+      const dateRange = homeNavList.filter(el => el.active == true);
+      user = JSON.parse(await AsyncStorage.getItem('user')) 
+      dispatch(getEarnExpendData(dateRange, user?.groupId ?? ""));
+    };
+    fetchEarnExpendData();
   }, [dateRange]);
-  
+
   const navPressHandle = (navPress) => {
     homeNavList.map(el => {
       if (el.label == navPress.label) {
@@ -47,7 +48,7 @@ const Home = () => {
           <View style={styles.navigationContainer}>
             {homeNavList.map((ele, idx) => (
               <Pressable onPress={() => navPressHandle(ele)}>
-                <Text key={idx} style={ele.active ? {...styles.activeNavText,backgroundColor:colors.notification, color:colors.primary} : {...styles.navText,color:colors.text} }>{ele.label}</Text>
+                <Text key={idx} style={ele.active ? { ...styles.activeNavText, backgroundColor: colors.notification, color: colors.primary } : { ...styles.navText, color: colors.text }}>{ele.label}</Text>
               </Pressable>
             ))}
           </View>
@@ -56,11 +57,11 @@ const Home = () => {
               <Card containerStyle={{ ...styles.cardContainer, backgroundColor: colors.card }}>
                 <View style={styles.cardTitle}>
                   <View>
-                    <Text style={{...styles.cardLeftTitle,color:colors.text}}>Analytics</Text>
+                    <Text style={{ ...styles.cardLeftTitle, color: colors.text }}>Analytics</Text>
                   </View>
                   <View style={styles.cardRightTitle}>
                     <View>
-                      <Text style={{...styles.cardRightText,color:colors.text}}>{dateRange.label}</Text>
+                      <Text style={{ ...styles.cardRightText, color: colors.text }}>{dateRange.label}</Text>
                     </View>
                     <View style={{ ...styles.cardRightIconCont, borderColor: colors.text }}>
                       <FeatherIcons name='filter' color={colors.text} size={15} />
@@ -70,9 +71,9 @@ const Home = () => {
                 <View>
                   {!isLoading && account && account?.analyticsDetail && <>
                     {Object.keys(account?.analyticsDetail).map((el, idx) => (
-                      <View key={idx+homeNavList.length} style={styles.analyticsDetails}>
-                        <View><Text style={{...styles.analyticsText,color:colors.text}}>{el}</Text></View>
-                        <View><Text style={{...styles.analyticsText,color:colors.text}}>₹{account.analyticsDetail[el] ? account.analyticsDetail[el]:'NA'}</Text></View>
+                      <View key={idx + homeNavList.length} style={styles.analyticsDetails}>
+                        <View><Text style={{ ...styles.analyticsText, color: colors.text }}>{el}</Text></View>
+                        <View><Text style={{ ...styles.analyticsText, color: colors.text }}>₹{account.analyticsDetail[el] ? account.analyticsDetail[el] : 'NA'}</Text></View>
                       </View>
                     ))}
                   </>}
@@ -88,9 +89,9 @@ const Home = () => {
             </View></>}
         </View>
       </ScrollView>
-          <View style={styles.expensEarnBtn}>
-            <FloatingActionBtn/>
-          </View>
+      <View style={styles.expensEarnBtn}>
+        <FloatingActionBtn />
+      </View>
       <View>
         <Header />
       </View>
@@ -160,24 +161,24 @@ const styles = StyleSheet.create({
     lineHeight: 30
   },
   expensEarnBtn: {
-    width:'100%',
-    height:'90%',
-    position:'absolute',
+    width: '100%',
+    height: '90%',
+    position: 'absolute',
     // flexDirection: 'row',
     // position: 'absolute',
     // justifyContent: 'space-between',
     // bottom: 0,
     // marginHorizontal: 22
   },
-  earnExpensBtn:{
+  earnExpensBtn: {
     // flexDirection:'row',
     // alignItems:'center',
-    padding:15,
+    padding: 15,
     // borderRadius:20
   },
-  earnExpensBtnText:{
-    fontSize:16,
-    fontWeight:'600'
+  earnExpensBtnText: {
+    fontSize: 16,
+    fontWeight: '600'
   },
   earnBtn: {
     backgroundColor: 'green'
