@@ -23,7 +23,6 @@ const Home = () => {
   useEffect(() => {
     const fetchEarnExpendData = async () => {
       const dateRange = homeNavList.filter(el => el.active == true);
-      user = JSON.parse(await AsyncStorage.getItem('user')) 
       dispatch(getEarnExpendData(dateRange, user?.groupId ?? ""));
     };
     fetchEarnExpendData();

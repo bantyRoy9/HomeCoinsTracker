@@ -3,7 +3,7 @@ import { getAxiosHeader, getAxiosHeaderWithoutCookie, showAlert } from "../../Ut
 import { USER_FAIL, USER_REQUIEST, USER_GETME_REQUIEST,USER_GETME_SUCCCESS,USER_SUCCCESS,USER_LOGOUT_SUCCCESS, USER_REGISTER_SUCCESS, USER_REGISTER_REQUIEST, USER_REGISTER_FAIL,ALL_USER_REQUIEST,ALL_USER_SUCCESS,ALL_USER_FAIL } from "../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { userControllerURL } from "../../Utils/URLProperties";
-export const loging = (userDetails) => async(dispatch) =>{
+export const loging = (userDetails,navigation) => async(dispatch) =>{
     try{
         dispatch({type:USER_REQUIEST});
         const { data } = await axios.post(`${userControllerURL}/loginUser`, userDetails, getAxiosHeaderWithoutCookie());
@@ -12,6 +12,7 @@ export const loging = (userDetails) => async(dispatch) =>{
             await AsyncStorage.setItem('user',JSON.stringify(data.data.user));
             await AsyncStorage.setItem('isGroupIncluded',`${data.data.user.isGroupIncluded}`)
             dispatch({type:USER_SUCCCESS,payload:data.data.user});
+            
         };
     }catch(err){
         if(err.response){
@@ -23,13 +24,14 @@ export const loging = (userDetails) => async(dispatch) =>{
     }
 };
 
-export const logoutUser = () => async(dispatch)=>{
+export const logoutUser = (navigation) => async(dispatch)=>{
     try{
         dispatch({type:USER_REQUIEST});
         // const { data } = await axios.get(`${userControllerURL}/logout`);
         await AsyncStorage.removeItem('cookie');
         await AsyncStorage.removeItem('isGroupIncluded');
         dispatch({type:USER_LOGOUT_SUCCCESS,payload:{}});
+        navigation.navigate('Login')
     }catch(err){
         dispatch({type:USER_FAIL,payload:null});
     };
@@ -49,11 +51,12 @@ export const getMe = (headers) =>async(dispatch)=>{
     }
 };
 
-export const createUser =(userDetails)=> async(dispatch) => {
+export const createUser =(userDetails,navigation)=> async(dispatch) => {
     try{
         dispatch({type:USER_REGISTER_REQUIEST});
-        const { data } = await axios.post(`${userControllerURL}/createUser`,userDetails,getAxiosHeaderWithoutCookie());
+       const { data } = await axios.post(`${userControllerURL}/createUser`,userDetails,getAxiosHeaderWithoutCookie());
         dispatch({type:USER_REGISTER_SUCCESS,payload:data});
+        navigation.navigate('OtpVerification');
     }catch(err){
         dispatch({type:USER_REGISTER_FAIL,payload:err?.response.data.msg})
     }

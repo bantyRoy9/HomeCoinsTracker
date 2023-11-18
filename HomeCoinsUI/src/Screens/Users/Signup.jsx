@@ -29,7 +29,7 @@ const Signup = ({ navigation }) => {
     setErrors(validation.error);
     if (validation.valid) {
       try {
-          dispatch(createUser(user));
+          dispatch(createUser(user,navigation));
       } catch (err) {
         showAlert(err);
       };
