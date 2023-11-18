@@ -33,7 +33,7 @@ const profileNavList = [{
     Icons: ["sign-out"]
 },
 ]
-const Profile = () => {
+const Profile = ({ navigation }) => {
     const dispatch = useDispatch();
     const [userDetails, setUserDetails] = useState({});
     const { colors,dark } = useTheme();
@@ -49,7 +49,7 @@ const Profile = () => {
     }, []);
 
     const logout = async () => {
-        dispatch(logoutUser())
+        dispatch(logoutUser(navigation))
     };
     const onPressprofileNav = (forPress) => {
         switch (forPress) {
