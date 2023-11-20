@@ -34,7 +34,7 @@ const Activity = ({groupId}) => {
                     <View style={defaultStyle.screenContainer}>
                         {activity && activity.data && activity?.data.map((el, idx) => (
                             <>
-                                <Pressable style={styles.activityLists}>
+                                <Pressable key={idx} style={styles.activityLists}>
                                     <View key={idx} style={styles.activityList}>
                                         <View style={styles.activityLeftSec}>
                                             <View style={styles.activityProfileList}>
