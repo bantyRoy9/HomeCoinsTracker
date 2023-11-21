@@ -25,6 +25,7 @@ const Home = () => {
       const dateRange = homeNavList.filter(el => el.active == true);
       if(user && Object.keys(user).length === 0){
         user = JSON.parse(await AsyncStorage.getItem('user'));
+        dispatch({type:USER_SUCCCESS,payload:user});
       };
       dispatch(getEarnExpendData(dateRange, user?.groupId ?? ""));
     };

@@ -129,18 +129,13 @@ const AddExpend = ({navigation}) => {
 export default AddExpend
 
 const styles = StyleSheet.create({
-
-  earnBtn: {
-    backgroundColor: 'green'
-  },
   button: {
-    alignItems: 'center',
+    alignItems:"center",
     justifyContent: 'center',
     paddingVertical: 18,
     paddingHorizontal: 40,
-    borderRadius: 50,
-    elevation: 3,
-    width: "70%",
+    borderRadius: 10,
+    width:"100%",
     marginVertical: 15
   },
   text: {

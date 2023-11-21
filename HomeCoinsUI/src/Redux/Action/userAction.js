@@ -31,7 +31,6 @@ export const logoutUser = (navigation) => async(dispatch)=>{
         await AsyncStorage.removeItem('cookie');
         await AsyncStorage.removeItem('isGroupIncluded');
         dispatch({type:USER_LOGOUT_SUCCCESS,payload:{}});
-        navigation.navigate('Login')
     }catch(err){
         dispatch({type:USER_FAIL,payload:null});
     };
