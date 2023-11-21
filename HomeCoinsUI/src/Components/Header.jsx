@@ -21,8 +21,8 @@ const Header = () => {
     return (
         <View style={[styles.headerContainer,backgroundStyle]}>
             
-            {bottomHeaderList && bottomHeaderList.map(headerLists=>(
-                <View style={styles.headerIcons}>
+            {bottomHeaderList && bottomHeaderList.map((headerLists,idx)=>(
+                <View key={idx} style={styles.headerIcons}>
                     <Pressable style={styles.headerIcon} onPress={()=>navigatePage(headerLists.navUrl)}>
                         <Icons name={headerLists.iconName} size={25} color={backgroundStyle.color} />
                         <Text style={{color:backgroundStyle.color}}>{headerLists.title}</Text>

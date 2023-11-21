@@ -154,7 +154,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     borderRadius: 50,
     elevation: 3,
-    width: "70%",
     marginVertical: 15
   },
   text: {

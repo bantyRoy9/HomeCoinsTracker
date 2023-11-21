@@ -33,9 +33,9 @@ const Activity = ({groupId}) => {
                 <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
                     <View style={defaultStyle.screenContainer}>
                         {activity && activity.data && activity?.data.map((el, idx) => (
-                            <>
+                            <View key={idx}>
                                 <Pressable style={styles.activityLists}>
-                                    <View key={idx} style={styles.activityList}>
+                                    <View style={styles.activityList}>
                                         <View style={styles.activityLeftSec}>
                                             <View style={styles.activityProfileList}>
                                                 <Image source={require('../../../Assets/profiles/default.png')}
@@ -67,7 +67,7 @@ const Activity = ({groupId}) => {
                                     </View>
                                 </Pressable>
                                 {activity.data.length - 1 > idx && <Divider style={{ borderBottomColor: backgroundStyle.color }} />}
-                            </>
+                            </View>
                         ))}
                     </View>
                 </ScrollView>

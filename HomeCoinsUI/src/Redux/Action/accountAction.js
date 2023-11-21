@@ -14,6 +14,7 @@ const getAnalyticsDetails = (resData) => {
   }
   
 export const getEarnExpendData = (dateRange,groupId)=> async(dispatch)=>{
+    
     try{
         dispatch({type:ACCOUNT_REQUIEST});
         const { data } = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}&groupId=${groupId}`)

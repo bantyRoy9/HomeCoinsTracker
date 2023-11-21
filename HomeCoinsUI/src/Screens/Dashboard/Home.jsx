@@ -23,6 +23,10 @@ const Home = () => {
   useEffect(() => {
     const fetchEarnExpendData = async () => {
       const dateRange = homeNavList.filter(el => el.active == true);
+      if(user && Object.keys(user).length === 0){
+        user = JSON.parse(await AsyncStorage.getItem('user'));
+        dispatch({type:USER_SUCCCESS,payload:user});
+      };
       dispatch(getEarnExpendData(dateRange, user?.groupId ?? ""));
     };
     fetchEarnExpendData();
@@ -46,7 +50,7 @@ const Home = () => {
         <View style={defaultStyle.screenContainer}>
           <View style={styles.navigationContainer}>
             {homeNavList.map((ele, idx) => (
-              <Pressable onPress={() => navPressHandle(ele)}>
+              <Pressable key={idx} onPress={() => navPressHandle(ele)}>
                 <Text key={idx} style={ele.active ? { ...styles.activeNavText, backgroundColor: colors.notification, color: colors.primary } : { ...styles.navText, color: colors.text }}>{ele.label}</Text>
               </Pressable>
             ))}

@@ -1,8 +1,6 @@
 import React from 'react';
-import { StyleSheet,useColorScheme,View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { DataTable, useTheme } from 'react-native-paper';
-import { darkColorProps, lightColorProps } from '../Utils/colorProp';
-import { defaultStyle } from '../Utils/defaultCss';
 
 const Table = ({tableData}) => {
   const { colors,dark} = useTheme();
@@ -29,7 +27,7 @@ return (
 	</DataTable.Header>
   {tableData && tableData.labels.map((el,idx)=>(
     <>
-	<DataTable.Row>
+	<DataTable.Row key={idx}>
 		<DataTable.Cell textStyle={{color:colors.text,fontWeight:'800'}}>{el}</DataTable.Cell>
 		<DataTable.Cell textStyle={{color:colors.text}}>{tableData.datasets[0].data[idx]}</DataTable.Cell>
 		<DataTable.Cell textStyle={{color:colors.text}}>{tableData.datasets[1].data[idx]}</DataTable.Cell>
