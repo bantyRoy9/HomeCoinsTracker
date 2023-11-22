@@ -27,14 +27,13 @@ export const loging = (userDetails,navigation) => async(dispatch) =>{
 export const logoutUser = (navigation) => async(dispatch)=>{
     try{
         dispatch({type:USER_REQUIEST});
-        // const { data } = await axios.get(`${userControllerURL}/logout`);
         await AsyncStorage.removeItem('cookie');
         await AsyncStorage.removeItem('isGroupIncluded');
         dispatch({type:USER_LOGOUT_SUCCCESS,payload:{}});
     }catch(err){
         dispatch({type:USER_FAIL,payload:null});
     };
-}
+};
 
 export const getMe = (headers) =>async(dispatch)=>{
     try{

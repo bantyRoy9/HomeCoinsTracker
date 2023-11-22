@@ -49,6 +49,7 @@ const Profile = ({ navigation }) => {
     }, []);
 
     const logout = async () => {
+
         dispatch(logoutUser(navigation))
     };
     const onPressprofileNav = (forPress) => {
