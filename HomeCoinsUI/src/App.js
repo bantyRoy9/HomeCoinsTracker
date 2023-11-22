@@ -15,6 +15,7 @@ import OtpVerification from './Screens/Users/OtpVerification';
 import { fetchUserDetail } from './Utils/CommonAuthFunction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { USER_SUCCCESS } from './Redux/constants';
+import SplashScreen from 'react-native-splash-screen';
 function App() {
   const Stack = createNativeStackNavigator();
   const { colors } = useTheme();
@@ -26,6 +27,7 @@ function App() {
       let cookie = await AsyncStorage.getItem('cookie');
       let isGroupIncluded = await AsyncStorage.getItem("isGroupIncluded");
       setUserDetails({ cookie, isGroupIncluded });
+      SplashScreen.hide();
     };
     fetchUserDetail();
 

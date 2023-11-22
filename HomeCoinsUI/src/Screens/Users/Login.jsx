@@ -4,9 +4,8 @@ import Input from '../../Components/Input';
 import { useDispatch,useSelector} from 'react-redux';
 import { forgotPassword, loging } from '../../Redux/Action/userAction';
 import { Divider, Modal, PaperProvider, Portal, useTheme } from 'react-native-paper';
-import { FontAwesome, Ionicons } from '../../Utils/VectorIcons';
+import { FontAwesome, Ionicons,defaultStyle } from '../../Utils';
 import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
-import { defaultStyle } from '../../Utils';
 const initialState = { email: "", password: "" }
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
@@ -61,10 +60,10 @@ const Login = ({navigation}) => {
             <View style={{ alignItems: 'center'}}>
               <Image source={require('../../../Assets/Icons/login1.png')} style={{width: 250,height: 180}}/>
             </View>
-            <View>
+            {/* <View>
               <Text style={{fontSize: 35,fontWeight: 700,color: backgroundStyle.color,marginVertical: 10}}>Login</Text>
               <Text style={{ color: backgroundStyle.color }}>Please sign in to continue</Text>
-            </View>
+            </View> */}
             <ScrollView showsVerticalScrollIndicator={false}>
             <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
               <Input
