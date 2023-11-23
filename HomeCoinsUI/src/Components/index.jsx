@@ -5,4 +5,5 @@ import FloatingActionBtn from './FloatingActionBtn';
 import Header from './Header';
 import Input from './Input';
 import Modals from './Modal';
-export { Chart, DataTable, DatePicker, FloatingActionBtn, Header, Input, Modals}
+import SelectPicker from './SelectPicker';
+export { Chart, DataTable, DatePicker, FloatingActionBtn, Header, Input, Modals,SelectPicker}

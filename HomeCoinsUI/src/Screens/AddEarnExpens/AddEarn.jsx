@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
-import {Input, DatePicker} from '../../Components';
+import SelectPicker from 'react-native-picker-select';
 import { updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { defaultStyle } from '../../Utils';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
@@ -78,6 +78,14 @@ const AddEarn = ({navigation}) => {
             errorMsg={errors?.amount}
             helperType={'error'}
           />
+        </View>
+        <View>
+          <SelectPicker onValueChange={(value) => console.log(value)}
+            items={[
+                { label: 'Football', value: 'football' },
+                { label: 'Baseball', value: 'baseball' },
+                { label: 'Hockey', value: 'hockey' },
+            ]}/>
         </View>
         <View>
           <Input
