@@ -3,10 +3,12 @@ import React, { useState } from 'react'
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
-import SelectPicker from 'react-native-picker-select';
 import { updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { defaultStyle } from '../../Utils';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
+import { DatePicker, Input } from '../../Components';
+import RNPickerSelect from 'react-native-picker-select';
+
 const initalState = {amount:'',source:'',description:'',date:moment(new Date()).format('YYYY-MM-DD')}
 const AddEarn = ({navigation}) => {
   const dispatch = useDispatch();
@@ -80,12 +82,14 @@ const AddEarn = ({navigation}) => {
           />
         </View>
         <View>
-          <SelectPicker onValueChange={(value) => console.log(value)}
+        <RNPickerSelect
+            onValueChange={(value) => console.log(value)}
             items={[
                 { label: 'Football', value: 'football' },
                 { label: 'Baseball', value: 'baseball' },
                 { label: 'Hockey', value: 'hockey' },
-            ]}/>
+            ]}
+        />
         </View>
         <View>
           <Input
@@ -124,7 +128,7 @@ const AddEarn = ({navigation}) => {
           />
         </View>
         <View>
-          <DatePicker 
+          <DatePicker
             key={"date"}
             value ={selectedDate}
             onPress={showDatePicker}
