@@ -6,7 +6,7 @@ import { addEarnExpend } from '../../Redux/Action/accountAction';
 import { updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { defaultStyle } from '../../Utils';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
-import { DatePicker, Input } from '../../Components';
+import { DatePicker, Input, SelectPicker } from '../../Components';
 import RNPickerSelect from 'react-native-picker-select';
 
 const initalState = {amount:'',source:'',description:'',date:moment(new Date()).format('YYYY-MM-DD')}
@@ -82,12 +82,9 @@ const AddEarn = ({navigation}) => {
           />
         </View>
         <View>
-        <RNPickerSelect
+        <SelectPicker
             onValueChange={(value) => console.log(value)}
             items={[
-                { label: 'Football', value: 'football' },
-                { label: 'Baseball', value: 'baseball' },
-                { label: 'Hockey', value: 'hockey' },
             ]}
         />
         </View>

@@ -5,7 +5,7 @@ import SelectedPicker from 'react-native-picker-select'
 const SelectPicker = ({items,onValueChange}) => {
   return (
     <View>
-      <SelectPicker items={items} onValueChange={onValueChange}/> 
+      <SelectedPicker items={items} onValueChange={onValueChange}/> 
     </View>
   )
 }
