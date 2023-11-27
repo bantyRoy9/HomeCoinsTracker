@@ -1,5 +1,5 @@
 import { StyleSheet, SafeAreaView, Text, View, StatusBar, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
@@ -7,7 +7,8 @@ import { updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { defaultStyle } from '../../Utils';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
 import { DatePicker, Input, SelectPicker } from '../../Components';
-import RNPickerSelect from 'react-native-picker-select';
+import axios from 'axios';
+import { sourceControllerURL } from '../../Utils/URLProperties';
 
 const initalState = {amount:'',source:'',description:'',date:moment(new Date()).format('YYYY-MM-DD')}
 const AddEarn = ({navigation}) => {
@@ -16,6 +17,7 @@ const AddEarn = ({navigation}) => {
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [details, setDetails] = useState(initalState);
   const [errors,setErrors] = useState({});
+  const [ source,setSource] = useState([])
   const { isLoading } = useSelector(state=> state.account);
   const { colors,dark} = useTheme();
   const backgroundStyle = {
@@ -27,6 +29,20 @@ const AddEarn = ({navigation}) => {
     color: colors.text
   }
 
+  useEffect(()=>{
+    const fetchSource = async()=>{
+      try{
+        const { data } = await axios.get(`${sourceControllerURL}/source`);
+        console.log(data,data.data.map(el=> {return {label:el.sourceName,value:el._id}}));
+        if( data.status ){
+          setSource(data.data.map(el=> {return {label:el.sourceName,value:el._id}}));
+        }
+      }catch(err){
+
+      }
+    }
+    fetchSource()
+  },[])
   const changeHandler = (key, value) => {
     setErrors(updateErrors(errors,key));
     setDetails({ ...details, [key]: value });
@@ -58,6 +74,9 @@ const AddEarn = ({navigation}) => {
     setSelectedDate(date);
     setDetails({ ...details, ["date"]: moment(new Date(date)).format('YYYY-MM-DD')});
   };
+  const selectPickerChangleHandler = () =>{
+
+  }
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={colors.background}></StatusBar>
@@ -81,13 +100,14 @@ const AddEarn = ({navigation}) => {
             helperType={'error'}
           />
         </View>
-        <View>
+      {/*<View>
         <SelectPicker
-            onValueChange={(value) => console.log(value)}
-            items={[
-            ]}
+            onValueChange={selectPickerChangleHandler}
+            placeholder="Source"
+            items={source}
+            icon={"soundcloud"}
         />
-        </View>
+  </View>*/}
         <View>
           <Input
             key={"source"}
