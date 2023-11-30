@@ -76,7 +76,7 @@ exports.loginUser = catchAsync(async (req, res, next) => {
         if (!phone || !password) {
             return next(new AppError('Please fill both Mobile no & password ', 401))
         }
-        const user = await User.findOne({ phone },'name email isActive isGroupIncluded role useId').select('+password');
+        const user = await User.findOne({ phone },'name email isActive isGroupIncluded role userId mobile').select('+password');
 
         if (!user || !(await user.correctPassword(password, user.password))) {
             return next(new AppError('Incorrect user Moble or Password', 401))
@@ -89,7 +89,7 @@ exports.loginUser = catchAsync(async (req, res, next) => {
             return next(new AppError('Please fill both email & password ', 401))
         };
 
-        const user = await User.findOne({ email },'name email isActive isGroupIncluded role useId totalEarn totalExpend groupId').select('+password').populate('totalEarn totalExpend','amount -_id');
+        const user = await User.findOne({ email },'name email isActive isGroupIncluded role userId mobile totalEarn totalExpend groupId').select('+password').populate('totalEarn totalExpend','amount -_id');
 
         if (!user || !(await user.correctPassword(password, user.password))) {
             return next(new AppError('Incorrect user email or password', 401))

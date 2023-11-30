@@ -6,8 +6,8 @@ import { ActivityIndicator, TextInput, useTheme } from 'react-native-paper';
 import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { defaultStyle } from '../../Utils';
 import { verifyUserOTP } from '../../Redux/Action/userAction';
-//{ navigation, route: { params: { emailAddress } } }
-const OtpVerification = () => {
+
+const OtpVerification = ({ navigation, route: { params: { emailAddress } } }) => {
   const [detail, setDetail] = useState({});
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
@@ -17,6 +17,7 @@ const OtpVerification = () => {
     backgroundColor: colors.background,
     color: colors.text
   };
+  console.log(emailAddress);
   const changeHandler = (key, value) => {
     updateErrors(errors, key);
     setDetail({ ...detail, [key]: value });
@@ -28,7 +29,7 @@ const OtpVerification = () => {
       setErrors(validation.error);
       if (validation.valid) {
         let OTP = Object.values(detail).join('')
-        dispatch(verifyUserOTP(OTP,{email:user?.email}));
+        dispatch(verifyUserOTP(OTP,{email:user?.email},navigation));
       }
     } catch (err) {
       showAlert(err);

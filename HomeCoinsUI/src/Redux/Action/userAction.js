@@ -8,11 +8,11 @@ export const loging = (userDetails,navigation) => async(dispatch) =>{
         dispatch({type:USER_REQUIEST});
         const { data } = await axios.post(`${userControllerURL}/loginUser`, userDetails, getAxiosHeaderWithoutCookie());
         if(data){
-            await AsyncStorage.setItem('cookie',data.token);
-            await AsyncStorage.setItem('user',JSON.stringify(data.data.user));
-            await AsyncStorage.setItem('isGroupIncluded',`${data.data.user.isGroupIncluded}`)
+            // await AsyncStorage.setItem('cookie',data.token);
+            // await AsyncStorage.setItem('user',JSON.stringify(data.data.user));
+            // await AsyncStorage.setItem('isGroupIncluded',`${data.data.user.isGroupIncluded}`)
+            await AsyncStorage.multiSet([['cookie',data.token], ['user',JSON.stringify(data.data.user)], ['isGroupIncluded',`${data.data.user.isGroupIncluded}`],['isActive',`${data.data.user.isActive}`] ])
             dispatch({type:USER_SUCCCESS,payload:data.data.user});
-            
         };
     }catch(err){
         if(err.response){

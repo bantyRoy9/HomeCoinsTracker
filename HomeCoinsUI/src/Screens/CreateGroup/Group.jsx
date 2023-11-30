@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View,Pressable } from 'react-native'
-import React,{ useState } from 'react'
+import React,{ useState,useEffect } from 'react'
 import { Input } from '../../Components'
 import { useDispatch, useSelector } from 'react-redux';
 import { ActivityIndicator } from 'react-native-paper';
@@ -14,6 +14,14 @@ const Group = ({ pageName,colors }) => {
     const dispatch = useDispatch();
     const { user } = useSelector(state=>state.user);
     const { isLoading } = useSelector(state=>state.group);
+
+    useEffect(()=>{
+      console.log(user);
+      if(!user.isActive){
+        let result = showAlert("Need to verify your email");
+        console.log(result);
+      }
+    },[]);
     const changeHandler=(key,value)=>{
         updateErrors(errors,key);
         setDetail({...detail,[key]: value});
