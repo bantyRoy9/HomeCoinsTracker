@@ -6,9 +6,9 @@ import { ActivityIndicator } from 'react-native-paper';
 import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { createGroupAndRequest } from '../../Redux/Action/groupAction';
 import { useNavigation } from '@react-navigation/native';
-const Group = ({ pageName,colors }) => {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const Group = ({navigation,pageName,colors }) => {
     let fields = pageName == "CreateNewGroup" ? "name" : "email";
-    const navigation = useNavigation();
     const [detail,setDetail]=useState({[fields]:""});
     const [errors,setErrors]=useState({});
     const dispatch = useDispatch();
@@ -16,11 +16,15 @@ const Group = ({ pageName,colors }) => {
     const { isLoading } = useSelector(state=>state.group);
 
     useEffect(()=>{
-      console.log(user);
-      if(!user.isActive){
-        let result = showAlert("Need to verify your email");
-        console.log(result);
-      }
+      const fetchUser = async()=>{
+        let userDetail = await AsyncStorage.multiGet(["userEmail","isActive"]);
+        if(userDetail[1][1]?.toLowerCase?.() === 'false'){ 
+          navigation.navigate('OtpVerification',{email:userDetail[0][1]});
+        }else{
+          navigation.navigate(pageName);
+        }
+      };
+      fetchUser()
     },[]);
     const changeHandler=(key,value)=>{
         updateErrors(errors,key);

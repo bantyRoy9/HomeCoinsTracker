@@ -7,7 +7,7 @@ import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFun
 import { defaultStyle } from '../../Utils';
 import { verifyUserOTP } from '../../Redux/Action/userAction';
 
-const OtpVerification = ({ navigation, route: { params: { emailAddress } } }) => {
+const OtpVerification = ({ navigation, route: { params: { email } } }) => {
   const [detail, setDetail] = useState({});
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
@@ -17,7 +17,6 @@ const OtpVerification = ({ navigation, route: { params: { emailAddress } } }) =>
     backgroundColor: colors.background,
     color: colors.text
   };
-  console.log(emailAddress);
   const changeHandler = (key, value) => {
     updateErrors(errors, key);
     setDetail({ ...detail, [key]: value });
@@ -29,7 +28,7 @@ const OtpVerification = ({ navigation, route: { params: { emailAddress } } }) =>
       setErrors(validation.error);
       if (validation.valid) {
         let OTP = Object.values(detail).join('')
-        dispatch(verifyUserOTP(OTP,{email:user?.email},navigation));
+        dispatch(verifyUserOTP(OTP,{email},navigation));
       }
     } catch (err) {
       showAlert(err);

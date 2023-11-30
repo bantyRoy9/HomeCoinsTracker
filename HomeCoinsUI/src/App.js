@@ -23,18 +23,19 @@ function App() {
   const [userDetails, setUserDetails] = useState({});
   const { user } = useSelector(state=>state.user)
   useEffect(() => {
-    const fetchUserDetail = async () => {
-      let cookie = await AsyncStorage.getItem('cookie');
-      let isGroupIncluded = JSON.parse(await AsyncStorage.getItem("isGroupIncluded"));
-      let isActive = JSON.parse(await AsyncStorage.getItem("isActive"));
-      setUserDetails({ cookie, isGroupIncluded,isActive });
-    };
-    fetchUserDetail();
+    if(Object.keys(user).length){
+      setUserDetails({...userDetails,isGroupIncluded:user.user.isGroupIncluded,isActive:user.user.isActive });
+    }else{
+      fetchUserDetail();
+    }
     setTimeout(()=>{
       SplashScreen.hide();
     },500);
   }, [user]);
-  console.log(userDetails);
+  const fetchUserDetail = async () => {
+    let userDetail = await AsyncStorage.multiGet(["cookie","isGroupIncluded","isActive"]);
+    setUserDetails({ cookie:userDetail[0][1], isGroupIncluded:userDetail[1][1]?.toLowerCase?.() === 'true',isActive:userDetail[2][1]?.toLowerCase?.() === 'true' });
+  };
   const navigationOptions = {
     headerTintColor: colors.text,
     headerStyle: {
