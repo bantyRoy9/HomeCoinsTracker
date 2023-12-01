@@ -4,34 +4,35 @@
  */
 import React, { useEffect, useState } from 'react';
 import { Pressable, TouchableOpacity, View } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useDispatch, useSelector } from 'react-redux';
-import { getMe } from './Redux/Action/userAction';
 import { Activity, AddEarn, AddExpend, CreateGroup, EditProfile, Home, Login, Members, Profile, Signup } from './Screens';
 import { FontAwesome, FontAwesome5 } from './Utils';
 import { useTheme } from 'react-native-paper';
 import OtpVerification from './Screens/Users/OtpVerification';
-import { fetchUserDetail } from './Utils/CommonAuthFunction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { USER_SUCCCESS } from './Redux/constants';
 import SplashScreen from 'react-native-splash-screen';
+import { useSelector } from 'react-redux';
 function App() {
   const Stack = createNativeStackNavigator();
   const { colors } = useTheme();
-  const dispatch = useDispatch();
   const [userDetails, setUserDetails] = useState({});
   const { user } = useSelector(state=>state.user)
   useEffect(() => {
-    const fetchUserDetail = async () => {
-      let cookie = await AsyncStorage.getItem('cookie');
-      let isGroupIncluded = await AsyncStorage.getItem("isGroupIncluded");
-      setUserDetails({ cookie, isGroupIncluded });
-      SplashScreen.hide();
-    };
+    console.log(user);
+    if(user && Object.keys(user).length){
+      setUserDetails({...userDetails,isGroupIncluded:user.isGroupIncluded,isActive:user.isActive });
+    }else{
+    }
     fetchUserDetail();
-
+    setTimeout(()=>{
+      SplashScreen.hide();
+    },500);
   }, [user]);
+  const fetchUserDetail = async () => {
+    let userDetail = await AsyncStorage.multiGet(["cookie","isGroupIncluded","isActive"]);
+    setUserDetails({ cookie:userDetail[0][1], isGroupIncluded:userDetail[1][1]?.toLowerCase?.() === 'true',isActive:userDetail[2][1]?.toLowerCase?.() === 'true' });
+  };
   console.log(userDetails);
   const navigationOptions = {
     headerTintColor: colors.text,

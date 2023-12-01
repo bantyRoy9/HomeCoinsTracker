@@ -8,11 +8,9 @@ export const loging = (userDetails,navigation) => async(dispatch) =>{
         dispatch({type:USER_REQUIEST});
         const { data } = await axios.post(`${userControllerURL}/loginUser`, userDetails, getAxiosHeaderWithoutCookie());
         if(data){
-            await AsyncStorage.setItem('cookie',data.token);
-            await AsyncStorage.setItem('user',JSON.stringify(data.data.user));
-            await AsyncStorage.setItem('isGroupIncluded',`${data.data.user.isGroupIncluded}`)
-            dispatch({type:USER_SUCCCESS,payload:data.data.user});
-            
+            await AsyncStorage.multiSet([['userEmail',data.data.user.email],['cookie',data.token], ['user',JSON.stringify(data.data.user)], ['isGroupIncluded',`${data.data.user.isGroupIncluded}`],['isActive',`${data.data.user.isActive}`] ],()=>{
+                dispatch({type:USER_SUCCCESS,payload:data.data.user});
+            })
         };
     }catch(err){
         if(err.response){
@@ -27,8 +25,7 @@ export const loging = (userDetails,navigation) => async(dispatch) =>{
 export const logoutUser = (navigation) => async(dispatch)=>{
     try{
         dispatch({type:USER_REQUIEST});
-        await AsyncStorage.removeItem('cookie');
-        await AsyncStorage.removeItem('isGroupIncluded');
+        await AsyncStorage.clear();
         dispatch({type:USER_LOGOUT_SUCCCESS,payload:{}});
     }catch(err){
         dispatch({type:USER_FAIL,payload:null});
@@ -88,8 +85,11 @@ export const forgotPassword = (user) => async(dispatch)=>{
 export const verifyUserOTP = (OTP,user)=>async(dispatch) =>{
     try{
         dispatch({type:USER_REGISTER_REQUIEST});
-        const { data } = await axios.post(`${userControllerURL}/verifyUserOtp/${OTP}`,user);
-        dispatch({type:USER_REGISTER_SUCCESS,payload:data.data})
+        // const { data } = await axios.post(`${userControllerURL}/verifyUserOtp/${OTP}`,user);
+        // if(data.status){
+            await AsyncStorage.setItem("isActive","true");
+            // dispatch({type:USER_REGISTER_SUCCESS,payload:data.data})
+        // }
     }catch(err){
         showAlert(err.response.data.msg)
         dispatch({type:USER_REGISTER_FAIL,payload:null})
