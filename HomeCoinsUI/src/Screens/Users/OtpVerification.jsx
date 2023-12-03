@@ -33,7 +33,10 @@ const OtpVerification = ({ navigation, route: { params: { email } } }) => {
     } catch (err) {
       showAlert(err);
     }
-  }
+  };
+  const resendOTPBtn = () =>{
+
+  };
   const btnStyle = {
     backgroundColor: colors.btnBackground,
     color: colors.text
@@ -107,7 +110,10 @@ const OtpVerification = ({ navigation, route: { params: { email } } }) => {
           />
         </View>
         <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} >
-          <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'small'} color={colors.text}/> : "VERIFY"}</Text>
+          <Text style={styles.text}>{isLoading ? <ActivityIndicator size={'small'} color={colors.text}/> : "VERIFY"}</Text>
+        </Pressable>
+        <Pressable style={{ ...styles.resendBtn }} onPress={resendOTPBtn}>
+          <Text style={{ ...styles.text,borderBottomWidth:1,borderBottomColor:btnStyle.backgroundColor,color:btnStyle.backgroundColor }}>Resend OTP</Text>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -117,12 +123,14 @@ export default OtpVerification
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    justifyContent: 'center',
     paddingVertical: 16,
-    paddingHorizontal: 32,
     borderRadius: 10,
-    width: "100%",
-    marginVertical: 15
+    marginVertical: 20
+  },
+  resendBtn:{
+    alignItems: 'center',
+    paddingVertical: 0,
+    marginVertical: 10
   },
   text: {
     fontSize: 16,

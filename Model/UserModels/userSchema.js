@@ -103,7 +103,7 @@ userSchema.methods.createPasswordResetToken = function(){
 userSchema.methods.createVerifyUserOtp = function(){
     const verifyUserOtp = generateOTP();
     this.verifyUserOtp = verifyUserOtp;
-    this.verifyUserOtpExpire = Date.now() + 10*60*60*1000;
+    this.verifyUserOtpExpire = Date.now() + 10*60*1000;
     return verifyUserOtp;
 };
 

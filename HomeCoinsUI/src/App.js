@@ -17,23 +17,22 @@ function App() {
   const Stack = createNativeStackNavigator();
   const { colors } = useTheme();
   const [userDetails, setUserDetails] = useState({});
-  const { user } = useSelector(state=>state.user)
+  const { user } = useSelector(state=>state.user);
+  const { group } = useSelector(state=>state.group);
   useEffect(() => {
-    console.log(user);
     if(user && Object.keys(user).length){
       setUserDetails({...userDetails,isGroupIncluded:user.isGroupIncluded,isActive:user.isActive });
-    }else{
-    }
+    };
     fetchUserDetail();
     setTimeout(()=>{
       SplashScreen.hide();
     },500);
-  }, [user]);
+  }, [user,group]);
   const fetchUserDetail = async () => {
     let userDetail = await AsyncStorage.multiGet(["cookie","isGroupIncluded","isActive"]);
     setUserDetails({ cookie:userDetail[0][1], isGroupIncluded:userDetail[1][1]?.toLowerCase?.() === 'true',isActive:userDetail[2][1]?.toLowerCase?.() === 'true' });
   };
-  console.log(userDetails);
+  console.log(group);
   const navigationOptions = {
     headerTintColor: colors.text,
     headerStyle: {

@@ -37,7 +37,6 @@ const Group = ({navigation,pageName,colors }) => {
             setErrors(validation.error);
             if(validation.valid){
                 dispatch(createGroupAndRequest(detail,fields=="email"?user.id:""));
-                navigation.navigate('CreateGroup');   
             }
         }catch(err){
             showAlert(err);
