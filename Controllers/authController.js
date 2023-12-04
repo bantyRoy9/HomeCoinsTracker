@@ -11,7 +11,7 @@ const { removeWhiteSpace } = require('../Utils/commonFunction');
 const generateOTP = catchAsync(async(userModal,res,data) =>{
     const verifyUserOtp = userModal.createVerifyUserOtp();
     await userModal.save({ validateBeforeSave: false });
-   // await new Email(userModal, verifyUserOtp).sendOTPEmail('Verify User Email (OTP)','activate your HomeCoinsTracker Account, please verify your email address. Your account will not be created until your email address is confirmed.');
+    await new Email(userModal, verifyUserOtp).sendOTPEmail('Verify User Email (OTP)','activate your HomeCoinsTracker Account, please verify your email address. Your account will not be created until your email address is confirmed.');
     this.responseSend(res,200,true,data,"OTP sended to your registed email.");
 });
 const signToken = id => {
@@ -208,11 +208,10 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 });
 
 exports.sendOTP = catchAsync(async(req,res,next)=>{
-    console.log(new Date(req.user?.verifyUserOtpExpire).setHours(0,0,0) , Date.now());
     if(new Date(req.user?.verifyUserOtpExpire).setHours(0,0,0) > Date.now()){
         return next(new AppError('OTP Already sended. Please check your registed email',400))
     };
-   // generateOTP(req.user,res);
+    generateOTP(req.user,res);
 });
 
 exports.responseSend = async(res,statusCode,status,data,msg)=>{

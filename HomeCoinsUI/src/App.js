@@ -6,10 +6,9 @@ import React, { useEffect, useState } from 'react';
 import { Pressable, TouchableOpacity, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Activity, AddEarn, AddExpend, CreateGroup, EditProfile, Home, Login, Members, Profile, Signup } from './Screens';
+import { Activity, AddEarn, AddExpend, CreateGroup, EditProfile, Home, Login, Members, Profile, Signup,OtpVerification } from './Screens';
 import { FontAwesome, FontAwesome5 } from './Utils';
 import { useTheme } from 'react-native-paper';
-import OtpVerification from './Screens/Users/OtpVerification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SplashScreen from 'react-native-splash-screen';
 import { useSelector } from 'react-redux';
@@ -32,7 +31,6 @@ function App() {
     let userDetail = await AsyncStorage.multiGet(["cookie","isGroupIncluded","isActive"]);
     setUserDetails({ cookie:userDetail[0][1], isGroupIncluded:userDetail[1][1]?.toLowerCase?.() === 'true',isActive:userDetail[2][1]?.toLowerCase?.() === 'true' });
   };
-  console.log(group);
   const navigationOptions = {
     headerTintColor: colors.text,
     headerStyle: {

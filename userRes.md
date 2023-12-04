@@ -1,0 +1,21 @@
+# user details response
+{
+    status:true,
+    msg:"",
+    length:"",
+    token:"",
+    data:{
+        user:{
+            name:"",
+            email:"",
+            isActive:"", 
+            isGroupIncluded:"",
+            role:"",
+            userId:"",
+            mobile:"",
+            totalEarn:"",
+            totalExpend:"",
+            groupId:""
+        }
+    }
+};

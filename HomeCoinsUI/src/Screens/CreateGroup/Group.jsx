@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ActivityIndicator } from 'react-native-paper';
 import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { createGroupAndRequest } from '../../Redux/Action/groupAction';
-import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const Group = ({navigation,pageName,colors }) => {
     let fields = pageName == "CreateNewGroup" ? "name" : "email";
     const [detail,setDetail]=useState({[fields]:""});
@@ -14,7 +14,6 @@ const Group = ({navigation,pageName,colors }) => {
     const dispatch = useDispatch();
     const { user } = useSelector(state=>state.user);
     const { isLoading } = useSelector(state=>state.group);
-
     useEffect(()=>{
       const fetchUser = async()=>{
         let userDetail = await AsyncStorage.multiGet(["userEmail","isActive"]);
@@ -36,7 +35,7 @@ const Group = ({navigation,pageName,colors }) => {
             const validation = validateForm(detail);
             setErrors(validation.error);
             if(validation.valid){
-                dispatch(createGroupAndRequest(detail,fields=="email"?user.id:""));
+                dispatch(createGroupAndRequest(detail,fields=="email"?user.id:"",navigation));
             }
         }catch(err){
             showAlert(err);
