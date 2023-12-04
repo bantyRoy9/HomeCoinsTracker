@@ -29,7 +29,7 @@ exports.addMemberRequest = catchAsync(async (req, res, next) => {
         const addMemberUser = await User.findOne({ email: req.body.email });
         if (!addMemberUser) return next(new AppError('User not registered to HomecoinsTracker', 400));
 
-        if (req.user.email == req.body.email) return next(new AppError("Not Allow!, User cann't add it self Try another email", 400));
+        if (req.user.email == req.body.email) return next(new AppError("Not Allow!, User cann't add it self. Try another email", 400));
         if (!addMemberUser.isGroupIncluded) return next(new AppError('User Not Found Any Group', 401));
 
         const group = await GroupModels.findOne({ _id: addMemberUser.groupId });
@@ -40,7 +40,7 @@ exports.addMemberRequest = catchAsync(async (req, res, next) => {
         await req.user.save({ validateBeforeSave: false });
         const verifyURL = `${req.protocol}://${req.get('host')}/api/v1/groupController/verifyUser/${verifyToken},${addMemberUser.groupId},${req.user.id}`;
 
-        await new Email(addMemberUser, verifyURL).sendUrlEmail('Send User Add Request','');
+        await new Email(addMemberUser, verifyURL).sendUrlEmail('Add Request by user',`This user "${req.user.email}" wants to add your group. if you want to add, please click bellow link otherwise ignore it.`);
         responseSend(res, 200, true,{},"Request sended to group admin");
     } else {
         return next(new AppError('User already exist in another group', 406));

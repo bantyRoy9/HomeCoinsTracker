@@ -6,54 +6,43 @@ const jwt = require('jsonwebtoken')
 const catchAsync = require('../Utils/catchAsync');
 const Email = require('../Utils/Email');
 const SendSMS = require('../Utils/SendSMS');
+const { removeWhiteSpace } = require('../Utils/commonFunction');
 
-
+const generateOTP = catchAsync(async(userModal,res,data) =>{
+    const verifyUserOtp = userModal.createVerifyUserOtp();
+    await userModal.save({ validateBeforeSave: false });
+    await new Email(userModal, verifyUserOtp).sendOTPEmail('Verify User Email (OTP)','activate your HomeCoinsTracker Account, please verify your email address. Your account will not be created until your email address is confirmed.');
+    this.responseSend(res,200,true,data,"OTP sended to your registed email.");
+});
 const signToken = id => {
-    return jwt.sign({ id }, process.env.jwt_secret, {
-        expiresIn: process.env.jwt_expire
-    })
-}
-
+    return jwt.sign({ id }, process.env.jwt_secret, {expiresIn: process.env.jwt_expire});
+};
 const createSendToken = (user, statusCode, res) => {
     const token = signToken(user._id);
     const tokenOptions = {
         expires: new Date(Date.now() + process.env.jwt_cookie_expire * 24 * 60 * 60 * 1000),
         // secure:true,
         httpOnly: true
-    }
+    };
     // if(provess.env.NODE_ENV ==='production') cookieOptions.secure = true 
     res.cookie('jwt', token, tokenOptions)
     user.password = undefined;
+    //this.responseSend(res,statusCode,true,{token,user},"")
     res.status(statusCode).json({
         status: 'success',
         token,
         data: {
             user
         }
-    })
+    });
 };
 
 exports.sendCreateUserOtp = catchAsync(async(req,res,next)=>{
+    req.body['email'] = removeWhiteSpace(req.body.email,'L');
     const user = await User.find({email:req.body.email});
     if(user.length) return next(new AppError('User already existed!',406));
     const newUser = await User.create(req.body);
-    let URL = `${req.protocol}://${req.get('host')}/me`;
-    const verifyUserOtp = newUser.createVerifyUserOtp();
-    await newUser.save({ validateBeforeSave: false })
-   // await new Email(newUser, URL).sendWelcome();
-    await new Email(newUser, verifyUserOtp).sendOTPEmail('Verify User Email (OTP)','activate your HomeCoinsTracker Account, please verify your email address. Your account will not be created until your email address is confirmed.');
-    res.status(200).json({
-        status:true,
-        msg:'OTP has sended to your registed email address.',
-        data:{
-            user:{
-                name:newUser.name,
-                isActive:newUser.isActive,
-                email:newUser.email,
-                isGroupIncluded:newUser.isGroupIncluded
-            }
-        }
-    });
+    generateOTP(newUser,res);
 });
 
 exports.createrUser = catchAsync(async (req, res, next) => {
@@ -65,40 +54,30 @@ exports.createrUser = catchAsync(async (req, res, next) => {
     user.verifyUserOtp=undefined;
     user.verifyUserOtpExpire=undefined;
     user.isActive = true;
-    await user.save();
-    createSendToken(user, 201, res)
-})
+    createSendToken(user, 201, res);
+});
  
 exports.loginUser = catchAsync(async (req, res, next) => {
     const { email, password, phone } = req.body;
-    // loging with phone
     if (!Object.keys(req.body).includes('email')) {
         if (!phone || !password) {
-            return next(new AppError('Please fill both Mobile no & password ', 401))
-        }
+            return next(new AppError('Please fill both Mobile no & password ', 401));
+        };
         const user = await User.findOne({ phone },'name email isActive isGroupIncluded role userId mobile').select('+password');
-
         if (!user || !(await user.correctPassword(password, user.password))) {
-            return next(new AppError('Incorrect user Moble or Password', 401))
-        }
-
+            return next(new AppError('Incorrect user Moble or Password', 401));
+        };
         createSendToken(user, 200, res);
     } else {
-
         if (!email || !password) {
-            return next(new AppError('Please fill both email & password ', 401))
+            return next(new AppError('Please fill both email & password ', 401));
         };
-
         const user = await User.findOne({ email },'name email isActive isGroupIncluded role userId mobile totalEarn totalExpend groupId').select('+password').populate('totalEarn totalExpend','amount -_id');
-
         if (!user || !(await user.correctPassword(password, user.password))) {
-            return next(new AppError('Incorrect user email or password', 401))
-        }
-
+            return next(new AppError('Incorrect user email or password', 401));
+        };
         createSendToken(user, 200, res);
-
-    }
-
+    };
 });
 
 exports.logout = async (req, res, next) => {
@@ -113,63 +92,59 @@ exports.protect = catchAsync(async (req, res, next) => {
     let token;
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
-    }
-    else if (req.headers.cookie && req.headers.cookie.startsWith('jwt')) {
+    }else if (req.headers.cookie && req.headers.cookie.startsWith('jwt')) {
         token = req.headers.cookie.split('=')[1];
-    }
+    };
     if (!token) {
-        return next(new AppError('you are not login! please Login', 401))
-    }
-
+        return next(new AppError('you are not login! please Login', 401));
+    };
     const decoder = await promisify(jwt.verify)(token, process.env.jwt_secret);
-    const currentUser = await User.findById(decoder.id)
+    const currentUser = await User.findById(decoder.id);
     if (!currentUser) {
-        return next(new AppError('The user belongs to this Id token is no longer exist', 401))
-    }
-
+        return next(new AppError('The user belongs to this Id token is no longer exist', 401));
+    };
     // iat is key of decoder object which show time in ms
     if (currentUser.changePasswordAfter(decoder.iat)) {
-        return next(new AppError('User recently changed password! please login again!!', 401))
-    }
-    
-    req.user = currentUser
+        return next(new AppError('User recently changed password! please login again!!', 401));
+    };
+    req.user = currentUser;
     // send data into pug
-    res.locals.user = currentUser;
+    //res.locals.user = currentUser;
     next();
-})
+});
 
 
 exports.isLoggedIn = async (req, res, next) => {
     let token;
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
-    }
-    else if (req.headers.cookie && req.headers.cookie.startsWith('jwt')) {
+    }else if (req.headers.cookie && req.headers.cookie.startsWith('jwt')) {
         token = req.headers.cookie.split('=')[1];
-    }
+    };
     if (!token) {
-        return next(new AppError('you are not login! please Login', 401))
-    }
+        return next(new AppError('you are not login! please Login', 401));
+    };
     const decoder = await promisify(jwt.verify)(req.cookies.jwt, process.env.jwt_secret);
-    const currentUser = await User.findById(decoder.id)
+    const currentUser = await User.findById(decoder.id);
     if (!currentUser) {
-        return next(new AppError('The user belongs to this Id token is no longer exist', 401))
-    }
+        return next(new AppError('The user belongs to this Id token is no longer exist', 401));
+    };
     if (currentUser.changePasswordAfter(decoder.iat)) {
-        return next(new AppError('User recently changed password! please login again!!', 401))
-    }
-    res.user = currentUser
+        return next(new AppError('User recently changed password! please login again!!', 401));
+    };
+    res.user = currentUser;
     next();
 };
 
 exports.restrictTo = (...role) => {
     return (req, res, next) => {
         if (!role.includes(req.user.role)) {
-            return next(new AppError('You do not have permission to perform this action', 403))
-        }
+            return next(new AppError('You do not have permission to perform this action', 403));
+        };
         next();
-    }
+    };
 };
+
 exports.setUserAndGroupId = (keyName) => async(req,res,next)=>{
     const keyNames = keyName.split(',');
     if(keyNames && keyNames.length>0){
@@ -178,33 +153,29 @@ exports.setUserAndGroupId = (keyName) => async(req,res,next)=>{
         });
     };
     if(!req.user.isGroupIncluded) return next(new AppError('User not exist any group',404));
-    req.body['groupId'] = req.user.groupId
+    req.body['groupId'] = req.user.groupId;
     next();
 };
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
-        return next(new AppError('User Email is Not Found', 404))
+        return next(new AppError('User Email is Not Found', 404));
     };
     const resetToken = user.createPasswordResetToken();
-    await user.save({ validateBeforeSave: false })
+    await user.save({ validateBeforeSave: false });
     try {
         // const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`
         const resetURL = resetToken
         await new Email(user, resetURL).sendOTPEmail('HomeCoinsTracker account password reset',`Please use this code to reset the password for the HomeCoinsTracker account ${req.body.email.substring(0,4)}**@gmail.com.`);
         //await new SendSMS(user,resetURL).resetPassword();
-
-        res.status(200).json({
-            status: 'success',
-            message: 'verification code send to your registerd mobile or email!!'
-        })
+        this.responseSend(res,200,true,"","verification code send to your registerd mobile or email!!");
     } catch (err) {
         user.passwordResetToken = undefined,
         user.passwordResetExpire = undefined;
-        await user.save({ validateBeforeSave: false })
+        await user.save({ validateBeforeSave: false });
         return next(new AppError('There was an Error sending the email. Try again later ', 500))
-    }
+    };
 })
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
@@ -234,6 +205,13 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
     await user.save();
 
     createSendToken(user, 200, res);
+});
+
+exports.sendOTP = catchAsync(async(req,res,next)=>{
+    if(new Date(req.user?.verifyUserOtpExpire).setHours(0,0,0) > Date.now()){
+        return next(new AppError('OTP Already sended. Please check your registed email',400))
+    };
+    generateOTP(req.user,res);
 });
 
 exports.responseSend = async(res,statusCode,status,data,msg)=>{

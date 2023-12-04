@@ -6,10 +6,9 @@ import React, { useEffect, useState } from 'react';
 import { Pressable, TouchableOpacity, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Activity, AddEarn, AddExpend, CreateGroup, EditProfile, Home, Login, Members, Profile, Signup } from './Screens';
+import { Activity, AddEarn, AddExpend, CreateGroup, EditProfile, Home, Login, Members, Profile, Signup,OtpVerification } from './Screens';
 import { FontAwesome, FontAwesome5 } from './Utils';
 import { useTheme } from 'react-native-paper';
-import OtpVerification from './Screens/Users/OtpVerification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SplashScreen from 'react-native-splash-screen';
 import { useSelector } from 'react-redux';
@@ -17,23 +16,21 @@ function App() {
   const Stack = createNativeStackNavigator();
   const { colors } = useTheme();
   const [userDetails, setUserDetails] = useState({});
-  const { user } = useSelector(state=>state.user)
+  const { user } = useSelector(state=>state.user);
+  const { group } = useSelector(state=>state.group);
   useEffect(() => {
-    console.log(user);
     if(user && Object.keys(user).length){
       setUserDetails({...userDetails,isGroupIncluded:user.isGroupIncluded,isActive:user.isActive });
-    }else{
-    }
+    };
     fetchUserDetail();
     setTimeout(()=>{
       SplashScreen.hide();
     },500);
-  }, [user]);
+  }, [user,group]);
   const fetchUserDetail = async () => {
     let userDetail = await AsyncStorage.multiGet(["cookie","isGroupIncluded","isActive"]);
     setUserDetails({ cookie:userDetail[0][1], isGroupIncluded:userDetail[1][1]?.toLowerCase?.() === 'true',isActive:userDetail[2][1]?.toLowerCase?.() === 'true' });
   };
-  console.log(userDetails);
   const navigationOptions = {
     headerTintColor: colors.text,
     headerStyle: {

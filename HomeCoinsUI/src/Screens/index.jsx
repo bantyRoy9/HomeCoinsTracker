@@ -9,5 +9,6 @@ import Activity from "./Activity/Activity";
 import AddEarn from "./AddEarnExpens/AddEarn";
 import AddExpend from "./AddEarnExpens/AddExpend";
 import CreateGroup from "./CreateGroup/CreateGroup";
+import OtpVerification from "./Users/OtpVerification";
 
-export { EditProfile, Login, Profile, Signup,Home,Members,Activity,AddEarn,AddExpend,CreateGroup}
+export { EditProfile, Login, Profile, Signup,Home,Members,Activity,AddEarn,AddExpend,CreateGroup,OtpVerification}

@@ -71,4 +71,9 @@ exports.sortArrayDataByDate = (data,keyName)=>{
         return 0
     });
     return data
+};
+
+exports.removeWhiteSpace = (str,toTransform) =>{
+    str = str.toString().replace(/\s/g,"");
+    return toTransform == 'U' ? str.toUpperCase() : str.toLowerCase();
 }
