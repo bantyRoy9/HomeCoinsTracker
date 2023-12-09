@@ -59,12 +59,12 @@ exports.createrUser = catchAsync(async (req, res, next) => {
 });
  
 exports.loginUser = catchAsync(async (req, res, next) => {
-    const { email, password, phone } = req.body;
+    const { email, password, mobile } = req.body;
     if (!Object.keys(req.body).includes('email')) {
-        if (!phone || !password) {
+        if (!mobile || !password) {
             return next(new AppError('Please fill both Mobile no & password ', 401));
         };
-        const user = await User.findOne({ phone },'name email isActive isGroupIncluded role userId mobile').select('+password');
+        const user = await User.findOne({ mobile },'name email isActive isGroupIncluded role userId mobile').select('+password');
         if (!user || !(await user.correctPassword(password, user.password))) {
             return next(new AppError('Incorrect user Moble or Password', 401));
         };
