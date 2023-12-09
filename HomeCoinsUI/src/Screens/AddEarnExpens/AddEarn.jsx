@@ -100,14 +100,14 @@ const AddEarn = ({navigation}) => {
             helperType={'error'}
           />
         </View>
-      {/*<View>
+      <View>
         <SelectPicker
             onValueChange={selectPickerChangleHandler}
             placeholder="Source"
             items={source}
             icon={"soundcloud"}
         />
-  </View>*/}
+  </View>
         <View>
           <Input
             key={"source"}
