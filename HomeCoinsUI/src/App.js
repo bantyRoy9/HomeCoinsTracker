@@ -3,15 +3,15 @@
  * @BANTI
  */
 import React, { useEffect, useState } from 'react';
-import { Pressable, TouchableOpacity, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { Pressable, TouchableOpacity, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SplashScreen from 'react-native-splash-screen';
+import { useTheme } from 'react-native-paper';
+import { useSelector } from 'react-redux';
 import { Activity, AddEarn, AddExpend, CreateGroup, EditProfile, Home, Login, Members, Profile, Signup,OtpVerification } from './Screens';
 import { FontAwesome, FontAwesome5 } from './Utils';
-import { useTheme } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import SplashScreen from 'react-native-splash-screen';
-import { useSelector } from 'react-redux';
 function App() {
   const Stack = createNativeStackNavigator();
   const { colors } = useTheme();

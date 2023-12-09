@@ -54,6 +54,7 @@ exports.createrUser = catchAsync(async (req, res, next) => {
     user.verifyUserOtp=undefined;
     user.verifyUserOtpExpire=undefined;
     user.isActive = true;
+    user.save();
     createSendToken(user, 201, res);
 });
  
