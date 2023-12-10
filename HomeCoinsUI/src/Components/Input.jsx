@@ -25,10 +25,6 @@ const Input = (props) => {
     colors:colors.text
   };
   
-  const first = useRef();
-  const second = useRef();
-  const third = useRef();
-  const forth = useRef();
   return (
     <View style={styles.inputContainer} pointerEvents={props?.pointerEvents}>
       {props.isLabel && <Text style={styles.inputLabel}>{props.label}</Text>}
