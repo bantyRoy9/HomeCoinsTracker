@@ -75,7 +75,7 @@ export const validateForm = (details) => {
     Object.keys(details).forEach((el, idx) => {
       if (!details[el]) {
         valid = false;
-        error[el] = `*Enter ${el} value`
+        error[el] = `*Enter ${el.replace(/([a-z0-9])([A-Z])/g, '$1 $2')}`
       };
     });
   };

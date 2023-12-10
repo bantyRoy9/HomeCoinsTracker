@@ -26,6 +26,10 @@ const Signup = ({ navigation }) => {
   const submitHandler = async (e) => {
     e.preventDefault();
     let validation = validateForm(user);
+    if(user?.confirmPassword !== user?.password){
+      validation.valid=false;
+      validation.error.confirmPassword = "Password and confirm password should be match."
+    };
     setErrors(validation.error);
     if (validation.valid) {
       try {

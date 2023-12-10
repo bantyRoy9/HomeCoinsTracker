@@ -49,10 +49,11 @@ export const getMe = (headers) =>async(dispatch)=>{
 export const createUser =(userDetails,navigation)=> async(dispatch) => {
     try{
         dispatch({type:USER_REGISTER_REQUIEST});
-       const { data } = await axios.post(`${userControllerURL}/createUser`,userDetails,getAxiosHeaderWithoutCookie());
+        const { data } = await axios.post(`${userControllerURL}/createUser`,userDetails,getAxiosHeaderWithoutCookie());
         dispatch({type:USER_REGISTER_SUCCESS,payload:data});
-        navigation.navigate('OtpVerification');
+        navigation.navigate('OtpVerification',{email:userDetails.email});
     }catch(err){
+        showAlert(err?.response.data.msg)
         dispatch({type:USER_REGISTER_FAIL,payload:err?.response.data.msg})
     }
 };
@@ -82,14 +83,17 @@ export const forgotPassword = (user) => async(dispatch)=>{
     }
 };
 
-export const verifyUserOTP = (OTP,user)=>async(dispatch) =>{
+export const verifyUserOTP = (OTP,user,navigation)=>async(dispatch) =>{
     try{
         dispatch({type:USER_REGISTER_REQUIEST});
-        // const { data } = await axios.post(`${userControllerURL}/verifyUserOtp/${OTP}`,user);
-        // if(data.status){
-            await AsyncStorage.setItem("isActive","true");
-            // dispatch({type:USER_REGISTER_SUCCESS,payload:data.data})
-        // }
+        console.log(`${userControllerURL}/verifyUserOtp/${OTP}`,user,"working");
+        const { data } = await axios.post(`${userControllerURL}/verifyUserOtp/${OTP}`,user);
+        if(data){
+            await AsyncStorage.multiSet([['userEmail',data.data.user.email],['cookie',data.token], ['user',JSON.stringify(data.data.user)], ['isGroupIncluded',`${data.data.user.isGroupIncluded}`],['isActive',`${data.data.user.isActive}`] ],()=>{
+                navigation.navigate("Login")
+                dispatch({type:USER_REGISTER_SUCCESS,payload:data.data.user});
+            })
+        };
     }catch(err){
         showAlert(err.response.data.msg)
         dispatch({type:USER_REGISTER_FAIL,payload:null})
