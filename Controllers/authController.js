@@ -6,13 +6,14 @@ const jwt = require('jsonwebtoken')
 const catchAsync = require('../Utils/catchAsync');
 const Email = require('../Utils/Email');
 const SendSMS = require('../Utils/SendSMS');
-const { removeWhiteSpace } = require('../Utils/commonFunction');
+const { removeWhiteSpace, requiredResponseBody } = require('../Utils/commonFunction');
+const { userBO } = require('../Utils/resonseJSON');
 
 const generateOTP = catchAsync(async(userModal,res,data) =>{
     const verifyUserOtp = userModal.createVerifyUserOtp();
     await userModal.save({ validateBeforeSave: false });
-    await new Email(userModal, verifyUserOtp).sendOTPEmail('Verify User Email (OTP)','activate your HomeCoinsTracker Account, please verify your email address. Your account will not be created until your email address is confirmed.');
-    this.responseSend(res,200,true,data,"OTP sended to your registed email.");
+    await new Email(userModal, verifyUserOtp).sendOTPEmail('Verify User Email (OTP)','Activate your HomeCoinsTracker Account, please verify your email address. Your account will not be created until your email address is confirmed.');
+    this.responseSend(res,201,true,userModal?._doc,"OTP sended to your registed email.",userBO);
 });
 const signToken = id => {
     return jwt.sign({ id }, process.env.jwt_secret, {expiresIn: process.env.jwt_expire});
@@ -27,44 +28,44 @@ const createSendToken = (user, statusCode, res) => {
     // if(provess.env.NODE_ENV ==='production') cookieOptions.secure = true 
     res.cookie('jwt', token, tokenOptions)
     user.password = undefined;
-    //this.responseSend(res,statusCode,true,{token,user},"")
-    res.status(statusCode).json({
-        status: 'success',
-        token,
-        data: {
-            user
-        }
-    });
+    this.responseSend(res,statusCode,true,user._doc,"User verified",userBO,token)
+    // res.status(statusCode).json({
+    //     status: 'success',
+    //     token,
+    //     data: {
+    //         user
+    //     }
+    // });
 };
 
-exports.sendCreateUserOtp = catchAsync(async(req,res,next)=>{
+exports.createUser = catchAsync(async(req,res,next)=>{
     req.body['email'] = removeWhiteSpace(req.body.email,'L');
     const user = await User.find({email:req.body.email});
-    if(user.length) return next(new AppError('User already existed!',406));
+    if(user.length) return next(new AppError('User already exists!',409));
     const newUser = await User.create(req.body);
     generateOTP(newUser,res);
 });
 
-exports.createrUser = catchAsync(async (req, res, next) => {
+exports.verifyCreatedUserOTP = catchAsync(async (req, res, next) => {
     const OTP = req.params.OTP;
-    const user = await User.findOne({email:req.body.email,verifyUserOtp:OTP,verifyUserOtpExpire: { $gt: Date.now() }},'name email isActive isGroupIncluded role useId');
+    const user = await User.findOne({email:req.body.email,verifyUserOtp:OTP,verifyUserOtpExpire: { $gt: Date.now() }});
     if(!user){
         return next(new AppError('OTP has expired or invalid',400));  
     };
     user.verifyUserOtp=undefined;
     user.verifyUserOtpExpire=undefined;
     user.isActive = true;
-    user.save();
-    createSendToken(user, 201, res);
+    await user.save();
+    createSendToken(user, 200, res);
 });
  
 exports.loginUser = catchAsync(async (req, res, next) => {
-    const { email, password, phone } = req.body;
+    const { email, password, mobile } = req.body;
     if (!Object.keys(req.body).includes('email')) {
-        if (!phone || !password) {
+        if (!mobile || !password) {
             return next(new AppError('Please fill both Mobile no & password ', 401));
         };
-        const user = await User.findOne({ phone },'name email isActive isGroupIncluded role userId mobile').select('+password');
+        const user = await User.findOne({ mobile },'name email isActive isGroupIncluded role userId mobile').select('+password');
         if (!user || !(await user.correctPassword(password, user.password))) {
             return next(new AppError('Incorrect user Moble or Password', 401));
         };
@@ -102,7 +103,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     const decoder = await promisify(jwt.verify)(token, process.env.jwt_secret);
     const currentUser = await User.findById(decoder.id);
     if (!currentUser) {
-        return next(new AppError('The user belongs to this Id token is no longer exist', 401));
+        return next(new AppError('The user belongs to this email is no longer exist', 401));
     };
     // iat is key of decoder object which show time in ms
     if (currentUser.changePasswordAfter(decoder.iat)) {
@@ -215,8 +216,10 @@ exports.sendOTP = catchAsync(async(req,res,next)=>{
     generateOTP(req.user,res);
 });
 
-exports.responseSend = async(res,statusCode,status,data,msg)=>{
+exports.responseSend = async(res,statusCode,status,data,msg,DTO,token)=>{
+    if(DTO && DTO.length){data = await requiredResponseBody(data,DTO)};
+    if(token){data = {user:data}}
     res.status(statusCode).json({
-        status,length:data?.length??0,msg,data
+        status,length:data?.length??0,msg,data,token
     });
 };

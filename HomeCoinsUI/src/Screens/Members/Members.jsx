@@ -1,13 +1,13 @@
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View,Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { getAxiosHeaderWithoutCookie } from '../../Utils/CommonAuthFunction';
+import { getAxiosHeader, getAxiosHeaderWithoutCookie } from '../../Utils/CommonAuthFunction';
 import axios from 'axios';
 import { groupControllerURL, userControllerURL } from '../../Utils/URLProperties';
 import { defaultStyle } from '../../Utils/defaultCss';
 import { useTheme } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 
-const Members = ({ navigate }) => {
+const Members = () => {
   const [userList, setUserList] = useState([]);
   const { user } = useSelector(state=>state.user);
   const { colors,dark} = useTheme();
@@ -18,9 +18,11 @@ const Members = ({ navigate }) => {
   useEffect(() => {
     const getUsersList = async () => {
       try {
-        const { data } = await axios.get(`${groupControllerURL}/groupMembers/${user?.groupId}`, getAxiosHeaderWithoutCookie());
+        console.log(user,`${groupControllerURL}/groupMembers/${user?.groupId}`,await getAxiosHeader());
+        const { data } = await axios.get(`${groupControllerURL}/groupMembers/${user?.groupId}`, await getAxiosHeader());
+        console.log(data);
         setUserList(data.data);
-      } catch (err) { }
+      }catch(err){}
     };
     getUsersList();
   }, []);
@@ -32,9 +34,7 @@ const Members = ({ navigate }) => {
           {userList.map((el,idx) => (
             <View key={idx} style={{flexDirection:'row',gap:20}}>
               <View>
-                <Image source={require(`../../../Assets/profiles/default.png`)}
-                  style={{ width: 35, height: 35, borderRadius: 50 }}
-                />
+                <Image source={require(`../../../Assets/profiles/default.png`)} style={{ width: 35, height: 35, borderRadius: 50 }}/>
               </View>
               <View>
               <Text>{el?.name.charAt(0).toUpperCase() + el.name.slice(1)}</Text>

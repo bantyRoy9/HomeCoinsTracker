@@ -8,6 +8,7 @@
     "lint": "eslint .",
     "start": "react-native start",
     "start:prod": "NODE_ENV=production react-native start",
+    "start:dev": "NODE_ENV=development react-native start",
     "test": "jest"
   },
   "dependencies": {

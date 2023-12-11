@@ -1,18 +1,18 @@
 import { StyleSheet, Text, View, Pressable, SafeAreaView, StatusBar } from 'react-native'
-import React, { useState, useRef, useEffect } from 'react'
-import { Input } from '../../Components'
+import React, { useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { ActivityIndicator, TextInput, useTheme } from 'react-native-paper';
-import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
-import { defaultStyle } from '../../Utils';
+import { getAxiosHeader, showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
+import { defaultStyle, userControllerURL } from '../../Utils';
 import { verifyUserOTP } from '../../Redux/Action/userAction';
+import axios from 'axios';
 
 const OtpVerification = ({ navigation, route: { params: { email } } }) => {
   const [detail, setDetail] = useState({});
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const { colors, dark } = useTheme();
-  const { isLoading,user } = useSelector(state => state.user);
+  const { isLoading } = useSelector(state => state.user);
   const backgroundStyle = {
     backgroundColor: colors.background,
     color: colors.text
@@ -34,8 +34,15 @@ const OtpVerification = ({ navigation, route: { params: { email } } }) => {
       showAlert(err);
     }
   };
-  const resendOTPBtn = () =>{
-
+  const resendOTPBtn = async() =>{
+    try{
+      const { data } = await axios.post(`${userControllerURL}/sendOTP`,{email},await getAxiosHeader());
+      if(data && data.status){
+        showAlert(data?.msg);
+      };
+    }catch(err){
+      showAlert(err)
+    }
   };
   const btnStyle = {
     backgroundColor: colors.btnBackground,
@@ -51,7 +58,7 @@ const OtpVerification = ({ navigation, route: { params: { email } } }) => {
       <View style={{ ...defaultStyle.screenContainer, flex: 1 }}>
         <View style={styles.otpHeading}>
           <Text style={[styles.textBold, backgroundStyle]} >OTP Verification</Text>
-          <Text style={[styles.textBold, backgroundStyle]}>Enter the OTP number just sent you at <Text style={{ ...styles.textEmail, color: btnStyle.backgroundColor }}>{user?.email}</Text></Text>
+          <Text style={[styles.textBold, backgroundStyle]}>Enter the OTP number just sent you at <Text style={{ ...styles.textEmail, color: btnStyle.backgroundColor }}>{email}</Text></Text>
         </View>
         <View style={{ flexDirection: 'row', gap: 10, width: '100%', justifyContent: 'space-evenly' }}>
           <TextInput

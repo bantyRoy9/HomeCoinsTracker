@@ -10,25 +10,24 @@ module.exports = class Email {
     }
 
     newTransport() {
-        
-        return nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_FROM,
-                pass: process.env.EMAIL_APP_PASSWORD,
-            }
-        })
-        /*   if (process.env.NODE_DEV == "production") {
-        } else {
+        if(process.env.NODE_DEV == "production"){
             return nodemailer.createTransport({
-                service: process.env.EMAIL_HOST,
-                port: process.env.EMAIL_PORT,
+                service: 'gmail',
                 auth: {
-                    user: process.env.EMAIL_USER,
-                    pass: process.env.EMAIL_PASS
+                    user: process.env.EMAIL_FROM,
+                    pass: process.env.EMAIL_APP_PASSWORD,
                 }
-            })
-         }*/
+            });
+        }else{
+            return nodemailer.createTransport({
+                host: process.env.MAILTRAP_HOST,
+                port: process.env.MAILTRAP_PORT,
+                auth: {
+                  user: process.env.MAILTRAP_USER,
+                  pass: process.env.MAILTRAP_PASS
+                }
+              });
+        };
     };
     async send(template,subject,messageToUser) {
         let html = pug.renderFile(`${__dirname}/Templates/Email/${template}.pug`,{

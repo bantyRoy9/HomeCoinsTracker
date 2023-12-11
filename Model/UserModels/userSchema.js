@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-const otpGenerator = require('otp-generator')
+const otpGenerator = require('otp-generator');
+const { removeWhiteSpace } = require('../../Utils/commonFunction');
 const userSchema = new mongoose.Schema({
     name:{
         type:String,
@@ -76,7 +77,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre('save', async function(next){
-    this.userId = `${this.name}${Math.trunc((Math.random()+1)*10000)}`
+    this.userId = `${removeWhiteSpace(this.name,"L")}${Math.trunc((Math.random()+1)*10000)}`
     if(!this.isModified('password')) return next();
     this.password = await bcrypt.hash(this.password,12)
     this.confirmPassword = undefined;

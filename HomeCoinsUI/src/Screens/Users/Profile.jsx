@@ -37,19 +37,22 @@ const Profile = ({ navigation }) => {
     const dispatch = useDispatch();
     const [userDetails, setUserDetails] = useState({});
     const { colors,dark } = useTheme();
-    const { user } = useSelector(state => state.user);
     const backgroudStyle = {
         backgroundColor: colors.background,
         color: colors.text
     };
     useEffect(() => {
-        if (user) {
-            setUserDetails(user)
-        }
+        const fetchUser = async()=>{
+            let user = await AsyncStorage.getItem("user");
+            console.log(user);
+            if (user) {
+                setUserDetails(JSON.parse(user))
+            }
+        };
+        fetchUser()
     }, []);
 
     const logout = async () => {
-
         dispatch(logoutUser(navigation))
     };
     const onPressprofileNav = (forPress) => {
@@ -89,15 +92,15 @@ const Profile = ({ navigation }) => {
                     <View style={styles.profileAccountDetails}>
                         <View style={styles.profileAccountDetail}>
                             <View style={styles.profileAccountTests}>
-                                <Text style={{ ...styles.profileText, ...styles.profileAccountText,color:colors.text }}>{user?.totalEarn?.reduce((a, b) => a + b?.amount, 0)}</Text>
+                                <Text style={{ ...styles.profileText, ...styles.profileAccountText,color:colors.text }}>{userDetails?.totalEarn?.reduce((a, b) => a + b?.amount, 0)}</Text>
                                 <Text style={{color:colors.text}}>Total Earn</Text>
                             </View>
                             <View style={styles.profileAccountTests}>
-                                <Text style={{ ...styles.profileText, ...styles.profileAccountText,color:colors.text }}>{user?.totalExpend?.reduce((a, b) => a + b?.amount, 0)}</Text>
+                                <Text style={{ ...styles.profileText, ...styles.profileAccountText,color:colors.text }}>{userDetails?.totalExpend?.reduce((a, b) => a + b?.amount, 0)}</Text>
                                 <Text style={{color:colors.text}}>Total Expend</Text>
                             </View>
                             <View style={styles.profileAccountTests}>
-                                <Text style={{ ...styles.profileText, ...styles.profileAccountText,color:colors.text }}>{user?.totalEarn?.reduce((a, b) => a + b?.amount, 0) - user?.totalExpend?.reduce((a, b) => a + b?.amount, 0)}</Text>
+                                <Text style={{ ...styles.profileText, ...styles.profileAccountText,color:colors.text }}>{userDetails?.totalEarn?.reduce((a, b) => a + b?.amount, 0) - userDetails?.totalExpend?.reduce((a, b) => a + b?.amount, 0)}</Text>
                                 <Text style={{color:colors.text}}>Total Savings</Text>
                             </View>
                         </View>

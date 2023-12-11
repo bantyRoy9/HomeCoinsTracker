@@ -10,7 +10,7 @@ export const createGroupAndRequest = (detail,userId,navigation)=> async(dispatch
         const { data } = await axios.post(`${groupControllerURL}/group/${userId}`,detail,await getAxiosHeader());
         if(data && data.status){
             userId!=="" ? await AsyncStorage.setItem("isGroupIncluded",data.status) : navigation.navigate('CreateGroup')
-            showAlert(createGroupRes.data.msg);
+            showAlert(data.msg);
             dispatch({type:GROUP_CREATE_SUCCESS,payload:data});
         }else{
             dispatch({type:GROUP_CREATE_FAIL,payload:{}});    

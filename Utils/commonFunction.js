@@ -76,4 +76,15 @@ exports.sortArrayDataByDate = (data,keyName)=>{
 exports.removeWhiteSpace = (str,toTransform) =>{
     str = str.toString().replace(/\s/g,"");
     return toTransform == 'U' ? str.toUpperCase() : str.toLowerCase();
-}
+};
+
+exports.requiredResponseBody = async(modal,responseArr) =>{
+    if(modal && responseArr && responseArr.length>0){
+        Object.keys(modal).forEach(el=>{
+            if(!responseArr.includes(el)){
+                delete modal[el];
+            };
+        });
+    };
+    return modal;
+};

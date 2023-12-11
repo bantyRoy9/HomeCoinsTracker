@@ -1,11 +1,11 @@
 const express = require('express');
-const { createrUser, loginUser, protect, isLoggedIn, logout, restrictTo, resetPassword, forgotPassword, sendCreateUserOtp,sendOTP } = require('../Controllers/authController');
+const { createUser,verifyCreatedUserOTP, loginUser, protect, isLoggedIn, logout, restrictTo, resetPassword, forgotPassword,sendOTP } = require('../Controllers/authController');
 const { getUserDetails,getLoginUserDetails,getUsers  } = require('../Controllers/userController');
-// const { createrUser, loginUser } = require('../Controllers/userController');
+// const { verifyCreatedUserOTP, loginUser } = require('../Controllers/userController');
 const router = express.Router();
 
-router.post('/createUser',sendCreateUserOtp);
-router.patch('/verifyUserOtp/:OTP',createrUser);
+router.post('/createUser',createUser);
+router.post('/verifyUserOtp/:OTP',verifyCreatedUserOTP);
 router.post('/loginUser', loginUser);
 router.get('/logout',logout);
 router.get('/getMe',isLoggedIn,getLoginUserDetails);

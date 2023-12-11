@@ -33,13 +33,7 @@ const Home = () => {
   }, [dateRange]);
 
   const navPressHandle = (navPress) => {
-    homeNavList.map(el => {
-      if (el.label == navPress.label) {
-        el.active = true;
-      } else {
-        el.active = false;
-      }
-    });
+    homeNavList.map(el => el.label == navPress.label ? el.active = true : el.active = false);
     setDateRange(navPress);
   };
 

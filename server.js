@@ -3,7 +3,7 @@ const app = require('./app');
 const dotenv = require('dotenv').config({path: './config.env'});
 const mongoose = require('mongoose');
 let DB = process.env.DB_URL;
-if(process.env.NODE_ENV == 'development'){
+if(process.env.NODE_ENV === 'development'){
     DB = process.env.DB_URL_LOCAL;
 }
 const PORT = process.env.PORT || 8000;

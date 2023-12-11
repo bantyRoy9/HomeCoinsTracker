@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Alert } from "react-native";
+import { validEmail, validMobile } from "./Regex";
 
 export const getStoredCookie = async () => {
   let cookie = null;
@@ -75,7 +76,15 @@ export const validateForm = (details) => {
     Object.keys(details).forEach((el, idx) => {
       if (!details[el]) {
         valid = false;
-        error[el] = `*Enter ${el} value`
+        error[el] = `*Enter ${el.replace(/([a-z0-9])([A-Z])/g, '$1 $2')}`
+      };
+      if(el === "email" && !validEmail.test(details[el])){
+        valid = false;
+        error[el] = '*Please enter valid email'
+      };
+      if(el === "mobile" && !validMobile.test(details[el])){
+        valid = false;
+        error[el] = '*Please enter valid mobile no.';
       };
     });
   };

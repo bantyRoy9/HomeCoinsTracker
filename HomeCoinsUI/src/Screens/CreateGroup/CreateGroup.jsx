@@ -1,7 +1,7 @@
 import { Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { useTheme } from 'react-native-paper'
-import { FontAwesome5, defaultStyle } from '../../Utils';
+import { FontAwesome5, defaultStyle,MaterialIcon } from '../../Utils';
 import Group from './Group';
 
 const CreateGroup = ({ navigation,route }) => {
@@ -22,8 +22,8 @@ const CreateGroup = ({ navigation,route }) => {
           { route.name == "CreateGroup" && <View style={styles.createGroupSection}>
             <Pressable style={{...styles.sectionCircle,backgroundColor:colors.lightBackground,color:colors.text}} onPress={()=>navigatePage('CreateNewGroup')}>
               <View style={styles.sectionText}>
-                <FontAwesome5 name='user-plus' size={30} color={colors.text}/>
-                <Text style={{...defaultStyle.textBold,color:colors.text}}>Create New Group</Text>
+                <MaterialIcon name='add-home' size={45} color={colors.text}/>
+                <Text style={{...defaultStyle.textBold,color:colors.text}}>New Home</Text>
               </View>
             </Pressable>
             <View>
@@ -31,13 +31,12 @@ const CreateGroup = ({ navigation,route }) => {
             </View>
             <Pressable style={{...styles.sectionCircle,backgroundColor:colors.lightBackground}} onPress={()=>navigatePage('ExistingGroup')}>
               <View style={styles.sectionText}>
-                <FontAwesome5 name='users' size={30}  color={colors.text}/>
-                <Text style={{...defaultStyle.textBold,color:colors.text}}>Existing Group</Text>
+                <MaterialIcon name='add-home-work' size={45}  color={colors.text}/>
+                <Text style={{...defaultStyle.textBold,color:colors.text}}>Existing Home</Text>
               </View>
             </Pressable>
           </View>}
-          { route.name === "CreateNewGroup" && <Group pageName={route.name} colors={colors} navigation={navigation}/>}
-          { route.name === "ExistingGroup" && <Group pageName={route.name} colors={colors} navigation={navigation}/>}
+          { (route.name === "CreateNewGroup" || route.name === "ExistingGroup") && <Group pageName={route.name} colors={colors} navigation={navigation}/>}
         </View>
       </ScrollView>
     </SafeAreaView>
