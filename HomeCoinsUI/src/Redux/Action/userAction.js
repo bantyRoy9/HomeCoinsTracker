@@ -72,11 +72,14 @@ export const getAllUser = async(dispatch)=>{
     }
 };
 
-export const forgotPassword = (user) => async(dispatch)=>{
+export const forgotPassword = (user,navigation) => async(dispatch)=>{
     try{
         dispatch({type:USER_REGISTER_REQUIEST})
         const { data } = await axios.post(`${userControllerURL}/forgotPassword`,user);
-        dispatch({type:USER_REGISTER_SUCCESS,payload:data.data})
+        if(data && data.status){
+            navigation.navigate('OtpVerification',{email:user.email,isForgetPassword:true});
+            dispatch({type:USER_REGISTER_SUCCESS,payload:data.data});
+        }
     }catch(err){
         showAlert(err.response.data.msg)
         dispatch({type:USER_REGISTER_FAIL,payload:null})

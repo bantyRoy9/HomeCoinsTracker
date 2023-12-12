@@ -1,18 +1,17 @@
-import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View , ActivityIndicator} from 'react-native'
+import { StatusBar,Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View , ActivityIndicator} from 'react-native'
 import React, { useState } from 'react'
-import { StatusBar } from 'react-native';
 import Input from '../../Components/Input';
 import Icons from 'react-native-vector-icons/Ionicons'
 import { useDispatch, useSelector } from 'react-redux';
-import { createUser } from '../../Redux/Action/userAction';
+import { createUser, forgotPassword } from '../../Redux/Action/userAction';
 import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { useTheme } from 'react-native-paper';
 
-const Signup = ({ navigation }) => {
+const Signup = ({ navigation,route: { params :{ isForgotPassword}}}) => {
   const dispatch = useDispatch();
   const { colors, dark } = useTheme();
   const [errors, setErrors] = useState({});
-  const [user, setUser] = useState({ name: "", email: "", password: "", confirmPassword: "" });
+  const [user, setUser] = useState(isForgotPassword?{email:""}:{ name: "", email: "", password: "", confirmPassword: "" });
   const { isLoading } = useSelector(state=>state.user);
   
   const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
@@ -33,13 +32,12 @@ const Signup = ({ navigation }) => {
     setErrors(validation.error);
     if (validation.valid) {
       try {
-          dispatch(createUser(user,navigation));
+          dispatch(isForgotPassword?forgotPassword(user,navigation):createUser(user,navigation));
       } catch (err) {
         showAlert(err);
       };
     }
   };
-
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
@@ -49,10 +47,27 @@ const Signup = ({ navigation }) => {
             <Icons name='arrow-back' size={30} onPress={() => navigation.navigate('Login')} color={colors.text} />
           </View>
           <View style={styles.pageTitle}>
-            <Text style={{ ...styles.headerTitle, color: colors.text }}>Create Account</Text>
-            <Text style={{ ...styles.subHeaderTitle, color: colors.text }}>Please fill the input below here</Text>
+            <Text style={{ ...styles.headerTitle, color: colors.text }}>{isForgotPassword?"Forgot Password":"Create Account"}</Text>
+            <Text style={{ ...styles.subHeaderTitle, color: colors.text }}>Please fill the deltai below here</Text>
           </View>
-          <ScrollView contentContainerStyle={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+          {isForgotPassword?<ScrollView contentContainerStyle={{flex:1}} showsVerticalScrollIndicator={false}>
+          <View>
+              <Input
+                placeholder={"Enter your email address"}
+                label={"Enter your email address"}
+                isLabel={false}
+                name={'email'}
+                icons={'envelope-o'}
+                value={user.email}
+                secureTextEntry={false}
+                autoFocus={false}
+                onChangeText={(text) => changeHandler("email", text)}
+                isHelper={errors.email ? true : false}
+                errorMsg={errors?.email}
+                helperType={'error'}
+              />
+            </View>
+          </ScrollView>:<ScrollView contentContainerStyle={{ flex: 1 }} showsVerticalScrollIndicator={false}>
             <View>
               <Input
                 placeholder={"Full Name"}
@@ -134,17 +149,17 @@ const Signup = ({ navigation }) => {
                 helperType={'error'}
               />
             </View>
-          </ScrollView>
+          </ScrollView>}
           <View style={{ width: '100%' }}>
             <View style={{ width: "auto", alignItems: 'center' }}>
               <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler}>
-                <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'small'} color={colors.text}/> : "SIGN UP"}</Text>
+                <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'small'} color={colors.text}/> : isForgotPassword?"SUBMIT":"SIGN UP"}</Text>
               </Pressable>
             </View>
             <View style={{ position: 'relative', height: 30 }}>
               <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignContent: 'center' }}>
-                  <Text style={{ fontSize: 16, color: backgroundStyle.color }}>Allready have an accounts? </Text><Text onPress={() => navigation.navigate('Login')} style={{ color: btnStyle.color, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Login</Text>
+                  <Text style={{ fontSize: 16, color: backgroundStyle.color }}>{isForgotPassword?"Don't want to rest password?":"Allready have an accounts?"} </Text><Text onPress={() => navigation.navigate('Login')} style={{ color: btnStyle.color, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Login</Text>
                 </View>
               </View>
             </View>

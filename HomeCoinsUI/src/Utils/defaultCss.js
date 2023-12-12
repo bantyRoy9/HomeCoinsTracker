@@ -1,4 +1,4 @@
-import { StyleSheet ,Dimensions,useColorScheme} from 'react-native'
+import { StyleSheet ,Dimensions} from 'react-native'
 
 const width = Dimensions.get("window").width - 40;
 export const defaultStyle = StyleSheet.create({
