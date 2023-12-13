@@ -1,8 +1,6 @@
-const express = require('express');
+const router = require('express').Router();
 const { createUser,verifyCreatedUserOTP, loginUser, protect, isLoggedIn, logout, restrictTo, resetPassword, forgotPassword,sendOTP } = require('../Controllers/authController');
 const { getUserDetails,getLoginUserDetails,getUsers  } = require('../Controllers/userController');
-// const { verifyCreatedUserOTP, loginUser } = require('../Controllers/userController');
-const router = express.Router();
 
 router.post('/createUser',createUser);
 router.post('/verifyUserOtp/:OTP',verifyCreatedUserOTP);

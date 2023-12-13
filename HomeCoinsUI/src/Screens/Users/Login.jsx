@@ -1,4 +1,4 @@
-import { StatusBar,Image ,Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View, useColorScheme,ActivityIndicator } from 'react-native'
+import { StatusBar,Image ,Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View,ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import Input from '../../Components/Input';
 import { useDispatch,useSelector} from 'react-redux';
@@ -28,11 +28,11 @@ const Login = ({navigation}) => {
     setErrors({});
     setModalVisible(true)
   };
-  const hideModal = () => {
-    setUser({});
-    setErrors({});
-    setModalVisible(false);
-  }
+  // const hideModal = () => {
+  //   setUser({});
+  //   setErrors({});
+  //   setModalVisible(false);
+  // }
   
   const changeHandler = (name, value) => {
     setErrors(updateErrors(errors,name));
@@ -52,7 +52,6 @@ const Login = ({navigation}) => {
     }
   };
   return (
-    <PaperProvider>
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
       <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle} contentContainerStyle={{flex:1,justifyContent:'center'}}>
@@ -101,7 +100,7 @@ const Login = ({navigation}) => {
               <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} >
                 <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'small'} color={colors.text}/> : "LOGIN"}</Text>
               </Pressable>
-              <Pressable onPress={showModal}>
+              <Pressable onPress={() => navigation.navigate('Signup',{isForgotPassword:true,isOTPVerified:false})}>
               <Text style={{ color: colors.btnBackground }} >
                 Forgot Password?
               </Text>
@@ -110,48 +109,13 @@ const Login = ({navigation}) => {
           <View style={{ position: 'relative', height: 50 }}>
             <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
               <View style={styles.btnSignup}>
-                <Text style={{ fontSize: 16, color: backgroundStyle.color }}>Don't have an account? </Text><Text onPress={() => navigation.navigate('Signup')} style={{ color: colors.btnBackground, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Sign up</Text>
+                <Text style={{ fontSize: 16, color: backgroundStyle.color }}>Don't have an account? </Text><Text onPress={() => navigation.navigate('Signup',{isForgotPassword:false})} style={{ color: colors.btnBackground, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Sign up</Text>
               </View>
             </View>
           </View>
           </View>
       </ScrollView>
     </SafeAreaView>
-      <Portal>
-        <Modal onDismiss={hideModal} visible={modalVisible} contentContainerStyle={{...backgroundStyle,...styles.modalView}}>
-          <View style={styles.modalHeader}>
-              <View style={styles.forgetBtn}>
-                <Text style={styles.modalHeaderText}>Forget Password</Text>
-                <View><FontAwesome name='close' size={15} onPress={hideModal}/></View>
-          </View>
-          </View>
-          <Divider/>
-          <View Style={styles.modalBody}>
-          <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
-              <Input
-                placeholder={"Enter your email"}
-                label={"Enter your email"}
-                isLabel={false}
-                name={"email"}
-                autoFocus={false}
-                icons={'envelope-o'}
-                value={user.email}
-                onChangeText={(text) => changeHandler("email", text)}
-                isHelper={errors.email?true:false}
-                errorMsg={errors?.email}
-                helperType={'error'}
-              />
-            </View>
-          </View>
-          <View style={{...btnStyle,...styles.modalFooter}}>
-              <Pressable style={styles.modalFooterBtn}>
-                <Text style={styles.modalFooterBtnText}>Next</Text>
-                <Ionicons name='send' size={20}/>
-              </Pressable>
-          </View>
-        </Modal>
-      </Portal>
-    </PaperProvider>
   )
 }
 

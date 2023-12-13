@@ -7,7 +7,7 @@ import { defaultStyle, userControllerURL } from '../../Utils';
 import { verifyUserOTP } from '../../Redux/Action/userAction';
 import axios from 'axios';
 
-const OtpVerification = ({ navigation, route: { params: { email } } }) => {
+const OtpVerification = ({ navigation, route: { params: { email ,isForgetPassword} } }) => {
   const [detail, setDetail] = useState({});
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const OtpVerification = ({ navigation, route: { params: { email } } }) => {
       setErrors(validation.error);
       if (validation.valid) {
         let OTP = Object.values(detail).join('')
-        dispatch(verifyUserOTP(OTP,{email},navigation));
+        dispatch(verifyUserOTP(OTP,{email},navigation,isForgetPassword));
       }
     } catch (err) {
       showAlert(err);

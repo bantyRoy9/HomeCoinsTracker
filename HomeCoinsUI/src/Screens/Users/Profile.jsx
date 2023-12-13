@@ -44,7 +44,6 @@ const Profile = ({ navigation }) => {
     useEffect(() => {
         const fetchUser = async()=>{
             let user = await AsyncStorage.getItem("user");
-            console.log(user);
             if (user) {
                 setUserDetails(JSON.parse(user))
             }
