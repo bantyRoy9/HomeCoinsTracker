@@ -7,11 +7,11 @@ import { createUser, forgotPassword } from '../../Redux/Action/userAction';
 import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { useTheme } from 'react-native-paper';
 
-const Signup = ({ navigation,route: { params :{ isForgotPassword}}}) => {
+const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified}}}) => {
   const dispatch = useDispatch();
   const { colors, dark } = useTheme();
   const [errors, setErrors] = useState({});
-  const [user, setUser] = useState(isForgotPassword?{email:""}:{ name: "", email: "", password: "", confirmPassword: "" });
+  const [user, setUser] = useState((isForgotPassword && !isOTPVerified)?{email:""}:(isOTPVerified && isForgotPassword)?{password: "", confirmPassword: ""}:{ name: "", email: "", password: "", confirmPassword: "" });
   const { isLoading } = useSelector(state=>state.user);
   
   const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
@@ -47,11 +47,11 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword}}}) => {
             <Icons name='arrow-back' size={30} onPress={() => navigation.navigate('Login')} color={colors.text} />
           </View>
           <View style={styles.pageTitle}>
-            <Text style={{ ...styles.headerTitle, color: colors.text }}>{isForgotPassword?"Forgot Password":"Create Account"}</Text>
+            <Text style={{ ...styles.headerTitle, color: colors.text }}>{(isForgotPassword && !isOTPVerified)?"Forgot Password":(isForgotPassword && isOTPVerified)?"Reset Password":"Create Account"}</Text>
             <Text style={{ ...styles.subHeaderTitle, color: colors.text }}>Please fill the deltai below here</Text>
-          </View>
-          {isForgotPassword?<ScrollView contentContainerStyle={{flex:1}} showsVerticalScrollIndicator={false}>
-          <View>
+          </View><ScrollView contentContainerStyle={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+            {(isForgotPassword && !isOTPVerified) ? <>
+              <View>
               <Input
                 placeholder={"Enter your email address"}
                 label={"Enter your email address"}
@@ -66,9 +66,44 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword}}}) => {
                 errorMsg={errors?.email}
                 helperType={'error'}
               />
-            </View>
-          </ScrollView>:<ScrollView contentContainerStyle={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+              </View>
+            </>
+            : (isForgotPassword && isOTPVerified) ? <>
             <View>
+              <Input
+                placeholder={"Password"}
+                label={"Password"}
+                isLabel={false}
+                name={'password'}
+                icons={'lock'}
+                value={user.password}
+                secureTextEntry={true}
+                autoFocus={false}
+                onChangeText={(text) => changeHandler("password", text)}
+                isHelper={errors.email ? true : false}
+                errorMsg={errors?.email}
+                helperType={'error'}
+              />
+            </View>
+            <View>
+              <Input
+                placeholder={"Confirm Password"}
+                label={"Confirm Password"}
+                isLabel={false}
+                name={'confirmPassword'}
+                icons={'lock'}
+                value={user.confirmPassword}
+                secureTextEntry={true}
+                autoFocus={false}
+                onChangeText={(text) => changeHandler("confirmPassword", text)}
+                isHelper={errors.confirmPassword ? true : false}
+                errorMsg={errors?.confirmPassword}
+                helperType={'error'}
+              />
+            </View>
+            </> 
+            :
+            <><View>
               <Input
                 placeholder={"Full Name"}
                 label={"Full Name"}
@@ -148,8 +183,8 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword}}}) => {
                 errorMsg={errors?.confirmPassword}
                 helperType={'error'}
               />
-            </View>
-          </ScrollView>}
+            </View></>}
+          </ScrollView>
           <View style={{ width: '100%' }}>
             <View style={{ width: "auto", alignItems: 'center' }}>
               <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler}>

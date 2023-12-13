@@ -100,7 +100,7 @@ const Login = ({navigation}) => {
               <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} >
                 <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'small'} color={colors.text}/> : "LOGIN"}</Text>
               </Pressable>
-              <Pressable onPress={() => navigation.navigate('Signup',{isForgotPassword:true})}>
+              <Pressable onPress={() => navigation.navigate('Signup',{isForgotPassword:true,isOTPVerified:false})}>
               <Text style={{ color: colors.btnBackground }} >
                 Forgot Password?
               </Text>
