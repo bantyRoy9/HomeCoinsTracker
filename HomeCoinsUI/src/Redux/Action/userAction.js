@@ -74,7 +74,7 @@ export const getAllUser = async(dispatch)=>{
 
 export const forgotPassword = (user,navigation) => async(dispatch)=>{
     try{
-        dispatch({type:USER_REGISTER_REQUIEST})
+        dispatch({type:USER_REGISTER_REQUIEST});
         const { data } = await axios.post(`${userControllerURL}/forgotPassword`,user);
         if(data && data.status){
             navigation.navigate('OtpVerification',{email:user.email,isForgetPassword:true});
@@ -85,17 +85,21 @@ export const forgotPassword = (user,navigation) => async(dispatch)=>{
         dispatch({type:USER_REGISTER_FAIL,payload:null})
     }
 };
-export const verifyForgotPasswordOTP = async(OTP,user,navigation)=>{
+export const verifyForgotPasswordOTP = async(OTP,navigation,user)=>{
     try{
-        const { data } = await axios.post(`${userControllerURL}/verifyForgetPasswordOTP/${OTP}`,user);
+        const { data } = await axios.post(`${userControllerURL}/resetPassword/${OTP}`,user);
         if(data && data.status){
-            navigation.navigate('Signup',{isOTPVerified:true,isForgotPassword:true});
+            if(user){
+                navigation.navigate('Login');
+                showAlert(data.msg);
+            }else{
+                navigation.navigate('Signup',{isOTPVerified:true,isForgotPassword:true,OTP:OTP});
+            }
         }
     }catch(err){
         showAlert(err.response.data.msg);
     }
-
-}
+};
 export const verifyUserOTP = (OTP,user,navigation)=>async(dispatch) =>{
     try{
         dispatch({type:USER_REGISTER_REQUIEST});

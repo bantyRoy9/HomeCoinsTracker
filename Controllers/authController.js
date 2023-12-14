@@ -187,12 +187,11 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
         return next(new AppError('Token has Invalid or has expired', 400))
     };
     if(!Object.keys(req.body).length){
-        return next(this.responseSend(res,200,true,"","OTP verification successful."))
+        return this.responseSend(res,200,true,"","OTP verification successful.")
     };
-    console.log(await user.correctPassword(req.body.password, user.password),req.body.password,user.password);
-    if (await user.correctPassword(req.body.password, user.password)) {
-        return next(new AppError("New password and current password should not same. try again",400))
-    }
+    // if (await user.correctPassword(req.body.password, user.password)) {
+    //     return next(new AppError("New password and current password should not same. try again",400))
+    // }
     user.password = req.body.password;
     user.passwordconfirm = req.body.passwordconfirm;
     user.passwordResetExpire = undefined;

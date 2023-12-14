@@ -18,9 +18,7 @@ const Members = () => {
   useEffect(() => {
     const getUsersList = async () => {
       try {
-        console.log(user,`${groupControllerURL}/groupMembers/${user?.groupId}`,await getAxiosHeader());
         const { data } = await axios.get(`${groupControllerURL}/groupMembers/${user?.groupId}`, await getAxiosHeader());
-        console.log(data);
         setUserList(data.data);
       }catch(err){}
     };

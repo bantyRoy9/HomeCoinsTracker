@@ -19,10 +19,6 @@ function App() {
   const { user } = useSelector(state=>state.user);
   const { group } = useSelector(state=>state.group);
   useEffect(() => {
-    // if(user && Object.keys(user).length){
-    //   console.log(user);
-    //   setUserDetails({...userDetails,isGroupIncluded:user.isGroupIncluded,isActive:user.isActive });
-    // };
     fetchUserDetail();
     setTimeout(()=>{
       SplashScreen.hide();

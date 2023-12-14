@@ -3,11 +3,11 @@ import React, { useState } from 'react'
 import Input from '../../Components/Input';
 import Icons from 'react-native-vector-icons/Ionicons'
 import { useDispatch, useSelector } from 'react-redux';
-import { createUser, forgotPassword } from '../../Redux/Action/userAction';
+import { createUser, forgotPassword, verifyForgotPasswordOTP } from '../../Redux/Action/userAction';
 import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { useTheme } from 'react-native-paper';
 
-const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified}}}) => {
+const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,OTP}}}) => {
   const dispatch = useDispatch();
   const { colors, dark } = useTheme();
   const [errors, setErrors] = useState({});
@@ -32,9 +32,13 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified}}
     setErrors(validation.error);
     if (validation.valid) {
       try {
-          dispatch(isForgotPassword?forgotPassword(user,navigation):createUser(user,navigation));
+        if(isForgotPassword && isOTPVerified){
+          verifyForgotPasswordOTP(OTP,navigation,{password:user.password,confirmPassword:user.confirmPassword}) 
+        }else{
+          dispatch((isForgotPassword && !isOTPVerified)?forgotPassword(user,navigation) : createUser(user,navigation));
+        };
       } catch (err) {
-        showAlert(err);
+          showAlert(err);
       };
     }
   };

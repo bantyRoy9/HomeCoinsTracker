@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ActivityIndicator, TextInput, useTheme } from 'react-native-paper';
 import { getAxiosHeader, showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { defaultStyle, userControllerURL } from '../../Utils';
-import { verifyUserOTP } from '../../Redux/Action/userAction';
+import { verifyForgotPasswordOTP, verifyUserOTP } from '../../Redux/Action/userAction';
 import axios from 'axios';
 
 const OtpVerification = ({ navigation, route: { params: { email ,isForgetPassword} } }) => {
@@ -28,7 +28,7 @@ const OtpVerification = ({ navigation, route: { params: { email ,isForgetPasswor
       setErrors(validation.error);
       if (validation.valid) {
         let OTP = Object.values(detail).join('')
-        dispatch(verifyUserOTP(OTP,{email},navigation,isForgetPassword));
+        isForgetPassword?verifyForgotPasswordOTP(OTP,navigation):dispatch(verifyUserOTP(OTP,{email},navigation,isForgetPassword));
       }
     } catch (err) {
       showAlert(err);
