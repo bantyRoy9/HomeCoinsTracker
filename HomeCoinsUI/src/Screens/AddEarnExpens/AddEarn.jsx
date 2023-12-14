@@ -33,7 +33,6 @@ const AddEarn = ({navigation}) => {
     const fetchSource = async()=>{
       try{
         const { data } = await axios.get(`${sourceControllerURL}/source`);
-        console.log(data,data.data.map(el=> {return {label:el.sourceName,value:el._id}}));
         if( data.status ){
           setSource(data.data.map(el=> {return {label:el.sourceName,value:el._id}}));
         }

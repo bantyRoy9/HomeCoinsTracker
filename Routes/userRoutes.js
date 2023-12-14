@@ -8,7 +8,7 @@ router.post('/loginUser', loginUser);
 router.get('/logout',logout);
 router.get('/getMe',isLoggedIn,getLoginUserDetails);
 router.post('/forgotPassword',forgotPassword);
-router.get('/resetPassword/:token',resetPassword);
+router.post('/resetPassword/:token',resetPassword);
 
 router.use(protect);
 router.get('/getUserDetailById', getUserDetails);
