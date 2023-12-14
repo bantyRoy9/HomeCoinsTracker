@@ -197,7 +197,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     user.passwordResetExpire = undefined;
     user.passwordResetToken = undefined;
     await user.save();
-    createSendToken(user, 200, res);
+    this.responseSend(res,200,true,{},"Password update successfully");
 })
 
 exports.updatePassword = catchAsync(async (req, res, next) => {

@@ -18,7 +18,6 @@ export const getEarnExpendData = (dateRange,groupId)=> async(dispatch)=>{
     try{
         dispatch({type:ACCOUNT_REQUIEST});
         const { data } = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}&groupId=${groupId}`)
-        console.log(data);
         if (data.status && data.data && data.graphData) {
             data.analyticsDetail = getAnalyticsDetails(data.graphData)
             data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })
