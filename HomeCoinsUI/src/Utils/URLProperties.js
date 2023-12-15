@@ -1,5 +1,4 @@
 const NODE_ENV = process.env.NODE_ENV
-console.log(NODE_ENV)
 // const REACT_LOCAL_URL = "http://192.168.1.5:8000" //manikarn
 // const REACT_LOCAL_URL = "http://192.168.43.167:8000" //manikarn
 const REACT_LOCAL_URL = "http://192.168.1.7:8000" //note7
