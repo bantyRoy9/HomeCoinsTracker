@@ -55,7 +55,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
             <Text style={{ ...styles.subHeaderTitle, color: colors.text }}>Please fill the deltai below here</Text>
           </View><ScrollView contentContainerStyle={{ flex: 1 }} showsVerticalScrollIndicator={false}>
             {(isForgotPassword && !isOTPVerified) ? <>
-              <View>
+              <View pointerEvents={isLoading ? "none" : "auto"}>
               <Input
                 placeholder={"Enter your email address"}
                 label={"Enter your email address"}
@@ -73,7 +73,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
               </View>
             </>
             : (isForgotPassword && isOTPVerified) ? <>
-            <View>
+            <View pointerEvents={isLoading ? "none" : "auto"}>
               <Input
                 placeholder={"Password"}
                 label={"Password"}
@@ -89,7 +89,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
                 helperType={'error'}
               />
             </View>
-            <View>
+            <View pointerEvents={isLoading ? "none" : "auto"}>
               <Input
                 placeholder={"Confirm Password"}
                 label={"Confirm Password"}
@@ -107,7 +107,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
             </View>
             </> 
             :
-            <><View>
+            <><View pointerEvents={isLoading ? "none" : "auto"}>
               <Input
                 placeholder={"Full Name"}
                 label={"Full Name"}
@@ -123,7 +123,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
                 helperType={'error'}
               />
             </View>
-            <View>
+            <View pointerEvents={isLoading ? "none" : "auto"}>
               <Input
                 placeholder={"Mobile"}
                 label={"Moble"}
@@ -140,7 +140,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
                 helperType={'error'}
               />
             </View>
-            <View>
+            <View pointerEvents={isLoading ? "none" : "auto"}>
               <Input
                 placeholder={"Email"}
                 label={"Email"}
@@ -156,7 +156,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
                 helperType={'error'}
               />
             </View>
-            <View>
+            <View pointerEvents={isLoading ? "none" : "auto"}>
               <Input
                 placeholder={"Password"}
                 label={"Password"}
@@ -172,7 +172,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
                 helperType={'error'}
               />
             </View>
-            <View>
+            <View pointerEvents={isLoading ? "none" : "auto"}>
               <Input
                 placeholder={"Confirm Password"}
                 label={"Confirm Password"}
