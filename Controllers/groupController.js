@@ -16,6 +16,7 @@ exports.createGroup = catchAsync(async (req, res, next) => {
 
     const response = await GroupModels.create(reqBody);
     req.user.isGroupIncluded = true;
+    req.user.role="admin"
     req.user.groupId = response._id;
     await req.user.save();
     responseSend(res, 201, true, response, 'Group created successfully.')

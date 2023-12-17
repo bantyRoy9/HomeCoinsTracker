@@ -11,7 +11,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
   const dispatch = useDispatch();
   const { colors, dark } = useTheme();
   const [errors, setErrors] = useState({});
-  const [user, setUser] = useState((isForgotPassword && !isOTPVerified)?{email:""}:(isOTPVerified && isForgotPassword)?{password: "", confirmPassword: ""}:{ name: "", email: "", password: "", confirmPassword: "" });
+  const [user, setUser] = useState((isForgotPassword && !isOTPVerified)?{email:""}:(isOTPVerified && isForgotPassword)?{password: "", confirmPassword: ""}:{ name: "",mobile:"", email: "", password: "", confirmPassword: "" });
   const { isLoading } = useSelector(state=>state.user);
   
   const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
@@ -84,8 +84,8 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
                 secureTextEntry={true}
                 autoFocus={false}
                 onChangeText={(text) => changeHandler("password", text)}
-                isHelper={errors.email ? true : false}
-                errorMsg={errors?.email}
+                isHelper={errors.password ? true : false}
+                errorMsg={errors?.password}
                 helperType={'error'}
               />
             </View>
@@ -167,8 +167,8 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
                 secureTextEntry={true}
                 autoFocus={false}
                 onChangeText={(text) => changeHandler("password", text)}
-                isHelper={errors.email ? true : false}
-                errorMsg={errors?.email}
+                isHelper={errors.password ? true : false}
+                errorMsg={errors?.password}
                 helperType={'error'}
               />
             </View>
