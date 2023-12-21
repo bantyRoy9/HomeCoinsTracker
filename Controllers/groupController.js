@@ -12,13 +12,14 @@ exports.createGroup = catchAsync(async (req, res, next) => {
         members: { member: req.user.id },
         createdBy: req.user.id
     };
-    if (req.user.isGroupIncluded) return next(new AppError('Not Allow!, User exist in any othe group', 406));
+    if (req.user.isGroupIncluded) return next(new AppError('Not Allow!, User exist in other group', 406));
 
     const response = await GroupModels.create(reqBody);
     req.user.isGroupIncluded = true;
+    req.user.role="admin";
     req.user.groupId = response._id;
     await req.user.save();
-    responseSend(res, 201, true, response, 'Group created successfully.')
+    responseSend(res, 201, true, response, 'Group created successfully.');
 });
 exports.getGroupList = catchAsync(async (req, res, next) => {
     const groupList = await GroupModels.find({}).populate('createdBy');
@@ -27,14 +28,15 @@ exports.getGroupList = catchAsync(async (req, res, next) => {
 exports.addMemberRequest = catchAsync(async (req, res, next) => {
     if (req.body && (req.body.email || req.body.mobile) && !req.user.isGroupIncluded) {
         const addMemberUser = await User.findOne({ email: req.body.email });
-        if (!addMemberUser) return next(new AppError('User not registered to HomecoinsTracker', 400));
+        if (!addMemberUser) return next(new AppError('User not found!', 404));
 
         if (req.user.email == req.body.email) return next(new AppError("Not Allow!, User cann't add it self. Try another email", 400));
-        if (!addMemberUser.isGroupIncluded) return next(new AppError('User Not Found Any Group', 401));
+        if (!addMemberUser.isGroupIncluded) return next(new AppError('User not include to any Group', 404));
+        if(addMemberUser.role !== "admin") return next(new AppError('User have not access to allow to add new member. try by admin email!',406));
 
-        const group = await GroupModels.findOne({ _id: addMemberUser.groupId });
-        let member = group.members.filter(el => el.member == addMemberUser._id);
-        if (member && member.length && menubar[0].role !== 'admin') return next(new AppError('Given User have not access to add memeber'), 406);
+        // const group = await GroupModels.findOne({ _id: addMemberUser.groupId });
+        // let member = group.members.filter(el => el.member == addMemberUser._id);
+        // if (member && member.length && menubar[0].role !== 'admin') return next(new AppError('User have not access to add memeber. try by admin email!'), 406);
 
         const verifyToken = req.user.createVerifyToken();
         await req.user.save({ validateBeforeSave: false });
