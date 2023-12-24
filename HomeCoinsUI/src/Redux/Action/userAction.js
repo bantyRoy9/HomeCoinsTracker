@@ -6,6 +6,7 @@ import { userControllerURL } from "../../Utils/URLProperties";
 export const loging = (userDetails,navigation) => async(dispatch) =>{
     try{
         dispatch({type:USER_REQUIEST});
+        console.log(`${userControllerURL}/loginUser`);
         const { data } = await axios.post(`${userControllerURL}/loginUser`, userDetails, getAxiosHeaderWithoutCookie());
         if(data){
             await AsyncStorage.multiSet([['userEmail',data.data.user.email],['cookie',data.token], ['user',JSON.stringify(data.data.user)], ['isGroupIncluded',`${data.data.user.isGroupIncluded}`],['isActive',`${data.data.user.isActive}`] ],()=>{

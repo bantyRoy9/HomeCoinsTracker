@@ -162,7 +162,7 @@ exports.setUserAndGroupId = (keyName) => async(req,res,next)=>{
 exports.forgotPassword = catchAsync(async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
-        return next(new AppError('User Email is Not Found', 404));
+        return next(new AppError('Email not exists, try another email.', 404));
     };
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });

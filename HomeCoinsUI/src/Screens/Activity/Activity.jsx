@@ -39,7 +39,7 @@ const Activity = ({groupId}) => {
                                         <View style={styles.activityLeftSec}>
                                             <View style={styles.activityProfileList}>
                                                 <Image source={require('../../../Assets/profiles/default.png')}
-                                                    style={{ width: 40, height: 40, borderRadius: 50 }}
+                                                    style={{ width: 40, height: 40, borderRadius: 8 }}
                                                 />
                                             </View>
                                             <View>
