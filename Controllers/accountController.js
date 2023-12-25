@@ -13,20 +13,14 @@ const { responseSend } = require("./authController");
 
 exports.saveDailyEarns = catchAsync(async(req,res,next) => {
     const saveEarn = await EarnModel.create(req.body);
-    await addUsersActivity(req,'addEarn',saveEarn._id);
-    res.status(201).json({
-        status:'true',
-        saveEarn,
-    })
+    req.earnId=saveEarn._id;
+    next();
 });
 
 exports.saveDailyExped = catchAsync(async(req,res,next)=>{
     const saveExpend = await ExpendModel.create(req.body);
-    const expendByuser = await User.findById({_id:req.body.expendBy});
-    expendByuser.totalExpend = [...expendByuser.totalExpend, saveExpend._id];
-    await expendByuser.save();
-    await addUsersActivity(req,'addExpend',saveExpend._id);
-    next(responseSend(res,201,true,saveExpend,"Expend saved successfully"));
+    req.expendId = saveExpend._id;
+    next();
 });
 
 exports.totalEarnByUser = catchAsync(async(req,res,next) =>{

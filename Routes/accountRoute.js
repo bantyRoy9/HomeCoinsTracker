@@ -8,7 +8,7 @@ router.route('/getEarnExpend').get(getQuery,getTotalEarns,getTotalExpend);
 router.route('/earn').get(getTotalEarns).post(protect,setUserAndGroupId('earnBy'),saveDailyEarns,addUsersActivity);
 router.route('/earn/:id').delete(deleteDailyEarns);
 router.route('/getEarnByUser').get(protect,totalEarnByUser);
-router.route('/expend').get(getTotalExpend).post(protect,setUserAndGroupId('expendBy'),saveDailyExped);
+router.route('/expend').get(getTotalExpend).post(protect,setUserAndGroupId('expendBy'),saveDailyExped,addUsersActivity);
 
 
 module.exports = router
