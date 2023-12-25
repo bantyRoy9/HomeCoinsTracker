@@ -51,7 +51,7 @@ exports.addMemberRequest = catchAsync(async (req, res, next) => {
 
 exports.verifyGroupToken = catchAsync(async (req, res, next) => {
     const verifyToken = req.params.verifyToken.split(',');
-    if (!verifyToken && !verifyToken.length) return next(new AppError('Verification Token not found', 400));
+    if (!verifyToken && !verifyToken.length) return next(new AppError('Verification Token not found', 404));
 
     const resetToken = crypto.createHash('sha256').update(verifyToken[0]).digest('hex');
     const user = await User.findOne({ verifyGroupToken: resetToken, verifyGroupTokenExpire: { $gt: Date.now() } });

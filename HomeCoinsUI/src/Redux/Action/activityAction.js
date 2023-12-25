@@ -6,7 +6,7 @@ import { getAxiosHeader } from "../../Utils/CommonAuthFunction"
 export const getActivity = (groupId) =>async(dispatch)=>{
     try{
     dispatch({type:ACTIVITY_REQUIEST})
-    const { data } = await axios.get(`${activityControllerURL}/activity/${groupId}`,getAxiosHeader());
+    const { data } = await axios.get(`${activityControllerURL}/activity/${groupId}`, await getAxiosHeader());
     if(data){
         dispatch({type:ACTIVITY_SUCCESS,payload:data});
     }

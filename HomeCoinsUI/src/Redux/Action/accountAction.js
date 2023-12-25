@@ -32,15 +32,19 @@ export const getEarnExpendData = (dateRange,groupId)=> async(dispatch)=>{
     }
 };
 
-export const addEarnExpend = (details,urlType) => async(dispatch) =>{
+export const addEarnExpend = (details,urlType,navigation) => async(dispatch) =>{
     try{
         dispatch({type:ACCOUNT_ADD_REQUIEST});
-        const { data } = await axios.post(`${accountControllerURL}/${urlType}`,details,getAxiosHeader());
-        if(data){
+        const { data } = await axios.post(`${accountControllerURL}/${urlType}`,details, await getAxiosHeader());
+        if(data && data.status){
             showAlert(`${details.amount} add successfully.`);
+            navigation.navigate('Home')
             dispatch({type:ACCOUNT_ADD_SUCCESS,payload:data});
+        }else{
+            showAlert(data.msg)
         }
     }catch(err){
+        showAlert(err.response.data.msg)
         dispatch({type:ACCOUNT_ADD_FAIL,payload:null});
     }
 };

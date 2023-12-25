@@ -34,12 +34,12 @@ const Activity = ({groupId}) => {
                     <View style={defaultStyle.screenContainer}>
                         {activity && activity.data && activity?.data.map((el, idx) => (
                             <View key={idx}>
-                                <Pressable style={styles.activityLists}>
+                                <Pressable style={{...styles.activityLists,borderBottomColor:colors.border,borderBottomWidth:activity.data.length - 1 > idx?1:0}}>
                                     <View style={styles.activityList}>
                                         <View style={styles.activityLeftSec}>
                                             <View style={styles.activityProfileList}>
                                                 <Image source={require('../../../Assets/profiles/default.png')}
-                                                    style={{ width: 40, height: 40, borderRadius: 50 }}
+                                                    style={{ width: 40, height: 40, borderRadius: 8 }}
                                                 />
                                             </View>
                                             <View>
@@ -66,7 +66,6 @@ const Activity = ({groupId}) => {
                                         </View>
                                     </View>
                                 </Pressable>
-                                {activity.data.length - 1 > idx && <Divider style={{ borderBottomColor: backgroundStyle.color }} />}
                             </View>
                         ))}
                     </View>

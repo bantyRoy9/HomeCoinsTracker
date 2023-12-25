@@ -53,9 +53,8 @@ const AddEarn = ({navigation}) => {
     setErrors(validation.error);
     try {
       if(validation.valid){
-        dispatch(addEarnExpend(details,'earn'));
+        dispatch(addEarnExpend(details,'earn',navigation));
         setDetails(initalState);
-        navigation.navigate('Home');
       }
     } catch (err) {}
   };

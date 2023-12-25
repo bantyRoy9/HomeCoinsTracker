@@ -1,44 +1,14 @@
 const express = require('express');
 const { saveDailyEarns, getTotalEarns, totalEarnByUser, getTotalExpend, saveDailyExped, getQuery, deleteDailyEarns } = require('../Controllers/accountController');
 const { protect, setUserAndGroupId } = require('../Controllers/authController');
+const { addUsersActivity } = require('../Controllers/activityController');
 const router = express.Router();
 
 router.route('/getEarnExpend').get(getQuery,getTotalEarns,getTotalExpend);
-router.route('/earn')
-    .get((req, res, next) => {
-        console.log('/earn'); next();
-    },
-        getTotalEarns
-    ).post(
-        protect,
-        setUserAndGroupId('earnBy'),
-        saveDailyEarns
-    );
-router.route('/earn/:id')
-    .delete(deleteDailyEarns);
-
-router.route('/getEarnByUser')
-    .get((req, res, next) => {
-        console.log('/getEarnExpend'); next();
-    },
-        protect,
-        totalEarnByUser
-    );
-
-router.route('/expend')
-    .get((req, res, next) => {
-        console.log('/expend');
-        next();
-    },
-        getTotalExpend
-    ).post((req, res, next) => {
-        console.log('/getEarnExpend');
-        next();
-    },
-        protect,
-        setUserAndGroupId('expendBy'),
-        saveDailyExped
-    );
+router.route('/earn').get(getTotalEarns).post(protect,setUserAndGroupId('earnBy'),saveDailyEarns,addUsersActivity);
+router.route('/earn/:id').delete(deleteDailyEarns);
+router.route('/getEarnByUser').get(protect,totalEarnByUser);
+router.route('/expend').get(getTotalExpend).post(protect,setUserAndGroupId('expendBy'),saveDailyExped,addUsersActivity);
 
 
 module.exports = router

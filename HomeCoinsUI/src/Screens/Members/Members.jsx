@@ -1,16 +1,18 @@
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View,Image } from 'react-native'
+import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, Image, ActivityIndicator, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { getAxiosHeader, getAxiosHeaderWithoutCookie } from '../../Utils/CommonAuthFunction';
 import axios from 'axios';
 import { groupControllerURL, userControllerURL } from '../../Utils/URLProperties';
 import { defaultStyle } from '../../Utils/defaultCss';
-import { useTheme } from 'react-native-paper';
+import { useTheme, Divider } from 'react-native-paper';
 import { useSelector } from 'react-redux';
+import { colors as color } from 'react-native-elements';
 
 const Members = () => {
   const [userList, setUserList] = useState([]);
-  const { user } = useSelector(state=>state.user);
-  const { colors,dark} = useTheme();
+  const [isLoading, setIsLoading] = useState(true);
+  const { user } = useSelector(state => state.user);
+  const { colors, dark } = useTheme();
   const backgroundStyle = {
     backgroundColor: colors.background,
     color: colors.text
@@ -20,31 +22,39 @@ const Members = () => {
       try {
         const { data } = await axios.get(`${groupControllerURL}/groupMembers/${user?.groupId}`, await getAxiosHeader());
         setUserList(data.data);
-      }catch(err){}
+        setIsLoading(false);
+      } catch (err) { }
     };
     getUsersList();
   }, []);
+  console.log(isLoading);
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} />
-      <ScrollView style={defaultStyle.screenContainer}>
-        {userList && userList.length > 0 && <>
-          {userList.map((el,idx) => (
-            <View key={idx} style={{flexDirection:'row',gap:20}}>
-              <View>
-                <Image source={require(`../../../Assets/profiles/default.png`)} style={{ width: 35, height: 35, borderRadius: 50 }}/>
+      {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> :
+        <ScrollView style={defaultStyle.screenContainer}>
+          {userList && userList.length > 0 ? <>
+            {userList.map((el, idx) => (
+              <View style={{marginVertical:2}}>
+                <Pressable key={idx} style={{ flexDirection: 'row',paddingVertical:13,gap:15, alignItems: 'center',borderBottomColor:colors.border,borderBottomWidth:userList.length -1 >idx?1:0 }}>
+                  <View>
+                    <Image source={require(`../../../Assets/profiles/default.png`)} style={{ width: 35, height: 35, borderRadius: 8 }} />
+                  </View>
+                  <View style={{ flexDirection: "row", flex: 1, justifyContent: 'space-between', alignItems: 'center' }}>
+                    <View>
+                      <Text style={{color:colors.text,fontSize:16,fontWeight:"bold"}}>{el?.name.charAt(0).toUpperCase() + el.name.slice(1)}</Text>
+                      <Text style={{color:colors.text}}>{el.email}</Text>
+                    </View>
+                    {el.role==="admin" && <View>
+                      <Text style={{color:color.success,fontSize:16,fontWeight:"bold"}}>{el?.role.charAt(0).toUpperCase() + el.role.slice(1)}</Text>
+                    </View>}
+                  </View>
+                </Pressable>
               </View>
-              <View>
-              <Text>{el?.name.charAt(0).toUpperCase() + el.name.slice(1)}</Text>
-              {/* <Text>{el.}</Text> */}
-              <Text>{el.userId}</Text>
-              <Text>{el.email}</Text>
-              <Text>{el.role}</Text>
-              </View>
-            </View>
-          ))}
-        </>}
-      </ScrollView>
+            ))}
+          </> : <></>
+          }
+        </ScrollView>}
     </SafeAreaView>
   )
 }

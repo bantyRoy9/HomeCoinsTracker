@@ -53,6 +53,7 @@ function App() {
   const editProfile = () => {
     // navigation.navigate('EditProfile');
   }
+
   const headerIcons = {
     home: <>
       <View style={{ position: 'relative' }}>
