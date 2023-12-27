@@ -79,12 +79,15 @@ exports.removeWhiteSpace = (str,toTransform) =>{
 };
 
 exports.requiredResponseBody = async(modal,responseArr) =>{
+    console.log(modal,responseArr);
     if(modal && responseArr && responseArr.length>0){
+        console.log(Object.keys(JSON.parse(JSON.stringify(modal))));
         Object.keys(modal).forEach(el=>{
             if(!responseArr.includes(el)){
                 delete modal[el];
             };
         });
     };
+    console.log(modal);
     return modal;
 };

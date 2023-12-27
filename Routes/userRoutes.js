@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { createUser,verifyCreatedUserOTP, loginUser, protect, isLoggedIn, logout, restrictTo, resetPassword, forgotPassword,sendOTP } = require('../Controllers/authController');
-const { getUserDetails,getLoginUserDetails,getUsers  } = require('../Controllers/userController');
+const { getUserDetails,getLoginUserDetails,getUsers, getUserLists  } = require('../Controllers/userController');
 
 router.post('/createUser',createUser);
 router.post('/verifyUserOtp/:OTP',verifyCreatedUserOTP);
@@ -13,6 +13,7 @@ router.post('/resetPassword/:token',resetPassword);
 router.use(protect);
 router.get('/getUserDetailById', getUserDetails);
 router.post('/sendOTP',sendOTP);
+router.get('/getUserLists',getUserLists);
 
 router.use(restrictTo('admin'));
 router.route('/users').get(getUsers);

@@ -7,6 +7,7 @@ import { defaultStyle } from '../../Utils/defaultCss';
 import { useTheme, Divider } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { colors as color } from 'react-native-elements';
+import { Header } from '../../Components';
 
 const Members = () => {
   const [userList, setUserList] = useState([]);
@@ -55,6 +56,9 @@ const Members = () => {
           </> : <></>
           }
         </ScrollView>}
+        <View>
+        <Header title="Member"/>
+      </View>
     </SafeAreaView>
   )
 }
