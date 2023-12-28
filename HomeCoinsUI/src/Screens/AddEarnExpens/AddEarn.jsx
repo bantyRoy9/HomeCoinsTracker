@@ -17,8 +17,8 @@ const AddEarn = ({navigation}) => {
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [details, setDetails] = useState(initalState);
   const [errors,setErrors] = useState({});
-  const [ source,setSource] = useState([])
-  const { isLoading } = useSelector(state=> state.account);
+  const [ source,setSource] = useState([{label:"A",value:"A"}])
+  let { isLoading } = useSelector(state=> state.account);
   const { colors,dark} = useTheme();
   const backgroundStyle = {
     backgroundColor: colors.background,
@@ -33,13 +33,15 @@ const AddEarn = ({navigation}) => {
     const fetchSource = async()=>{
       try{
         const { data } = await axios.get(`${sourceControllerURL}/source`);
+        console.log(data);
         if( data.status ){
-          setSource(data.data.map(el=> {return {label:el.sourceName,value:el._id}}));
+          // setSource(data.data.map(el=> {return {label:el.sourceName,value:el._id}}));
         }
       }catch(err){
 
       }
     }
+    isLoading=false
     fetchSource()
   },[])
   const changeHandler = (key, value) => {
@@ -72,9 +74,11 @@ const AddEarn = ({navigation}) => {
     setSelectedDate(date);
     setDetails({ ...details, ["date"]: moment(new Date(date)).format('YYYY-MM-DD')});
   };
-  const selectPickerChangleHandler = () =>{
-
+  const selectPickerChangleHandler = (e) =>{
+    console.log(e);
   }
+  isLoading=false
+  console.log(isLoading);
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={colors.background}></StatusBar>

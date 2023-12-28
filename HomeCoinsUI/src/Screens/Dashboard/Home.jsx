@@ -90,7 +90,7 @@ const Home = () => {
         <FloatingActionBtn />
       </View>
       <View>
-        <Header />
+        <Header title="Home"/>
       </View>
     </SafeAreaView>
   )
@@ -160,12 +160,7 @@ const styles = StyleSheet.create({
   expensEarnBtn: {
     width: '100%',
     height: '90%',
-    position: 'absolute',
-    // flexDirection: 'row',
-    // position: 'absolute',
-    // justifyContent: 'space-between',
-    // bottom: 0,
-    // marginHorizontal: 22
+    position: 'absolute'
   },
   earnExpensBtn: {
     // flexDirection:'row',

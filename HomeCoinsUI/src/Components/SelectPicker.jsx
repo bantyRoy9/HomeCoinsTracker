@@ -22,11 +22,16 @@ const SelectPicker = (props) => {
         textInputProps={{}}
         style={{
           ...pickerSelectStyles,
-          
-          iconContainer: {top: 10,left: 10},
+          iconContainer: {top: 15,left: 10},
+          viewContainer:{backgroundColor:colors.surfaceVariant},
+          chevronContainer:{backgroundColor:'red'},
+          inputAndroidContainer:{backgroundColor:'red'},
           placeholder: {
             fontSize: 15,
+            color:colors.text,
+            left:10,
             fontWeight: 'bold',
+            marginLeft:20
           },
         }}
         Icon={()=> <Icons name={props.icon} size={20}/>}

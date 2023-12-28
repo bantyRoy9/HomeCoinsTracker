@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, Text, View, Pressable, SafeAreaView, ScrollView, Image } from 'react-native'
+import { StatusBar, StyleSheet, Text, View, Pressable, SafeAreaView, ScrollView, Image } from 'react-native';
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getActivity } from '../../Redux/Action/activityAction';
@@ -8,6 +8,7 @@ import moment from 'moment';
 import { stringTransform } from '../../Utils/HomeCommon';
 import { colors as color } from 'react-native-elements';
 import { showAlert } from '../../Utils/CommonAuthFunction';
+import { Header } from '../../Components';
 
 
 const Activity = ({groupId}) => {
@@ -71,6 +72,9 @@ const Activity = ({groupId}) => {
                     </View>
                 </ScrollView>
             }
+        <View>
+            <Header title="Activity"/>
+        </View>
         </SafeAreaView>
     )
 }

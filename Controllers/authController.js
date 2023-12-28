@@ -7,7 +7,7 @@ const catchAsync = require('../Utils/catchAsync');
 const Email = require('../Utils/Email');
 const SendSMS = require('../Utils/SendSMS');
 const { removeWhiteSpace, requiredResponseBody } = require('../Utils/commonFunction');
-const { userBO } = require('../Utils/resonseJSON');
+const { userBO } = require('../Utils/responseJSON');
 
 const generateOTP = catchAsync(async(userModal,res,data) =>{
     const verifyUserOtp = userModal.createVerifyUserOtp();
