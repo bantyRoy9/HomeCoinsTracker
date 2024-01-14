@@ -1,5 +1,18 @@
 import moment from "moment";
 
+export const topHomeNavList = [{
+    label:"Daily",
+    dateRange:`${moment().format('YYYY-MM-DD')}_${moment().format('YYYY-MM-DD')}`,
+    active:true
+},{
+    label:"Monthly",
+    dateRange:`${moment().format('YYYY-MM-DD')}_${moment().format('YYYY-MM-DD')}`,
+    active:false
+},{
+    label:"Yearly",
+    dateRange:`${moment().format('YYYY-MM-DD')}_${moment().format('YYYY-MM-DD')}`,
+    active:false
+}]
 export const homeNavList = [
     {
         label:'Today',

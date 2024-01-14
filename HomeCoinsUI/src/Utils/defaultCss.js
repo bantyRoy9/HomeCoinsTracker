@@ -28,6 +28,7 @@ export const defaultStyle = StyleSheet.create({
       activityIndicator:{
         flex:1,
         justifyContent:'center',
+        height:'auto'
     },
     model:{
         borderColor:'red',

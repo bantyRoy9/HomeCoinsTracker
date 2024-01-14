@@ -3,14 +3,16 @@ import React, { useState, useEffect } from 'react'
 import { Card } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEarnExpendData } from '../../Redux/Action/accountAction';
-import { Chart, DataTable, FloatingActionBtn, Header } from '../../Components';
-import { homeNavList, defaultStyle, FeatherIcons } from '../../Utils';
+import { Chart, DataTable, DatePicker, FloatingActionBtn, Header } from '../../Components';
+import { homeNavList, defaultStyle, FeatherIcons, FontAwesome } from '../../Utils';
 import { useTheme } from 'react-native-paper';
-import { showAlert } from '../../Utils/CommonAuthFunction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { USER_SUCCCESS } from '../../Redux/constants';
+import { topHomeNavList } from '../../Utils/homeNavList';
+import Daily from './Daily';
+import Monthly from './Monthly';
 const Home = () => {
-  const [dateRange, setDateRange] = useState({ label: 'Last 7 days' });
+  const [dateRange, setDateRange] = useState({ label: 'Daily' });
   const dispatch = useDispatch();
   const { colors, dark } = useTheme();
   const backgroundStyle = {
@@ -33,59 +35,21 @@ const Home = () => {
   }, [dateRange]);
 
   const navPressHandle = (navPress) => {
-    homeNavList.map(el => el.label == navPress.label ? el.active = true : el.active = false);
+    topHomeNavList.map(el => el.label == navPress.label ? el.active = true : el.active = false);
     setDateRange(navPress);
   };
 
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
-      <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
-        <View style={defaultStyle.screenContainer}>
-          <View style={styles.navigationContainer}>
-            {homeNavList.map((ele, idx) => (
-              <Pressable key={idx} onPress={() => navPressHandle(ele)}>
-                <Text key={idx} style={ele.active ? { ...styles.activeNavText, backgroundColor: colors.notification, color: colors.primary } : { ...styles.navText, color: colors.text }}>{ele.label}</Text>
+        <View style={{...styles.navigationContainer,backgroundColor:colors.HeaderBg,paddingHorizontal:10}}>
+            {topHomeNavList.map((ele,idx)=>(
+              <Pressable onPress={()=>navPressHandle(ele)} key={`${ele.label}_${idx}`} style={{flex:1}}>
+                <Text style={ele.active ? {textAlign:'center',fontSize: 14, color:colors.text,paddingVertical:12,borderBottomColor:colors.notification,borderBottomWidth:3} : { ...styles.navText,textAlign:'center',fontSize:16,paddingVertical:12, color: colors.text }}>{ele.label}</Text>
               </Pressable>
             ))}
-          </View>
-          {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> : <>
-            <View style={defaultStyle.viewSection}>
-              <Card containerStyle={{ ...styles.cardContainer, backgroundColor: colors.card }}>
-                <View style={styles.cardTitle}>
-                  <View>
-                    <Text style={{ ...styles.cardLeftTitle, color: colors.text }}>Analytics</Text>
-                  </View>
-                  <View style={styles.cardRightTitle}>
-                    <View>
-                      <Text style={{ ...styles.cardRightText, color: colors.text }}>{dateRange.label}</Text>
-                    </View>
-                    <View style={{ ...styles.cardRightIconCont, borderColor: colors.text }}>
-                      <FeatherIcons name='filter' color={colors.text} size={15} />
-                    </View>
-                  </View>
-                </View>
-                <View>
-                  {!isLoading && account && account?.analyticsDetail && <>
-                    {Object.keys(account?.analyticsDetail).map((el, idx) => (
-                      <View key={idx + homeNavList.length} style={styles.analyticsDetails}>
-                        <View><Text style={{ ...styles.analyticsText, color: colors.text }}>{el}</Text></View>
-                        <View><Text style={{ ...styles.analyticsText, color: colors.text }}>₹{account.analyticsDetail[el] ? account.analyticsDetail[el] : 'NA'}</Text></View>
-                      </View>
-                    ))}
-                  </>}
-                </View>
-              </Card>
-              {!isLoading && account?.graphData && account?.graphData.labels && account?.graphData.labels.length > 0 && <>
-                <View style={defaultStyle.viewSection}>
-                  <Chart graphData={account?.graphData} />
-                </View>
-                <View>
-                  <DataTable tableData={account.graphData} />
-                </View></>}
-            </View></>}
         </View>
-      </ScrollView>
+        {dateRange.label === "Daily"? <Daily dateRange={dateRange}/> : <Monthly/>}             
       <View style={styles.expensEarnBtn}>
         <FloatingActionBtn />
       </View>
@@ -110,7 +74,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 15
+    // marginTop: 15
   },
   navText: {
     fontSize: 14,
@@ -119,6 +83,11 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     paddingHorizontal: 10,
     borderRadius: 7
+  },
+  activeNavText1: {
+    borderBottomColor:'red',
+    borderBottomWidth:5,
+    paddingVertical:15
   },
   cardContainer: {
     padding: 15,
