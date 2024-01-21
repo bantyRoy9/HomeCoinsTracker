@@ -9,6 +9,7 @@ export const defaultTheme ={
         border:"rgb(238, 238, 238)",
         notification:"rgb(254, 103, 0)",
         card:"rgb(238, 238, 238)",
+        HeaderBg:"rgb(238, 238, 238)",
         btnBackground:"rgb(13, 245, 227)",
         inputFocusBackground:"rgb(255, 255, 255)",
         loaderColor:"rgb(56, 48, 76)",

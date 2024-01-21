@@ -10,6 +10,7 @@ export const darkTheme = {
         text:"rgb(254, 254, 254)",
         notification:"rgb(254, 103, 0)",
         card:"rgb(40, 40, 40)",
+        HeaderBg:"rgb(40, 40, 40)",
         surfaceVariant:"rgb(10, 6, 26)",
         btnBackground:"rgb(13, 245, 227)",
         headerBg:"rgb(31, 27, 36)",

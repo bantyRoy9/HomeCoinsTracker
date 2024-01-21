@@ -1,25 +1,24 @@
-import { ScrollView, ActivityIndicator, SafeAreaView, StyleSheet, Pressable, Text, View, useColorScheme, StatusBar } from 'react-native'
+import { SafeAreaView, StyleSheet, Pressable, Text, View, StatusBar } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { Card } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEarnExpendData } from '../../Redux/Action/accountAction';
-import { Chart, DataTable, FloatingActionBtn, Header } from '../../Components';
-import { homeNavList, defaultStyle, FeatherIcons } from '../../Utils';
+import { FloatingActionBtn, Header } from '../../Components';
+import { FontAwesome, homeNavList } from '../../Utils';
 import { useTheme } from 'react-native-paper';
-import { showAlert } from '../../Utils/CommonAuthFunction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { USER_SUCCCESS } from '../../Redux/constants';
+import { topHomeNavList } from '../../Utils/homeNavList';
+import Daily from './Daily';
+import Monthly from './Monthly';
+import moment from 'moment';
 const Home = () => {
-  const [dateRange, setDateRange] = useState({ label: 'Last 7 days' });
+  const [dateRange, setDateRange] = useState({ label: 'Daily' });
+  let dateFormatObj={date:moment().format("DD"),day:moment().format("dddd"),month:moment().format("MMMM"),year:moment().format("YYYY")};
+  const [ dateFormat, setDateFormat]=useState(dateFormatObj)
   const dispatch = useDispatch();
   const { colors, dark } = useTheme();
-  const backgroundStyle = {
-    backgroundColor: colors.background,
-    color: colors.text
-  };
-  const { isLoading, account } = useSelector(state => state.account);
+  const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
   let { isAuthenticated, user } = useSelector(state => state.user);
-
   useEffect(() => {
     const fetchEarnExpendData = async () => {
       const dateRange = homeNavList.filter(el => el.active == true);
@@ -33,65 +32,47 @@ const Home = () => {
   }, [dateRange]);
 
   const navPressHandle = (navPress) => {
-    homeNavList.map(el => el.label == navPress.label ? el.active = true : el.active = false);
+    topHomeNavList.map(el => el.label == navPress.label ? el.active = true : el.active = false);
+    console.log(navPress);
     setDateRange(navPress);
   };
 
+  handleDateRange =(action)=>{
+    console.log(action);
+  }
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
-      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
-      <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
-        <View style={defaultStyle.screenContainer}>
-          <View style={styles.navigationContainer}>
-            {homeNavList.map((ele, idx) => (
-              <Pressable key={idx} onPress={() => navPressHandle(ele)}>
-                <Text key={idx} style={ele.active ? { ...styles.activeNavText, backgroundColor: colors.notification, color: colors.primary } : { ...styles.navText, color: colors.text }}>{ele.label}</Text>
+        <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
+        <View style={{...styles.navigationContainer,backgroundColor:colors.HeaderBg,paddingHorizontal:10}}>
+            {topHomeNavList.map((ele,idx)=>(
+              <Pressable onPress={()=>navPressHandle(ele)} key={`${ele.label}_${idx}`} style={{flex:1}}>
+                <Text style={ele.active ? {textAlign:'center',fontSize: 14, color:colors.text,paddingVertical:12,borderBottomColor:colors.notification,borderBottomWidth:3} : { ...styles.navText,textAlign:'center',fontSize:16,paddingVertical:12, color: colors.text }}>{ele.label}</Text>
               </Pressable>
             ))}
-          </View>
-          {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> : <>
-            <View style={defaultStyle.viewSection}>
-              <Card containerStyle={{ ...styles.cardContainer, backgroundColor: colors.card }}>
-                <View style={styles.cardTitle}>
-                  <View>
-                    <Text style={{ ...styles.cardLeftTitle, color: colors.text }}>Analytics</Text>
-                  </View>
-                  <View style={styles.cardRightTitle}>
-                    <View>
-                      <Text style={{ ...styles.cardRightText, color: colors.text }}>{dateRange.label}</Text>
-                    </View>
-                    <View style={{ ...styles.cardRightIconCont, borderColor: colors.text }}>
-                      <FeatherIcons name='filter' color={colors.text} size={15} />
-                    </View>
-                  </View>
-                </View>
-                <View>
-                  {!isLoading && account && account?.analyticsDetail && <>
-                    {Object.keys(account?.analyticsDetail).map((el, idx) => (
-                      <View key={idx + homeNavList.length} style={styles.analyticsDetails}>
-                        <View><Text style={{ ...styles.analyticsText, color: colors.text }}>{el}</Text></View>
-                        <View><Text style={{ ...styles.analyticsText, color: colors.text }}>₹{account.analyticsDetail[el] ? account.analyticsDetail[el] : 'NA'}</Text></View>
-                      </View>
-                    ))}
-                  </>}
-                </View>
-              </Card>
-              {!isLoading && account?.graphData && account?.graphData.labels && account?.graphData.labels.length > 0 && <>
-                <View style={defaultStyle.viewSection}>
-                  <Chart graphData={account?.graphData} />
-                </View>
-                <View>
-                  <DataTable tableData={account.graphData} />
-                </View></>}
-            </View></>}
         </View>
-      </ScrollView>
-      <View style={styles.expensEarnBtn}>
-        <FloatingActionBtn />
-      </View>
-      <View>
-        <Header title="Home"/>
-      </View>
+        <View style={{flex:1}}>
+          <View style={{paddingHorizontal:10,marginHorizontal:18,marginVertical:1,paddingVertical:10,backgroundColor:colors.headerBg,marginTop:10,borderWidth:1,flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+            <View style={{flex:1,flexDirection:'row',alignItems:'center',gap:8}}>
+              <Pressable style={{padding:8}} onPress={()=>handleDateRange("prev")}><FontAwesome name='chevron-left' color={colors.text} size={15}/></Pressable>
+                <View style={{flexDirection:'row',alignItems:'center',gap:10}}>
+                  <View style={{padding:8,borderWidth:1,borderColor:colors.text,borderRadius:5}}><Text style={{color:colors.text,fontWeight:600}}>{dateFormat.date}</Text></View>
+                  <View>
+                    <Text style={{color:colors.text}}>{dateFormat.month} {dateFormat.year}</Text>
+                    <Text style={{color:colors.text}}>{dateFormat.day}</Text>
+                  </View>
+                </View>
+              </View>
+            <View style={{flexDirection:'row',alignItems:'center',gap:10}}>
+              <View>
+                <Text style={{color:colors.text,textAlign:'right'}}>Blance</Text>
+                <Text style={{color:colors.text,fontSize:16}}>₹12000</Text>
+              </View>
+              <Pressable style={{padding:8}} onPress={()=>handleDateRange("next")}><FontAwesome name='chevron-right' color={colors.text} size={15}/></Pressable>
+            </View>
+          </View>
+          {dateRange.label === "Daily"? <Daily dateRange={dateRange}/> : <Monthly dateRange={dateRange}/>}</View>
+        <View style={styles.expensEarnBtn}><FloatingActionBtn /></View>
+        <View><Header title="Home"/></View>
     </SafeAreaView>
   )
 }
@@ -99,83 +80,20 @@ const Home = () => {
 export default Home
 
 const styles = StyleSheet.create({
-  toHeaderContainer: {
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginTop: 20,
-    paddingBottom: 10,
-  },
   navigationContainer: {
     justifyContent: 'space-around',
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 15
   },
   navText: {
     fontSize: 14,
-  },
-  activeNavText: {
-    paddingVertical: 7,
-    paddingHorizontal: 10,
-    borderRadius: 7
-  },
-  cardContainer: {
-    padding: 15,
-    margin: 0,
-    borderRadius: 10,
-    borderWidth: 0
-  },
-  cardTitle: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 15,
-    alignItems: 'center'
-  },
-  cardLeftTitle: {
-    fontSize: 18,
-    fontSize: 20
-  },
-  cardRightTitle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  cardRightText: {
-    marginRight: 8,
-  },
-  cardRightIconCont: {
-    borderWidth: 1.5,
-    borderRadius: 5,
-    padding: 4
-  },
-  analyticsDetails: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  analyticsText: {
-    fontSize: 16,
-    fontWeight: '500',
-    lineHeight: 30
   },
   expensEarnBtn: {
     width: '100%',
     height: '90%',
     position: 'absolute'
   },
-  earnExpensBtn: {
-    // flexDirection:'row',
-    // alignItems:'center',
-    padding: 15,
-    // borderRadius:20
-  },
-  earnExpensBtnText: {
-    fontSize: 16,
-    fontWeight: '600'
-  },
   earnBtn: {
     backgroundColor: 'green'
-  },
-  expensBtn: {
-    backgroundColor: 'red',
   }
 })
