@@ -11,8 +11,9 @@ import { topHomeNavList } from '../../Utils/homeNavList';
 import Daily from './Daily';
 import Monthly from './Monthly';
 import moment from 'moment';
+const dateStr = ["date","day","month","year"];
 const Home = () => {
-  const [dateRange, setDateRange] = useState({ label: 'Daily' });
+  const [dateRange, setDateRange] = useState(topHomeNavList.filter(el => el.active == true)[0]);
   let dateFormatObj={date:moment().format("DD"),day:moment().format("dddd"),month:moment().format("MMMM"),year:moment().format("YYYY")};
   const [ dateFormat, setDateFormat]=useState(dateFormatObj)
   const dispatch = useDispatch();
@@ -21,25 +22,28 @@ const Home = () => {
   let { isAuthenticated, user } = useSelector(state => state.user);
   useEffect(() => {
     const fetchEarnExpendData = async () => {
-      const dateRange = homeNavList.filter(el => el.active == true);
       if(user && Object.keys(user).length === 0){
         user = JSON.parse(await AsyncStorage.getItem('user'));
         dispatch({type:USER_SUCCCESS,payload:user});
       };
-      dispatch(getEarnExpendData(dateRange, user?.groupId ?? ""));
+      dispatch(getEarnExpendData(dateRange.dateRange, user?.groupId ?? ""));
     };
     fetchEarnExpendData();
   }, [dateRange]);
 
   const navPressHandle = (navPress) => {
-    topHomeNavList.map(el => el.label == navPress.label ? el.active = true : el.active = false);
-    console.log(navPress);
+    topHomeNavList.map(el => el.label === navPress.label ? el.active = true : el.active = false);
     setDateRange(navPress);
   };
 
   handleDateRange =(action)=>{
-    console.log(action);
-  }
+    setDateRange(prevDate=>{
+      let date = prevDate.dateRange.split("_"),dateType="days",value="1";
+      if(prevDate.label === "Monthly"){dateType="month"}else if(prevDate.label === "Yearly"){dateType="year"};
+      if(action === "prev"){value = "-1"};
+      return {...prevDate,['dateRange']:`${moment(new Date(date[0])).add(value,dateType).format("YYYY-MM-DD")}_${moment(new Date(date[1])).add(value,dateType).format("YYYY-MM-DD")}`}
+    });
+  };
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
         <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />

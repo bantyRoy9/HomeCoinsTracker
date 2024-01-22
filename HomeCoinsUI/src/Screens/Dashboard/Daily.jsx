@@ -1,11 +1,9 @@
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { FeatherIcons, FontAwesome, defaultStyle, homeNavList } from '../../Utils'
-import { Chart, DataTable } from '../../Components'
+import { defaultStyle } from '../../Utils'
 import { Card } from 'react-native-elements';
 import { useTheme } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
-import { getEarnExpendData } from '../../Redux/Action/accountAction'
 const Daily = ({dateRange}) => {
     const { colors, dark } = useTheme();
     const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
@@ -13,10 +11,9 @@ const Daily = ({dateRange}) => {
     return (
     <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
         <View style={defaultStyle.screenContainer}>
-          
           {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> : <>
             <View style={defaultStyle.viewSection}>
-
+              
             </View></>}
         </View>
       </ScrollView>
