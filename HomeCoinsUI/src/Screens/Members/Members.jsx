@@ -1,6 +1,6 @@
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, Image, ActivityIndicator, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { getAxiosHeader, getAxiosHeaderWithoutCookie } from '../../Utils/CommonAuthFunction';
+import { getAxiosHeader } from '../../Utils/CommonAuthFunction';
 import axios from 'axios';
 import { groupControllerURL, userControllerURL } from '../../Utils/URLProperties';
 import { defaultStyle } from '../../Utils/defaultCss';
@@ -36,8 +36,8 @@ const Members = () => {
         <ScrollView style={defaultStyle.screenContainer}>
           {userList && userList.length > 0 ? <>
             {userList.map((el, idx) => (
-              <View style={{marginVertical:2}}>
-                <Pressable key={idx} style={{ flexDirection: 'row',paddingVertical:13,gap:15, alignItems: 'center',borderBottomColor:colors.border,borderBottomWidth:userList.length -1 >idx?1:0 }}>
+              <View style={{marginVertical:2}} key={idx}>
+                <Pressable style={{ flexDirection: 'row',paddingVertical:13,gap:15, alignItems: 'center',borderBottomColor:colors.border,borderBottomWidth:userList.length -1 >idx?1:0 }}>
                   <View>
                     <Image source={require(`../../../Assets/profiles/default.png`)} style={{ width: 35, height: 35, borderRadius: 8 }} />
                   </View>
