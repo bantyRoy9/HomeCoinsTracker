@@ -4,7 +4,6 @@ REACT_LOCAL_URL = "http://192.168.43.167:8000" //note7
 // const REACT_PROD_URL = "https://homecoinstracker.onrender.com"
 const REACT_PROD_URL = "http://13.126.184.51";
 NODE_ENV="production"
-console.log(NODE_ENV);
 const accountControllerURL = `${NODE_ENV === 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController`;
 const userControllerURL = `${NODE_ENV === 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/userController`;
 const activityControllerURL = `${NODE_ENV === 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/activityController`;

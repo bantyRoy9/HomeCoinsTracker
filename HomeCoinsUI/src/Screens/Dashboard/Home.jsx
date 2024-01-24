@@ -11,6 +11,7 @@ import { topHomeNavList } from '../../Utils/homeNavList';
 import Daily from './Daily';
 import Monthly from './Monthly';
 import moment from 'moment';
+import { getActivity } from '../../Redux/Action/activityAction';
 const dateStr = ["date","day","month","year"];
 const Home = () => {
   const [dateRange, setDateRange] = useState(topHomeNavList.filter(el => el.active == true)[0]);
@@ -18,6 +19,8 @@ const Home = () => {
   const { colors, dark } = useTheme();
   const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
   let { isAuthenticated, user } = useSelector(state => state.user);
+  const { activity } = useSelector(state=>state.activity);
+
   useEffect(() => {
     const fetchEarnExpendData = async () => {
       if(user && Object.keys(user).length === 0){
@@ -26,7 +29,7 @@ const Home = () => {
       };
       dispatch(getEarnExpendData(dateRange.dateRange, user?.groupId ?? ""));
     };
-    fetchEarnExpendData();
+    dateRange.label !== "Daily"?fetchEarnExpendData():dispatch(getActivity(user?.groupId,dateRange.dateRange));
   }, [dateRange]);
 
   const navPressHandle = (navPress) => {
@@ -34,7 +37,7 @@ const Home = () => {
     setDateRange(navPress);
   };
 
-  handleDateRange =(action)=>{
+  handleDateRange = (action)=>{
     setDateRange(prevDate=>{
       let date = prevDate.dateRange.split("_"),dateType="days",value="1";
       if(prevDate.label === "Monthly"){dateType="month"}else if(prevDate.label === "Yearly"){dateType="year"};
