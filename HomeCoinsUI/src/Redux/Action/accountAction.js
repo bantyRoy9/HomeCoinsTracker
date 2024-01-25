@@ -17,7 +17,7 @@ export const getEarnExpendData = (dateRange,groupId)=> async(dispatch)=>{
     try{
         dispatch({type:ACCOUNT_REQUIEST});
         console.log(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange}&groupId=${groupId}`);
-        const { data } = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange[0].dateRange}&groupId=${groupId}`)
+        const { data } = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange}&groupId=${groupId}`)
         if (data.status && data.data && data.graphData) {
             data.analyticsDetail = getAnalyticsDetails(data.graphData)
             data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })
@@ -43,6 +43,7 @@ export const addEarnExpend = (details,urlType,navigation) => async(dispatch) =>{
             dispatch({type:ACCOUNT_ADD_SUCCESS,payload:data});
         }else{
             showAlert(data.msg)
+            dispatch({type:ACCOUNT_ADD_FAIL,payload:null});
         }
     }catch(err){
         showAlert(err.response.data.msg)

@@ -1,16 +1,17 @@
 import moment from "moment";
 const date = new Date();
+console.log(date.getDate(),date.getMonth());
 export const topHomeNavList = [{
     label:"Daily",
     dateRange:`${moment().format('YYYY-MM-DD')}_${moment().format('YYYY-MM-DD')}`,
     active:true
 },{
     label:"Monthly",
-    dateRange:`${moment().subtract(date.getDate()-1,'days').format('YYYY-MM-DD')}_${moment().format('YYYY-MM-DD')}`,
+    dateRange:`${moment().startOf('month').format('YYYY-MM-DD')}_${moment().endOf('month').format('YYYY-MM-DD')}`,
     active:false
 },{
     label:"Yearly",
-    dateRange:`${moment().subtract(date.getMonth(),'month').subtract(date.getDate()-1,'days').format('YYYY-MM-DD')}_${moment().format('YYYY-MM-DD')}`,
+    dateRange:`${moment().startOf('year').format('YYYY-MM-DD')}_${moment().endOf('year').format('YYYY-MM-DD')}`,
     active:false
 }]
 export const homeNavList = [

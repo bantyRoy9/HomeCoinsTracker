@@ -8,12 +8,22 @@ const Daily = ({dateRange}) => {
     const { colors, dark } = useTheme();
     const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
     const { isLoading, account } = useSelector(state => state.account);
+    
     return (
     <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
         <View style={defaultStyle.screenContainer}>
           {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> : <>
             <View style={defaultStyle.viewSection}>
-              
+               <View><Text>{JSON.stringify(account?.graphData)}</Text></View>
+               <View>
+                <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',paddingVertical:10,paddingHorizontal:12,backgroundColor:colors.HeaderBg,}}>
+                  <Text style={{fontSize:15,color:colors.text}}>Total Income</Text>
+                  <Text style={{fontSize:17,color:colors.text}}>200</Text>
+                </View>
+                <View>
+
+                </View>
+               </View>
             </View></>}
         </View>
       </ScrollView>

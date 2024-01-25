@@ -8,17 +8,10 @@ import { useSelector } from 'react-redux'
 const Monthly = ({dateRange}) => {
     const { colors } = useTheme();
     const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
-    const { isLoading, account } = useSelector(state => state.account);
+    let { isLoading, account } = useSelector(state => state.account);
     return (
     <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
         <View style={defaultStyle.screenContainer}>
-          {/* <View style={styles.navigationContainer}>
-            {homeNavList.map((ele, idx) => (
-              <Pressable key={`${ele.label}_${idx}`} onPress={() => navPressHandle(ele)}>
-                <Text key={idx} style={ele.active ? { ...styles.activeNavText, backgroundColor: colors.notification, color: colors.primary } : { ...styles.navText, color: colors.text }}>{ele.label}</Text>
-              </Pressable>
-            ))}
-          </View> */}
           {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> : <>
             <View style={defaultStyle.viewSection}>
               <Card containerStyle={{ ...styles.cardContainer, backgroundColor: colors.card }}>

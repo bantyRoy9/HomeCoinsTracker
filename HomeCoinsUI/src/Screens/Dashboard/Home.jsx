@@ -11,15 +11,16 @@ import { topHomeNavList } from '../../Utils/homeNavList';
 import Daily from './Daily';
 import Monthly from './Monthly';
 import moment from 'moment';
+import { getActivity } from '../../Redux/Action/activityAction';
 const dateStr = ["date","day","month","year"];
 const Home = () => {
   const [dateRange, setDateRange] = useState(topHomeNavList.filter(el => el.active == true)[0]);
-  let dateFormatObj={date:moment().format("DD"),day:moment().format("dddd"),month:moment().format("MMMM"),year:moment().format("YYYY")};
-  const [ dateFormat, setDateFormat]=useState(dateFormatObj)
-  const dispatch = useDispatch();
+   const dispatch = useDispatch();
   const { colors, dark } = useTheme();
   const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
   let { isAuthenticated, user } = useSelector(state => state.user);
+  const { activity } = useSelector(state=>state.activity);
+
   useEffect(() => {
     const fetchEarnExpendData = async () => {
       if(user && Object.keys(user).length === 0){
@@ -28,7 +29,7 @@ const Home = () => {
       };
       dispatch(getEarnExpendData(dateRange.dateRange, user?.groupId ?? ""));
     };
-    fetchEarnExpendData();
+    dateRange.label !== "Daily"?fetchEarnExpendData():dispatch(getActivity(user?.groupId,dateRange.dateRange));
   }, [dateRange]);
 
   const navPressHandle = (navPress) => {
@@ -36,14 +37,15 @@ const Home = () => {
     setDateRange(navPress);
   };
 
-  handleDateRange =(action)=>{
+  handleDateRange = (action)=>{
     setDateRange(prevDate=>{
       let date = prevDate.dateRange.split("_"),dateType="days",value="1";
       if(prevDate.label === "Monthly"){dateType="month"}else if(prevDate.label === "Yearly"){dateType="year"};
       if(action === "prev"){value = "-1"};
-      return {...prevDate,['dateRange']:`${moment(new Date(date[0])).add(value,dateType).format("YYYY-MM-DD")}_${moment(new Date(date[1])).add(value,dateType).format("YYYY-MM-DD")}`}
+      return {...prevDate,['dateRange']:`${moment(new Date(date[0])).add(value,dateType).startOf(dateType).format("YYYY-MM-DD")}_${moment(new Date(date[1])).add(value,dateType).endOf(dateType).format("YYYY-MM-DD")}`}
     });
   };
+  let date = dateRange.dateRange.split("_")[0],dateFormat={date:moment(new Date(date)).format("DD"),day:moment(new Date(date)).format("dddd"),month:moment(new Date(date)).format("MMMM"),year:moment(new Date(date)).format("YYYY")},isDaily=dateRange.label === "Daily"?true:false;
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
         <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
@@ -55,22 +57,22 @@ const Home = () => {
             ))}
         </View>
         <View style={{flex:1}}>
-          <View style={{paddingHorizontal:10,marginHorizontal:18,marginVertical:1,paddingVertical:10,backgroundColor:colors.headerBg,marginTop:10,borderWidth:1,flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+          <View style={{paddingHorizontal:10,marginHorizontal:18,marginVertical:1,paddingVertical:10,backgroundColor:colors.headerBg,marginTop:10,borderWidth:.4,borderColor:colors.text,flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
             <View style={{flex:1,flexDirection:'row',alignItems:'center',gap:8}}>
               <Pressable style={{padding:8}} onPress={()=>handleDateRange("prev")}><FontAwesome name='chevron-left' color={colors.text} size={15}/></Pressable>
-                <View style={{flexDirection:'row',alignItems:'center',gap:10}}>
-                  <View style={{padding:8,borderWidth:1,borderColor:colors.text,borderRadius:5}}><Text style={{color:colors.text,fontWeight:600}}>{dateFormat.date}</Text></View>
+                <View style={{flexDirection:'row',alignItems:'center',justifyContent:`${!isDaily && 'center'}`,flex:1,gap:10}}>
+                  {isDaily && <View style={{padding:8,borderWidth:.4,borderColor:colors.text,borderRadius:5}}><Text style={{color:colors.text,fontWeight:600}}>{dateFormat.date}</Text></View>}
                   <View>
                     <Text style={{color:colors.text}}>{dateFormat.month} {dateFormat.year}</Text>
-                    <Text style={{color:colors.text}}>{dateFormat.day}</Text>
+                    {isDaily &&<Text style={{color:colors.text}}>{dateFormat.day}</Text>}
                   </View>
                 </View>
               </View>
             <View style={{flexDirection:'row',alignItems:'center',gap:10}}>
-              <View>
+            {isDaily && <View>
                 <Text style={{color:colors.text,textAlign:'right'}}>Blance</Text>
                 <Text style={{color:colors.text,fontSize:16}}>₹12000</Text>
-              </View>
+              </View>}
               <Pressable style={{padding:8}} onPress={()=>handleDateRange("next")}><FontAwesome name='chevron-right' color={colors.text} size={15}/></Pressable>
             </View>
           </View>

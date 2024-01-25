@@ -78,7 +78,6 @@ const AddEarn = ({navigation}) => {
     console.log(e);
   }
   isLoading=false
-  console.log(isLoading);
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={colors.background}></StatusBar>
