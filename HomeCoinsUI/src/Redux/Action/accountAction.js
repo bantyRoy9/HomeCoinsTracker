@@ -13,15 +13,20 @@ const getAnalyticsDetails = (resData) => {
     return analyticsJson;
   }
   
-export const getEarnExpendData = (dateRange,groupId)=> async(dispatch)=>{
+export const getEarnExpendData = (dateRange,groupId,isGraph=false)=> async(dispatch)=>{
     try{
         dispatch({type:ACCOUNT_REQUIEST});
-        console.log(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange}&groupId=${groupId}`);
-        const { data } = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange}&groupId=${groupId}`)
+        console.log(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange}&groupId=${groupId}&isGraph=${isGraph}`);
+        const { data } = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange}&groupId=${groupId}&isGraph=${isGraph}`)
         if (data.status && data.data && data.graphData) {
-            data.analyticsDetail = getAnalyticsDetails(data.graphData)
-            data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })
-            data.graphData.labels = data.graphData.labels.map(el => moment(el, 'DD-MM-YYYY').format('DD MMM'));
+            if(isGraph){
+                data.analyticsDetail = getAnalyticsDetails(data.graphData)
+                data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })
+                data.graphData.labels = data.graphData.labels.map(el => moment(el, 'DD-MM-YYYY').format('DD MMM'));
+            }else{
+                data.earnList = data.graphData.filter(el=>el['earnBy']);
+                data.expendList = data.graphData.filter(el=>el['expendBy']);
+            };
             dispatch({type:ACCOUNT_SUCCCESS,payload:data});
           }else{
             dispatch({type:ACCOUNT_FAIL,payload:null});

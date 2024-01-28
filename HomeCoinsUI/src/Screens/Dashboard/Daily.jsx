@@ -4,6 +4,7 @@ import { defaultStyle } from '../../Utils'
 import { Card } from 'react-native-elements';
 import { useTheme } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
+import moment from 'moment';
 const Daily = ({dateRange}) => {
     const { colors, dark } = useTheme();
     const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
@@ -14,14 +15,32 @@ const Daily = ({dateRange}) => {
         <View style={defaultStyle.screenContainer}>
           {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> : <>
             <View style={defaultStyle.viewSection}>
-               <View><Text>{JSON.stringify(account?.graphData)}</Text></View>
-               <View>
+               <View style={{marginBottom:10}}>
                 <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',paddingVertical:10,paddingHorizontal:12,backgroundColor:colors.HeaderBg,}}>
                   <Text style={{fontSize:15,color:colors.text}}>Total Income</Text>
-                  <Text style={{fontSize:17,color:colors.text}}>200</Text>
+                  <Text style={{fontSize:17,color:colors.text}}>₹{(account && account.earnList && account.earnList.length>0) ? account.earnList.reduce((total,list)=>list.amount+total,0) : "0.00"}</Text>
                 </View>
                 <View>
-
+                  {account && account.earnList && account.earnList.length>0 && account.earnList.map((el,idx)=>(<Pressable key={idx+'earn'}>
+                    <View style={{flexDirection:'row',justifyContent:'space-between',padding:10}}>
+                      <Text>{moment(el.date).format("DD-MM-YYYY")}</Text>
+                      <Text>₹{el?.amount??"--"}</Text>
+                    </View>
+                  </Pressable>))}
+                </View>
+               </View>
+               <View>
+                <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',paddingVertical:10,paddingHorizontal:12,backgroundColor:colors.HeaderBg,}}>
+                  <Text style={{fontSize:15,color:colors.text}}>Total Expend</Text>
+                  <Text style={{fontSize:17,color:colors.text}}>₹{(account && account.expendList && account.expendList.length>0) ? account.expendList.reduce((total,list)=>list.amount+total,0):"0.00"}</Text>
+                </View>
+                <View>
+                  {account && account.expendList && account.expendList.length>0 && account.expendList.map((el,idx)=>(<Pressable key={idx+'expend'}>
+                    <View style={{flexDirection:'row',justifyContent:'space-between',padding:10}}>
+                      <Text>{moment(el.date).format("DD-MM-YYYY")}</Text>
+                      <Text>₹{el?.amount??"--"}</Text>
+                    </View>
+                  </Pressable>))}
                 </View>
                </View>
             </View></>}
