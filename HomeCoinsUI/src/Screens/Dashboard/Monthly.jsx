@@ -40,9 +40,9 @@ const Monthly = ({dateRange}) => {
                 </View>
               </Card>
               {!isLoading && account?.graphData && account?.graphData.labels && account?.graphData.labels.length > 0 && <>
-                <View style={defaultStyle.viewSection}>
+                {/* <View style={defaultStyle.viewSection}>
                   <Chart graphData={account?.graphData} />
-                </View>
+                </View> */}
                 <View>
                   <DataTable tableData={account.graphData} />
                 </View></>}

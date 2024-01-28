@@ -21,7 +21,7 @@ function App() {
   useEffect(() => {
     fetchUserDetail();
     setTimeout(()=>{
-      SplashScreen.hide();
+      // SplashScreen.hide();
     },500);
   }, [user,group]);
   const fetchUserDetail = async () => {

@@ -57,7 +57,7 @@ const Login = ({navigation}) => {
       <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle} contentContainerStyle={{flex:1,justifyContent:'center'}}>
           <View style={defaultStyle.screenContainer}>
             <View style={{ alignItems: 'center'}}>
-              <Image source={require('../../../Assets/Icons/login1.png')} style={{width: 250,height: 180}}/>
+              <Image source={require('../../../Assets/Icons/coinsTracker.png')} style={{width: 250,height: 180}}/>
             </View>
             {/* <View>
               <Text style={{fontSize: 35,fontWeight: 700,color: backgroundStyle.color,marginVertical: 10}}>Login</Text>

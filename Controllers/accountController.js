@@ -69,11 +69,17 @@ exports.getTotalExpend = catchAsync(async(req,res,next)=>{
     const filterData = new ApiFeature(ExpendModel.find(groupFilter),req.query).filter();
     const totalExpend = await filterData.modal;
    let graphDataJson = null;
-    if(req.totalErans){
-        graphDataJson = graphData([req.totalErans,totalExpend],['Earn','Expend'],['#5aa16d','#a15a76']);
-    }else{
-        graphDataJson = graphData([totalExpend],['Expend'],['#5aa16d']);
-    }
+   console.log(req.query);
+   if(req.query.type === "both" && req.query.isGraph === "true"){
+       if(req.totalErans){ 
+           graphDataJson = graphData([req.totalErans,totalExpend],['Earn','Expend'],['#5aa16d','#a15a76']);
+       }else{
+           graphDataJson = graphData([totalExpend],['Expend'],['#5aa16d']);
+       }
+   }else{
+    graphDataJson=[...req.totalErans,...totalExpend]
+   };
+
     res.status(200).json({
         status:true,
         graphData:graphDataJson,
