@@ -7,7 +7,7 @@
     "start": "node server.js",
     "dev": "NODE_ENV=development nodemon server.js",
     "prod": "NODE_ENV=production nodemon server.js",
-    "debug": "NODE_ENV=production ndb server.js",
+    "debug": "NODE_ENV=development ndb server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "BANTI",

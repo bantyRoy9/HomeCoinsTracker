@@ -27,9 +27,9 @@ const Home = () => {
         user = JSON.parse(await AsyncStorage.getItem('user'));
         dispatch({type:USER_SUCCCESS,payload:user});
       };
-      dispatch(getEarnExpendData(dateRange.dateRange, user?.groupId ?? ""));
+      dispatch(getEarnExpendData(dateRange.dateRange, user?.groupId ?? "",dateRange.label !== "Daily" ? true : false));
     };
-    dateRange.label !== "Daily"?fetchEarnExpendData():dispatch(getActivity(user?.groupId,dateRange.dateRange));
+    fetchEarnExpendData();
   }, [dateRange]);
 
   const navPressHandle = (navPress) => {

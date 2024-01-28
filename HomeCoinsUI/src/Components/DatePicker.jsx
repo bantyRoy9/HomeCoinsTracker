@@ -41,7 +41,7 @@ const DatePicker = (props) => {
         <DateTimePickerModal
           date={props?.date??selectedDate}
           isVisible={props?.isVisible??datePickerVisible}
-          mode={props?.mode??"date"}
+          mode={props?.mode??"datetime"}
           onConfirm={props?.onConfirm??handleConfirm}
           onCancel={props?.onCancel??hideDatePicker}
           maximumDate={new Date()}

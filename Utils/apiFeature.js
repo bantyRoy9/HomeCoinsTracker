@@ -6,7 +6,7 @@ class ApiFeature {
 
     filter(){
         let queryObj = {...this.query};
-        const removeObjKey = ['page','filter','search','sort','type'];
+        const removeObjKey = ['page','filter','search','sort','type','isGraph'];
         removeObjKey.forEach(el=> delete queryObj[el]);
         let queryStr = JSON.stringify(queryObj).replace(/\b(gt|gte|lte|lt)\b/g, match=> `$${match}`);
         this.modal = this.modal.find(JSON.parse(queryStr));
