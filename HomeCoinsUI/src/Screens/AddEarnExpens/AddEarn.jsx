@@ -157,6 +157,7 @@ const AddEarn = ({navigation}) => {
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
             onChangeText={(text)=>changeHandler("date", text)}
+            isInputBox={true}
           />
         </View>
         
