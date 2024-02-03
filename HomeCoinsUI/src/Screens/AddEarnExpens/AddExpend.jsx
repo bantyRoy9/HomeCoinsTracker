@@ -113,6 +113,7 @@ const AddExpend = ({navigation}) => {
           isHelper={errors.date ? true : false}
           errorMsg={errors?.date}
           helperType={'error'}
+          isInputBox={true}
           />
           
         </View>

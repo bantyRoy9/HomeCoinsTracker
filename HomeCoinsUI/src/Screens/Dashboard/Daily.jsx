@@ -21,12 +21,12 @@ const Daily = ({dateRange}) => {
                   <Text style={{fontSize:17,color:colors.text}}>₹{(account && account.earnList && account.earnList.length>0) ? account.earnList.reduce((total,list)=>list.amount+total,0) : "0.00"}</Text>
                 </View>
                 <View>
-                  {account && account.earnList && account.earnList.length>0 && account.earnList.map((el,idx)=>(<Pressable key={idx+'earn'}>
+                  {(account && account.earnList && account.earnList.length>0) ? account.earnList.map((el,idx)=>(<Pressable key={idx+'earn'}>
                     <View style={{flexDirection:'row',justifyContent:'space-between',padding:10}}>
-                      <Text>{moment(el.date).format("DD-MM-YYYY")}</Text>
-                      <Text>₹{el?.amount??"--"}</Text>
+                      <Text style={{color:colors.text}}>{moment(el.date).format("DD-MM-YYYY")}</Text>
+                      <Text style={{color:colors.text}}>₹{el?.amount??"--"}</Text>
                     </View>
-                  </Pressable>))}
+                  </Pressable>)) : <View style={{flexDirection:'row',justifyContent:'center',padding:10}}><Text style={{color:colors.error}}>Income Not Found</Text></View>}
                 </View>
                </View>
                <View>
@@ -35,12 +35,12 @@ const Daily = ({dateRange}) => {
                   <Text style={{fontSize:17,color:colors.text}}>₹{(account && account.expendList && account.expendList.length>0) ? account.expendList.reduce((total,list)=>list.amount+total,0):"0.00"}</Text>
                 </View>
                 <View>
-                  {account && account.expendList && account.expendList.length>0 && account.expendList.map((el,idx)=>(<Pressable key={idx+'expend'}>
+                  {(account && account.expendList && account.expendList.length>0) ? account.expendList.map((el,idx)=>(<Pressable key={idx+'expend'}>
                     <View style={{flexDirection:'row',justifyContent:'space-between',padding:10}}>
-                      <Text>{moment(el.date).format("DD-MM-YYYY")}</Text>
-                      <Text>₹{el?.amount??"--"}</Text>
+                      <Text style={{color:colors.text}}>{moment(el.date).format("DD-MM-YYYY")}</Text>
+                      <Text style={{color:colors.text}}>₹{el?.amount??"--"}</Text>
                     </View>
-                  </Pressable>))}
+                  </Pressable>)) : <View style={{flexDirection:'row',justifyContent:'center',padding:10}}><Text style={{color:colors.error}}>Expend Not Found</Text></View>}
                 </View>
                </View>
             </View></>}

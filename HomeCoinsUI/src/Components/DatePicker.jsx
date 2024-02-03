@@ -22,8 +22,8 @@ const DatePicker = (props) => {
   return (
     
       <View style={{position:'relative'}}>
-        <View pointerEvents='none'>
-        {selectedDate && <Input
+        {selectedDate && props.isInputBox && <View pointerEvents='none'>
+         <Input
             placeholder={"Date"}
             label={"Enter Date"}
             isLabel={false}
@@ -33,8 +33,8 @@ const DatePicker = (props) => {
             secureTextEntry={false}
             autoFocus={false}
             onChangeText={props?.onChangeText}
-          />}
-        </View>
+          />
+        </View>}
         <View style={{position:'absolute',width:'100%',height:50,top:12}} pointerEvents={props?.pointerEvents}>
           <Pressable onPress={props?.onPress??showDatePicker} style={{height:'100%',alignItems:'center',borderRadius:10}}></Pressable>
         </View>
@@ -45,6 +45,7 @@ const DatePicker = (props) => {
           onConfirm={props?.onConfirm??handleConfirm}
           onCancel={props?.onCancel??hideDatePicker}
           maximumDate={new Date()}
+          isInputBox={true}
         />
       </View>
   );
