@@ -1,6 +1,5 @@
 import moment from "moment";
 const date = new Date();
-console.log(date.getDate(),date.getMonth());
 export const topHomeNavList = [{
     label:"Daily",
     dateRange:`${moment().format('YYYY-MM-DD')}_${moment().format('YYYY-MM-DD')}`,

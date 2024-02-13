@@ -28,7 +28,7 @@ const Members = () => {
     };
     getUsersList();
   }, []);
-  console.log(isLoading);
+  // console.log(isLoading);
   return (
     <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
       <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} />

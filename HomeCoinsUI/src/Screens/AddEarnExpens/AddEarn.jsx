@@ -33,7 +33,7 @@ const AddEarn = ({navigation}) => {
     const fetchSource = async()=>{
       try{
         const { data } = await axios.get(`${sourceControllerURL}/source`);
-        console.log(data);
+        // console.log(data);
         if( data.status ){
           // setSource(data.data.map(el=> {return {label:el.sourceName,value:el._id}}));
         }
@@ -75,7 +75,7 @@ const AddEarn = ({navigation}) => {
     setDetails({ ...details, ["date"]: moment(new Date(date)).format('YYYY-MM-DD')});
   };
   const selectPickerChangleHandler = (e) =>{
-    console.log(e);
+    // console.log(e);
   }
   isLoading=false
   return (
@@ -101,14 +101,14 @@ const AddEarn = ({navigation}) => {
             helperType={'error'}
           />
         </View>
-      <View>
+      {/* <View>
         <SelectPicker
             onValueChange={selectPickerChangleHandler}
             placeholder="Source"
             items={source}
             icon={"soundcloud"}
         />
-  </View>
+  </View> */}
         <View>
           <Input
             key={"source"}
