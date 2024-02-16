@@ -80,7 +80,7 @@ const Home = () => {
             <View style={{flexDirection:'row',alignItems:'center',gap:10}}>
             {isDaily && <View>
                 <Text style={{color:colors.text,textAlign:'right'}}>Blance</Text>
-                <Text style={{color:colors.text,fontSize:16}}>{account && ((account?.earnList.reduce((total,list)=>list.amount+total,0)??0) - (account?.expendList.reduce((total,list)=>list.amount+total,0)??0)).toFixed(2)}</Text>
+                <Text style={{color:colors.text,fontSize:16}}>{account && ((account?.earnList?.reduce((total,list)=>list.amount+total,0)??0) - (account?.expendList?.reduce((total,list)=>list.amount+total,0)??0)).toFixed(2)}</Text>
               </View>}
               <Pressable style={{padding:8}} onPress={()=>handleDateRange("next")}><FontAwesome name='chevron-right' color={colors.text} size={15}/></Pressable>
             </View>

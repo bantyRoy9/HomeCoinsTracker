@@ -43,9 +43,9 @@ export const addEarnExpend = (details,urlType,navigation) => async(dispatch) =>{
         dispatch({type:ACCOUNT_ADD_REQUIEST});
         const { data } = await axios.post(`${accountControllerURL}/${urlType}`,details, await getAxiosHeader());
         if(data && data.status){
-            showAlert(`${details.amount} add successfully.`);
-            navigation.navigate('Home')
+            showAlert(`${details.amount} added.`);
             dispatch({type:ACCOUNT_ADD_SUCCESS,payload:data});
+            navigation.navigate('Home')
         }else{
             showAlert(data.msg)
             dispatch({type:ACCOUNT_ADD_FAIL,payload:null});
