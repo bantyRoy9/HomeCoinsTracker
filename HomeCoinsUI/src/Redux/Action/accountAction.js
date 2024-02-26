@@ -16,7 +16,7 @@ const getAnalyticsDetails = (resData) => {
 export const getEarnExpendData = (dateRange,groupId,isGraph=false)=> async(dispatch)=>{
     try{
         dispatch({type:ACCOUNT_REQUIEST});
-        // console.log(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange}&groupId=${groupId}&isGraph=${isGraph}`);
+        console.log(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange}&groupId=${groupId}&isGraph=${isGraph}`);
         const { data } = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange}&groupId=${groupId}&isGraph=${isGraph}`)
         if (data.status && data.data && data.graphData) {
             if(isGraph){
