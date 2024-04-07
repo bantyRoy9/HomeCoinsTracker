@@ -22,7 +22,8 @@ const Input = (props) => {
 
   const backgroundStyle = {
     backgroundColor:colors.surfaceVariant,
-    colors:colors.text
+    color:colors.text,
+    borderBottomWidth:0
   };
   
   return (
@@ -36,7 +37,7 @@ const Input = (props) => {
                 value= {props?.value}
                 style={{
                   ...styles.inputBox,
-                  ...backgroundStyle
+                  ...backgroundStyle,
                 }}
                 maxLength={props?.maxLength}
                 ref={props?.ref}

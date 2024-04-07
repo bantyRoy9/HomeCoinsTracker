@@ -6,6 +6,7 @@ import { forgotPassword, loging } from '../../Redux/Action/userAction';
 import { Divider, Modal, PaperProvider, Portal, useTheme } from 'react-native-paper';
 import { FontAwesome, Ionicons,defaultStyle } from '../../Utils';
 import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
+import Button from '../../Components/Button';
 const initialState = { email: "", password: "" }
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
@@ -52,17 +53,10 @@ const Login = ({navigation}) => {
     }
   };
   return (
-    <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
-      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
-      <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle} contentContainerStyle={{flex:1,justifyContent:'center'}}>
-          <View style={defaultStyle.screenContainer}>
+    <View style={defaultStyle.screenContainer}>
             <View style={{ alignItems: 'center'}}>
               <Image source={require('../../../Assets/Icons/coinsTracker.png')} style={{width: 250,height: 180}}/>
             </View>
-            {/* <View>
-              <Text style={{fontSize: 35,fontWeight: 700,color: backgroundStyle.color,marginVertical: 10}}>Login</Text>
-              <Text style={{ color: backgroundStyle.color }}>Please sign in to continue</Text>
-            </View> */}
             <ScrollView showsVerticalScrollIndicator={false}>
             <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
               <Input
@@ -97,9 +91,7 @@ const Login = ({navigation}) => {
             </View>
             </ScrollView>
             <View style={{ width: "auto", alignItems: 'center' }} >
-              <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} >
-                <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'small'} color={colors.text}/> : "LOGIN"}</Text>
-              </Pressable>
+              <Button onPress={submitHandler} colors={colors} isLoading={isLoading} title='Login' btnStyle={btnStyle} key={'button'}/>
               <Pressable onPress={() => navigation.navigate('Signup',{isForgotPassword:true,isOTPVerified:false})}>
               <Text style={{ color: colors.btnBackground }} >
                 Forgot Password?
@@ -114,8 +106,6 @@ const Login = ({navigation}) => {
             </View>
           </View>
           </View>
-      </ScrollView>
-    </SafeAreaView>
   )
 }
 

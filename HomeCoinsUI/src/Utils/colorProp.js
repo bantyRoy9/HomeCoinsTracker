@@ -1,10 +1,10 @@
 export const lightColorProps = {
-    background:"rgb(242, 242, 242)",
+    background:"red",
     btnBackground:"rgb(56, 48, 76)",
     btnPrimary:"rgb(56, 48, 76)",
     btnSecondery:"",
     textColor:"rgb(56, 48, 76)",
-    inputBackground:"rgb(242, 242, 242)",
+    inputBackground:"rgb(241, 241, 241)",
     inputFocusBackground:"rgb(255, 255, 255)",
     inputTextColor:"rgb(56, 48, 76)",
     inputTextColorOnFocus:"rgb(56, 48, 76)",
@@ -19,7 +19,7 @@ export const lightColorProps = {
 }
 
 export const darkColorProps ={
-    background:"rgb(10, 6, 26)",
+    background:"RGB(241, 241, 241)",
     btnBackground:"rgb(13, 245, 227)",
     btnPrimary:"rgb(255, 255, 255)",
     btnSecondery:"",

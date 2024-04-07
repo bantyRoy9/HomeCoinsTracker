@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import RNPickerSelect from 'react-native-picker-select'
-import { useTheme } from 'react-native-paper'
+import { useTheme,HelperText } from 'react-native-paper'
 import Icons from 'react-native-vector-icons/FontAwesome'
-
+import { defaultStyle } from '../Utils'
 
 const SelectPicker = (props) => {
   const { colors } = useTheme();
@@ -12,30 +12,32 @@ const SelectPicker = (props) => {
     color: colors.text
   };
   return (
-    <View>
+    <View style={defaultStyle.selectpickerContainer}>
       <RNPickerSelect
         placeholder={{label:props?.placeholder,value: null,color: colors.text}}
         items={props.items} 
-        darkTheme={props.darkTheme}
         onValueChange={props?.onValueChange}
         itemKey={props.key}
         textInputProps={{}}
         style={{
           ...pickerSelectStyles,
-          iconContainer: {top: 15,left: 10},
-          viewContainer:{backgroundColor:colors.surfaceVariant},
-          chevronContainer:{backgroundColor:'red'},
-          inputAndroidContainer:{backgroundColor:'red'},
+          iconContainer:{position:'absolute',left:10,top:18,width:30,color:colors.text},
+          viewContainer:{backgroundColor:colors.surfaceVariant,paddingLeft:30,color:colors.text},
+          inputAndroid:{color:colors.text,borderWidth:1,borderColor:'red'},
+          modalViewMiddleDark:{borderColor:'red',borderWidth:1,color:"red"},
+          modalViewTop:{borderColor:'red !important',borderWidth:1,color:"red !important"},
+          modalViewBottom:{borderColor:'red',borderWidth:1,color:"red"},
+          modalViewBottomDark:{borderColor:'red',borderWidth:1,color:"red"},
+          modalViewMiddle:{borderColor:'red',borderWidth:1,color:"red"},
           placeholder: {
             fontSize: 15,
             color:colors.text,
-            left:10,
-            fontWeight: 'bold',
-            marginLeft:20
           },
         }}
-        Icon={()=> <Icons name={props.icon} size={20}/>}
+        Icon={()=> <Icons name={props.icon} size={20} color={colors.text}/>}
+        
       /> 
+      {props.isHelper && <HelperText type={props.helperType}>{props.errorMsg}</HelperText>}
     </View>
   )
 }
