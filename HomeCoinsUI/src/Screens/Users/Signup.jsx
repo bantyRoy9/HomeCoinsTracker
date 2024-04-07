@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createUser, forgotPassword, verifyForgotPasswordOTP } from '../../Redux/Action/userAction';
 import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { useTheme } from 'react-native-paper';
+import Button from '../../Components/Button';
 
 const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,OTP}}}) => {
   const dispatch = useDispatch();
@@ -43,9 +44,6 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
     }
   };
   return (
-    <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
-      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
-      <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
         <View style={styles.signupContainer}>
           <View style={styles.arrowBack}>
             <Icons name='arrow-back' size={30} onPress={() => navigation.navigate('Login')} color={colors.text} />
@@ -191,9 +189,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
           </ScrollView>
           <View style={{ width: '100%' }}>
             <View style={{ width: "auto", alignItems: 'center' }}>
-              <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler}>
-                <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'small'} color={colors.text}/> : isForgotPassword?"SUBMIT":"SIGN UP"}</Text>
-              </Pressable>
+              <Button btnStyle={btnStyle} colors={colors} isLoading={isLoading} onPress={submitHandler} title={isForgotPassword?"SUBMIT":"SIGN UP"}/>
             </View>
             <View style={{ position: 'relative', height: 30 }}>
               <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
@@ -204,9 +200,6 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
             </View>
           </View>
         </View>
-
-      </ScrollView>
-    </SafeAreaView>
   )
 }
 

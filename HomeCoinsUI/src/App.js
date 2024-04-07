@@ -12,6 +12,7 @@ import { useTheme } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { Activity, AddEarn, AddExpend, CreateGroup, EditProfile, Home, Login, Members, Profile, Signup,OtpVerification } from './Screens';
 import { FontAwesome, FontAwesome5 } from './Utils';
+import DefaultLayout from './Screens/DefaultLayout/DefaultLayout';
 function App() {
   const Stack = createNativeStackNavigator();
   const { colors } = useTheme();
@@ -70,6 +71,8 @@ function App() {
       </TouchableOpacity>
     </>
   }
+  
+  
   return (
 
     <NavigationContainer >
