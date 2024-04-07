@@ -118,8 +118,8 @@ const AddExpend = ({navigation}) => {
           
         </View>
         <View style={{ width: "auto", alignItems: 'center' }}>
-          <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} pointerEvents={isLoading?"none":"auto"}>
-            <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'small'} color={colors.loaderColor}/> :"ADD EXPEND"}</Text>
+          <Pressable style={{ ...defaultStyle.button, ...btnStyle }} onPress={submitHandler} pointerEvents={isLoading?"none":"auto"}>
+            <Text style={{ ...defaultStyle.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'small'} color={colors.loaderColor}/> :"ADD EXPEND"}</Text>
           </Pressable>
         </View>
       </View>
@@ -128,21 +128,3 @@ const AddExpend = ({navigation}) => {
 }
 
 export default AddExpend
-
-const styles = StyleSheet.create({
-  button: {
-    alignItems:"center",
-    justifyContent: 'center',
-    paddingVertical: 18,
-    paddingHorizontal: 40,
-    borderRadius: 10,
-    width:"100%",
-    marginVertical: 15
-  },
-  text: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: 'bold',
-    letterSpacing: 0.25,
-  },
-})

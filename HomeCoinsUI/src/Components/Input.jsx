@@ -22,7 +22,7 @@ const Input = (props) => {
 
   const backgroundStyle = {
     backgroundColor:colors.surfaceVariant,
-    colors:colors.text
+    color:colors.text
   };
   
   return (

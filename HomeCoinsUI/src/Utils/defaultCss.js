@@ -11,5 +11,21 @@ export const defaultStyle = StyleSheet.create({
     activityIndicator:{flex:1,justifyContent:'center',height:'auto'},
     model:{borderColor:'red',padding:10,backgroundColor:'white',marginHorizontal:18,marginVertical:1},
     textBold:{fontWeight:'700',fontSize:16},
-    textWhite:{color:'#eeee'}
+    textWhite:{color:'#eeee'},
+    selectpickerContainer:{marginVertical:6},
+    button: {
+        alignItems:"center",
+        justifyContent: 'center',
+        paddingVertical: 18,
+        paddingHorizontal: 40,
+        borderRadius: 10,
+        width:"100%",
+        marginVertical: 15
+      },
+      text: {
+        fontSize: 16,
+        lineHeight: 21,
+        fontWeight: 'bold',
+        letterSpacing: 0.25,
+      },
 })

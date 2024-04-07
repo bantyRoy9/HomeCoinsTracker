@@ -17,7 +17,7 @@ const AddEarn = ({navigation}) => {
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [details, setDetails] = useState(initalState);
   const [errors,setErrors] = useState({});
-  const [ source,setSource] = useState([{label:"A",value:"A"}])
+  const [ source,setSource] = useState([{label:"Auto",value:"auto"}])
   let { isLoading } = useSelector(state=> state.account);
   const { colors,dark} = useTheme();
   const backgroundStyle = {
@@ -51,7 +51,7 @@ const AddEarn = ({navigation}) => {
   
   const submitHandler = async (e) => {
     e.preventDefault();
-    let validation = validateForm(details);
+    let validation = validateForm(details,true);
     setErrors(validation.error);
     try {
       if(validation.valid){
@@ -75,7 +75,8 @@ const AddEarn = ({navigation}) => {
     setDetails({ ...details, ["date"]: moment(new Date(date)).format('YYYY-MM-DD')});
   };
   const selectPickerChangleHandler = (e) =>{
-    // console.log(e);
+    setErrors(updateErrors(errors,"source"));
+    setDetails({ ...details, ["source"]: e});
   }
   isLoading=false
   return (
@@ -101,15 +102,18 @@ const AddEarn = ({navigation}) => {
             helperType={'error'}
           />
         </View>
-      {/* <View>
+      <View>
         <SelectPicker
             onValueChange={selectPickerChangleHandler}
             placeholder="Source"
             items={source}
             icon={"soundcloud"}
+            isHelper={errors.source ? true : false}
+            errorMsg={errors?.source}
+            helperType={'error'}
         />
-  </View> */}
-        <View>
+  </View>
+        {/*<View>
           <Input
             key={"source"}
             placeholder={"Source"}
@@ -126,7 +130,7 @@ const AddEarn = ({navigation}) => {
             errorMsg={errors?.source}
             helperType={'error'}
           />
-        </View>
+  </View>*/}
         <View>
           <Input
             key={"description"}
@@ -161,9 +165,9 @@ const AddEarn = ({navigation}) => {
           />
         </View>
         
-        <View style={{ width: "auto", alignItems: 'center' }}>
-          <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} pointerEvents={isLoading?"none":"auto"}>
-            <Text style={{ ...styles.text, ...btnStyle.color }}>{ isLoading ? <ActivityIndicator size={'small'} color={colors.loaderColor}/> : "ADD EARN"}</Text>
+        <View style={{ alignItems: 'center' }}>
+          <Pressable style={{ ...defaultStyle.button, ...btnStyle }} onPress={submitHandler} pointerEvents={isLoading?"none":"auto"}>
+            <Text style={{ ...defaultStyle.text, ...btnStyle.color }}>{ isLoading ? <ActivityIndicator size={'small'} color={colors.loaderColor}/> : "ADD EARN"}</Text>
           </Pressable>
         </View>
       </View>
@@ -177,20 +181,5 @@ const styles = StyleSheet.create({
 
   earnBtn: {
     backgroundColor: 'green'
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 18,
-    paddingHorizontal: 40,
-    borderRadius: 50,
-    elevation: 3,
-    marginVertical: 15
-  },
-  text: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: 'bold',
-    letterSpacing: 0.25,
   },
 })
