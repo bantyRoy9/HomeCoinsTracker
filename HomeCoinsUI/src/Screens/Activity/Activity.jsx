@@ -11,7 +11,6 @@ const Activity = () => {
         { colors } = useTheme(),
         { isLoading, activity } = useSelector(state => state.activity),
         { user } = useSelector(state=> state.user);
-        console.log(isLoading);
     useEffect(() => {
         try{
             dispatch(getActivity(user?.groupId));

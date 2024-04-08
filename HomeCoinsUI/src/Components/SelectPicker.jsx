@@ -18,6 +18,7 @@ const SelectPicker = (props) => {
         items={props.items} 
         onValueChange={props?.onValueChange}
         itemKey={props.key}
+        value={props?.value}
         textInputProps={{}}
         style={{
           ...pickerSelectStyles,

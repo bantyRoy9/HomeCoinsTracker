@@ -1,24 +1,24 @@
-import { StyleSheet, SafeAreaView, Text, View, StatusBar, Pressable } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
 import { updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { defaultStyle } from '../../Utils';
-import { ActivityIndicator, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { DatePicker, Input, SelectPicker } from '../../Components';
 import axios from 'axios';
 import { sourceControllerURL } from '../../Utils/URLProperties';
 import Button from '../../Components/Button';
 
 const initalState = {amount:'',source:'',description:'',date:moment(new Date()).format('YYYY-MM-DD')}
-const AddEarn = ({navigation}) => {
+const AddEarn = ({navigation,editData}) => {
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [details, setDetails] = useState(initalState);
+  const [details, setDetails] = useState((editData && editData.data) ? editData.data : initalState);
   const [errors,setErrors] = useState({});
-  const [ source,setSource] = useState([{label:"Auto",value:"auto"}])
+  const [ source,setSource] = useState([{label:"auto",value:"auto"}])
   let { isLoading } = useSelector(state=> state.account);
   const { colors,dark} = useTheme();
 
@@ -27,7 +27,7 @@ const AddEarn = ({navigation}) => {
       try{
         const { data } = await axios.get(`${sourceControllerURL}/source`);
         if( data.status ){
-          setSource(data.data.map(el=> {return {label:el.sourceName,value:el._id}}));
+          //setSource(data.data.map(el=> {return {label:el.sourceName,value:el._id}}));
         }
       }catch(err){}
     }
@@ -79,7 +79,7 @@ const AddEarn = ({navigation}) => {
             isLabel={false}
             name={'amount'}
             icons={'money'}
-            value={details?.amount}
+            value={details?.amount.toString()}
             secureTextEntry={false}
             autoFocus={false}
             keyboardType={'numeric'}
@@ -95,6 +95,7 @@ const AddEarn = ({navigation}) => {
             onValueChange={selectPickerChangleHandler}
             placeholder="Source"
             items={source}
+            value={details?.source}
             icon={"soundcloud"}
             isHelper={errors.source ? true : false}
             errorMsg={errors?.source}
@@ -152,7 +153,7 @@ const AddEarn = ({navigation}) => {
             isInputBox={true}
           />
         </View>
-        <Button isLoading={isLoading} onPress={submitHandler} title={"ADD EARN"}/>
+        <Button isLoading={isLoading} onPress={submitHandler} title={(editData && editData.status) ? "Update Earn" : "Add Earn" }/>
       </View>
   )
 }

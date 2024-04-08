@@ -16,7 +16,6 @@ const Header = ({ title }) => {
     const navigatePage=(pageLink)=>{
         navigation.navigate(pageLink);
     };
-    console.log(title);
     return (
         <View style={[styles.headerContainer,backgroundStyle]}>
             {bottomHeaderList && bottomHeaderList.map((headerLists,idx)=>(

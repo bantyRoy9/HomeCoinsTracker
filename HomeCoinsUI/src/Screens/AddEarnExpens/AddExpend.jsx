@@ -8,10 +8,10 @@ import {Input,DatePicker} from '../../Components';
 import Button from '../../Components/Button';
 
 const initialState = {amount:"",description:"",date:moment().format('YYYY-MM-DD')}
-const AddExpend = ({navigation}) => {
+const AddExpend = ({navigation,editData}) => {
   const dispatch = useDispatch();
-  const [details, setDetails] = useState(initialState);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [details, setDetails] = useState((editData && editData.data ) ? editData.data : initialState);
+  const [selectedDate, setSelectedDate] = useState((editData && editData.data ) ? new Date(editData.data.date) : new Date());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [errors,setErrors] = useState({});
   const { isLoading } = useSelector(state=> state.account);
@@ -57,7 +57,7 @@ const AddExpend = ({navigation}) => {
             isLabel={false}
             name={'amount'}
             icons={'money'}
-            value={details?.amount}
+            value={details?.amount.toString()}
             secureTextEntry={false}
             autoFocus={false}
             keyboardType={'numeric'}
@@ -105,7 +105,7 @@ const AddExpend = ({navigation}) => {
           />
           
         </View>
-        <Button isLoading={isLoading} onPress={submitHandler} title={"Add expend"}/>
+        <Button isLoading={isLoading} onPress={submitHandler} title={`${(editData && editData.data.status) ? "Update" : "Add"} expend`}/>
       </View>
     
   )
