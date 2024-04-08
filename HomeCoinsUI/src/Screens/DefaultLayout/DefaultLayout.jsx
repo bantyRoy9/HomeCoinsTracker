@@ -1,26 +1,28 @@
-import {ScrollView, StatusBar} from 'react-native';
+import {ScrollView, StatusBar, View} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native';
 import {useTheme} from 'react-native-paper';
+import { Header } from '../../Components';
 const DefaultLayout = ({ Component,...props }) => {
   const {colors, dark} = useTheme();
   const backgroundStyle = {
     backgroundColor: colors.background,
     color: colors.text,
   };
-  
   return (
     <SafeAreaView style={{...backgroundStyle, height: '100%'}}>
       <StatusBar
-        // barStyle={dark ? 'light-content' : 'dark-content'}
+        barStyle={!dark ? 'light-content' : 'dark-content'}
         backgroundColor={colors.HeaderBg}
       />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}
-        contentContainerStyle={{flex: 1, justifyContent: 'center'}}>
+        contentContainerStyle={props.isFlexCenter && {flex: 1, justifyContent: 'center'}}
+        >
         <Component {...props}/>
+        {props.isFlexCenter && props.route.name !=="Login" && <View><Header title={props.route.name}/></View>}
       </ScrollView>
     </SafeAreaView>
   );

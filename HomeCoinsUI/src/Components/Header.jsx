@@ -2,7 +2,7 @@ import { StyleSheet, Text, View,Pressable } from 'react-native'
 import React from 'react'
 import Icons from 'react-native-vector-icons/FontAwesome'
 import { useNavigation } from '@react-navigation/native';
-import { bottomHeaderList } from '../Utils/homeNavList';
+import { bottomHeaderList } from '../Utils';
 import { useTheme } from 'react-native-paper';
 
 const Header = ({ title }) => {
@@ -16,6 +16,7 @@ const Header = ({ title }) => {
     const navigatePage=(pageLink)=>{
         navigation.navigate(pageLink);
     };
+    console.log(title);
     return (
         <View style={[styles.headerContainer,backgroundStyle]}>
             {bottomHeaderList && bottomHeaderList.map((headerLists,idx)=>(

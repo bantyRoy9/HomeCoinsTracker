@@ -53,8 +53,6 @@ const OtpVerification = ({ navigation, route: { params: { email ,isForgetPasswor
   const thirdRef = useRef();
   const forthRef = useRef();
   return (
-    <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
-      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
       <View style={{ ...defaultStyle.screenContainer, flex: 1 }}>
         <View style={styles.otpHeading}>
           <Text style={[styles.textBold, backgroundStyle]} >OTP Verification</Text>
@@ -123,7 +121,6 @@ const OtpVerification = ({ navigation, route: { params: { email ,isForgetPasswor
           <Text style={{ ...styles.text,borderBottomWidth:1,borderBottomColor:btnStyle.backgroundColor,color:btnStyle.backgroundColor }}>Resend OTP</Text>
         </Pressable>
       </View>
-    </SafeAreaView>
   )
 }
 export default OtpVerification

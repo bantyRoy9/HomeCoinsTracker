@@ -6,6 +6,7 @@ import { ActivityIndicator } from 'react-native-paper';
 import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { createGroupAndRequest } from '../../Redux/Action/groupAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Button from '../../Components/Button';
 
 const Group = ({navigation,pageName,colors }) => {
     let fields = pageName == "CreateNewGroup" ? "name" : "email";
@@ -62,9 +63,10 @@ const Group = ({navigation,pageName,colors }) => {
               errorMsg={errors[fields]}
               helperType={'error'}
             />
-            <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} >
+            <Button onPress={submitHandler} isLoading={isLoading} title={pageName == "CreateNewGroup" ? "Continue" : "SEND REQUEST"} />
+            {/* <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} >
                 <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'small'} color={colors.text}/> : pageName == "CreateNewGroup" ? "DONE" : "SEND REQUEST"}</Text>
-              </Pressable>
+              </Pressable> */}
           </View>
   )
 }

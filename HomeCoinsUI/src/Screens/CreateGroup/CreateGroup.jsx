@@ -1,24 +1,16 @@
-import { Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { useTheme } from 'react-native-paper'
-import { FontAwesome5, defaultStyle,MaterialIcon } from '../../Utils';
+import { defaultStyle,MaterialIcon } from '../../Utils';
 import Group from './Group';
 
 const CreateGroup = ({ navigation,route }) => {
-  const { colors, dark } = useTheme();
-  const backgroudStyle = {
-    backgroundColor: colors.background,
-    color: colors.text
-  };
-  
-  const navigatePage=(pageName)=>{
+  const { colors } = useTheme();
+ const navigatePage=(pageName)=>{
     navigation.navigate(pageName);
   };
   return (
-    <SafeAreaView style={{ ...backgroudStyle, height: '100%' }}>
-      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flex:1}}>
-        <View style={defaultStyle.screenContainer}>
+    <View style={defaultStyle.screenContainer}>
           { route.name == "CreateGroup" && <View style={styles.createGroupSection}>
             <Pressable style={{...styles.sectionCircle,backgroundColor:colors.lightBackground,color:colors.text}} onPress={()=>navigatePage('CreateNewGroup')}>
               <View style={styles.sectionText}>
@@ -37,9 +29,7 @@ const CreateGroup = ({ navigation,route }) => {
             </Pressable>
           </View>}
           { (route.name === "CreateNewGroup" || route.name === "ExistingGroup") && <Group pageName={route.name} colors={colors} navigation={navigation}/>}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    </View>
   )
 }
 

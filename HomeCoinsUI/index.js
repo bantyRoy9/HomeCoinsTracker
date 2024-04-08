@@ -10,7 +10,7 @@ import { store } from './src/Redux/Store';
 import { PaperProvider } from 'react-native-paper';
 import { darkTheme,defaultTheme } from './src/Screens/DefaultLayout/ThemeColorProps';
 const ReduxProvider = () => {
-    const themeModeDark = useColorScheme() !== 'dark'
+    const themeModeDark = useColorScheme() === 'dark'
     return(
         <Provider store={store}>
             <PaperProvider theme={themeModeDark ? darkTheme : defaultTheme}>
