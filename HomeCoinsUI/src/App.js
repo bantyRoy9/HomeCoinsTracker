@@ -30,26 +30,27 @@ function App() {
     setUserDetails({ cookie:userDetail[0][1], isGroupIncluded:userDetail[1][1]?.toLowerCase?.() === 'true',isActive:userDetail[2][1]?.toLowerCase?.() === 'true' });
   };
   const navigationOptions = {
-    headerTintColor: colors.text,
+    headerTintColor: colors.HeaderText,
     headerStyle: {
-      backgroundColor: colors.headerBg,
-      borderBottomColor: colors.headerBg,
-      borderBottomWidth: 1,
+      backgroundColor: colors.HeaderBg,
+      // borderBottomColor: colors.headerBg,
+      // borderBottomWidth: 1,
     },
     headerTitleStyle: {
-      fontSize: 21,
+      fontSize: 20,
     }
   };
   const headerTitle = {
     home: { title: 'Dashboard' },
-    addExpend: { title: 'Add Expend' },
-    addEarn: { title: 'Add Earn' },
+    addExpend: { title: 'Add expend' },
+    addEarn: { title: 'Add earn' },
     profile: { title: 'Profile' },
-    editProfile: { title: 'Edit Profile' },
+    editProfile: { title: 'Edit profile' },
     activity: { title: 'Activity' },
     members: { title: 'Members' },
-    createGroup: { title: 'Create Group' },
-    otpVerification: { title: 'User Verification' }
+    createGroup: { title: 'Create group' },
+    createNewGroup:{title:"Create new group"},
+    otpVerification: { title: 'User verification' }
   }
   const editProfile = () => {
     // navigation.navigate('EditProfile');
@@ -58,16 +59,16 @@ function App() {
   const headerIcons = {
     home: <>
       <View style={{ position: 'relative' }}>
-        <FontAwesome name='bell' color={colors.text} size={20} />
+        <FontAwesome name='bell' color={colors.HeaderText} size={20} />
         <View style={{ position: 'absolute', width: 10, height: 10, borderRadius: 50, backgroundColor: colors.notification, right: 0 }}></View>
       </View>
     </>,
     profile: <>
-      <FontAwesome5 name='user-edit' size={25} onPress={editProfile} color={colors.text} />
+      <FontAwesome5 name='user-edit' size={20} onPress={editProfile} color={colors.HeaderText} />
     </>,
     createProfile: <>
       <TouchableOpacity >
-        <FontAwesome5 name='user' size={25} color={colors.text} onPress={() => navigation.navigate('Profile')} />
+        <FontAwesome5 name='user' size={20} color={colors.HeaderText} onPress={() => navigation.navigate('Profile')} />
       </TouchableOpacity>
     </>
   }
@@ -83,7 +84,7 @@ function App() {
           <Stack.Screen name='AddEarn' component={AddEarn} options={{ ...navigationOptions, ...headerTitle.addEarn }} />
           <Stack.Screen name='AddExpend' component={AddExpend} options={{ ...navigationOptions, ...headerTitle.addExpend }} />
           <Stack.Screen name='Activity' component={Activity} options={{ ...navigationOptions, ...headerTitle.activity }} />
-          <Stack.Screen name='Members' component={Members} options={{ ...navigationOptions, ...headerTitle.members }} />
+          <Stack.Screen name='Member' component={Members} options={{ ...navigationOptions, ...headerTitle.members }} />
           <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () => headerIcons.profile }} />
           <Stack.Screen name='EditProfile' component={EditProfile} options={{ ...navigationOptions, ...headerTitle.editProfile }} />
         </> : userDetails.cookie ? <>
@@ -94,13 +95,13 @@ function App() {
               headerRight: () => (
                 <>
                   <Pressable onPress={() => navigation.navigate('Profile')}>
-                    <FontAwesome5 name='user' size={25} color={colors.text} />
+                    <FontAwesome5 name='user' size={20} color={colors.HeaderText} />
                   </Pressable>
                 </>
               )
             })
             } />
-          <Stack.Screen name='CreateNewGroup' component={CreateGroup} options={navigationOptions} />
+          <Stack.Screen name='CreateNewGroup' component={CreateGroup} options={{...navigationOptions,...headerTitle.createNewGroup}} />
           <Stack.Screen name='ExistingGroup' component={CreateGroup} options={navigationOptions} />
           <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () => headerIcons.profile }} />
           <Stack.Screen name='OtpVerification' component={OtpVerification} options={{ ...navigationOptions, ...headerTitle.otpVerification }} />

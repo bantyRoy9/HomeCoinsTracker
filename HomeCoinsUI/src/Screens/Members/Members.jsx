@@ -28,12 +28,10 @@ const Members = () => {
     };
     getUsersList();
   }, []);
-  // console.log(isLoading);
   return (
-    <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
-      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} />
+    <>
       {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> :
-        <ScrollView style={defaultStyle.screenContainer}>
+        <ScrollView showsHorizontalScrollIndicator={false} style={defaultStyle.screenContainer}>
           {userList && userList.length > 0 ? <>
             {userList.map((el, idx) => (
               <View style={{marginVertical:2}} key={idx}>
@@ -57,9 +55,8 @@ const Members = () => {
           }
         </ScrollView>}
         <View>
-        <Header title="Member"/>
       </View>
-    </SafeAreaView>
+    </>
   )
 }
 

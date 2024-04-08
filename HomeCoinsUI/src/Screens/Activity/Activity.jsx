@@ -1,38 +1,26 @@
-import { StatusBar, StyleSheet, Text, View, Pressable, SafeAreaView, ScrollView, Image } from 'react-native';
 import React, { useEffect } from 'react'
+import { StyleSheet, Text, View, Pressable, ActivityIndicator, ScrollView, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { getActivity } from '../../Redux/Action/activityAction';
-import { ActivityIndicator, Divider, useTheme } from 'react-native-paper';
-import { defaultStyle } from '../../Utils/defaultCss';
+import { useTheme } from 'react-native-paper';
 import moment from 'moment';
-import { stringTransform } from '../../Utils/HomeCommon';
-import { colors as color } from 'react-native-elements';
-import { showAlert } from '../../Utils/CommonAuthFunction';
-import { Header } from '../../Components';
+import { getActivity } from '../../Redux/Action/activityAction';
+import { showAlert,stringTransform,defaultStyle } from '../../Utils';
 
-
-const Activity = ({groupId}) => {
-    const dispatch = useDispatch();
-    const { colors,dark } = useTheme();
-    const backgroundStyle = {
-        backgroundColor: colors.background,
-        color: colors.text
-    };
-    const { isLoading, activity } = useSelector(state => state.activity);
-    const { user } = useSelector(state=> state.user);
+const Activity = () => {
+    const dispatch = useDispatch(),
+        { colors } = useTheme(),
+        { isLoading, activity } = useSelector(state => state.activity),
+        { user } = useSelector(state=> state.user);
     useEffect(() => {
         try{
             dispatch(getActivity(user?.groupId));
         }catch(err){
             showAlert(err);
         }
-    }, [dispatch]);
+    }, []);
     return (
-        <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
-            <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
-            {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> :
-                <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
-                    <View style={defaultStyle.screenContainer}>
+        <>{isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> :
+                <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={defaultStyle.screenContainer}>
                         {activity && activity.data && activity?.data.map((el, idx) => (
                             <View key={idx}>
                                 <Pressable style={{...styles.activityLists,borderBottomColor:colors.border,borderBottomWidth:activity.data.length - 1 > idx?1:0}}>
@@ -55,7 +43,7 @@ const Activity = ({groupId}) => {
                                             </View>
                                         </View>
                                         <View style={styles.activityRightSec}>
-                                            <Text style={{color: el.Url == "/expend"? color.error: color.success}}>{`${el.Url == "/expend" ? '- ₹' + el.addExpend?.amount ?? "NA" + '' : '+ ₹' + el.addEarn?.amount ?? "NA" + ''} `}</Text>
+                                            <Text style={{color: el.Url == "/expend"? colors.error: colors.success}}>{`${el.Url == "/expend" ? '- ₹' + el.addExpend?.amount ?? "NA" + '' : '+ ₹' + el.addEarn?.amount ?? "NA" + ''} `}</Text>
                                         </View>
                                     </View>
                                     <View style={{flexDirection:'row',justifyContent:'space-between'}}>
@@ -69,13 +57,9 @@ const Activity = ({groupId}) => {
                                 </Pressable>
                             </View>
                         ))}
-                    </View>
                 </ScrollView>
             }
-        <View>
-            <Header title="Activity"/>
-        </View>
-        </SafeAreaView>
+        </>
     )
 }
 
@@ -85,8 +69,6 @@ const styles = StyleSheet.create({
     activityLists: {
         paddingVertical: 15,
         gap:10
-        // borderColor: 'red',
-        // borderWidth: 1
     },
     activityList: {
         flexDirection:'row',justifyContent:"space-between"

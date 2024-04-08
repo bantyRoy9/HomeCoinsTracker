@@ -2,7 +2,7 @@ import { StyleSheet, Dimensions } from 'react-native'
 
 const width = Dimensions.get("window").width - 40;
 export const defaultStyle = StyleSheet.create({
-  screenContainer: { marginHorizontal: 18, marginVertical: 1 },
+  screenContainer: { marginHorizontal: 10, marginVertical: 1 },
   text: { color: "#fff", fontSize: 16 },
   screenWidth: { width: width, marginVertical: 'auto' },
   viewSection: { marginVertical: 15 },

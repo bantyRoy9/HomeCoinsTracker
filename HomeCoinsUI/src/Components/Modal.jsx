@@ -1,40 +1,59 @@
-import React, {useState} from 'react';
-import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
-
-const Modals = () => {
-  const [modalVisible, setModalVisible] = useState(false);
+import React from 'react';
+import {Modal, StyleSheet, View, TouchableWithoutFeedback, Text, Pressable} from 'react-native';
+import {AddEarn} from '../Screens';
+import { FontAwesome5 } from '../Utils';
+import { useTheme }  from 'react-native-paper';
+const Modals = ({Component,modalVisible,type, modalVisibleHandler}) => {
+  const { colors } = useTheme();
   return (
-    <View style={styles.centeredView}>
-      <Modal
-        animationType="left"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
-          </View>
+    <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={modalVisibleHandler}>
+      <TouchableWithoutFeedback onPress={modalVisibleHandler}>
+        <View style={styles.overlay}>
+          <TouchableWithoutFeedback>
+            <>
+            {Component && <View style={styles.centeredView}>
+              <View style={{justifyContent:'center',display:'flex',alignItems:'center',borderRadius:30}}>
+                <Pressable style={{backgroundColor:"red",alignItems:'center',gap:10,flexDirection:'row',paddingHorizontal:25,paddingVertical:15,position:'absolute',top:-60,borderRadius:50}}>
+                <FontAwesome5 name='trash-alt' color={colors.HeaderText} size={20}/>
+                <Text style={{color:colors.HeaderText,fontSize:15}}>Delete {type}</Text>
+                </Pressable>
+              </View>
+              {Component}
+            </View>}</>
+          </TouchableWithoutFeedback>
         </View>
-      </Modal>
-      <Pressable
-        style={[styles.button, styles.buttonOpen]}
-        onPress={() => setModalVisible(true)}>
-        <Text style={styles.textStyle}>Show Modal</Text>
-      </Pressable>
-    </View>
+      </TouchableWithoutFeedback>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
- 
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(1, 66, 131,.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  centeredView: {
+    // margin: 20,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 15,
+    paddingTop:35,
+    width:'100%',
+    height:'auto',
+    position:'absolute',
+    bottom:0,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
 });
 
 export default Modals;

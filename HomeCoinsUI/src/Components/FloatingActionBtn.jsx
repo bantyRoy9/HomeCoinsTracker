@@ -34,7 +34,8 @@ const FloatingActionBtn = () => {
             },
             style: {
               backgroundColor: '#5aa16d',
-              marginBottom: -30
+              marginBottom: -30,
+              
             },
             onPress: () => navigation.navigate('AddEarn')
           }, {

@@ -14,7 +14,7 @@ const Monthly = ({dateRange}) => {
         <View style={defaultStyle.screenContainer}>
           {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> : <>
             <View style={defaultStyle.viewSection}>
-              <Card containerStyle={{ ...styles.cardContainer, backgroundColor: colors.card }}>
+              <View style={{ ...styles.cardContainer, backgroundColor: colors.card }}>
                 <View style={styles.cardTitle}>
                   <View>
                     <Text style={{ ...styles.cardLeftTitle, color: colors.text }}>Analytics</Text>
@@ -38,7 +38,7 @@ const Monthly = ({dateRange}) => {
                     ))}
                   </>}
                 </View>
-              </Card>
+              </View>
               {!isLoading && account?.graphData && account?.graphData.labels && account?.graphData.labels.length > 0 && <>
                 <View style={defaultStyle.viewSection}>
                   <Chart graphData={account?.graphData} />

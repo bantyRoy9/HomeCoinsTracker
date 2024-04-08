@@ -1,45 +1,35 @@
-import { StyleSheet, SafeAreaView, Text, View, StatusBar, Pressable } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
 import { updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import { defaultStyle } from '../../Utils';
-import { ActivityIndicator, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { DatePicker, Input, SelectPicker } from '../../Components';
 import axios from 'axios';
 import { sourceControllerURL } from '../../Utils/URLProperties';
+import Button from '../../Components/Button';
 
 const initalState = {amount:'',source:'',description:'',date:moment(new Date()).format('YYYY-MM-DD')}
-const AddEarn = ({navigation}) => {
+const AddEarn = ({navigation,editData}) => {
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [details, setDetails] = useState(initalState);
+  const [details, setDetails] = useState((editData && editData.data) ? editData.data : initalState);
   const [errors,setErrors] = useState({});
-  const [ source,setSource] = useState([{label:"Auto",value:"auto"}])
+  const [ source,setSource] = useState([{label:"auto",value:"auto"}])
   let { isLoading } = useSelector(state=> state.account);
   const { colors,dark} = useTheme();
-  const backgroundStyle = {
-    backgroundColor: colors.background,
-    color: colors.text
-  };
-  const btnStyle = {
-    backgroundColor: colors.btnBackground,
-    color: colors.text
-  }
 
   useEffect(()=>{
     const fetchSource = async()=>{
       try{
         const { data } = await axios.get(`${sourceControllerURL}/source`);
-        // console.log(data);
         if( data.status ){
-          // setSource(data.data.map(el=> {return {label:el.sourceName,value:el._id}}));
+          //setSource(data.data.map(el=> {return {label:el.sourceName,value:el._id}}));
         }
-      }catch(err){
-
-      }
+      }catch(err){}
     }
     isLoading=false
     fetchSource()
@@ -80,9 +70,7 @@ const AddEarn = ({navigation}) => {
   }
   isLoading=false
   return (
-    <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
-      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={colors.background}></StatusBar>
-      <View style={defaultStyle.screenContainer}>
+    <View style={defaultStyle.screenContainer}>
         <View>
           <Input
             key={"Amount"}
@@ -91,7 +79,7 @@ const AddEarn = ({navigation}) => {
             isLabel={false}
             name={'amount'}
             icons={'money'}
-            value={details?.amount}
+            value={details?.amount.toString()}
             secureTextEntry={false}
             autoFocus={false}
             keyboardType={'numeric'}
@@ -107,6 +95,7 @@ const AddEarn = ({navigation}) => {
             onValueChange={selectPickerChangleHandler}
             placeholder="Source"
             items={source}
+            value={details?.source}
             icon={"soundcloud"}
             isHelper={errors.source ? true : false}
             errorMsg={errors?.source}
@@ -164,14 +153,8 @@ const AddEarn = ({navigation}) => {
             isInputBox={true}
           />
         </View>
-        
-        <View style={{ alignItems: 'center' }}>
-          <Pressable style={{ ...defaultStyle.button, ...btnStyle }} onPress={submitHandler} pointerEvents={isLoading?"none":"auto"}>
-            <Text style={{ ...defaultStyle.text, ...btnStyle.color }}>{ isLoading ? <ActivityIndicator size={'small'} color={colors.loaderColor}/> : "ADD EARN"}</Text>
-          </Pressable>
-        </View>
+        <Button isLoading={isLoading} onPress={submitHandler} title={(editData && editData.status) ? "Update Earn" : "Add Earn" }/>
       </View>
-    </SafeAreaView>
   )
 }
 

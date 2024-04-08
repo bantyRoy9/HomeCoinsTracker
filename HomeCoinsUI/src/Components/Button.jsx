@@ -1,18 +1,21 @@
 import {View, Text, Pressable, ActivityIndicator, StyleSheet} from 'react-native';
 import React from 'react';
-
+import { useTheme } from 'react-native-paper';
 const Button = ({
-    onPress,
-    btnStyle,
-    isLoading,
-    colors,
-    title
+  onPress,
+  isLoading,
+  title
 }) => {
+  const { colors } = useTheme();
+  const btnStyle = {
+    backgroundColor: colors.btnBackground,
+    color: colors.text
+  }
   return (
-    <Pressable style={{...styles.button, ...btnStyle}} onPress={onPress}>
+    <Pressable style={{...styles.button, ...btnStyle}} onPress={onPress} pointerEvents={isLoading?"none":"auto"}>
       <Text style={{...styles.text, ...btnStyle.color}}>
         {isLoading ? (
-          <ActivityIndicator size={'small'} color={colors.text} />
+          <ActivityIndicator size={'small'} color={colors.loaderColor} />
         ) : (
           title
         )}
@@ -34,7 +37,6 @@ const styles = StyleSheet.create({
         marginVertical: 15
       },
       text: {
-        textTransform:'uppercase',
         color:'rgb(255,255,255)',
         fontSize: 16,
         lineHeight: 21,

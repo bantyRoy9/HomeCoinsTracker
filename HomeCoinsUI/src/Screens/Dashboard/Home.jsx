@@ -55,17 +55,16 @@ const Home = () => {
   };
   let date = dateRange.dateRange.split("_")[0],dateFormat={date:moment(new Date(date)).format("DD"),day:moment(new Date(date)).format("dddd"),month:moment(new Date(date)).format("MMMM"),year:moment(new Date(date)).format("YYYY")},isDaily=dateRange.label === "Daily"?true:false;
   return (
-    <SafeAreaView style={{ ...backgroundStyle, height: '100%' }}>
-        <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
+        <>
         <View style={{...styles.navigationContainer,backgroundColor:colors.HeaderBg,paddingHorizontal:10}}>
             {topHomeNavList.map((ele,idx)=>(
               <Pressable onPress={()=>navPressHandle(ele)} key={`${ele.label}_${idx}`} style={{flex:1}}>
-                <Text style={ele.active ? {textAlign:'center',fontSize: 14, color:colors.text,paddingVertical:12,borderBottomColor:colors.notification,borderBottomWidth:3} : { ...styles.navText,textAlign:'center',fontSize:16,paddingVertical:12, color: colors.text }}>{ele.label}</Text>
+                <Text style={ele.active ? {textAlign:'center',fontSize: 14, color:colors.HeaderText,paddingVertical:12,borderBottomColor:colors.notification,borderBottomWidth:3} : { ...styles.navText,textAlign:'center',fontSize:16,paddingVertical:12, color: colors.HeaderText }}>{ele.label}</Text>
               </Pressable>
             ))}
         </View>
         <View style={{flex:1}}>
-          <View style={{paddingHorizontal:10,marginHorizontal:18,marginVertical:1,paddingVertical:10,backgroundColor:colors.headerBg,marginTop:10,borderWidth:.4,borderColor:colors.text,flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+          <View style={{paddingHorizontal:10,marginHorizontal:10,marginVertical:1,paddingVertical:10,backgroundColor:colors.surfaceVariant,marginTop:10,flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
             <View style={{flex:1,flexDirection:'row',alignItems:'center',gap:8}}>
               <Pressable style={{padding:8}} onPress={()=>handleDateRange("prev")}><FontAwesome name='chevron-left' color={colors.text} size={15}/></Pressable>
                 <Pressable onPress={showDatePicker} style={{flexDirection:'row',position:'relative',alignItems:'center',justifyContent:`${!isDaily && 'center'}`,flex:1,gap:10}}>
@@ -87,13 +86,13 @@ const Home = () => {
           </View>
           {dateRange.label === "Daily"? <Daily dateRange={dateRange}/> : <Monthly dateRange={dateRange}/>}</View>
         <View style={styles.expensEarnBtn}><FloatingActionBtn /></View>
-        <View><Header title="Home"/></View>
-    </SafeAreaView>
+        </>
+    
   );
 };
 export default Home;
 const styles = StyleSheet.create({
   navigationContainer: {justifyContent: 'space-around',flexDirection: 'row',alignItems: 'center'},
   navText: {fontSize: 14},
-  expensEarnBtn: {width: '100%',height: '90%',position: 'absolute'}
+  expensEarnBtn: {width: '100%',height: '90.5%',position: 'absolute',top:0}
 });

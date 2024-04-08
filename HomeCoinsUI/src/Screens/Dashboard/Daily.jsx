@@ -1,14 +1,19 @@
+import React, { useState } from 'react'
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
 import { defaultStyle } from '../../Utils'
-import { Card } from 'react-native-elements';
 import { useTheme } from 'react-native-paper'
-import { useDispatch, useSelector } from 'react-redux'
-import moment from 'moment';
-const Daily = ({dateRange}) => {
-    const { colors, dark } = useTheme();
+import { useSelector } from 'react-redux'
+import { Modals } from '../../Components'
+import AddEarn from '../AddEarnExpens/AddEarn'
+import AddExpend from '../AddEarnExpens/AddExpend'
+const Daily = () => {
+    const { colors } = useTheme();
     const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
     const { isLoading, account } = useSelector(state => state.account);
+    const [modalVisible,setModalVisible]=useState({status:false,element:null,data:null});
+    const modalVisibleHandler =(type,data)=>{
+      setModalVisible(prev=> ({...prev,status:!prev.status,element:type,data:data}))
+    }
     return (
     <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
         <View style={defaultStyle.screenContainer}>
@@ -16,12 +21,12 @@ const Daily = ({dateRange}) => {
             <View style={defaultStyle.viewSection}>
                <View style={{marginBottom:10}}>
                 <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',paddingVertical:10,paddingHorizontal:12,backgroundColor:colors.HeaderBg,}}>
-                  <Text style={{fontSize:15,color:colors.text}}>Total Income</Text>
-                  <Text style={{fontSize:17,color:colors.text}}>₹{(account && account.earnList && account.earnList.length>0) ? (account.earnList.reduce((total,list)=>list.amount+total,0)).toFixed(2) : "0.00"}</Text>
+                  <Text style={{fontSize:15,color:colors.HeaderText}}>Total Income</Text>
+                  <Text style={{fontSize:17,color:colors.HeaderText}}>₹{(account && account.earnList && account.earnList.length>0) ? (account.earnList.reduce((total,list)=>list.amount+total,0)).toFixed(2) : "0.00"}</Text>
                 </View>
                 <View>
-                  {(account && account.earnList && account.earnList.length>0) ? account.earnList.map((el,idx)=>(<Pressable key={idx+'earn'}>
-                    <View style={{flexDirection:'row',justifyContent:'space-between',padding:10}}>
+                  {(account && account.earnList && account.earnList.length>0) ? account.earnList.map((el,idx)=>(<Pressable key={idx+'earn'} onLongPress={()=>modalVisibleHandler("Earn",el)}>
+                    <View style={{flexDirection:'row',justifyContent:'space-between',padding:10,backgroundColor:colors.surfaceVariant}}>
                       <Text style={{color:colors.text}}>{el.source}</Text>
                       <Text style={{color:colors.text}}>₹{el?.amount.toFixed(2)??"--"}</Text>
                     </View>
@@ -30,17 +35,18 @@ const Daily = ({dateRange}) => {
                </View>
                <View>
                 <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',paddingVertical:10,paddingHorizontal:12,backgroundColor:colors.HeaderBg,}}>
-                  <Text style={{fontSize:15,color:colors.text}}>Total Expend</Text>
-                  <Text style={{fontSize:17,color:colors.text}}>₹{(account && account.expendList && account.expendList.length>0) ? (account.expendList.reduce((total,list)=>list.amount+total,0)).toFixed(2):"0.00"}</Text>
+                  <Text style={{fontSize:15,color:colors.HeaderText}}>Total Expend</Text>
+                  <Text style={{fontSize:17,color:colors.HeaderText}}>₹{(account && account.expendList && account.expendList.length>0) ? (account.expendList.reduce((total,list)=>list.amount+total,0)).toFixed(2):"0.00"}</Text>
                 </View>
                 <View>
-                  {(account && account.expendList && account.expendList.length>0) ? account.expendList.map((el,idx)=>(<Pressable key={idx+'expend'}>
-                    <View style={{flexDirection:'row',justifyContent:'space-between',padding:10}}>
+                  {(account && account.expendList && account.expendList.length>0) ? account.expendList.map((el,idx)=>(<Pressable onLongPress={()=>modalVisibleHandler("Expend",el)} key={idx+'expend'}>
+                    <View style={{flexDirection:'row',justifyContent:'space-between',padding:10,backgroundColor:colors.surfaceVariant}}>
                       <Text style={{color:colors.text}}>{el.description}</Text>
                       <Text style={{color:colors.text}}>₹{el?.amount.toFixed(2)??"--"}</Text>
                     </View>
                   </Pressable>)) : <View style={{flexDirection:'row',justifyContent:'center',padding:10}}><Text style={{color:colors.error}}>Expend Not Found</Text></View>}
                 </View>
+                <Modals Component={modalVisible.element === "Earn" ? <AddEarn editData={modalVisible}/> :<AddExpend editData={modalVisible}/>} modalVisible={modalVisible.status} modalVisibleHandler={modalVisibleHandler}/>
                </View>
             </View></>}
         </View>

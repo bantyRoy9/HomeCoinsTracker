@@ -5,7 +5,7 @@ let NODE_ENV = process.env.NODE_ENV,
     if(timeHour >= 8 && timeHour <= 20){        
         REACT_PROD_URL = "https://homecoinstracker.onrender.com";
     }
-// NODE_ENV="production"
+NODE_ENV="production"
 const accountControllerURL = `${NODE_ENV === 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/accountController`;
 const userControllerURL = `${NODE_ENV === 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/userController`;
 const activityControllerURL = `${NODE_ENV === 'production' ? REACT_PROD_URL:REACT_LOCAL_URL}/api/v1/activityController`;

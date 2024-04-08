@@ -1,10 +1,10 @@
-import { StatusBar,Image ,Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View,ActivityIndicator } from 'react-native'
+import { Image ,Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import Input from '../../Components/Input';
 import { useDispatch,useSelector} from 'react-redux';
-import { forgotPassword, loging } from '../../Redux/Action/userAction';
-import { Divider, Modal, PaperProvider, Portal, useTheme } from 'react-native-paper';
-import { FontAwesome, Ionicons,defaultStyle } from '../../Utils';
+import { loging } from '../../Redux/Action/userAction';
+import { useTheme } from 'react-native-paper';
+import { defaultStyle } from '../../Utils';
 import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
 import Button from '../../Components/Button';
 const initialState = { email: "", password: "" }
@@ -22,19 +22,7 @@ const Login = ({navigation}) => {
   }
   const [user, setUser] = useState(initialState);
   const [errors,setErrors] = useState({});
-  const [modalVisible, setModalVisible] = useState(false);
 
-  const showModal = () => {
-    setUser({});
-    setErrors({});
-    setModalVisible(true)
-  };
-  // const hideModal = () => {
-  //   setUser({});
-  //   setErrors({});
-  //   setModalVisible(false);
-  // }
-  
   const changeHandler = (name, value) => {
     setErrors(updateErrors(errors,name));
     setUser({ ...user, [name]: value });
@@ -46,7 +34,7 @@ const Login = ({navigation}) => {
     setErrors(validation.error);
     if(validation.valid){
     try {
-        modalVisible ? dispatch(forgotPassword(user)) : dispatch(loging(user));
+        dispatch(loging(user));
       } catch (err) {
         showAlert(err);
       }
@@ -91,7 +79,7 @@ const Login = ({navigation}) => {
             </View>
             </ScrollView>
             <View style={{ width: "auto", alignItems: 'center' }} >
-              <Button onPress={submitHandler} colors={colors} isLoading={isLoading} title='Login' btnStyle={btnStyle} key={'button'}/>
+              <Button onPress={submitHandler} isLoading={isLoading} title='Login'/>
               <Pressable onPress={() => navigation.navigate('Signup',{isForgotPassword:true,isOTPVerified:false})}>
               <Text style={{ color: colors.btnBackground }} >
                 Forgot Password?
@@ -105,7 +93,7 @@ const Login = ({navigation}) => {
               </View>
             </View>
           </View>
-          </View>
+    </View>
   )
 }
 

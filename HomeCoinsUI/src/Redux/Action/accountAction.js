@@ -24,15 +24,14 @@ export const getEarnExpendData = (dateRange,groupId,isGraph=false)=> async(dispa
                 data.graphData.datasets.map((el, id) => el['color'] = function () { return data.graphData.datasets[id].colorCode })
                 data.graphData.labels = data.graphData.labels.map(el => moment(el, 'DD-MM-YYYY').format('DD MMM'));
             }else{
-                data.earnList = data.graphData.filter(el=>el['earnBy']);
-                data.expendList = data.graphData.filter(el=>el['expendBy']);
+                data.earnList = data.graphData.filter(el=>el['earnBy']).map(el=>({...el,date:moment(new Date(el.date)).format("YYYY-MM-DD")}));
+                data.expendList = data.graphData.filter(el=>el['expendBy']).map(el=>({...el,date:moment(new Date(el.date)).format("YYYY-MM-DD")}));
             };
             dispatch({type:ACCOUNT_SUCCCESS,payload:data});
           }else{
             dispatch({type:ACCOUNT_FAIL,payload:null});
           };
     }catch(err){
-        // console.log(err);
         if(err.response && err.response.data){showAlert(err?.response?.data.msg??err)};
         dispatch({type:ACCOUNT_FAIL,payload:null});
     }

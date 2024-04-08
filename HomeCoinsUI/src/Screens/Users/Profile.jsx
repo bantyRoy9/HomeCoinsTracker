@@ -1,46 +1,15 @@
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, Pressable, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { darkColorProps, lightColorProps, defaultStyle, FontAwesome } from '../../Utils';
-import { useDispatch, useSelector } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ScrollView, StyleSheet, Text, View, Pressable, Image } from 'react-native'
+import { useDispatch } from 'react-redux';
 import { logoutUser } from '../../Redux/Action/userAction';
+import { defaultStyle, FontAwesome, profileNavList } from '../../Utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from 'react-native-paper';
-const profileNavList = [{
-    label: 'User Dashboard',
-    onPress: 'userDashboard',
-    Icons: ["dashboard"]
-},
-{
-    label: 'Add Members',
-    onPress: 'addMember',
-    Icons: ["users"]
-},
-{
-    label: 'Email Setting',
-    onPress: 'emailSetting',
-    Icons: ["envelope-o"]
-}, {
-    label: 'Notification Settings',
-    onPress: 'notificationSetting',
-    Icons: ["bell"]
-}, {
-    label: 'Password',
-    onPress: 'passwordSetting',
-    Icons: ["lock"]
-}, {
-    label: 'Logout',
-    onPress: 'Logout',
-    Icons: ["sign-out"]
-},
-]
+
 const Profile = ({ navigation }) => {
     const dispatch = useDispatch();
     const [userDetails, setUserDetails] = useState({});
-    const { colors,dark } = useTheme();
-    const backgroudStyle = {
-        backgroundColor: colors.background,
-        color: colors.text
-    };
+    const { colors } = useTheme();
     useEffect(() => {
         const fetchUser = async()=>{
             let user = await AsyncStorage.getItem("user");
@@ -63,9 +32,7 @@ const Profile = ({ navigation }) => {
         }
     }
     return (
-        <SafeAreaView style={{ ...backgroudStyle, height: '100%' }}>
-            <StatusBar barStyle={dark?'light-content':'dark-content'} backgroundColor={backgroudStyle.backgroundColor} />
-            <View style={defaultStyle.screenContainer}>
+        <View style={defaultStyle.screenContainer}>
                 <View style={{...styles.profileViewSection,borderColor:colors.border}}>
                     <View style={styles.profileDetails}>
                         <View style={styles.profilePhoto}>
@@ -80,11 +47,11 @@ const Profile = ({ navigation }) => {
                     </View>
                     <View style={styles.profileContactDetails}>
                         <View style={styles.profileContactDetail}>
-                            <FontAwesome name='phone' size={25} color={colors.text}/>
+                            <FontAwesome name='phone' size={20} color={colors.text}/>
                             <Text style={{ ...styles.profileText, ...styles.profileContactDetailText,color:colors.text}}>+91 {userDetails?.mobile ?? 'NA'}</Text>
                         </View>
                         <View style={styles.profileContactDetail}>
-                            <FontAwesome name='envelope-o' size={25} color={colors.text}/>
+                            <FontAwesome name='envelope-o' size={20} color={colors.text}/>
                             <Text style={{ ...styles.profileText, ...styles.profileContactDetailText,color:colors.text }}>{userDetails?.email ?? 'NA'}</Text>
                         </View>
                     </View>
@@ -110,15 +77,14 @@ const Profile = ({ navigation }) => {
                         {profileNavList.map(nav => (
                             <Pressable key={nav.label} style={{ ...styles.profileNavLists, borderColor: colors.border }} onPress={() => onPressprofileNav(nav.onPress)}>
                                 <View style={styles.profileNavList}>
-                                    <View><FontAwesome name={nav?.Icons[0]} size={25} color={colors.text}/></View>
+                                    <View><FontAwesome name={nav?.Icons[0]} size={20} color={colors.text}/></View>
                                     <View><Text style={{ ...styles.profileText, ...styles.profileContactDetailText,color:colors.text }}>{nav?.label}</Text></View>
                                 </View>
                             </Pressable>
                         ))}
                     </View>
                 </ScrollView>
-            </View>
-        </SafeAreaView>
+        </View>
     )
 }
 
@@ -157,7 +123,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     profileDetailText: {
-        fontSize: 25,
+        fontSize: 20,
         fontWeight: '600',
     },
     profileContactDetailText: {
@@ -176,7 +142,7 @@ const styles = StyleSheet.create({
     },
     profileAccountText: {
         fontWeight: '800',
-        fontSize: 25
+        fontSize: 20
     },
     // profileEditIcon:{
     //     position:'absolute',
