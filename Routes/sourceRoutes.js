@@ -4,6 +4,6 @@ const { getSource , createSource } = require('../Controllers/sourceController');
 
 
 const router = express.Router();
-router.route('/source').get(getSource).post(protect,restrictTo('Admin'),setUserAndGroupId('createdBy'),createSource);
+router.route('/source').get(getSource).post(protect,restrictTo('admin'),setUserAndGroupId('createdBy'),createSource);
 
 module.exports = router;
