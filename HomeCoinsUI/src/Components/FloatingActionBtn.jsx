@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FAB, Portal, PaperProvider, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import { defaultStyle } from '../Utils/defaultCss';
+import { defaultStyle } from '../Utils/defaultStyle';
 
 const FloatingActionBtn = () => {
   const navigation = useNavigation();

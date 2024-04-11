@@ -12,8 +12,10 @@ export const defaultTheme ={
         HeaderBg:"rgb(1, 66, 131)",
         HeaderText:"rgb(254, 254, 254)",
         btnBackground:"rgb(1, 66, 131)",
+        success:"rgb(34, 119, 0)",
+        warning:"rgb(159, 96, 0)",
         inputFocusBackground:"rgb(255, 255, 255)",
-        loaderColor:"rgb(56, 48, 76)",
+        loaderColor:"rgb(254, 254, 254)",
         lightBackground:"rgb(238, 238, 238)",
         surfaceVariant:"rgba(1, 66, 131,.1)"
     }

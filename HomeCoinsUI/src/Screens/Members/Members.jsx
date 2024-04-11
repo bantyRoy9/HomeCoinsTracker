@@ -1,41 +1,30 @@
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, Image, ActivityIndicator, Pressable } from 'react-native'
+import { ScrollView,  StyleSheet, Text, View, Image, ActivityIndicator, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { getAxiosHeader } from '../../Utils/CommonAuthFunction';
 import axios from 'axios';
-import { groupControllerURL, userControllerURL } from '../../Utils/URLProperties';
-import { defaultStyle } from '../../Utils/defaultCss';
-import { useTheme, Divider } from 'react-native-paper';
-import { useSelector } from 'react-redux';
+import { defaultStyle } from '../../Utils/defaultStyle';
+import { useTheme } from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
 import { colors as color } from 'react-native-elements';
-import { Header } from '../../Components';
+import { getMemberList } from '../../Redux/Action/memberAction';
 
 const Members = () => {
-  const [userList, setUserList] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const disptch = useDispatch();
   const { user } = useSelector(state => state.user);
   const { colors, dark } = useTheme();
-  const backgroundStyle = {
-    backgroundColor: colors.background,
-    color: colors.text
-  };
-  useEffect(() => {
-    const getUsersList = async () => {
-      try {
-        const { data } = await axios.get(`${groupControllerURL}/groupMembers/${user?.groupId}`, await getAxiosHeader());
-        setUserList(data.data);
-        setIsLoading(false);
-      } catch (err) { }
-    };
-    getUsersList();
-  }, []);
+  const { isLoading,member} = useSelector(state=>state.member);
+  useEffect(()=>{
+    member && !member.length && disptch(getMemberList(user.groupId));
+  },[])
+  
   return (
     <>
       {isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> :
         <ScrollView showsHorizontalScrollIndicator={false} style={defaultStyle.screenContainer}>
-          {userList && userList.length > 0 ? <>
-            {userList.map((el, idx) => (
+          {member && member.length > 0 ? <>
+            {member.map((el, idx) => (
               <View style={{marginVertical:2}} key={idx}>
-                <Pressable style={{ flexDirection: 'row',paddingVertical:13,gap:15, alignItems: 'center',borderBottomColor:colors.border,borderBottomWidth:userList.length -1 >idx?1:0 }}>
+                <Pressable style={{ flexDirection: 'row',paddingVertical:13,gap:15, alignItems: 'center',borderBottomColor:colors.border,borderBottomWidth:member.length -1 >idx?1:0 }}>
                   <View>
                     <Image source={require(`../../../Assets/profiles/default.png`)} style={{ width: 35, height: 35, borderRadius: 8 }} />
                   </View>

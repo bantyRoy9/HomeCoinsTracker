@@ -1,38 +1,31 @@
 import { StyleSheet, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { addEarnExpend } from '../../Redux/Action/accountAction';
-import { updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
-import { defaultStyle } from '../../Utils';
-import { useTheme } from 'react-native-paper';
-import { DatePicker, Input, SelectPicker } from '../../Components';
+import moment from 'moment';
 import axios from 'axios';
-import { sourceControllerURL } from '../../Utils/URLProperties';
-import Button from '../../Components/Button';
+import { addEarnExpend } from '../../Redux/Action/accountAction';
+import { DatePicker, Input, SelectPicker,Button } from '../../Components';
+import { defaultStyle,updateErrors,validateForm,sourceControllerURL } from '../../Utils';
+import { getMemberList } from '../../Redux/Action/memberAction';
+import { filterKeyIncludeArr, getElementByIndex } from '../../Utils/CommonAuthFunction';
 
-const initalState = {amount:'',source:'',description:'',date:moment(new Date()).format('YYYY-MM-DD')}
 const AddEarn = ({navigation,editData}) => {
   const dispatch = useDispatch();
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [details, setDetails] = useState((editData && editData.data) ? editData.data : initalState);
-  const [errors,setErrors] = useState({});
-  const [ source,setSource] = useState([{label:"auto",value:"auto"}])
   let { isLoading } = useSelector(state=> state.account);
-  const { colors,dark} = useTheme();
-
+  const { source } = useSelector(state => state.source);
+  const { member } = useSelector(state => state.member);
+  const { user } = useSelector(state=>state.user);
+  const initalState = {amount:'',source:'',earnBy:"",date:moment(new Date()).format('YYYY-MM-DD')};
+  editData && editData.data && Object.keys(initalState).map(el=>initalState[el]=editData.data[el]);
+  const [selectedDate, setSelectedDate] = useState(new Date(initalState.date));
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [details, setDetails] = useState(initalState);
+  const [errors,setErrors] = useState({});
   useEffect(()=>{
-    const fetchSource = async()=>{
-      try{
-        const { data } = await axios.get(`${sourceControllerURL}/source`);
-        if( data.status ){
-          //setSource(data.data.map(el=> {return {label:el.sourceName,value:el._id}}));
-        }
-      }catch(err){}
-    }
-    isLoading=false
-    fetchSource()
+    let userActive = getElementByIndex(filterKeyIncludeArr(member,"email",user.email),0);
+    let sourceList = getElementByIndex(filterKeyIncludeArr(source,"sourceName","Auto"),0);
+    (userActive || sourceList ) && setDetails({...details,earnBy:userActive._id,source:sourceList?._id});
+    member && !member.length && dispatch(getMemberList(user.groupId));
   },[])
   const changeHandler = (key, value) => {
     setErrors(updateErrors(errors,key));
@@ -45,6 +38,9 @@ const AddEarn = ({navigation,editData}) => {
     setErrors(validation.error);
     try {
       if(validation.valid){
+        if(editData && editData.data){
+          details['id']=editData.data._id
+        };
         dispatch(addEarnExpend(details,'earn',navigation));
         setDetails(initalState);
       }
@@ -64,11 +60,11 @@ const AddEarn = ({navigation,editData}) => {
     setSelectedDate(date);
     setDetails({ ...details, ["date"]: moment(new Date(date)).format('YYYY-MM-DD')});
   };
-  const selectPickerChangleHandler = (e) =>{
-    setErrors(updateErrors(errors,"source"));
-    setDetails({ ...details, ["source"]: e});
+  const selectPickerChangleHandler = (e,selectType) =>{
+    setErrors(updateErrors(errors,selectType));
+    setDetails({ ...details, [selectType]: e});
   }
-  isLoading=false
+  isLoading=false;
   return (
     <View style={defaultStyle.screenContainer}>
         <View>
@@ -92,9 +88,9 @@ const AddEarn = ({navigation,editData}) => {
         </View>
       <View>
         <SelectPicker
-            onValueChange={selectPickerChangleHandler}
+            onValueChange={(e)=>selectPickerChangleHandler(e,"source")}
             placeholder="Source"
-            items={source}
+            items={source.map(el=>({label:el.sourceName,value:el._id}))}
             value={details?.source}
             icon={"soundcloud"}
             isHelper={errors.source ? true : false}
@@ -102,25 +98,19 @@ const AddEarn = ({navigation,editData}) => {
             helperType={'error'}
         />
   </View>
-        {/*<View>
-          <Input
-            key={"source"}
-            placeholder={"Source"}
-            label={"Source"}
-            isLabel={false}
-            name={'source'}
-            icons={'soundcloud'}
-            value={details?.source}
-            secureTextEntry={false}
-            autoFocus={false}
-            pointerEvents={isLoading ? "none" : "auto"}
-            onChangeText={(text) => changeHandler("source", text)}
-            isHelper={errors.source ? true : false}
-            errorMsg={errors?.source}
-            helperType={'error'}
-          />
-  </View>*/}
-        <View>
+  <View>
+    <SelectPicker
+      onValueChange={(e)=>selectPickerChangleHandler(e,"earnBy")}
+      placeholder="Earn By"
+      items={member.map(el=>({label:el.name,value:el._id}))}
+      value={details.earnBy}
+      icon="barcode"
+      isHelper={errors.earnBy ? true : false}
+      errorMsg={errors?.earnBy}
+      helperType={'error'}
+    />
+  </View>
+        {/* <View>
           <Input
             key={"description"}
             placeholder={"Description"}
@@ -137,7 +127,7 @@ const AddEarn = ({navigation,editData}) => {
             errorMsg={errors?.description}
             helperType={'error'}
           />
-        </View>
+        </View> */}
         <View>
           <DatePicker
             key={"date"}

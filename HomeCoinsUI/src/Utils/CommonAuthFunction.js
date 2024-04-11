@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Alert } from "react-native";
 import { validEmail, validMobile } from "./Regex";
+import moment from "moment";
 
 export const getStoredCookie = async () => {
   let cookie = null;
@@ -89,4 +90,17 @@ export const validateForm = (details) => {
     });
   };
   return { valid, error };
+};
+export const dateFormat = (format,date) =>{
+  return moment(date?date:new Date()).format(format?format:"YYYY-MM-DD");
+}
+export const filterKeyIncludeArr=(arr,key,value)=>{
+  return arr.filter(el=>el[key]===value);
+};
+
+export const getElementByIndex = (arr,indx,keyName) =>{
+  let result=null;
+  if(arr && arr.length && arr[indx]) result = arr[indx];
+  if(keyName) result=result[keyName]; 
+  return result;
 };

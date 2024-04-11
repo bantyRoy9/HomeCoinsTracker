@@ -7,10 +7,13 @@ import { addEarnExpend } from '../../Redux/Action/accountAction';
 import {Input,DatePicker} from '../../Components';
 import Button from '../../Components/Button';
 
-const initialState = {amount:"",description:"",date:moment().format('YYYY-MM-DD')}
 const AddExpend = ({navigation,editData}) => {
   const dispatch = useDispatch();
-  const [details, setDetails] = useState((editData && editData.data ) ? editData.data : initialState);
+  const initialState = {amount:"",description:"",date:moment(new Date()).format('YYYY-MM-DD')};
+  if(editData && editData.data){
+    Object.keys(initialState).map(el=>initialState[el]=editData.data[el]);
+  };
+  const [details, setDetails] = useState(initialState);
   const [selectedDate, setSelectedDate] = useState((editData && editData.data ) ? new Date(editData.data.date) : new Date());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [errors,setErrors] = useState({});
@@ -23,13 +26,16 @@ const AddExpend = ({navigation,editData}) => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    console.log(details);
     let validation = validateForm(details);
     setErrors(validation.error);
     try {
       if(validation.valid){
-        dispatch(addEarnExpend(details,'expend'));
+        if(editData && editData.data){
+          details["id"]=editData.data._id
+        }
+        dispatch(addEarnExpend(details,'expend',navigation));
         setDetails(initialState);
-        navigation.navigate('Home');
       }
     } catch (err) {}
   };
@@ -44,7 +50,7 @@ const AddExpend = ({navigation,editData}) => {
   const handleConfirm = (date) => {
     hideDatePicker();
     setSelectedDate(date);
-    setDetails({ ...details, ["date"]: moment(new Date(date)).format('YYYY-MM-DD')});
+    setDetails({ ...details, date: moment(new Date(date)).format('YYYY-MM-DD')});
   };
   
   return (
@@ -97,7 +103,7 @@ const AddExpend = ({navigation,editData}) => {
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
           pointerEvents={isLoading ? "none" : "auto"}
-          onChangeText={(text)=>changeHandler("date", text)}
+          onChangeText={(text)=>changeHandler("date" , text)}
           isHelper={errors.date ? true : false}
           errorMsg={errors?.date}
           helperType={'error'}
@@ -105,7 +111,7 @@ const AddExpend = ({navigation,editData}) => {
           />
           
         </View>
-        <Button isLoading={isLoading} onPress={submitHandler} title={`${(editData && editData.data.status) ? "Update" : "Add"} expend`}/>
+        <Button isLoading={isLoading} onPress={submitHandler} title={`${(editData && editData.status) ? "Update" : "Add"} expend`}/>
       </View>
     
   )

@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
     inputIcons:{
       position:'absolute',
       zIndex:1,
-      top:21,
-      left:12,
+      top:20,
+      left:15,
       fontSize:20
     },
     inputBox:{

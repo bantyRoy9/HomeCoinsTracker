@@ -5,12 +5,14 @@ import { useTheme } from 'react-native-paper';
 import moment from 'moment';
 import { getActivity } from '../../Redux/Action/activityAction';
 import { showAlert,stringTransform,defaultStyle } from '../../Utils';
+import { dateFormat, filterKeyIncludeArr, getElementByIndex } from '../../Utils/CommonAuthFunction';
 
 const Activity = () => {
     const dispatch = useDispatch(),
         { colors } = useTheme(),
         { isLoading, activity } = useSelector(state => state.activity),
-        { user } = useSelector(state=> state.user);
+        { user } = useSelector(state=> state.user),
+        { source } = useSelector(state=>state.source);
     useEffect(() => {
         try{
             dispatch(getActivity(user?.groupId));
@@ -18,6 +20,7 @@ const Activity = () => {
             showAlert(err);
         }
     }, []);
+    
     return (
         <>{isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> :
                 <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={defaultStyle.screenContainer}>
@@ -34,7 +37,7 @@ const Activity = () => {
                                             <View>
                                                 {el.Url == "/earn" && <>
                                                     <View><Text style={{color:colors.text}}>Earn By</Text></View>
-                                                    <View><Text style={{color:colors.text}}>{stringTransform(el.addEarn?.source??"NA",'c')}</Text></View>
+                                                    <View><Text style={{color:colors.text}}>{stringTransform(getElementByIndex(filterKeyIncludeArr(source,"_id",el.addEarn.source),0,"sourceName"),'c')}</Text></View>
                                                 </>}
                                                 {el.Url == "/expend" && <>
                                                     <View><Text style={{color:colors.text}}>Expend to</Text></View>
@@ -43,12 +46,12 @@ const Activity = () => {
                                             </View>
                                         </View>
                                         <View style={styles.activityRightSec}>
-                                            <Text style={{color: el.Url == "/expend"? colors.error: colors.success}}>{`${el.Url == "/expend" ? '- ₹' + el.addExpend?.amount ?? "NA" + '' : '+ ₹' + el.addEarn?.amount ?? "NA" + ''} `}</Text>
+                                            <Text style={{color: el.Url == "/expend" ? colors.error : el.methodType === "PATCH" ? colors.warning : colors.success}}>{`${el.Url == "/expend" ? '- ₹' + el.addExpend?.amount ?? "NA" + '' : '+ ₹' + el.addEarn?.amount ?? "NA" + ''} `}</Text>
                                         </View>
                                     </View>
                                     <View style={{flexDirection:'row',justifyContent:'space-between'}}>
                                         <View>
-                                            <Text style={{color:colors.text}}>{el.date ? moment(el.date).format('DD MMM YY hh:mm a') : 'NA'}</Text>
+                                            <Text style={{color:colors.text}}>{el.updatedDate ? dateFormat("DD MMM YY hh:mm a",el.updatedDate) : el.date ? dateFormat("DD MMM YY hh:mm a",el.date) : 'NA'}</Text>
                                         </View>
                                         <View>
                                             <Text style={{color:colors.text}}>{`Add By ${stringTransform(el.user?.name, 'C')} `}</Text>
