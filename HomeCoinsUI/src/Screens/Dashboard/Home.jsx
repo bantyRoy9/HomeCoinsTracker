@@ -4,18 +4,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getEarnExpendData } from '../../Redux/Action/accountAction';
 import { FloatingActionBtn, Header } from '../../Components';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { FontAwesome,topHomeNavList } from '../../Utils';
+import { FontAwesome,defaultStyle,topHomeNavList } from '../../Utils';
 import { useTheme } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { USER_SUCCCESS } from '../../Redux/constants';
 import Daily from './Daily';
 import Monthly from './Monthly';
 import moment from 'moment';
+import { getSourceList } from '../../Redux/Action/sourceAction';
+import { getMemberList } from '../../Redux/Action/memberAction';
 const Home = () => {
   const [dateRange, setDateRange] = useState(topHomeNavList.filter(el => el.active == true)[0]);
-  const [datePickerVisible, setDatePickerVisible] = useState(false), dispatch = useDispatch(), { colors, dark } = useTheme(),backgroundStyle = {backgroundColor: colors.background,color: colors.text};
-  let { user } = useSelector(state => state.user);
-  const { account } = useSelector(state=> state.account);
+  const [datePickerVisible, setDatePickerVisible] = useState(false), dispatch = useDispatch(), { colors, dark } = useTheme();
+  let { user } = useSelector(state=>state.user);
+  const { account } = useSelector(state=>state.account);
+  const { source } = useSelector(state=>state.source);
+  const { member } = useSelector(state=>state.member);
   useEffect(() => {
     const fetchEarnExpendData = async () => {
       if(user && Object.keys(user).length === 0){
@@ -25,8 +29,9 @@ const Home = () => {
       dispatch(getEarnExpendData(dateRange.dateRange, user?.groupId ?? "",dateRange.label !== "Daily" ? true : false));
     };
     fetchEarnExpendData();
+    source && !source.length && dispatch(getSourceList());
+    member && !member.length && dispatch(getMemberList(user.groupId));
   }, [dateRange]);
-
   const navPressHandle = (navPress) => {
     topHomeNavList.map(el => el.label === navPress.label ? el.active = true : el.active = false);
     setDateRange(navPress);
@@ -56,14 +61,14 @@ const Home = () => {
   let date = dateRange.dateRange.split("_")[0],dateFormat={date:moment(new Date(date)).format("DD"),day:moment(new Date(date)).format("dddd"),month:moment(new Date(date)).format("MMMM"),year:moment(new Date(date)).format("YYYY")},isDaily=dateRange.label === "Daily"?true:false;
   return (
         <>
-        <View style={{...styles.navigationContainer,backgroundColor:colors.HeaderBg,paddingHorizontal:10}}>
+        <View style={{...styles.navigationContainer,backgroundColor:colors.HeaderBg}}>
             {topHomeNavList.map((ele,idx)=>(
               <Pressable onPress={()=>navPressHandle(ele)} key={`${ele.label}_${idx}`} style={{flex:1}}>
-                <Text style={ele.active ? {textAlign:'center',fontSize: 14, color:colors.HeaderText,paddingVertical:12,borderBottomColor:colors.notification,borderBottomWidth:3} : { ...styles.navText,textAlign:'center',fontSize:16,paddingVertical:12, color: colors.HeaderText }}>{ele.label}</Text>
+                <Text style={ele.active ? {...styles.navText,color:colors.HeaderText,borderBottomColor:colors.notification,borderBottomWidth:2} : { ...styles.navText,color: colors.HeaderText }}>{ele.label}</Text>
               </Pressable>
             ))}
         </View>
-        <View style={{flex:1}}>
+        <View style={{flex:1,height:'100%'}}>
           <View style={{paddingHorizontal:10,marginHorizontal:10,marginVertical:1,paddingVertical:10,backgroundColor:colors.surfaceVariant,marginTop:10,flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
             <View style={{flex:1,flexDirection:'row',alignItems:'center',gap:8}}>
               <Pressable style={{padding:8}} onPress={()=>handleDateRange("prev")}><FontAwesome name='chevron-left' color={colors.text} size={15}/></Pressable>
@@ -79,7 +84,7 @@ const Home = () => {
             <View style={{flexDirection:'row',alignItems:'center',gap:10}}>
             {isDaily && <View>
                 <Text style={{color:colors.text,textAlign:'right'}}>Blance</Text>
-                <Text style={{color:colors.text,fontSize:16}}>{account && ((account?.earnList?.reduce((total,list)=>list.amount+total,0)??0) - (account?.expendList?.reduce((total,list)=>list.amount+total,0)??0)).toFixed(2)}</Text>
+                <Text style={{color:colors.text,...defaultStyle.text}}>{account && ((account?.earnList?.reduce((total,list)=>list.amount+total,0)??0) - (account?.expendList?.reduce((total,list)=>list.amount+total,0)??0)).toFixed(2)}</Text>
               </View>}
               <Pressable style={{padding:8}} onPress={()=>handleDateRange("next")}><FontAwesome name='chevron-right' color={colors.text} size={15}/></Pressable>
             </View>
@@ -92,7 +97,22 @@ const Home = () => {
 };
 export default Home;
 const styles = StyleSheet.create({
-  navigationContainer: {justifyContent: 'space-around',flexDirection: 'row',alignItems: 'center'},
-  navText: {fontSize: 14},
-  expensEarnBtn: {width: '100%',height: '90.5%',position: 'absolute',top:0}
+  navigationContainer: {
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal:10
+  },
+  navText: {
+    textAlign:'center',
+    ...defaultStyle.text,
+    paddingVertical:12
+  },
+  expensEarnBtn: {
+    width: '100%',
+    height: '90.5%',
+    position: 'absolute',
+    top:0
+  },
+
 });

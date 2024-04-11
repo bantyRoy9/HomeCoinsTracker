@@ -36,7 +36,8 @@ export default Header
 const styles = StyleSheet.create({
     headerContainer: {
         display: 'flex',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginBottom:0
     },
     headerIcon:{
         alignItems:'center',

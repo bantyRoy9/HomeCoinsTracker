@@ -115,4 +115,4 @@ export const verifyUserOTP = (OTP,user,navigation)=>async(dispatch) =>{
         showAlert(err.response.data.msg)
         dispatch({type:USER_REGISTER_FAIL,payload:null})
     };
-}
+};

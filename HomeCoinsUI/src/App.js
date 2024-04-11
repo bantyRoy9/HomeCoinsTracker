@@ -19,6 +19,7 @@ function App() {
   const [userDetails, setUserDetails] = useState({});
   const { user } = useSelector(state=>state.user);
   const { group } = useSelector(state=>state.group);
+  
   useEffect(() => {
     fetchUserDetail();
     setTimeout(()=>{
