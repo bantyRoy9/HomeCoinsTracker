@@ -1,7 +1,7 @@
 class ApiFeature {
     constructor(modal,query){
         this.modal = modal;
-        this.query = query
+        this.query = query;
     };
 
     filter(){

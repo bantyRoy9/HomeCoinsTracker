@@ -2,7 +2,7 @@ import { SafeAreaView, StyleSheet, Pressable, Text, View, StatusBar } from 'reac
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getEarnExpendData } from '../../Redux/Action/accountAction';
-import { FloatingActionBtn, Header } from '../../Components';
+import { FloatingActionBtn } from '../../Components';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { FontAwesome,defaultStyle,topHomeNavList } from '../../Utils';
 import { useTheme } from 'react-native-paper';
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
   expensEarnBtn: {
     width: '100%',
-    height: '90.5%',
+    height: '100%',
     position: 'absolute',
     top:0
   },
