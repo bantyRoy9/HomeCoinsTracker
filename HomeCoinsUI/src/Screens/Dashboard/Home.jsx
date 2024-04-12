@@ -20,7 +20,7 @@ const Home = () => {
   const { account } = useSelector(state=>state.account);
   const { source,expendType } = useSelector(state=>state.source);
   const { member } = useSelector(state=>state.member);
-  console.log(source,'*********',expendType,'ddddd');
+  // console.log(account?.earnList,'*********',account?.expendList);
   useEffect(() => {
     const fetchEarnExpendData = async () => {
       if(user && Object.keys(user).length === 0){

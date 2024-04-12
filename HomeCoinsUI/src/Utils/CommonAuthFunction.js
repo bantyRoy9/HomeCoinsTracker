@@ -32,7 +32,8 @@ export const getAxiosHeader = async () => {
     if (value) {
       header = {
         headers: { authorization: "Bearer " + value },
-        withCredentials: true
+        withCredentials: true,
+        crossDomain:true
       }
     }
     return header;
@@ -105,3 +106,16 @@ export const getElementByIndex = (arr,indx,keyName) =>{
   if(keyName) result=result[keyName]; 
   return result;
 };
+
+export const updateArrByIndex = (arr,key,newElement) =>{
+  const index = arr.findIndex(el=>el[key] === newElement[key]);
+  console.log(index);
+  if(index !== -1){
+    arr[index] = newElement;
+  }
+  return arr;
+};
+
+export const removeElementByKey = (arr,key,value) =>{
+  return arr.filter(el=>el[key] !== value);
+}
