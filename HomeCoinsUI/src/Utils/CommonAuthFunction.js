@@ -99,7 +99,7 @@ export const filterKeyIncludeArr=(arr,key,value)=>{
 };
 
 export const getElementByIndex = (arr,indx,keyName) =>{
-  let result=null;
+  let result=[];
   if(arr && arr.length && arr[indx]) result = arr[indx];
   if(keyName) result=result[keyName]; 
   return result;

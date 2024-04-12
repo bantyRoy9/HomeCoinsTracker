@@ -26,7 +26,6 @@ const AddExpend = ({navigation,editData}) => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(details);
     let validation = validateForm(details);
     setErrors(validation.error);
     try {

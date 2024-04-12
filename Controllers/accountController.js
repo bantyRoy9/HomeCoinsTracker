@@ -1,15 +1,11 @@
 const EarnModel = require("../Model/AccountModels/earnSchema");
 const ExpendModel = require("../Model/AccountModels/expendSchema");
-const HomeAccSchemaModel = require("../Model/AccountModels/homeAcc");
-const User = require("../Model/UserModels/userSchema");
 const { graphData } = require("../Utils/commonFunction");
 const catchAsync = require("../Utils/catchAsync");
 const ApiFeature = require("../Utils/apiFeature");
 const moment = require('moment');
-const ActivityModels = require("../Model/ActivityModels/activityModel");
-const { addUsersActivity } = require("./activityController");
 const AppError = require("../Utils/appError");
-const { responseSend } = require("./authController");
+const { update } = require("./modalController");
 
 exports.saveDailyEarns = catchAsync(async(req,res,next) => {
     const saveEarn = await EarnModel.create(req.body);
@@ -22,6 +18,7 @@ exports.saveDailyExped = catchAsync(async(req,res,next)=>{
     req.expendId = saveExpend._id;
     next();
 });
+exports.updateDailyEarnExped =(type)=> update(type === "earn" ? EarnModel : ExpendModel);
 
 exports.totalEarnByUser = catchAsync(async(req,res,next) =>{
     const toatalErn = await EarnModel.find({earnBy:req.user.id});
@@ -76,7 +73,11 @@ exports.getTotalExpend = catchAsync(async(req,res,next)=>{
            graphDataJson = graphData([totalExpend],['Expend'],['#5aa16d']);
        }
    }else{
-        graphDataJson=[...req.totalErans,...totalExpend]
+        if(req.totalErans){
+            graphDataJson=[...req?.totalErans,...totalExpend]
+        }else{
+            graphDataJson=totalExpend
+        }
     };
 
     res.status(200).json({

@@ -8,6 +8,7 @@ const DefaultLayout = ({ Component,...props }) => {
   const backgroundStyle = {
     backgroundColor: colors.background,
     color: colors.text,
+    marginBottom:0
   };
   return (<>
     <SafeAreaView style={{...backgroundStyle, height: '100%'}}>
@@ -19,7 +20,7 @@ const DefaultLayout = ({ Component,...props }) => {
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}
-        contentContainerStyle={props.isFlexCenter && {flex:1}}
+        contentContainerStyle={props.isFlexCenter && {flex:1,height:'100%',justifyContent:'center'}}
         >
         <Component {...props}/>
       </ScrollView>

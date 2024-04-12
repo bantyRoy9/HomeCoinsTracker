@@ -17,6 +17,14 @@ const expendSchema = new mongoose.Schema({
         type:mongoose.Schema.ObjectId,
         ref:'User'
     },
+    updatedBy:{
+        type:mongoose.Schema.ObjectId,
+        ref:'User'
+    },
+    updatedDate:{
+        type:Date,
+        require:true
+    },
     groupId:{
         type:mongoose.Schema.ObjectId,
         ref:'Group'
