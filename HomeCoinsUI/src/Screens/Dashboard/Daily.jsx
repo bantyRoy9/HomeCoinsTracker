@@ -2,19 +2,22 @@ import React, { useState } from 'react'
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { defaultStyle, stringTransform } from '../../Utils'
 import { useTheme } from 'react-native-paper'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Modals } from '../../Components'
 import AddEarn from '../AddEarnExpens/AddEarn'
 import AddExpend from '../AddEarnExpens/AddExpend'
 import { filterKeyIncludeArr, getElementByIndex } from '../../Utils/CommonAuthFunction'
 const Daily = () => {
-    const { colors } = useTheme();
+    const { colors } = useTheme(),dispatch = useDispatch();
     const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
     const { isLoading, account } = useSelector(state => state.account);
     const { source } = useSelector(state=>state.source);
     const [modalVisible,setModalVisible]=useState({status:false,element:null,data:null});
     const modalVisibleHandler =(type,data)=>{
       setModalVisible(prev=> ({...prev,status:!prev.status,element:type,data:data}))
+    };
+    const deleteHandler = () =>{
+      // dispatch()
     }
     const headerStyle={...styles.bodyTextStyle,paddingVertical:10,paddingHorizontal:12,backgroundColor:colors.HeaderBg};
     const headerTextStyle={...defaultStyle.text,color:colors.HeaderText};
@@ -53,7 +56,7 @@ const Daily = () => {
                     </View>
                   </Pressable>)) : <View style={noDataFound}><Text style={{color:colors.error}}>Expend Not Found</Text></View>}
                 </View>
-                <Modals Component={modalVisible.element === "Earn" ? <AddEarn editData={modalVisible}/> :<AddExpend editData={modalVisible}/>} modalVisible={modalVisible.status} modalVisibleHandler={modalVisibleHandler}/>
+                <Modals Component={modalVisible.element === "Earn" ? <AddEarn editData={modalVisible} isDelete={true}/> :<AddExpend editData={modalVisible}/>} modalVisible={modalVisible.status} modalVisibleHandler={modalVisibleHandler} onDelete={deleteHandler}/>
                </View>
             </View></>}
         </View>

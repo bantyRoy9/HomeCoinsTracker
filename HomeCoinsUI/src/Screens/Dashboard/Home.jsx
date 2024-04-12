@@ -18,8 +18,9 @@ const Home = () => {
   const [datePickerVisible, setDatePickerVisible] = useState(false), dispatch = useDispatch(), { colors, dark } = useTheme();
   let { user } = useSelector(state=>state.user);
   const { account } = useSelector(state=>state.account);
-  const { source } = useSelector(state=>state.source);
+  const { source,expendType } = useSelector(state=>state.source);
   const { member } = useSelector(state=>state.member);
+  console.log(source,'*********',expendType,'ddddd');
   useEffect(() => {
     const fetchEarnExpendData = async () => {
       if(user && Object.keys(user).length === 0){
@@ -29,7 +30,10 @@ const Home = () => {
       dispatch(getEarnExpendData(dateRange.dateRange, user?.groupId ?? "",dateRange.label !== "Daily" ? true : false));
     };
     fetchEarnExpendData();
-    source && !source.length && dispatch(getSourceList());
+    source && !source.length && dispatch(getSourceList('source'));
+    setTimeout(()=>{
+      expendType && !expendType.length && dispatch(getSourceList('expendType'));
+    },2000)
     member && !member.length && dispatch(getMemberList(user.groupId));
   }, [dateRange]);
   const navPressHandle = (navPress) => {

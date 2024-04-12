@@ -5,10 +5,11 @@ const expendSchema = new mongoose.Schema({
         type:Number,
         require:true
     },
-    description:{
-        type:String,
-        require:true
+    expendType:{
+        type:mongoose.Schema.ObjectId,
+        ref:'ExpendType'
     },
+    description:String,
     date:{
         type:Date,
         require:true

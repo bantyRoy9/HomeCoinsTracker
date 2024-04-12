@@ -2,8 +2,7 @@
 import { ACCOUNT_ADD_FAIL, ACCOUNT_ADD_REQUIEST, ACCOUNT_ADD_SUCCESS, ACCOUNT_FAIL, ACCOUNT_REQUIEST, ACCOUNT_REQUIEST_ADD, ACCOUNT_SUCCCESS, USER_GETME_SUCCCESS,USER_GETME_FAIL} from "../constants";
 import axios from 'axios';
 import moment from 'moment';
-import { getAxiosHeader, showAlert } from '../../Utils/CommonAuthFunction';
-import { accountControllerURL } from '../../Utils/URLProperties';
+import { getAxiosHeader, showAlert, accountControllerURL } from '../../Utils';
 
 const getAnalyticsDetails = (resData) => {
     const analyticsJson ={};
@@ -42,7 +41,6 @@ export const addEarnExpend = (details,urlType,navigation) => async(dispatch) =>{
         dispatch({type:ACCOUNT_ADD_REQUIEST});
         let method="post";
         if(details.id) method="patch";
-        console.log(method,urlType,details,`${accountControllerURL}/${urlType}`);
         const { data } = await axios[method](`${accountControllerURL}/${urlType}`,details, await getAxiosHeader());
         if(data && data.status){
             showAlert(data.msg);

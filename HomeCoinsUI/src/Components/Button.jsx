@@ -4,16 +4,17 @@ import { useTheme } from 'react-native-paper';
 const Button = ({
   onPress,
   isLoading,
-  title
+  title,
+  btnType="Primary"
 }) => {
   const { colors } = useTheme();
   const btnStyle = {
-    backgroundColor: colors.btnBackground,
-    color: colors.text
+    backgroundColor: colors[`btn${btnType}Background`],
+    color: colors[`btn${btnType}Color`]
   }
   return (
     <Pressable style={{...styles.button, ...btnStyle}} onPress={onPress} pointerEvents={isLoading?"none":"auto"}>
-      <Text style={{...styles.text, ...btnStyle.color}}>
+      <Text style={{...styles.text, color:btnStyle.color}}>
         {isLoading ? (
           <ActivityIndicator size={'small'} color={colors.loaderColor} />
         ) : (
@@ -32,15 +33,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingVertical: 16,
         paddingHorizontal: 32,
-        borderRadius: 10,
+        borderRadius: 8,
         width: "100%",
         marginVertical: 15
       },
       text: {
-        color:'rgb(255,255,255)',
         fontSize: 16,
-        lineHeight: 21,
-        fontWeight: 'bold',
+        lineHeight: 20,
+        fontWeight: '500',
         letterSpacing: 0.25,
       },
 });
