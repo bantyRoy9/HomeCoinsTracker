@@ -18,6 +18,10 @@ const sourceSchema = new mongoose.Schema({
         type:mongoose.Schema.ObjectId,
         ref:'User'
     },
+    groupId:{
+        type:mongoose.Schema.ObjectId,
+        ref:'Group'
+    },
     sourceInv:Number
 });
 

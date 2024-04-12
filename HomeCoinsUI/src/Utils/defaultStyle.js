@@ -24,5 +24,10 @@ export const defaultStyle = StyleSheet.create({
     borderRadius: 10,
     width: "100%",
     marginVertical: 15
+  },
+  viewBottom:{
+    position:'absolute',
+    bottom:0,
+    width:'100%'
   }
 })

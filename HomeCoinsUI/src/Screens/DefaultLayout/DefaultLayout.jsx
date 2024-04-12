@@ -8,10 +8,9 @@ const DefaultLayout = ({ Component,...props }) => {
   const backgroundStyle = {
     backgroundColor: colors.background,
     color: colors.text,
-    marginBottom:0
   };
   return (<>
-    <SafeAreaView style={{...backgroundStyle, height: '100%'}}>
+    <SafeAreaView style={{...backgroundStyle,height:"100%"}}>
       <StatusBar
         barStyle={!dark ? 'light-content' : 'dark-content'}
         backgroundColor={colors.HeaderBg}
@@ -20,7 +19,7 @@ const DefaultLayout = ({ Component,...props }) => {
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}
-        contentContainerStyle={props.isFlexCenter && {flex:1,height:'100%',justifyContent:'center'}}
+        contentContainerStyle={props.isFlexCenter ? {justifyContent:'center',height:'100%'} : {height:'100%'}}
         >
         <Component {...props}/>
       </ScrollView>

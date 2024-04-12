@@ -1,22 +1,8 @@
-const { sourceModel } = require("../Model/SourceModels");
-const catchAsync = require("../Utils/catchAsync");
+const expendType = require("../Model/AccountModels/expendTypeSchema");
+const sourceModel = require("../Model/SourceModels/sourceSchema");
+const { findModal, createModal } = require("./commonController");
 
-exports.getSource = catchAsync(async(req,res,next)=>{
-    // const allSource = await sourceModel.find({},'sourceName').lean().populate("createdBy",'name email');
-    const allSource = await sourceModel.find({},'sourceName');
-
-    res.status(200).json({
-        status:true,
-        msg:'Get all source successfully',
-        data:allSource
-    });
-});
-
-exports.createSource = catchAsync(async(req,res,next)=>{
-    await sourceModel.create(req.body);
-    res.status(201).json({
-        status:true,
-        msg:"Source created successfully",
-        data:null
-    });
-})
+exports.getSource = findModal(sourceModel,{},"sourceName");
+exports.createSource = createModal(sourceModel);
+exports.getExpendType=findModal(expendType,{},"name")
+exports.createExpendType = createModal(expendType);

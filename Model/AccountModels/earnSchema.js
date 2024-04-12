@@ -6,8 +6,8 @@ const earnSchema = new mongoose.Schema({
         require:true
     },
     source:{
-        type:String,
-        require:true
+        type:mongoose.Schema.ObjectId,
+        ref:'Source'
     },
     date:{
         type:Date,

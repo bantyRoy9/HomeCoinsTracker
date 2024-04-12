@@ -11,7 +11,12 @@ export const defaultTheme ={
         card:"rgba(1, 66, 131,.1)",
         HeaderBg:"rgb(1, 66, 131)",
         HeaderText:"rgb(254, 254, 254)",
-        btnBackground:"rgb(1, 66, 131)",
+
+        btnPrimaryBackground:"rgb(1, 66, 131)",
+        btnSecondaryBackground:"rgba(1, 66, 131,.1)",
+        btnPrimaryColor:"rgb(255, 255, 255)",
+        btnSecondaryColor:"rgb(1, 1, 1)",
+        
         success:"rgb(34, 119, 0)",
         warning:"rgb(159, 96, 0)",
         inputFocusBackground:"rgb(255, 255, 255)",

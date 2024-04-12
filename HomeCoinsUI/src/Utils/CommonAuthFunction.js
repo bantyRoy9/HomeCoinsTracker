@@ -32,7 +32,8 @@ export const getAxiosHeader = async () => {
     if (value) {
       header = {
         headers: { authorization: "Bearer " + value },
-        withCredentials: true
+        withCredentials: true,
+        crossDomain:true
       }
     }
     return header;
@@ -75,9 +76,10 @@ export const validateForm = (details) => {
   let valid = true, error = {};
   if (details && Object.keys(details).length > 0) {
     Object.keys(details).forEach((el, idx) => {
+
       if (!details[el]) {
         valid = false;
-        error[el] = `*${el=='source'?'Select':'Enter'} ${el.replace(/([a-z0-9])([A-Z])/g, '$1 $2')}`
+        error[el] = `*${(el== 'source' || el== 'expendType')?'Select':'Enter'} ${el.replace(/([a-z0-9])([A-Z])/g, '$1 $2')}`
       };
       if(el === "email" && !validEmail.test(details[el])){
         valid = false;
@@ -99,8 +101,21 @@ export const filterKeyIncludeArr=(arr,key,value)=>{
 };
 
 export const getElementByIndex = (arr,indx,keyName) =>{
-  let result=[];
+  let result="";
   if(arr && arr.length && arr[indx]) result = arr[indx];
   if(keyName) result=result[keyName]; 
   return result;
 };
+
+export const updateArrByIndex = (arr,key,newElement) =>{
+  const index = arr.findIndex(el=>el[key] === newElement[key]);
+  console.log(index);
+  if(index !== -1){
+    arr[index] = newElement;
+  }
+  return arr;
+};
+
+export const removeElementByKey = (arr,key,value) =>{
+  return arr.filter(el=>el[key] !== value);
+}

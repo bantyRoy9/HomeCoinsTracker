@@ -1,1 +1,0 @@
-exports.sourceModel = require('./sourceSchema');

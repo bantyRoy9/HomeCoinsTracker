@@ -2,7 +2,26 @@ import { StyleSheet, Text, View, useColorScheme } from 'react-native'
 import React, { useState,useRef } from 'react'
 import Icons from 'react-native-vector-icons/FontAwesome'
 import { HelperText, TextInput, useTheme } from 'react-native-paper';
-const Input = (props) => {
+const Input = ({
+  pointerEvents,
+  isLabel,
+  label,
+  icons,
+  keyboardType,
+  value,
+  maxLength,
+  ref,
+  autoFocus,
+  name,
+  secureTextEntry,
+  placeholder,
+  onChangeText,
+  onPress,
+  editable,
+  isHelper,
+  helperType,
+  errorMsg
+}) => {
   const { colors } = useTheme();
   const [isFocuse, setIsFocuse] = useState(defualtProperty);
   const defualtProperty = {
@@ -27,32 +46,32 @@ const Input = (props) => {
   };
   
   return (
-    <View style={styles.inputContainer} pointerEvents={props?.pointerEvents}>
-      {props.isLabel && <Text style={styles.inputLabel}>{props.label}</Text>}
-      {props.icons && <Icons style={{...styles.inputIcons,color:colors.text}} name={props.icons} size={20} />}  
+    <View style={styles.inputContainer} pointerEvents={pointerEvents}>
+      {isLabel && <Text style={styles.inputLabel}>{label}</Text>}
+      {icons && <Icons style={{...styles.inputIcons,color:colors.text}} name={icons} size={20} />}  
         <TextInput
-                keyboardType={props?.keyboardType}
+                keyboardType={keyboardType}
                 onBlur={onBlur}
                 onFocus={onFocuse}
-                value= {props?.value}
+                value= {value}
                 style={{
                   ...styles.inputBox,
                   ...backgroundStyle,
                 }}
-                maxLength={props?.maxLength}
-                ref={props?.ref}
-                autoFocus={props.autoFocus}
-                label={props.label}
-                name={props.name}
+                maxLength={maxLength}
+                ref={ref}
+                autoFocus={autoFocus}
+                label={label}
+                name={name}
                 mode='flat'
                 cursorColor= {backgroundStyle.color}
-                secureTextEntry={props?.secureTextEntry??false}
-                placeholder={props?.placeholder}
-                onChangeText={props?.onChangeText}
-                onPressIn={props?.onPress}
-                editable={props?.editable}
+                secureTextEntry={secureTextEntry??false}
+                placeholder={placeholder}
+                onChangeText={onChangeText}
+                onPressIn={onPress}
+                editable={editable}
               />
-              {props.isHelper && <HelperText type={props.helperType}>{props.errorMsg}</HelperText>}
+              {isHelper && <HelperText type={helperType}>{errorMsg}</HelperText>}
 
     </View>
   )
