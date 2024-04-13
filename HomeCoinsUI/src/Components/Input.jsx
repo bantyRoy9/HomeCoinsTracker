@@ -81,7 +81,7 @@ export default Input
 
 const styles = StyleSheet.create({
     inputContainer:{
-        marginVertical:10,
+        marginVertical:5,
         position:'relative',
 
     },

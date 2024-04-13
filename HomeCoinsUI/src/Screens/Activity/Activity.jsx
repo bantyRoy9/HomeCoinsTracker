@@ -37,7 +37,7 @@ const Activity = () => {
                                             <View>
                                                 {el.Url == "/earn" && <>
                                                     <View><Text style={{color:colors.text}}>Earn By</Text></View>
-                                                    <View><Text style={{color:colors.text}}>{stringTransform(getElementByIndex(filterKeyIncludeArr(source,"_id",el.addEarn.source),0,"sourceName"),'c')}</Text></View>
+                                                    <View><Text style={{color:colors.text}}>{stringTransform(getElementByIndex(filterKeyIncludeArr(source,"_id",el.addEarn?.source),0,"sourceName"),'c')}</Text></View>
                                                 </>}
                                                 {el.Url == "/expend" && <>
                                                     <View><Text style={{color:colors.text}}>Expend to</Text></View>
@@ -54,7 +54,7 @@ const Activity = () => {
                                             <Text style={{color:colors.text}}>{el.updatedDate ? dateFormat("DD MMM YY hh:mm a",el.updatedDate) : el.date ? dateFormat("DD MMM YY hh:mm a",el.date) : 'NA'}</Text>
                                         </View>
                                         <View>
-                                            <Text style={{color:colors.text}}>{`Add By ${stringTransform(el.user?.name, 'C')} `}</Text>
+                                            <Text style={{color:colors.text}}>{`${el.methodType === "PATCH" ? "Updated" : "Added"} By ${stringTransform(el.user?.name, 'C')} `}</Text>
                                         </View>
                                     </View>
                                 </Pressable>
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         gap:10
     },
     activityList: {
-        flexDirection:'row',justifyContent:"space-between"
+        flexDirection:'row',justifyContent:"space-between",alignItems:'center'
     },
     activityLeftSec:{
         flexDirection:'row',justifyContent:"space-between",gap:10

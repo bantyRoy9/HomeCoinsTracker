@@ -13,7 +13,7 @@ const Button = ({
     color: colors[`btn${btnType}Color`]
   }
   return (
-    <Pressable style={{...styles.button, ...btnStyle}} onPress={onPress} pointerEvents={isLoading?"none":"auto"}>
+    <Pressable style={{...styles.button, ...btnStyle}} onTouchStart={onPress} pointerEvents={isLoading?"none":"auto"}>
       <Text style={{...styles.text, color:btnStyle.color}}>
         {isLoading ? (
           <ActivityIndicator size={'small'} color={colors.loaderColor} />

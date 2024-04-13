@@ -20,7 +20,6 @@ const Home = () => {
   const { account } = useSelector(state=>state.account);
   const { source,expendType } = useSelector(state=>state.source);
   const { member } = useSelector(state=>state.member);
-  // console.log(account?.earnList,'*********',account?.expendList);
   useEffect(() => {
     const fetchEarnExpendData = async () => {
       if(user && Object.keys(user).length === 0){
@@ -88,13 +87,12 @@ const Home = () => {
             <View style={{flexDirection:'row',alignItems:'center',gap:10}}>
             {isDaily && <View>
                 <Text style={{color:colors.text,textAlign:'right'}}>Blance</Text>
-                <Text style={{color:colors.text,...defaultStyle.text}}>{account && ((account?.earnList?.reduce((total,list)=>list.amount+total,0)??0) - (account?.expendList?.reduce((total,list)=>list.amount+total,0)??0)).toFixed(2)}</Text>
+                <Text style={{color:colors.text,...defaultStyle.text}}>{account && ((account?.earnList?.reduce((total,list)=>parseFloat(list?.amount??0)+total,0)??0) - (account?.expendList?.reduce((total,list)=>parseFloat(list?.amount??0)+total,0)??0)).toFixed(2)}</Text>
               </View>}
               <Pressable style={{padding:8}} onPress={()=>handleDateRange("next")}><FontAwesome name='chevron-right' color={colors.text} size={15}/></Pressable>
             </View>
           </View>
-          {dateRange.label === "Daily"? <Daily dateRange={dateRange}/> : <Monthly dateRange={dateRange}/>}</View>
-        <View style={styles.expensEarnBtn}><FloatingActionBtn /></View>
+          {dateRange.label === "Daily"? <><Daily dateRange={dateRange}/><View style={styles.expensEarnBtn}><FloatingActionBtn dateRange={dateRange.dateRange}/></View></> : <Monthly dateRange={dateRange}/>}</View>
         </>
     
   );

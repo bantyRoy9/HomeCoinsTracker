@@ -3,7 +3,7 @@ import { FAB, Portal, PaperProvider, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { defaultStyle } from '../Utils/defaultStyle';
 
-const FloatingActionBtn = () => {
+const FloatingActionBtn = ({dateRange}) => {
   const navigation = useNavigation();
   const [open, setOpen] = useState(false);
   const { colors } = useTheme();
@@ -37,7 +37,7 @@ const FloatingActionBtn = () => {
               marginBottom: -30,
               
             },
-            onPress: () => navigation.navigate('AddEarn')
+            onPress: () => navigation.navigate('AddEarn',dateRange)
           }, {
             icon: 'home-minus',
             label: 'Expend   ',
@@ -56,7 +56,7 @@ const FloatingActionBtn = () => {
               backgroundColor: '#a15a76',
               marginBottom: -30,
             },
-            onPress: () => navigation.navigate('AddExpend'),
+            onPress: () => navigation.navigate('AddExpend',dateRange),
           },
           ]}
           onStateChange={onStateChange}

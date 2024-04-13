@@ -1,8 +1,8 @@
 
-import { ACCOUNT_ADD_FAIL, ACCOUNT_ADD_REQUIEST, ACCOUNT_ADD_SUCCESS, ACCOUNT_FAIL, ACCOUNT_REQUIEST, ACCOUNT_REQUIEST_ADD, ACCOUNT_SUCCCESS, USER_GETME_SUCCCESS,USER_GETME_FAIL} from "../constants";
+import { ACCOUNT_ADD_FAIL, ACCOUNT_ADD_REQUIEST, ACCOUNT_ADD_SUCCESS, ACCOUNT_FAIL, ACCOUNT_REQUIEST, ACCOUNT_SUCCCESS} from "../constants";
 import axios from 'axios';
 import moment from 'moment';
-import { getAxiosHeader, showAlert, accountControllerURL, stringTransform } from '../../Utils';
+import { getAxiosHeader, showAlert, accountControllerURL, stringTransform, catchAsync } from '../../Utils';
 
 const getAnalyticsDetails = (resData) => {
     const analyticsJson ={};
@@ -10,12 +10,11 @@ const getAnalyticsDetails = (resData) => {
     analyticsJson.Expend = resData.datasets[1].data.reduce((a, b) => a + b, 0);
     analyticsJson.Saving = analyticsJson.Earn - analyticsJson.Expend;
     return analyticsJson;
-  }
+};
   
 export const getEarnExpendData = (dateRange,groupId,isGraph=false)=> async(dispatch)=>{
     try{
         dispatch({type:ACCOUNT_REQUIEST});
-        console.log(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange}&groupId=${groupId}&isGraph=${isGraph}`);
         const { data } = await axios.get(`${accountControllerURL}/getEarnExpend?type=both&dateRange=${dateRange}&groupId=${groupId}&isGraph=${isGraph}`)
         if (data.status && data.data && data.graphData) {
             if(isGraph){
@@ -36,26 +35,23 @@ export const getEarnExpendData = (dateRange,groupId,isGraph=false)=> async(dispa
     }
 };
 
-export const addEarnExpend = (details,urlType,navigation) => async(dispatch) =>{
+export const addEarnExpend = (details,urlType,navigation,modalDate) => async(dispatch) =>{
     try{
         dispatch({type:ACCOUNT_ADD_REQUIEST});
         let method="post";
         if(details.id) method="patch";
         if(details.isDelete) method="delete"
-       console.log(details,method,`${accountControllerURL}/${urlType}${details.isDelete?"/"+details._id:""}`);
         const { data } = await axios[method](`${accountControllerURL}/${urlType}${details.isDelete?"/"+details._id:""}`,!details.isDelete && details, await getAxiosHeader());
         if(data && data.status){
             showAlert(data.msg);
             navigation && navigation.navigate('Home');
             details['_id']=data?.data[`add${stringTransform(urlType,'c')}`]??details.id;
             details['methodType']=method;
+            if(modalDate) details['modalDate']=modalDate;
             dispatch({type:ACCOUNT_ADD_SUCCESS,payload:details});
-        }else{
-            showAlert(data.msg)
-            dispatch({type:ACCOUNT_ADD_FAIL,payload:null});
-        }
+        };
     }catch(err){
-        showAlert(err.response.data.msg)
+        showAlert(err?.response.data.msg??"Something worng happend")
         dispatch({type:ACCOUNT_ADD_FAIL,payload:null});
     }
 };

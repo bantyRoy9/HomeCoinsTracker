@@ -4,10 +4,10 @@ import { homeNavList,topHomeNavList,bottomHeaderList,profileNavList } from "./Na
 import { accountControllerURL,activityControllerURL,userControllerURL,sourceControllerURL } from "./URLProperties";
 import { FontAwesome, FontAwesome5,AntDesign,Ionicons,FeatherIcons,MaterialCommunityIcons,MaterialIcon} from './VectorIcons';
 import { stringTransform } from "./HomeCommon";
-import { updateErrors,validateForm,getAxiosHeader,getAxiosHeaderWithoutCookie,getLocalIP,getStoredCookie,showAlert,dateFormat,filterKeyIncludeArr,getElementByIndex } from "./CommonAuthFunction";
+import {catchAsync,updateErrors,validateForm,getAxiosHeader,getAxiosHeaderWithoutCookie,getLocalIP,getStoredCookie,showAlert,dateFormat,filterKeyIncludeArr,getElementByIndex } from "./CommonAuthFunction";
 export {
     lightColorProps,darkColorProps,defaultStyle,homeNavList,accountControllerURL,sourceControllerURL,activityControllerURL,userControllerURL,topHomeNavList,bottomHeaderList,profileNavList,
-    showAlert,dateFormat,filterKeyIncludeArr,getElementByIndex,
+    catchAsync,showAlert,dateFormat,filterKeyIncludeArr,getElementByIndex,
         updateErrors,validateForm,getAxiosHeader,getAxiosHeaderWithoutCookie,getLocalIP,getStoredCookie,
         FeatherIcons,FontAwesome,FontAwesome5,AntDesign,Ionicons,MaterialCommunityIcons,MaterialIcon,
         stringTransform

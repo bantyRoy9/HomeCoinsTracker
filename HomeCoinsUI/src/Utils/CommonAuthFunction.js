@@ -4,6 +4,18 @@ import { Alert } from "react-native";
 import { validEmail, validMobile } from "./Regex";
 import moment from "moment";
 
+export const catchAsync = (asyncFunc) => {
+  return (dispatch, errorType, ...args) => {
+    asyncFunc(dispatch,errorType, ...args)
+      .catch(err => {
+        if (err.response && err.response.data) {
+          showAlert(err.response.data.msg ?? err);
+        }
+        dispatch({ type: errorType, payload: null });
+      });
+  };
+};
+
 export const getStoredCookie = async () => {
   let cookie = null;
   try {
@@ -109,7 +121,6 @@ export const getElementByIndex = (arr,indx,keyName) =>{
 
 export const updateArrByIndex = (arr,key,newElement) =>{
   const index = arr.findIndex(el=>el[key] === newElement[key]);
-  console.log(index);
   if(index !== -1){
     arr[index] = newElement;
   }
