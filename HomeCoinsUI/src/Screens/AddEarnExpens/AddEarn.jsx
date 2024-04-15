@@ -4,14 +4,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
 import { getMemberList } from '../../Redux/Action/memberAction';
-import { DatePicker, Input, SelectPicker,Button } from '../../Components';
+import { DatePicker, Input, SelectPicker,Button, Modals } from '../../Components';
 import { defaultStyle,updateErrors,validateForm,filterKeyIncludeArr,getElementByIndex } from '../../Utils';
+import CreateSourceExpendType from '../../Components/CreateSourceExpendType';
 
 const AddEarn = ({navigation,editData,...props}) => {
   const defaultPropsDate=props?.route?.params??moment(new Date()).format("YYYY-MM-DD");
   const dispatch = useDispatch(),defaultDate=defaultPropsDate.split("_")[0];
   let { isLoading } = useSelector(state => state.account);
-  const { source } = useSelector(state => state.source);
+  const { source,isLoading:sourceLoading } = useSelector(state => state.source);
   const { member } = useSelector(state => state.member);
   const { user } = useSelector(state => state.user);
 
@@ -21,6 +22,8 @@ const AddEarn = ({navigation,editData,...props}) => {
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [details, setDetails] = useState(initalState);
   const [errors,setErrors] = useState({});
+  const [modalVisible,setModalVisible]=useState(false);
+
 
   useEffect(()=>{
     member && !member.length && dispatch(getMemberList(user.groupId));
@@ -28,6 +31,10 @@ const AddEarn = ({navigation,editData,...props}) => {
     let sourceList = getElementByIndex(filterKeyIncludeArr(source,"sourceName","Auto"),0);
     (userActive || sourceList ) && !editData && setDetails({...details,earnBy:userActive._id,source:sourceList?._id});
   },[]);
+
+  const modalVisibleHandler =()=>{
+    setModalVisible(prev=>!prev)
+  }
 
   const changeHandler = (key, value) => {
     setErrors(updateErrors(errors,key));
@@ -66,7 +73,7 @@ const AddEarn = ({navigation,editData,...props}) => {
 
   isLoading=false;
   return (
-    <View style={defaultStyle.screenContainer}>
+    <><View style={defaultStyle.screenContainer}>
       <View>
         <Input
           key={"Amount"}
@@ -127,6 +134,13 @@ const AddEarn = ({navigation,editData,...props}) => {
       </View>
       <Button isLoading={isLoading} onPress={submitHandler} title={(editData && editData.status) ? "Update Earn" : "Add Earn" }/>
     </View>
+    {user && user.role === "admin" && !editData && <><View style={defaultStyle.viewBottom}>
+    <View style={defaultStyle.screenContainer}>
+      <Button isLoading={sourceLoading} onPress={modalVisibleHandler} title={"Manage earn type"} btnType={"Secondary"}/>
+    </View>
+  </View>
+  <Modals Component={<CreateSourceExpendType modalVisibleHandler={modalVisibleHandler} pageType="earn"/>} modalVisible={modalVisible} modalVisibleHandler={modalVisibleHandler} /></>
+  }</>
   )
 }
 

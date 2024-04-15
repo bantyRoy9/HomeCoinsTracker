@@ -21,7 +21,7 @@ const AddExpend = ({navigation,editData,...props}) => {
   const [details, setDetails] = useState(initialState);
   const [errors,setErrors] = useState({});
   const [modalVisible,setModalVisible]=useState(false);
-
+  
   const changeHandler = (name, value) => {
     setErrors(updateErrors(errors,name));
     setDetails({ ...details, [name]: value })
@@ -84,7 +84,7 @@ const AddExpend = ({navigation,editData,...props}) => {
           <SelectPicker
             onValueChange={(e)=>selectPickerChangleHandler(e,"expendType")}
             placeholder="Expend To"
-            items={expendType.map(el=>({label:el.name,value:el._id}))}
+            items={expendType.map(el=>({label:el.expendName,value:el._id}))}
             value={details?.expendType}
             icon={"soundcloud"}
             isHelper={errors.expendType ? true : false}
@@ -133,7 +133,7 @@ const AddExpend = ({navigation,editData,...props}) => {
           <Button isLoading={sourceLoading} onPress={modalVisibleHandler} title={"Manage expend type"} btnType={"Secondary"}/>
         </View>
       </View>
-      <Modals Component={<CreateSourceExpendType/>} modalVisible={!modalVisible} modalVisibleHandler={modalVisibleHandler} /></>
+      <Modals Component={<CreateSourceExpendType modalVisibleHandler={modalVisibleHandler} pageType="expend"/>} modalVisible={modalVisible} modalVisibleHandler={modalVisibleHandler} /></>
       }
       </>
   )

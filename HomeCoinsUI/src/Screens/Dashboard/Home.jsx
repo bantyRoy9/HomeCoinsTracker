@@ -29,6 +29,7 @@ const Home = () => {
       dispatch(getEarnExpendData(dateRange.dateRange, user?.groupId ?? "",dateRange.label !== "Daily" ? true : false));
     };
     fetchEarnExpendData();
+    console.log(source);
     source && !source.length && dispatch(getSourceList('source'));
     setTimeout(()=>{
       expendType && !expendType.length && dispatch(getSourceList('expendType'));

@@ -105,6 +105,23 @@ export const validateForm = (details) => {
   };
   return { valid, error };
 };
+
+export const handleReducerPayload = (currentState,prevState,methodType,key,value) =>{
+  console.log(currentState,prevState,methodType,key,value,"handler");
+  switch(methodType){
+    // case "get":
+    //   return;
+    case "post":
+      return [...prevState,currentState]
+    case "patch": 
+      return updateArrByIndex(prevState,key,currentState);
+    case "delete":
+      return removeElementByKey(prevState,key,currentState[key]);
+    default:
+      return currentState
+  }
+}
+
 export const dateFormat = (format,date) =>{
   return moment(date?date:new Date()).format(format?format:"YYYY-MM-DD");
 }

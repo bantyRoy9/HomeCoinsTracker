@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const expendTypeSchema = new mongoose.Schema({
-    name:{
+    expendName:{
         type:String,
         require:true
     },
@@ -12,6 +12,10 @@ const expendTypeSchema = new mongoose.Schema({
     source:{
         type:mongoose.Schema.ObjectId,
         ref:"Source"
+    },
+    expendType:{
+        type:String,
+        unique:true
     },
     groupId:{
         type:mongoose.Schema.ObjectId,
