@@ -7,6 +7,7 @@ export const defaultTheme ={
         background:"rgb(255, 255, 255)",
         text:"rgb(10, 6, 26)",
         border:"rgba(1, 66, 131,.1)",
+        borderSecondary:"rgba(1, 66, 131,0.5)",
         notification:"rgb(254, 103, 0)",
         card:"rgba(1, 66, 131,.1)",
         HeaderBg:"rgb(1, 66, 131)",

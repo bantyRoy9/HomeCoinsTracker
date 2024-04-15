@@ -4,6 +4,18 @@ import { Alert } from "react-native";
 import { validEmail, validMobile } from "./Regex";
 import moment from "moment";
 
+export const catchAsync = (asyncFunc) => {
+  return (dispatch, errorType, ...args) => {
+    asyncFunc(dispatch,errorType, ...args)
+      .catch(err => {
+        if (err.response && err.response.data) {
+          showAlert(err.response.data.msg ?? err);
+        }
+        dispatch({ type: errorType, payload: null });
+      });
+  };
+};
+
 export const getStoredCookie = async () => {
   let cookie = null;
   try {
@@ -93,6 +105,23 @@ export const validateForm = (details) => {
   };
   return { valid, error };
 };
+
+export const handleReducerPayload = (currentState,prevState,methodType,key,value) =>{
+  console.log(currentState,prevState,methodType,key,value,"handler");
+  switch(methodType){
+    // case "get":
+    //   return;
+    case "post":
+      return [...prevState,currentState]
+    case "patch": 
+      return updateArrByIndex(prevState,key,currentState);
+    case "delete":
+      return removeElementByKey(prevState,key,currentState[key]);
+    default:
+      return currentState
+  }
+}
+
 export const dateFormat = (format,date) =>{
   return moment(date?date:new Date()).format(format?format:"YYYY-MM-DD");
 }
@@ -109,7 +138,6 @@ export const getElementByIndex = (arr,indx,keyName) =>{
 
 export const updateArrByIndex = (arr,key,newElement) =>{
   const index = arr.findIndex(el=>el[key] === newElement[key]);
-  console.log(index);
   if(index !== -1){
     arr[index] = newElement;
   }

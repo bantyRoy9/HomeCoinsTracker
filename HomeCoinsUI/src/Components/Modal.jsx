@@ -6,16 +6,16 @@ const Modals = ({Component,modalVisible,type, modalVisibleHandler,onDelete}) => 
   const { colors } = useTheme();
   return (
     <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={modalVisibleHandler}>
-      <TouchableWithoutFeedback onPress={modalVisibleHandler}>
+      <TouchableWithoutFeedback >
         <View style={styles.overlay}>
           <TouchableWithoutFeedback>
             <>
             {Component && <View style={styles.centeredView}>
               <View style={{justifyContent:'center',display:'flex',alignItems:'center',borderRadius:30}}>
-                {onDelete && <Pressable onPress={onDelete} style={{backgroundColor:"red",alignItems:'center',gap:10,flexDirection:'row',paddingHorizontal:25,paddingVertical:15,position:'absolute',top:-60,borderRadius:50}}>
+                {onDelete ? <Pressable onPress={onDelete} style={{backgroundColor:"red",alignItems:'center',gap:10,flexDirection:'row',paddingHorizontal:25,paddingVertical:15,position:'absolute',top:-60,borderRadius:50}}>
                 <FontAwesome5 name='trash-alt' color={colors.HeaderText} size={20}/>
                 <Text style={{color:colors.HeaderText,fontSize:15}}>Delete {type}</Text>
-                </Pressable>}
+                </Pressable> : <Pressable style={{height:40,position:'absolute',top:-33}} onTouchStart={modalVisibleHandler}><View style={{width:120,height:5,backgroundColor:colors.surfaceVariant}}></View></Pressable>}
               </View>
               {Component}
             </View>}</>

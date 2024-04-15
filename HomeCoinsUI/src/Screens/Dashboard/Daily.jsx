@@ -13,7 +13,7 @@ const Daily = () => {
     const { colors } = useTheme(),dispatch = useDispatch();
     const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
     const { isLoading, account } = useSelector(state => state.account);
-    const { source } = useSelector(state=>state.source);
+    const { source,expendType } = useSelector(state=>state.source);
     const initialState = {status:false,element:null,data:null};
     const [modalVisible,setModalVisible]=useState(initialState);
 
@@ -41,13 +41,13 @@ const Daily = () => {
                <View style={{marginBottom:10}}>
                 <View style={headerStyle}>
                   <Text style={headerTextStyle}>Total Income</Text>
-                  <Text style={headerTextStyle}>₹{(account && account.earnList && account.earnList.length>0) ? (account.earnList.reduce((total,list)=>list.amount+total,0)).toFixed(2) : "0.00"}</Text>
+                  <Text style={headerTextStyle}>₹{(account && account.earnList && account.earnList.length>0) ? (account.earnList.reduce((total,list)=>parseFloat(list?.amount??0)+total,0)).toFixed(2) : "0.00"}</Text>
                 </View>
                 <View>
                   {(account && account.earnList && account.earnList.length>0) ? account.earnList.map((el,idx)=>(<Pressable key={idx+'earn'} onPress={()=>modalVisibleHandler("Earn",el)}>
                     <View style={bodyStyle}>
                       <Text style={{color:colors.text}}>{stringTransform(getElementByIndex(filterKeyIncludeArr(source,"_id",el.source),0,"sourceName"),'c')}</Text>
-                      <Text style={{color:colors.text}}>₹{el?.amount.toFixed(2)??"--"}</Text>
+                      <Text style={{color:colors.text}}>₹{parseFloat(el?.amount??0).toFixed(2)}</Text>
                     </View>
                   </Pressable>)) : <View style={noDataFound}><Text style={{color:colors.error}}>Income Not Found</Text></View>}
                 </View>
@@ -55,13 +55,13 @@ const Daily = () => {
                <View>
                 <View style={headerStyle}>
                   <Text style={headerTextStyle}>Total Expend</Text>
-                  <Text style={headerTextStyle}>₹{(account && account.expendList && account.expendList.length>0) ? (account.expendList.reduce((total,list)=>list.amount+total,0)).toFixed(2):"0.00"}</Text>
+                  <Text style={headerTextStyle}>₹{(account && account.expendList && account.expendList.length>0) ? (account.expendList.reduce((total,list)=>parseFloat(list?.amount??0)+total,0)).toFixed(2):"0.00"}</Text>
                 </View>
                 <View>
                   {(account && account.expendList && account.expendList.length>0) ? account.expendList.map((el,idx)=>(<Pressable onPress={()=>modalVisibleHandler("Expend",el)} key={idx+'expend'}>
                     <View style={bodyStyle}>
                       <Text style={{color:colors.text}}>{stringTransform(el.description,'c')}</Text>
-                      <Text style={{color:colors.text}}>₹{el?.amount.toFixed(2)??"--"}</Text>
+                      <Text style={{color:colors.text}}>₹{parseFloat(el?.amount??0).toFixed(2)}</Text>
                     </View>
                   </Pressable>)) : <View style={noDataFound}><Text style={{color:colors.error}}>Expend Not Found</Text></View>}
                 </View>

@@ -5,12 +5,20 @@ const initialState = {
     isLoading:false
 }
 const handlePayload = (prevList,actionList) =>{
+    let isUpdateData = false;
+    if(actionList.date !== actionList.modalDate){
+        isUpdateData=true;
+    };
     switch(actionList.methodType){
         case "post":
-            return [...prevList,...actionList];
+            return  isUpdateData ? prevList : [...prevList,actionList];
         case "patch":
             actionList.amount=parseFloat(actionList.amount);
-            return removeElementByKey(updateArrByIndex(prevList,"_id",actionList),"date",actionList.date)
+            let updateData = updateArrByIndex(prevList,"_id",actionList);
+            if(isUpdateData){
+                updateData=removeElementByKey(updateData,"date",actionList.date)
+            }
+            return updateData;
         case "delete":
             return removeElementByKey(prevList,"_id",actionList._id);
         default:
@@ -36,10 +44,9 @@ export const accountReducer = (state =initialState,action) => {
             if(actionList.earnBy){
                 earnList = handlePayload(earnList,actionList)
             };
-            if(actionList.expendBy){
+            if(actionList.expendType){
                 expendList = handlePayload(expendList,actionList)
             }
-            console.log({...state.account,earnList,expendList});
             return{
                 ...state,
                 account:{...state.account,earnList,expendList},

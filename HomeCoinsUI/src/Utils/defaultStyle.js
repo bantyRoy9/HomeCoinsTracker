@@ -6,6 +6,8 @@ const getFontSize = size => size/fontScale;
 export const defaultStyle = StyleSheet.create({
   screenContainer: { marginHorizontal: 10, marginVertical: 1 },
   text: {fontSize: getFontSize(15)},
+  flexRow:{justifyContent:'space-around',display:'flex',flexDirection:'row'},
+  flex1:{flex:1,alignItems:'center',paddingVertical:8},
   textBold:{fontSize:getFontSize(15),fontWeight:'bold'},
   screenWidth: { width: width, marginVertical: 'auto' },
   viewSection: { marginVertical: 15 },
@@ -15,7 +17,7 @@ export const defaultStyle = StyleSheet.create({
   model: { borderColor: 'red', padding: 10, backgroundColor: 'white', marginHorizontal: 18, marginVertical: 1 },
   textBold: { fontWeight: '700', fontSize: getFontSize(16) },
   textWhite: { color: '#eeee' },
-  selectpickerContainer: { marginVertical: 6 },
+  selectpickerContainer: { marginVertical: 5 },
   button: {
     alignItems: "center",
     justifyContent: 'center',
@@ -29,5 +31,9 @@ export const defaultStyle = StyleSheet.create({
     position:'absolute',
     bottom:0,
     width:'100%'
+  },
+  borderView:{
+    borderWidth:1,
+    borderColor:'red'
   }
 })

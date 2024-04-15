@@ -52,7 +52,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
             <Text style={{ ...styles.headerTitle, color: colors.text }}>{(isForgotPassword && !isOTPVerified)?"Forgot Password":(isForgotPassword && isOTPVerified)?"Reset Password":"Create Account"}</Text>
             <Text style={{ ...styles.subHeaderTitle, color: colors.text }}>Please fill the deltai below here</Text>
           </View>
-          <ScrollView contentContainerStyle={{ flex:1 }} showsVerticalScrollIndicator={false}>
+          <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
             {(isForgotPassword && !isOTPVerified) ? <>
               <View pointerEvents={isLoading ? "none" : "auto"}>
               <Input
@@ -187,10 +187,9 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
                 helperType={'error'}
               />
             </View></>}
-          </ScrollView>
           <View style={{ width: '100%' }}>
             <View style={{ width: "auto", alignItems: 'center' }}>
-              <Button isLoading={isLoading} onPress={submitHandler} title={isForgotPassword?"SUBMIT":"SIGN UP"}/>
+              <Button isLoading={isLoading} onPress={submitHandler} title={isForgotPassword?"Continue":"Sign up"}/>
             </View>
             <View style={{ position: 'relative', height: 30 }}>
               <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
@@ -200,6 +199,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
               </View>
             </View>
           </View>
+          </ScrollView>
         </View>
   )
 }

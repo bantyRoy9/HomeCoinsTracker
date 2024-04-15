@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import moment from 'moment';
 import { useDispatch,useSelector } from 'react-redux';
@@ -8,21 +8,20 @@ import {Input,DatePicker, SelectPicker, Modals} from '../../Components';
 import Button from '../../Components/Button';
 import CreateSourceExpendType from '../../Components/CreateSourceExpendType';
 
-const AddExpend = ({navigation,editData}) => {
-  const dispatch = useDispatch();
-  const { isLoading } = useSelector(state=> state.account);
+const AddExpend = ({navigation,editData,...props}) => {
+  const defaultPropsDate=props?.route?.params??moment(new Date()).format("YYYY-MM-DD");
+  const dispatch = useDispatch(),defaultDate=defaultPropsDate.split("_")[0];
+  const { isLoading,account } = useSelector(state=> state.account);
   const { expendType,isLoading:sourceLoading } = useSelector(state=> state.source);
   const { user } = useSelector(state=>state.user);
-
-  const initialState = {amount:"",description:"",expendType:"",date:moment(new Date()).format('YYYY-MM-DD')};
-  if(editData && editData.data){
-    Object.keys(initialState).map(el=>initialState[el]=editData.data[el]);
-  };
-  const [selectedDate, setSelectedDate] = useState((editData && editData.data ) ? new Date(editData.data.date) : new Date());
+  const initialState = {amount:"",description:"",expendType:"",date:defaultDate};
+  editData && editData.data && Object.keys(initialState).map(el=>initialState[el]=editData.data[el]);
+  const [selectedDate, setSelectedDate] = useState(new Date(initialState.date));
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [details, setDetails] = useState(initialState);
   const [errors,setErrors] = useState({});
-  const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [modalVisible,setModalVisible]=useState(false);
+  
   const changeHandler = (name, value) => {
     setErrors(updateErrors(errors,name));
     setDetails({ ...details, [name]: value })
@@ -53,11 +52,9 @@ const AddExpend = ({navigation,editData}) => {
     try {
       if(validation.valid){
         if(editData && editData.data){
-          details["id"]=editData.data._id
+          details["id"]=editData.data._id;
         }
-        console.log(details);
-        dispatch(addEarnExpend(details,'expend',navigation));
-        setDetails(initialState);
+        dispatch(addEarnExpend(details,'expend',navigation,editData ? editData.data.date:defaultDate));
       }
     } catch (err) {}
   };
@@ -87,7 +84,7 @@ const AddExpend = ({navigation,editData}) => {
           <SelectPicker
             onValueChange={(e)=>selectPickerChangleHandler(e,"expendType")}
             placeholder="Expend To"
-            items={expendType.map(el=>({label:el.name,value:el._id}))}
+            items={expendType.map(el=>({label:el.expendName,value:el._id}))}
             value={details?.expendType}
             icon={"soundcloud"}
             isHelper={errors.expendType ? true : false}
@@ -115,31 +112,28 @@ const AddExpend = ({navigation,editData}) => {
         </View>
         <View>
           <DatePicker 
-          key="Date"
+          key="date"
           value ={selectedDate}
           onPress={showDatePicker}
           date={selectedDate}
           isVisible={datePickerVisible}
+          pointerEvents={isLoading ? "none" : "auto"}
           mode={'date'}
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
-          pointerEvents={isLoading ? "none" : "auto"}
           onChangeText={(text)=>changeHandler("date" , text)}
-          isHelper={errors.date ? true : false}
-          errorMsg={errors?.date}
-          helperType={'error'}
           isInputBox={true}
           />
           
         </View>
         <Button isLoading={isLoading} onPress={submitHandler} title={`${(editData && editData.status) ? "Update" : "Add"} expend`}/>
       </View>
-      {user && user.role === "admin" && <><View style={defaultStyle.viewBottom}>
+      {user && user.role === "admin" && !editData && <><View style={defaultStyle.viewBottom}>
         <View style={defaultStyle.screenContainer}>
-          <Button isLoading={sourceLoading} onPress={modalVisibleHandler} title={"Create New Expend Type"} btnType={"Secondary"}/>
+          <Button isLoading={sourceLoading} onPress={modalVisibleHandler} title={"Manage expend type"} btnType={"Secondary"}/>
         </View>
       </View>
-      <Modals Component={<CreateSourceExpendType/>} modalVisible={modalVisible} modalVisibleHandler={modalVisibleHandler} /></>
+      <Modals Component={<CreateSourceExpendType modalVisibleHandler={modalVisibleHandler} pageType="expend"/>} modalVisible={modalVisible} modalVisibleHandler={modalVisibleHandler} /></>
       }
       </>
   )
