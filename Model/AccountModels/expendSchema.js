@@ -30,6 +30,8 @@ const expendSchema = new mongoose.Schema({
         type:mongoose.Schema.ObjectId,
         ref:'Group'
     }
+},{
+    timestamps:true
 });
 
 const ExpendModel = mongoose.model('Expend',expendSchema);

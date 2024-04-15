@@ -8,7 +8,6 @@ export const getSourceList = (urlType,details) => async(dispatch)=>{
         let method='get',reqBody={};
         if(details){method="post",reqBody=details};
         if(details && details.id){method="patch"};
-        console.log(`${sourceControllerURL}/${urlType}`,method,details);
         let { data } = await axios[method](`${sourceControllerURL}/${urlType}`,reqBody,await getAxiosHeader());
         dispatch({type:`GET_${urlConstant}_RESPONSE`,payload:{data:data.data,method}});
     }catch(err){

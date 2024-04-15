@@ -5,7 +5,7 @@ import { groupControllerURL } from '../../Utils/URLProperties';
 
 export const getMemberList = (groupId) =>async(disptch)=>{
     try{
-        disptch({type:GET_MEMBER_REQUEST})
+        disptch({type:GET_MEMBER_REQUEST});
         const { data } = await axios.get(`${groupControllerURL}/groupMembers/${groupId}`, await getAxiosHeader());
         disptch({type:GET_MEMBER_RESPONSE,payload:data.data});
     }catch(err){

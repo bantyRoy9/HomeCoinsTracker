@@ -3,20 +3,21 @@ import React, { useEffect, useState } from 'react';
 import Input from './Input';
 import Button from './Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { defaultStyle, filterKeyIncludeArr, getElementByIndex, updateErrors, validateForm } from '../Utils';
+import { defaultStyle, filterKeyIncludeArr, getElementByIndex, stringTransform, updateErrors, validateForm } from '../Utils';
 import { useTheme } from 'react-native-paper';
 import SelectPicker from './SelectPicker';
 import { getSourceList } from '../Redux/Action/sourceAction';
 const tabs = [{expendType:"Source",active:true,details:{source:"",expendName:""}},{expendType:"Custom",active:false,details:{expendType:"",expendName:""}}];
 const CreateSourceExpendType = ({modalVisibleHandler,pageType}) => {
   const { colors } = useTheme(),dispatch = useDispatch();
-  const { isLoading,source,expendType } = useSelector(state=>state.source)
+  let { isLoading,source } = useSelector(state=>state.source);
+  if(pageType === "source") source = [{_id:"selfEmployed",sourceName:"Self employed"},{_id:"employed",sourceName:"Employed"}];
+  const dd = {sourceType:"",sourceName:"",sourceInv:""};
   const [pageDetails,setPageDetails]=useState({
-    details:tabs[0].details,
+    details: (pageType === "source ") ? dd : tabs[0].details,
     activeTab:'Source',
     errors:{}
   });
-  
   const defaultColors={
     backgroundColor:colors.btnPrimaryBackground,
     color:colors.btnPrimaryColor,
@@ -40,6 +41,7 @@ const CreateSourceExpendType = ({modalVisibleHandler,pageType}) => {
     e.preventDefault();
     let validation = validateForm(pageDetails.details);
     setPageDetails({...pageDetails,errors:validation.error});
+    console.log(pageDetails,pageType);
     try {
       if(validation.valid){
         let expendPrefix = pageDetails.details?.expendType
@@ -47,28 +49,29 @@ const CreateSourceExpendType = ({modalVisibleHandler,pageType}) => {
           expendPrefix = getElementByIndex(filterKeyIncludeArr(source,'_id',pageDetails.details.source),0,'sourceName');
         }
         expendPrefix = expendPrefix +" "+pageDetails.details.expendName;
-        dispatch(getSourceList("expendType",{...pageDetails.details,expendName:expendPrefix}));
+        dispatch(getSourceList(pageType === "source" ? "source" : "expendType",{...pageDetails.details,expendName:expendPrefix}));
         modalVisibleHandler();
       }
     } catch (err) {}
   };
+  
   return (
     <>
-      <View style={[defaultStyle.flexRow,styles.navContainer,{backgroundColor:colors.surfaceVariant,borderWidth:0,borderColor:colors.borderSecondary}]}>
+      {pageType !== "source" && <View style={[defaultStyle.flexRow,styles.navContainer,{backgroundColor:colors.surfaceVariant,borderWidth:0,borderColor:colors.borderSecondary}]}>
           {tabs.map(el=>(
           <Pressable key={el.expendType} onTouchStart={()=>tabHandler(el.expendType)} style={[defaultStyle.flex1,(el.expendType === pageDetails.activeTab) && defaultColors]}>
             <Text style={[(el.expendType === pageDetails.activeTab) && defaultColors]}>{el.expendType}</Text>
           </Pressable>
           ))}
-      </View>
+      </View>}
        {pageDetails.activeTab === "Source" ? <SelectPicker
-            onValueChange={(e)=>selectPickerChangleHandler(e,"source")}
+            onValueChange={(e)=>selectPickerChangleHandler(e,pageType ==="source"?"sourceType":"source")}
             placeholder="Source"
             items={source.map(el=>({label:el.sourceName,value:el._id}))}
-            value={pageDetails.details?.source}
+            value={pageDetails.details[pageType === "source" ? "sourceType":'source']}
             icon={"soundcloud"}
-            isHelper={pageDetails.errors?.source ? true : false}
-            errorMsg={pageDetails.errors?.source}
+            isHelper={pageDetails.errors[pageType === "source" ? "sourceType":'source'] ? true : false}
+            errorMsg={pageDetails.errors[pageType === "source" ? "sourceType":'source']}
             helperType={'error'}
         /> : <Input
         key={'expend Type'}
@@ -85,19 +88,34 @@ const CreateSourceExpendType = ({modalVisibleHandler,pageType}) => {
         helperType={'error'}
       />}
       <Input
-        key={'expendName'}
-        placeholder={'Expend Name'}
-        name={'expendName'}
+        key={`${pageType}Name`}
+        placeholder={`${stringTransform(pageType,'c')} Name`}
+        name={`${pageType}Name`}
         icons={'barcode'}
-        value={pageDetails.details?.expendName}
+        value={pageDetails.details[`${pageType}Name`]}
         secureTextEntry={false}
         autoFocus={false}
         pointerEvents={isLoading ? 'none' : 'auto'}
-        onChangeText={text => changeHandler('expendName', text)}
-        isHelper={pageDetails.errors?.expendName ? true : false}
-        errorMsg={pageDetails.errors?.expendName}
+        onChangeText={text => changeHandler(`${pageType}Name`, text)}
+        isHelper={pageDetails.errors?.[`${pageType}Name`] ? true : false}
+        errorMsg={pageDetails.errors?.[`${pageType}Name`]}
         helperType={'error'}
       />
+      {pageType === "source" && <Input
+        key={'Source Investmaent'}
+        placeholder={'Ex: 800000'}
+        name={'sourceInv'}
+        icons={'barcode'}
+        keyboardType={'decimal-pad'}
+        value={pageDetails.details?.sourceInv}
+        secureTextEntry={false}
+        autoFocus={false}
+        pointerEvents={isLoading ? 'none' : 'auto'}
+        onChangeText={text => changeHandler('sourceInv', text)}
+        isHelper={pageDetails.errors?.sourceInv ? true : false}
+        errorMsg={pageDetails.errors?.sourceInv}
+        helperType={'error'}
+      />}
       <Button title={`Create new ${pageType} type`} isLoading={isLoading} onPress={submitHandler}/>
     </>
   );

@@ -19,12 +19,13 @@ const activityModel = new mongoose.Schema({
         type:Date,
         default:new Date()
     },
-    updatedDate:Date,
     Url:String,
     groupId:{
         type:mongoose.Schema.ObjectId,
         ref:'Group'
     }
+},{
+    timestamps:true
 });
 
 const ActivityModels = new mongoose.model('ActivityModel',activityModel);

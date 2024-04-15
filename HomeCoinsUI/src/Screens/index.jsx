@@ -11,7 +11,7 @@ const Members = (props) => <DefaultLayout Component={lazy(()=>import("./Members/
 const Activity = (props) => <DefaultLayout Component={lazy(()=>import("./Activity/Activity"))} {...props} isFlexCenter={true}/>
 const AddEarn = (props) => <DefaultLayout Component={lazy(()=>import("./AddEarnExpens/AddEarn"))} {...props} />
 const AddExpend = (props) => <DefaultLayout Component={lazy(()=>import("./AddEarnExpens/AddExpend"))} {...props}/>
-const CreateGroup = (props) => <DefaultLayout Component={lazy(()=>import("./CreateGroup/CreateGroup"))} {...props} isFlexCenter={true}/>
+const CreateGroup = (props) => <DefaultLayout Component={lazy(()=>import("./CreateGroup/CreateGroup"))} {...props} />
 const OtpVerification = (props) => <DefaultLayout Component={lazy(()=>import("./Users/OtpVerification"))} {...props}/>
 
 export { EditProfile, Login, Profile, Signup,Home,Members,Activity,AddEarn,AddExpend,CreateGroup,OtpVerification}

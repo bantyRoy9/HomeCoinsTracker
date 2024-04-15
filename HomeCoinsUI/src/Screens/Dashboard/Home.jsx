@@ -27,14 +27,13 @@ const Home = () => {
         dispatch({type:USER_SUCCCESS,payload:user});
       };
       dispatch(getEarnExpendData(dateRange.dateRange, user?.groupId ?? "",dateRange.label !== "Daily" ? true : false));
+      source && !source.length && dispatch(getSourceList('source'));
+      member && !member.length && dispatch(getMemberList(user.groupId));
+      setTimeout(()=>{
+        expendType && !expendType.length && dispatch(getSourceList('expendType'));
+      },2000);
     };
     fetchEarnExpendData();
-    console.log(source);
-    source && !source.length && dispatch(getSourceList('source'));
-    setTimeout(()=>{
-      expendType && !expendType.length && dispatch(getSourceList('expendType'));
-    },2000)
-    member && !member.length && dispatch(getMemberList(user.groupId));
   }, [dateRange]);
   const navPressHandle = (navPress) => {
     topHomeNavList.map(el => el.label === navPress.label ? el.active = true : el.active = false);

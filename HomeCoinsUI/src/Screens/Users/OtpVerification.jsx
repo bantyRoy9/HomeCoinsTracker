@@ -1,18 +1,19 @@
-import { StyleSheet, Text, View, Pressable, SafeAreaView, StatusBar } from 'react-native'
-import React, { useState, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { ActivityIndicator, TextInput, useTheme } from 'react-native-paper';
-import { getAxiosHeader, showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
-import { defaultStyle, userControllerURL } from '../../Utils';
-import { verifyForgotPasswordOTP, verifyUserOTP } from '../../Redux/Action/userAction';
+import { StyleSheet, Text, View, Pressable } from 'react-native'
+import React, { useState, useRef, useEffect } from 'react'
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { TextInput, useTheme } from 'react-native-paper';
+import { getAxiosHeader, showAlert, updateErrors, validateForm,defaultStyle,userControllerURL } from '../../Utils';
+import { verifyForgotPasswordOTP, verifyUserOTP } from '../../Redux/Action/userAction';
+import { Button } from '../../Components';
 
-const OtpVerification = ({ navigation, route: { params: { email ,isForgetPassword} } }) => {
+const OtpVerification = ({ navigation, route: { params: { email ,isForgetPassword,isSignUp} } }) => {
   const [detail, setDetail] = useState({});
   const [errors, setErrors] = useState({});
+  const [resendLoading,setResendLoading]=useState(false);
   const dispatch = useDispatch();
-  const { colors, dark } = useTheme();
-  const { isLoading } = useSelector(state => state.user);
+  const { colors } = useTheme();
+  let { isLoading } = useSelector(state => state.user);
   const backgroundStyle = {
     backgroundColor: colors.background,
     color: colors.text
@@ -27,8 +28,8 @@ const OtpVerification = ({ navigation, route: { params: { email ,isForgetPasswor
       const validation = validateForm(detail);
       setErrors(validation.error);
       if (validation.valid) {
-        let OTP = Object.values(detail).join('')
-        isForgetPassword?verifyForgotPasswordOTP(OTP,navigation):dispatch(verifyUserOTP(OTP,{email},navigation,isForgetPassword));
+        let OTP = Object.values(detail).join('');
+        isForgetPassword?verifyForgotPasswordOTP(OTP,navigation):dispatch(verifyUserOTP(OTP,{email},navigation,isSignUp?"Login":"CreateGroup"));
       }
     } catch (err) {
       showAlert(err);
@@ -36,12 +37,15 @@ const OtpVerification = ({ navigation, route: { params: { email ,isForgetPasswor
   };
   const resendOTPBtn = async() =>{
     try{
+      setResendLoading(true)
       const { data } = await axios.post(`${userControllerURL}/sendOTP`,{email},await getAxiosHeader());
       if(data && data.status){
         showAlert(data?.msg);
+        setResendLoading(false)
       };
     }catch(err){
       showAlert(err)
+      setResendLoading(false)
     }
   };
   const btnStyle = {
@@ -114,12 +118,9 @@ const OtpVerification = ({ navigation, route: { params: { email ,isForgetPasswor
             }}
           />
         </View>
-        <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} >
-          <Text style={styles.text}>{isLoading ? <ActivityIndicator size={'small'} color={colors.text}/> : "VERIFY"}</Text>
-        </Pressable>
-        <Pressable style={{ ...styles.resendBtn }} onPress={resendOTPBtn}>
-          <Text style={{ ...styles.text,borderBottomWidth:1,borderBottomColor:btnStyle.backgroundColor,color:btnStyle.backgroundColor }}>Resend OTP</Text>
-        </Pressable>
+        <Button isLoading={isLoading} onPress={submitHandler} title="Verify"/>
+        <Button isLoading={resendLoading} onPress={resendOTPBtn} title="Resend OTP" btnType='tertiary'/>
+
       </View>
   )
 }
