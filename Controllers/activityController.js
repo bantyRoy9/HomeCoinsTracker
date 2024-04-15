@@ -25,7 +25,6 @@ exports.addUsersActivity = catchAsync(async(req,res,next)=>{
     };
     switch(req.method){
         case "PATCH" :
-            reqBody["updatedDate"]=new Date();
             const updatedRes = await ActivityModels.findOneAndUpdate({[filterKey]:reqBody[filterKey]},reqBody);
             msg="updated";
             break;

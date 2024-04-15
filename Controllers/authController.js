@@ -29,13 +29,6 @@ const createSendToken = (user, statusCode, res) => {
     res.cookie('jwt', token, tokenOptions)
     user.password = undefined;
     this.responseSend(res,statusCode,true,user._doc,"User verified",userBO,token)
-    // res.status(statusCode).json({
-    //     status: 'success',
-    //     token,
-    //     data: {
-    //         user
-    //     }
-    // });
 };
 
 exports.createUser = catchAsync(async(req,res,next)=>{

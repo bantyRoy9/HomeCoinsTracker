@@ -13,10 +13,10 @@ const Button = ({
     color: colors[`btn${btnType}Color`]
   }
   return (
-    <Pressable style={{...styles.button, ...btnStyle}} onTouchStart={onPress} pointerEvents={isLoading?"none":"auto"}>
-      <Text style={{...styles.text, color:btnStyle.color}}>
+    <Pressable style={btnType === "tertiary" ? { ...styles.resendBtn }:{...styles.button, ...btnStyle}} onTouchStart={onPress} pointerEvents={isLoading?"none":"auto"}>
+      <Text style={btnType === "tertiary" ? { ...styles.text,borderBottomWidth:1,borderBottomColor:btnStyle.backgroundColor,color:btnStyle.backgroundColor } : {...styles.text, color:btnStyle.color}}>
         {isLoading ? (
-          <ActivityIndicator size={'small'} color={colors.loaderColor} />
+          <ActivityIndicator size={'small'} color={btnType === "tertiary" ? colors.HeaderBg : colors.loaderColor} />
         ) : (
           title
         )}
@@ -43,4 +43,21 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         letterSpacing: 0.25,
       },
+      resendBtn:{
+        alignItems: 'center',
+        paddingVertical: 0,
+        marginVertical: 10
+      },
+      otpHeading: {
+        marginVertical: 40,
+        gap: 10
+      },
+      textEmail: {
+        fontSize: 18,
+        fontWeight: 'normal'
+      },
+      textBold: {
+        fontSize: 25,
+        fontWeight: 'bold'
+      }
 });

@@ -6,7 +6,6 @@ import { userControllerURL } from "../../Utils/URLProperties";
 export const loging = (userDetails,navigation) => async(dispatch) =>{
     try{
         dispatch({type:USER_REQUIEST});
-        console.log(`${userControllerURL}/loginUser`);
         const { data } = await axios.post(`${userControllerURL}/loginUser`, userDetails, getAxiosHeaderWithoutCookie());
         if(data){
             await AsyncStorage.multiSet([['userEmail',data.data.user.email],['cookie',data.token], ['user',JSON.stringify(data.data.user)], ['isGroupIncluded',`${data.data.user.isGroupIncluded}`],['isActive',`${data.data.user.isActive}`] ],()=>{
@@ -52,7 +51,7 @@ export const createUser =(userDetails,navigation)=> async(dispatch) => {
         dispatch({type:USER_REGISTER_REQUIEST});
         const { data } = await axios.post(`${userControllerURL}/createUser`,userDetails,getAxiosHeaderWithoutCookie());
         dispatch({type:USER_REGISTER_SUCCESS,payload:data});
-        navigation.navigate('OtpVerification',{email:userDetails.email});
+        navigation.navigate('OtpVerification',{email:userDetails.email,isSignUp:true});
     }catch(err){
         showAlert(err?.response.data.msg)
         dispatch({type:USER_REGISTER_FAIL,payload:err?.response.data.msg})
@@ -101,13 +100,13 @@ export const verifyForgotPasswordOTP = async(OTP,navigation,user)=>{
         showAlert(err.response.data.msg);
     }
 };
-export const verifyUserOTP = (OTP,user,navigation)=>async(dispatch) =>{
+export const verifyUserOTP = (OTP,user,navigation,navigateURL)=>async(dispatch) =>{
     try{
         dispatch({type:USER_REGISTER_REQUIEST});
         const { data } = await axios.post(`${userControllerURL}/verifyUserOtp/${OTP}`,user);
         if(data){
             await AsyncStorage.multiSet([['userEmail',data.data.user.email],['cookie',data.token], ['user',JSON.stringify(data.data.user)], ['isGroupIncluded',`${data.data.user.isGroupIncluded}`],['isActive',`${data.data.user.isActive}`] ],()=>{
-                navigation.navigate("Login")
+                navigation.navigate(navigateURL,{isActive:`${data.data.user.isActive}`})
                 dispatch({type:USER_REGISTER_SUCCESS,payload:data.data.user});
             })
         };

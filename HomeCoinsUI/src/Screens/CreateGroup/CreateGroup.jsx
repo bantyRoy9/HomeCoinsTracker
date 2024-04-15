@@ -1,18 +1,28 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTheme } from 'react-native-paper'
 import { defaultStyle,MaterialIcon } from '../../Utils';
 import Group from './Group';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CreateGroup = ({ navigation,route }) => {
   const { colors } = useTheme();
- const navigatePage=(pageName)=>{
-    navigation.navigate(pageName);
+  const [userDetails,setUserDetails] = useState({userVerified:false,email:""});
+  const navigatePage=(pageName)=>{
+    (userDetails.userVerified ==="true" || route?.params?.isActive === "true")? navigation.navigate(pageName) : navigation.navigate('OtpVerification',{email:userDetails.email});
   };
+
+  useEffect(()=>{
+    const fetchUser = async()=>{
+      let userDetail = await AsyncStorage.multiGet(["userEmail","isActive"]);
+      setUserDetails({userVerified:userDetail[1][1],email:userDetail[0][1]})
+    };
+    fetchUser()
+  },[]);
   return (
     <View style={defaultStyle.screenContainer}>
           { route.name == "CreateGroup" && <View style={styles.createGroupSection}>
-            <Pressable style={{...styles.sectionCircle,backgroundColor:colors.lightBackground,color:colors.text}} onPress={()=>navigatePage('CreateNewGroup')}>
+            <Pressable style={{...styles.sectionCircle,backgroundColor:colors.surfaceVariant,color:colors.text}} onPress={()=>navigatePage('CreateNewGroup')}>
               <View style={styles.sectionText}>
                 <MaterialIcon name='add-home' size={45} color={colors.text}/>
                 <Text style={{...defaultStyle.textBold,color:colors.text}}>New Home</Text>
@@ -21,14 +31,14 @@ const CreateGroup = ({ navigation,route }) => {
             <View>
               <Text style={{...defaultStyle.textBold,...styles.sectionOr,color:colors.text}}>OR</Text>
             </View>
-            <Pressable style={{...styles.sectionCircle,backgroundColor:colors.lightBackground}} onPress={()=>navigatePage('ExistingGroup')}>
+            <Pressable style={{...styles.sectionCircle,backgroundColor:colors.surfaceVariant}} onPress={()=>navigatePage('ExistingGroup')}>
               <View style={styles.sectionText}>
                 <MaterialIcon name='add-home-work' size={45}  color={colors.text}/>
                 <Text style={{...defaultStyle.textBold,color:colors.text}}>Existing Home</Text>
               </View>
             </Pressable>
           </View>}
-          { (route.name === "CreateNewGroup" || route.name === "ExistingGroup") && <Group pageName={route.name} colors={colors} navigation={navigation}/>}
+          {(userDetails.userVerified ==="true" || route?.params?.isActive === "true") && (route.name === "CreateNewGroup" || route.name === "ExistingGroup") && <Group pageName={route.name} colors={colors} navigation={navigation}/>}
     </View>
   )
 }

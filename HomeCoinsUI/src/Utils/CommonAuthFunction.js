@@ -107,7 +107,6 @@ export const validateForm = (details) => {
 };
 
 export const handleReducerPayload = (currentState,prevState,methodType,key,value) =>{
-  console.log(currentState,prevState,methodType,key,value,"handler");
   switch(methodType){
     // case "get":
     //   return;

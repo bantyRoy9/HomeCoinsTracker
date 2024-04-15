@@ -9,13 +9,13 @@ exports.findModal = (Modal,queryMap={},listView,populate) => catchAsync(async(re
     next(responseSend(res,200,true,data,"Record find successfull."));
 });
 
-exports.createModal = (Modal,isSetActivity,BO) => catchAsync(async(req,res,next)=>{
+exports.createModal = (Modal,isSetActivity) => catchAsync(async(req,res,next)=>{
     const createRespone = await Modal.create(req.body);
     if(isSetActivity){
         req[`${req.url.replace("/","")}Id`]=createRespone._id;
         next();
     }else{
-        next(responseSend(res,201,true,createRespone,"Record created successfull.",BO && BO));
+        next(responseSend(res,201,true,createRespone,"Record created successfull."));
     }
 });
 

@@ -17,10 +17,17 @@ const earnSchema = new mongoose.Schema({
         type:mongoose.Schema.ObjectId,
         ref:'User'
     },
+    createdBy: {
+        type:mongoose.Schema.ObjectId,
+        ref:'User'
+    },
+    
     groupId:{
         type:mongoose.Schema.ObjectId,
         ref:'Group'
     }
+},{
+    timestamps:true
 });
 
 const EarnModel = mongoose.model('Earn',earnSchema);

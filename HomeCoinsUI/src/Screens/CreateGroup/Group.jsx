@@ -1,52 +1,35 @@
-import { StyleSheet, Text, View,Pressable } from 'react-native'
-import React,{ useState,useEffect } from 'react'
-import { Input } from '../../Components'
+import { StyleSheet, View } from 'react-native'
+import React,{ useState } from 'react'
+import { Input,Button } from '../../Components'
 import { useDispatch, useSelector } from 'react-redux';
-import { ActivityIndicator } from 'react-native-paper';
-import { showAlert, updateErrors, validateForm } from '../../Utils/CommonAuthFunction';
+import { showAlert, updateErrors, validateForm } from '../../Utils';
 import { createGroupAndRequest } from '../../Redux/Action/groupAction';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Button from '../../Components/Button';
 
-const Group = ({navigation,pageName,colors }) => {
-    let fields = pageName == "CreateNewGroup" ? "name" : "email";
-    const [detail,setDetail]=useState({[fields]:""});
-    const [errors,setErrors]=useState({});
-    const dispatch = useDispatch();
-    const { user } = useSelector(state=>state.user);
-    const { isLoading } = useSelector(state=>state.group);
-    useEffect(()=>{
-      const fetchUser = async()=>{
-        let userDetail = await AsyncStorage.multiGet(["userEmail","isActive"]);
-        if(userDetail[1][1]?.toLowerCase?.() === 'false'){ 
-          navigation.navigate('OtpVerification',{email:userDetail[0][1]});
-        }else{
-          navigation.navigate(pageName);
-        }
-      };
-      fetchUser()
-    },[]);
-    const changeHandler=(key,value)=>{
-        updateErrors(errors,key);
-        setDetail({...detail,[key]: value});
-    };
+
+const Group = ({navigation,pageName }) => {
+  let fields = pageName == "CreateNewGroup" ? "name" : "email";
+  const [detail,setDetail]=useState({[fields]:""});
+  const [errors,setErrors]=useState({});
+  const dispatch = useDispatch();
+  const { user } = useSelector(state=>state.user);
+  const { isLoading } = useSelector(state=>state.group);
+  const changeHandler=(key,value)=>{
+      updateErrors(errors,key);
+      setDetail({...detail,[key]: value});
+  };
     
-    const submitHandler = () =>{
-        try{
-            const validation = validateForm(detail);
-            setErrors(validation.error);
-            if(validation.valid){
-                dispatch(createGroupAndRequest(detail,fields=="email"?user.id:"",navigation));
-            }
-        }catch(err){
-            showAlert(err);
+  const submitHandler = () =>{
+    try{
+      const validation = validateForm(detail);
+      setErrors(validation.error);
+      if(validation.valid){
+          dispatch(createGroupAndRequest(detail,fields=="email"?user.id:"",navigation));
         }
-    }
-    const btnStyle = {
-        backgroundColor: colors.btnBackground,
-        color:colors.text
-      };
-    
+      }catch(err){
+        showAlert(err);
+      }
+  };
+  
   return (
     <View>
             <Input
@@ -63,10 +46,7 @@ const Group = ({navigation,pageName,colors }) => {
               errorMsg={errors[fields]}
               helperType={'error'}
             />
-            <Button onPress={submitHandler} isLoading={isLoading} title={pageName == "CreateNewGroup" ? "Continue" : "SEND REQUEST"} />
-            {/* <Pressable style={{ ...styles.button, ...btnStyle }} onPress={submitHandler} >
-                <Text style={{ ...styles.text, ...btnStyle.color }}>{isLoading ? <ActivityIndicator size={'small'} color={colors.text}/> : pageName == "CreateNewGroup" ? "DONE" : "SEND REQUEST"}</Text>
-              </Pressable> */}
+            <Button onPress={submitHandler} isLoading={isLoading} title={pageName == "CreateNewGroup" ? "Continue" : "Send Request"} />
           </View>
   )
 }

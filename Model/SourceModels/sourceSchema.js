@@ -1,18 +1,13 @@
 const mongoose = require('mongoose');
 
 const sourceSchema = new mongoose.Schema({
+    sourceType:{
+        type:String,
+        require:true  
+    },
     sourceName:{
         type:String,
         require:true
-    },
-    sorceType:String,
-    sourceEarn:{
-        type:mongoose.Schema.ObjectId,
-        ref:'EarnModal'
-    },
-    sourceEpend:{
-        type:mongoose.Schema.ObjectId,
-        ref:'ExpendModal'
     },
     createdBy:{
         type:mongoose.Schema.ObjectId,
@@ -23,6 +18,8 @@ const sourceSchema = new mongoose.Schema({
         ref:'Group'
     },
     sourceInv:Number
+},{
+    timestamps:true
 });
 
 const  SourceModal = mongoose.model("Sources",sourceSchema);

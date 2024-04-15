@@ -19,7 +19,7 @@ exports.createGroup = catchAsync(async (req, res, next) => {
     req.user.role="admin";
     req.user.groupId = response._id;
     await req.user.save();
-    responseSend(res, 201, true, response, 'Group created successfully.');
+    responseSend(res, 201, true, response, 'Group has created. Please login again!');
 });
 exports.getGroupList = catchAsync(async (req, res, next) => {
     const groupList = await GroupModels.find({}).populate('createdBy');
@@ -43,7 +43,7 @@ exports.addMemberRequest = catchAsync(async (req, res, next) => {
         const verifyURL = `${req.protocol}://${req.get('host')}/api/v1/groupController/verifyUser/${verifyToken},${addMemberUser.groupId},${req.user.id}`;
 
         await new Email(addMemberUser, verifyURL).sendUrlEmail('Add Request by user',`This user "${req.user.email}" wants to add your group. if you want to add, please click bellow link otherwise ignore it.`);
-        responseSend(res, 200, true,{},"Request sended to group admin");
+        responseSend(res, 200, true,{},"Request has been sended to group admin. kindly wait till aprroval.");
     } else {
         return next(new AppError('User already exist in another group', 406));
     };
@@ -73,7 +73,7 @@ exports.addMembers = catchAsync(async (req, res, next) => {
     group.members.push({ member: verifyToken[2], role: 'user' });
     await group.save();
     await User.findByIdAndUpdate(verifyToken[2],{isGroupIncluded:true,groupId:verifyToken[1]});
-    responseSend(res, 200, true, {}, 'User added successfully.');
+    responseSend(res, 200, true, {}, 'User added successfull.');
 });
 
 exports.getGroupMember=catchAsync(async(req,res,next)=>{
