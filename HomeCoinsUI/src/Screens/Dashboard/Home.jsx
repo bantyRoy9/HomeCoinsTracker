@@ -1,18 +1,19 @@
-import { SafeAreaView, StyleSheet, Pressable, Text, View, StatusBar } from 'react-native'
 import React, { useState, useEffect } from 'react'
+import { StyleSheet, Pressable, Text, View } from 'react-native'
+import moment from 'moment';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { useTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEarnExpendData } from '../../Redux/Action/accountAction';
-import { FloatingActionBtn } from '../../Components';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { FontAwesome,defaultStyle,topHomeNavList } from '../../Utils';
-import { useTheme } from 'react-native-paper';
+import { FloatingActionBtn } from '../../Components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { USER_SUCCCESS } from '../../Redux/constants';
 import Daily from './Daily';
 import Monthly from './Monthly';
-import moment from 'moment';
 import { getSourceList } from '../../Redux/Action/sourceAction';
 import { getMemberList } from '../../Redux/Action/memberAction';
+
 const Home = () => {
   const [dateRange, setDateRange] = useState(topHomeNavList.filter(el => el.active == true)[0]);
   const [datePickerVisible, setDatePickerVisible] = useState(false), dispatch = useDispatch(), { colors, dark } = useTheme();
@@ -20,6 +21,7 @@ const Home = () => {
   const { account } = useSelector(state=>state.account);
   const { source,expendType } = useSelector(state=>state.source);
   const { member } = useSelector(state=>state.member);
+
   useEffect(() => {
     const fetchEarnExpendData = async () => {
       if(user && Object.keys(user).length === 0){
@@ -35,6 +37,7 @@ const Home = () => {
     };
     fetchEarnExpendData();
   }, [dateRange]);
+  
   const navPressHandle = (navPress) => {
     topHomeNavList.map(el => el.label === navPress.label ? el.active = true : el.active = false);
     setDateRange(navPress);

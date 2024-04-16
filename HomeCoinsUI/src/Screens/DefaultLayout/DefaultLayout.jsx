@@ -12,7 +12,7 @@ const DefaultLayout = ({ Component,...props }) => {
   return (<>
     <SafeAreaView style={{...backgroundStyle,height:"100%"}}>
       <StatusBar
-        barStyle={!dark ? 'light-content' : 'dark-content'}
+        barStyle={'light-content'}
         backgroundColor={colors.HeaderBg}
       />
       <ScrollView

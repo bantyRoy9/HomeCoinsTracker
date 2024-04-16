@@ -25,7 +25,6 @@ export const getEarnExpendData = (dateRange,groupId,isGraph=false)=> async(dispa
                 data.earnList = data.graphData.filter(el=>el['earnBy']).map(el=>({...el,date:moment(new Date(el.date)).format("YYYY-MM-DD")}));
                 data.expendList = data.graphData.filter(el=>el['expendBy']).map(el=>({...el,date:moment(new Date(el.date)).format("YYYY-MM-DD")}));
             };
-            console.log(data.expendList);
             dispatch({type:ACCOUNT_SUCCCESS,payload:data});
           }else{
             dispatch({type:ACCOUNT_FAIL,payload:null});

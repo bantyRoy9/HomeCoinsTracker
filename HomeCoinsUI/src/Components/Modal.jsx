@@ -1,16 +1,17 @@
-import React from 'react';
+import React,{memo} from 'react';
 import {Modal, StyleSheet, View, TouchableWithoutFeedback, Text, Pressable, TouchableOpacity} from 'react-native';
 import { FontAwesome5 } from '../Utils';
 import { useTheme }  from 'react-native-paper';
-const Modals = ({Component,modalVisible,type, modalVisibleHandler,onDelete}) => {
+const Modals = memo(({Component,modalVisible,type,modalVisibleHandler,positionView,onDelete}) => {
   const { colors } = useTheme();
+  console.log(positionView);
   return (
     <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={modalVisibleHandler}>
-      <TouchableWithoutFeedback >
-        <View style={styles.overlay}>
+      <TouchableWithoutFeedback onPress={modalVisibleHandler}>
+        <View style={[styles.overlay,{backgroundColor:colors.modalOverlayColor}]}>
           <TouchableWithoutFeedback>
             <>
-            {Component && <View style={styles.centeredView}>
+            {Component && <View style={[styles.centeredView,styles[positionView],{backgroundColor:colors.background}]}>
               <View style={{justifyContent:'center',display:'flex',alignItems:'center',borderRadius:30}}>
                 {onDelete ? <Pressable onPress={onDelete} style={{backgroundColor:"red",alignItems:'center',gap:10,flexDirection:'row',paddingHorizontal:25,paddingVertical:15,position:'absolute',top:-60,borderRadius:50}}>
                 <FontAwesome5 name='trash-alt' color={colors.HeaderText} size={20}/>
@@ -24,35 +25,36 @@ const Modals = ({Component,modalVisible,type, modalVisibleHandler,onDelete}) => 
       </TouchableWithoutFeedback>
     </Modal>
   );
-};
+});
 
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(1, 66, 131,.3)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   centeredView: {
-    // margin: 20,
-    backgroundColor: 'white',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
     padding: 15,
     paddingTop:35,
-    width:'100%',
+    borderRadius:10,
+    width:'95%',
     height:'auto',
-    position:'absolute',
-    bottom:0,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    shadowOpacity: 0.5,
+    shadowRadius: 14,
+    elevation: 15,
   },
+  bottomView:{
+    position:'absolute',
+    width:'100%',
+    bottom:0,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+  }
 });
 
 export default Modals;

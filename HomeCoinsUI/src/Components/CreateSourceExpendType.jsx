@@ -1,5 +1,5 @@
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Input from './Input';
 import Button from './Button';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,13 +11,14 @@ const tabs = [{expendType:"Source",active:true,details:{source:"",expendName:""}
 const CreateSourceExpendType = ({modalVisibleHandler,pageType}) => {
   const { colors } = useTheme(),dispatch = useDispatch();
   let { isLoading,source } = useSelector(state=>state.source);
-  if(pageType === "source") source = [{_id:"selfEmployed",sourceName:"Self employed"},{_id:"employed",sourceName:"Employed"}];
-  const dd = {sourceType:"",sourceName:"",sourceInv:""};
-  const [pageDetails,setPageDetails]=useState({
-    details: (pageType === "source ") ? dd : tabs[0].details,
+  if(pageType === "source"){source = [{_id:"selfEmployed",sourceName:"Self employed"},{_id:"employed",sourceName:"Employed"}]};
+  const sourceList = {sourceType:"",sourceName:"",sourceInv:""};
+  const initialState = {
+    details: pageType === "source" ? sourceList : tabs[0].details,
     activeTab:'Source',
     errors:{}
-  });
+  };
+  const [pageDetails,setPageDetails]=useState(initialState);
   const defaultColors={
     backgroundColor:colors.btnPrimaryBackground,
     color:colors.btnPrimaryColor,
@@ -41,7 +42,6 @@ const CreateSourceExpendType = ({modalVisibleHandler,pageType}) => {
     e.preventDefault();
     let validation = validateForm(pageDetails.details);
     setPageDetails({...pageDetails,errors:validation.error});
-    console.log(pageDetails,pageType);
     try {
       if(validation.valid){
         let expendPrefix = pageDetails.details?.expendType
@@ -129,8 +129,5 @@ const styles = StyleSheet.create({
     paddingVertical:5,
     paddingHorizontal:10,
     borderRadius:5
-  },  
-  activeTab:{
-    
   }
 });

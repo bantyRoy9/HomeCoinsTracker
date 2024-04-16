@@ -133,7 +133,7 @@ const AddExpend = ({navigation,editData,...props}) => {
           <Button isLoading={sourceLoading} onPress={modalVisibleHandler} title={"Manage expend type"} btnType={"Secondary"}/>
         </View>
       </View>
-      <Modals Component={<CreateSourceExpendType modalVisibleHandler={modalVisibleHandler} pageType="expend"/>} modalVisible={modalVisible} modalVisibleHandler={modalVisibleHandler} /></>
+      <Modals Component={<CreateSourceExpendType modalVisibleHandler={modalVisibleHandler} pageType="expend"/>} modalVisible={modalVisible} modalVisibleHandler={modalVisibleHandler} positionView={"bottomView"}/></>
       }
       </>
   )
