@@ -24,7 +24,7 @@ return (
 		<DataTable.Title textStyle={{color:backgroundStyle.headerStyle.color}}>Earn</DataTable.Title>
 		<DataTable.Title textStyle={{color:backgroundStyle.headerStyle.color}}>Expend</DataTable.Title>
     <DataTable.Title textStyle={{color:backgroundStyle.headerStyle.color}}>Savings</DataTable.Title>
-    <DataTable.Title textStyle={{color:backgroundStyle.headerStyle.color}}>Action</DataTable.Title>
+    {/* <DataTable.Title textStyle={{color:backgroundStyle.headerStyle.color}}>Action</DataTable.Title> */}
 	</DataTable.Header>
   {tableData && tableData.labels.map((el,idx)=>(
     <>
@@ -33,7 +33,7 @@ return (
 		<DataTable.Cell textStyle={{color:colors.text}}>{tableData.datasets[0].data[idx]}</DataTable.Cell>
 		<DataTable.Cell textStyle={{color:colors.text}}>{tableData.datasets[1].data[idx]}</DataTable.Cell>
 		<DataTable.Cell textStyle={{color:colors.text}}>{tableData.datasets[0].data[idx] - tableData.datasets[1].data[idx]}</DataTable.Cell>
-		<DataTable.Cell textStyle={{color:colors.text}}>Action</DataTable.Cell>
+		{/* <DataTable.Cell textStyle={{color:colors.text}}>Action</DataTable.Cell> */}
 	</DataTable.Row>
     </>
   ))}
