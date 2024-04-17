@@ -10,24 +10,23 @@ import Button from '../../Components/Button';
 const initialState = { email: "", password: "" }
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
-  const {isLoading,isAuthenticated} = useSelector(state=>state.user);
-  const { colors,dark } = useTheme();
+  const {isLoading} = useSelector(state=>state.user);
+  const { colors } = useTheme();
   const backgroundStyle = {
     backgroundColor: colors.background,
     color: colors.text
   };
-  const btnStyle = {
-    backgroundColor: colors.btnBackground,
-    color:colors.text
-  }
   const [user, setUser] = useState(initialState);
   const [errors,setErrors] = useState({});
+  const [passwordPressIn,setPasswordPressOut] = useState(false)
+  const rightIconHandler = () =>{
+    setPasswordPressOut(prev=>!prev);
+  }
 
   const changeHandler = (name, value) => {
     setErrors(updateErrors(errors,name));
     setUser({ ...user, [name]: value });
   };
-  
   const submitHandler = async(e) => {
     e.preventDefault()
     const validation = validateForm(user);
@@ -42,7 +41,7 @@ const Login = ({navigation}) => {
   };
   return (
     <View style={defaultStyle.screenContainer}>
-            <View style={{ alignItems: 'center'}}>
+            <View style={{ alignItems: 'center',marginBottom:10}}>
               <Image source={require('../../../Assets/Icons/coinsTracker.png')} style={{width: 250,height: 180}}/>
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -53,7 +52,7 @@ const Login = ({navigation}) => {
                 isLabel={false}
                 name={"email"}
                 autoFocus={false}
-                icons={'envelope-o'}
+                icons={'envelope'}
                 value={user.email}
                 onChangeText={(text) => changeHandler("email", text)}
                 isHelper={errors.email?true:false}
@@ -63,7 +62,8 @@ const Login = ({navigation}) => {
             </View>
             <View style={{ marginVertical: 5 }} pointerEvents={isLoading ? 'none' : 'auto'}>
               <Input
-                secureTextEntry={true}
+                secureTextEntry={!passwordPressIn}
+                rightIcon={passwordPressIn?'eye':'eye-slash'}
                 placeholder={"Enter secure password"}
                 label={"Password"}
                 isLabel={false}
@@ -71,6 +71,7 @@ const Login = ({navigation}) => {
                 autoFocus={false}
                 icons={'lock'}
                 value={user.password}
+                rightIconHandler={rightIconHandler}
                 onChangeText={(text) => changeHandler("password", text)}
                 isHelper={errors.password?true:false}
                 errorMsg={errors.password}
@@ -80,16 +81,12 @@ const Login = ({navigation}) => {
             </ScrollView>
             <View style={{ width: "auto", alignItems: 'center' }} >
               <Button onPress={submitHandler} isLoading={isLoading} title='Login'/>
-              <Pressable onPress={() => navigation.navigate('Signup',{isForgotPassword:true,isOTPVerified:false})}>
-              <Text style={{ color: colors.btnBackground }} >
-                Forgot Password?
-              </Text>
-              </Pressable>
+              <Button onPress={()=>navigation.navigate("Signup",{isForgotPassword:true,isOTPVerified:false})} title="Forgot Password?" btnType='tertiary'/>
             </View>
           <View style={{ position: 'relative', height: 50 }}>
             <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
               <View style={styles.btnSignup}>
-                <Text style={{ fontSize: 16, color: backgroundStyle.color }}>Don't have an account? </Text><Text onPress={() => navigation.navigate('Signup',{isForgotPassword:false})} style={{ color: colors.btnBackground, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Sign up</Text>
+                <Text style={{ fontSize: 16, color: backgroundStyle.color }}>Don't have an account? </Text><Text onPress={() => navigation.navigate('Signup',{isForgotPassword:false})} style={{ color: colors.text, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Sign up</Text>
               </View>
             </View>
           </View>

@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View, useColorScheme } from 'react-native'
 import React, { useState,useRef } from 'react'
-import Icons from 'react-native-vector-icons/FontAwesome'
 import { HelperText, TextInput, useTheme } from 'react-native-paper';
+import { FontAwesome, FontAwesome5 } from '../Utils';
 const Input = ({
   pointerEvents,
   isLabel,
   label,
   icons,
+  rightIcon,
+  rightIconHandler,
   keyboardType,
   value,
   maxLength,
@@ -48,7 +50,7 @@ const Input = ({
   return (
     <View style={styles.inputContainer} pointerEvents={pointerEvents}>
       {isLabel && <Text style={styles.inputLabel}>{label}</Text>}
-      {icons && <Icons style={{...styles.inputIcons,color:colors.text}} name={icons} size={20} />}  
+      {icons && <FontAwesome5 style={{...styles.inputIcon,color:isHelper ? colors.error : colors.text}} name={icons} size={19} />}  
         <TextInput
                 keyboardType={keyboardType}
                 onBlur={onBlur}
@@ -58,6 +60,13 @@ const Input = ({
                   ...styles.inputBox,
                   ...backgroundStyle,
                 }}
+                placeholderTextColor={colors.text}
+                activeUnderlineColor={colors.text}
+                underlineColor={colors.text}
+                textColor={colors.text}
+                activeOutlineColor={colors.text}
+                outlineColor={colors.text}
+                error={isHelper}
                 maxLength={maxLength}
                 ref={ref}
                 autoFocus={autoFocus}
@@ -71,6 +80,7 @@ const Input = ({
                 onPressIn={onPress}
                 editable={editable}
               />
+              {rightIcon && <FontAwesome5 style={{...styles.inputIconRight,color:isHelper ? colors.error : colors.text}} name={rightIcon} size={18} onPress={rightIconHandler}/>}
               {isHelper && <HelperText type={helperType}>{errorMsg}</HelperText>}
 
     </View>
@@ -90,12 +100,17 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 5
     },
-    inputIcons:{
+    inputIcon:{
       position:'absolute',
       zIndex:1,
       top:20,
       left:15,
-      fontSize:20
+    },
+    inputIconRight:{
+      position:'absolute',
+      zIndex:1,
+      top:20,
+      right:20,
     },
     inputBox:{
         padding:1,

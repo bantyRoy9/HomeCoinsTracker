@@ -46,6 +46,8 @@ export const darkTheme = {
     btnSecondaryBackground: 'rgba(33, 33, 33,0.5)',
     btnPrimaryColor: 'rgb(255, 255, 255)',
     btnSecondaryColor: 'rgb(240, 240, 240)',
+    btntertiaryBackground: 'rgb(240, 240, 240)',
+    btntertiaryColor:'rgb(240, 240, 240)',
     success: 'rgb(34, 119, 0)',
     warning: 'rgb(159, 96, 0)',
     error: 'rgb(207, 102, 121)',

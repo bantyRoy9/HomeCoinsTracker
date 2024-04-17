@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Pressable, Text, View } from 'react-native'
+import { StyleSheet, Pressable, Text, View, TouchableOpacity } from 'react-native'
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useTheme } from 'react-native-paper';
@@ -77,7 +77,7 @@ const Home = () => {
         <View style={{flex:1,height:'100%'}}>
           <View style={{paddingHorizontal:10,marginHorizontal:10,marginVertical:1,paddingVertical:10,backgroundColor:colors.surfaceVariant,marginTop:10,flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
             <View style={{flex:1,flexDirection:'row',alignItems:'center',gap:8}}>
-              <Pressable style={{padding:8}} onPress={()=>handleDateRange("prev")}><FontAwesome name='chevron-left' color={colors.text} size={15}/></Pressable>
+              <TouchableOpacity style={{padding:8}} onPress={()=>handleDateRange("prev")}><FontAwesome name='chevron-left' color={colors.text} size={15}/></TouchableOpacity>
                 <Pressable onPress={showDatePicker} style={{flexDirection:'row',position:'relative',alignItems:'center',justifyContent:`${!isDaily && 'center'}`,flex:1,gap:10}}>
                     {isDaily && <View style={{padding:8,borderWidth:.4,borderColor:colors.text,borderRadius:5}}><Text style={{color:colors.text,fontWeight:600}}>{dateFormat.date}</Text></View>}
                     <View>
@@ -92,7 +92,7 @@ const Home = () => {
                 <Text style={{color:colors.text,textAlign:'right'}}>Blance</Text>
                 <Text style={{color:colors.text,...defaultStyle.text}}>{account && ((account?.earnList?.reduce((total,list)=>parseFloat(list?.amount??0)+total,0)??0) - (account?.expendList?.reduce((total,list)=>parseFloat(list?.amount??0)+total,0)??0)).toFixed(2)}</Text>
               </View>}
-              <Pressable style={{padding:8}} onPress={()=>handleDateRange("next")}><FontAwesome name='chevron-right' color={colors.text} size={15}/></Pressable>
+              <TouchableOpacity style={{padding:8}} onPress={()=>handleDateRange("next")}><FontAwesome name='chevron-right' color={colors.text} size={15}/></TouchableOpacity>
             </View>
           </View>
           {dateRange.label === "Daily"? <><Daily dateRange={dateRange}/><View style={styles.expensEarnBtn}><FloatingActionBtn dateRange={dateRange.dateRange}/></View></> : <Monthly dateRange={dateRange}/>}</View>

@@ -14,7 +14,11 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
   const [errors, setErrors] = useState({});
   const [user, setUser] = useState((isForgotPassword && !isOTPVerified)?{email:""}:(isOTPVerified && isForgotPassword)?{password: "", confirmPassword: ""}:{ name: "",mobile:"", email: "", password: "", confirmPassword: "" });
   const { isLoading } = useSelector(state=>state.user);
-  
+  const [passwordPressIn,setPasswordPressOut] = useState(false)
+  const rightIconHandler = () =>{
+    setPasswordPressOut(prev=>!prev);
+  }
+
   const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
   const btnStyle = {backgroundColor: colors.btnBackground,color: colors.btnBackground};
   
@@ -60,7 +64,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
                 label={"Enter your email address"}
                 isLabel={false}
                 name={'email'}
-                icons={'envelope-o'}
+                icons={'envelope'}
                 value={user.email}
                 secureTextEntry={false}
                 autoFocus={false}
@@ -128,7 +132,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
                 label={"Moble"}
                 isLabel={false}
                 name={'mobile'}
-                icons={'phone'}
+                icons={'mobile'}
                 value={user.mobile}
                 secureTextEntry={false}
                 autoFocus={false}
@@ -145,7 +149,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
                 label={"Email"}
                 isLabel={false}
                 name={'email'}
-                icons={'envelope-o'}
+                icons={'envelope'}
                 value={user.email}
                 secureTextEntry={false}
                 autoFocus={false}
@@ -161,9 +165,12 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
                 label={"Password"}
                 isLabel={false}
                 name={'password'}
+
                 icons={'lock'}
                 value={user.password}
-                secureTextEntry={true}
+                secureTextEntry={!passwordPressIn}
+                rightIcon={passwordPressIn?'eye':'eye-slash'}
+                rightIconHandler={rightIconHandler}
                 autoFocus={false}
                 onChangeText={(text) => changeHandler("password", text)}
                 isHelper={errors.password ? true : false}
@@ -194,7 +201,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
             <View style={{ position: 'relative', height: 30 }}>
               <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignContent: 'center' }}>
-                  <Text style={{ fontSize: 16, color: backgroundStyle.color }}>{isForgotPassword?"Don't want to rest password?":"Allready have an accounts?"} </Text><Text onPress={() => navigation.navigate('Login')} style={{ color: btnStyle.color, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Login</Text>
+                  <Text style={{ fontSize: 16, color: backgroundStyle.color }}>{isForgotPassword?"Don't want to rest password?":"Allready have an accounts?"} </Text><Text onPress={() => navigation.navigate('Login')} style={{ color: colors.text, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Login</Text>
                 </View>
               </View>
             </View>

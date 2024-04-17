@@ -1,119 +1,38 @@
 /**
- *
- * @BANTI
+ * 
+ * @BANTI_KUMAR
  */
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { Pressable, TouchableOpacity, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import SplashScreen from 'react-native-splash-screen';
-import { useTheme } from 'react-native-paper';
 import { useSelector } from 'react-redux';
-import { Activity, AddEarn, AddExpend, CreateGroup, EditProfile, Home, Login, Members, Profile, Signup,OtpVerification } from './Screens';
-import { FontAwesome, FontAwesome5 } from './Utils';
-import DefaultLayout from './Screens/DefaultLayout/DefaultLayout';
-function App() {
-  const Stack = createNativeStackNavigator();
-  const { colors } = useTheme();
-  const [userDetails, setUserDetails] = useState({});
+import SplashScreen from 'react-native-splash-screen';
+import AppNavigator from './Navigation/appNavigator';
+
+const App = () => {
+  const [userDetails, setUserDetails] = useState(null);
+  const fetchUserDetails = async () => {
+    const details = await AsyncStorage.multiGet(["cookie", "isGroupIncluded", "isActive"]);
+    setUserDetails({
+      cookie: details[0][1],
+      isGroupIncluded: details[1][1]?.toLowerCase() === 'true',
+      isActive: details[2][1]?.toLowerCase() === 'true'
+    });
+  };
   const { user } = useSelector(state=>state.user);
   const { group } = useSelector(state=>state.group);
-  
+
   useEffect(() => {
-    fetchUserDetail();
-    setTimeout(()=>{
+    fetchUserDetails().then(() => {
       SplashScreen.hide();
-    },500);
+    });
   }, [user,group]);
-  const fetchUserDetail = async () => {
-    let userDetail = await AsyncStorage.multiGet(["cookie","isGroupIncluded","isActive"]);
-    setUserDetails({ cookie:userDetail[0][1], isGroupIncluded:userDetail[1][1]?.toLowerCase?.() === 'true',isActive:userDetail[2][1]?.toLowerCase?.() === 'true' });
-  };
-  const navigationOptions = {
-    headerTintColor: colors.HeaderText,
-    headerStyle: {
-      backgroundColor: colors.HeaderBg,
-      // borderBottomColor: colors.headerBg,
-      // borderBottomWidth: 1,
-    },
-    headerTitleStyle: {
-      fontSize: 20,
-    }
-  };
-  const headerTitle = {
-    home: { title: 'Dashboard' },
-    addExpend: { title: 'Add expend' },
-    addEarn: { title: 'Add earn' },
-    profile: { title: 'Profile' },
-    editProfile: { title: 'Edit profile' },
-    activity: { title: 'Activity' },
-    members: { title: 'Members' },
-    createGroup: { title: 'Create group' },
-    createNewGroup:{title:"Create new group"},
-    otpVerification: { title: 'User verification' }
-  }
-  const editProfile = () => {
-    // navigation.navigate('EditProfile');
-  }
 
-  const headerIcons = {
-    home: <>
-      <View style={{ position: 'relative' }}>
-        <FontAwesome name='bell' color={colors.HeaderText} size={20} />
-        <View style={{ position: 'absolute', width: 10, height: 10, borderRadius: 50, backgroundColor: colors.notification, right: 0 }}></View>
-      </View>
-    </>,
-    profile: <>
-      <FontAwesome5 name='user-edit' size={20} onPress={editProfile} color={colors.HeaderText} />
-    </>,
-    createProfile: <>
-      <TouchableOpacity >
-        <FontAwesome5 name='user' size={20} color={colors.HeaderText} onPress={() => navigation.navigate('Profile')} />
-      </TouchableOpacity>
-    </>
-  }
-  
-  
   return (
-
-    <NavigationContainer >
-      {/* <Stack.Navigator initialRouteName={(isAuthenticated && user && user.isActive && user?.isGroupIncluded) ? "Home" : (isAuthenticated && user && user.isActive) ? "CreateGroup" : (isAuthenticated && user && !user.isActive) ? "OtpVerification" : "Login"}> */}
-      <Stack.Navigator initialRouteName={(userDetails.cookie && userDetails.isGroupIncluded) ? "Home" : userDetails.cookie ? "CreateGroup" : "Login"}>
-        {(userDetails.cookie && userDetails.isGroupIncluded) ? <>
-          <Stack.Screen name='Home' component={Home} options={{ ...navigationOptions, ...headerTitle.home, headerRight: () => headerIcons.home }} />
-          <Stack.Screen name='AddEarn' component={AddEarn} options={{ ...navigationOptions, ...headerTitle.addEarn }} />
-          <Stack.Screen name='AddExpend' component={AddExpend} options={{ ...navigationOptions, ...headerTitle.addExpend }} />
-          <Stack.Screen name='Activity' component={Activity} options={{ ...navigationOptions, ...headerTitle.activity }} />
-          <Stack.Screen name='Member' component={Members} options={{ ...navigationOptions, ...headerTitle.members }} />
-          <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () => headerIcons.profile }} />
-          <Stack.Screen name='EditProfile' component={EditProfile} options={{ ...navigationOptions, ...headerTitle.editProfile }} />
-        </> : userDetails.cookie ? <>
-          <Stack.Screen name='CreateGroup' component={CreateGroup}
-            options={({ navigation }) => ({
-              ...navigationOptions,
-              ...headerTitle.createGroup,
-              headerRight: () => (
-                <>
-                  <Pressable onPress={() => navigation.navigate('Profile')}>
-                    <FontAwesome5 name='user' size={20} color={colors.HeaderText} />
-                  </Pressable>
-                </>
-              )
-            })
-            } />
-          <Stack.Screen name='CreateNewGroup' component={CreateGroup} options={{...navigationOptions,...headerTitle.createNewGroup}} />
-          <Stack.Screen name='ExistingGroup' component={CreateGroup} options={navigationOptions} />
-          <Stack.Screen name='Profile' component={Profile} options={{ ...navigationOptions, ...headerTitle.profile, headerRight: () => headerIcons.profile }} />
-          <Stack.Screen name='OtpVerification' component={OtpVerification} options={{ ...navigationOptions, ...headerTitle.otpVerification }} />
-        </> : <>
-          <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />
-          <Stack.Screen name='Signup' component={Signup} options={{ headerShown: false }} />
-          <Stack.Screen name='OtpVerification' component={OtpVerification} options={{ ...navigationOptions, ...headerTitle.otpVerification }} />
-        </>}
-      </Stack.Navigator>
+    <NavigationContainer>
+      {userDetails ? <AppNavigator userDetails={userDetails} /> : null}
     </NavigationContainer>
   );
-}
+};
 
 export default App;

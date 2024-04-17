@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Modals } from '../../Components';
 import AddEarn from '../AddEarnExpens/AddEarn';
 import AddExpend from '../AddEarnExpens/AddExpend';
-import { filterKeyIncludeArr, getElementByIndex } from '../../Utils/CommonAuthFunction';
+import { filterKeyIncludeArr, getElementByIndex, showAlert } from '../../Utils/CommonAuthFunction';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
 import IncomeExpendSection from './IncomeExpendSection';
 
@@ -16,15 +16,22 @@ const Daily = () => {
     const backgroundStyle = useMemo(() => ({ backgroundColor: colors.background, color: colors.text }), [colors]);
     const { isLoading, account } = useSelector(state => state.account);
     const { source } = useSelector(state => state.source);
-    const initialState = { status: false, element: null, data: null };
+    const { user } = useSelector(state => state.user);
+    const initialState = { status: false, element: null, data: null,longPress:false };
     const [modalVisible, setModalVisible] = useState(initialState);
 
     useEffect(() => {
       setModalVisible(initialState);
     }, [account]);
 
-    const modalVisibleHandler = useCallback((type, data) => {
-      setModalVisible(prev => ({ ...prev, status: !prev.status, element: type, data: data }));
+    
+    const modalVisibleHandler = useCallback((type, data,longPress) => {
+      
+      // if(longPress && (user.role !== "admin" || data.createdBy !== data._id)){
+      //   showAlert("you don't have permission to update")
+      //   return false; 
+      // }
+      setModalVisible(prev => ({ ...prev, status: !prev.status, element: type, data: data,longPress }));
     }, []);
 
     const deleteHandler = () => {
@@ -35,7 +42,7 @@ const Daily = () => {
     };
     const bodyStyle={...styles.bodyTextStyle,backgroundColor:colors.surfaceVariant};
     const renderList = (list, type) => list.map((el, idx) => (
-      <Pressable key={idx + type} onPress={() => modalVisibleHandler(type, el)}>
+      <Pressable key={idx + type} onPress={() => modalVisibleHandler(type, el,true)} /*onLongPress={()=>modalVisibleHandler(type,el,true)}*/>
         <View style={bodyStyle}>
           <Text style={{ color: colors.text }}>{stringTransform(type === "Earn" ? getElementByIndex(filterKeyIncludeArr(source, "_id", el.source), 0, "sourceName") : el.description, 'c')}</Text>
           <Text style={{ color: colors.text }}>₹{parseFloat(el?.amount ?? 0).toFixed(2)}</Text>
@@ -59,7 +66,7 @@ const Daily = () => {
                 modalVisible={modalVisible.status} 
                 modalVisibleHandler={() => modalVisibleHandler(null, null)} 
                 onDelete={deleteHandler} 
-                positionView="bottomView"
+                bottomView={modalVisible.longPress}
               />
             </View>
           )}
