@@ -13,8 +13,8 @@ const Button = ({
     color: colors[`btn${btnType}Color`]
   }
   return (
-    <Pressable style={btnType === "tertiary" ? { ...styles.resendBtn }:{...styles.button, ...btnStyle}} onTouchStart={onPress} pointerEvents={isLoading?"none":"auto"}>
-      <Text style={btnType === "tertiary" ? { ...styles.text,borderBottomWidth:1,borderBottomColor:btnStyle.backgroundColor,color:btnStyle.backgroundColor } : {...styles.text, color:btnStyle.color}}>
+    <Pressable style={btnType === "tertiary" ? { ...styles.resendBtn,color:btnStyle.color }:{...styles.button, ...btnStyle}} onTouchStart={onPress} pointerEvents={isLoading?"none":"auto"}>
+      <Text style={btnType === "tertiary" ? { ...styles.text,borderBottomWidth:1,borderBottomColor:btnStyle.backgroundColor,color:btnStyle.color } : {...styles.text, color:btnStyle.color}}>
         {isLoading ? (
           <ActivityIndicator size={'small'} color={btnType === "tertiary" ? colors.HeaderBg : colors.loaderColor} />
         ) : (

@@ -7,4 +7,5 @@ import Input from './Input';
 import Modals from './Modal';
 import SelectPicker from './SelectPicker';
 import Button from './Button';
-export { Chart, DataTable, DatePicker, FloatingActionBtn, Header, Input, Modals,SelectPicker,Button}
+import HeaderRightButton from './HeaderRightButton';
+export { HeaderRightButton,Chart, DataTable, DatePicker, FloatingActionBtn, Header, Input, Modals,SelectPicker,Button}

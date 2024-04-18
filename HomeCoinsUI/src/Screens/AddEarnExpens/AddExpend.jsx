@@ -68,7 +68,7 @@ const AddExpend = ({navigation,editData,...props}) => {
             label={"Enter Amount"}
             isLabel={false}
             name={'amount'}
-            icons={'money'}
+            icons={'money-bill-alt'}
             value={details?.amount.toString()}
             secureTextEntry={false}
             autoFocus={false}
