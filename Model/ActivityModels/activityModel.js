@@ -17,7 +17,7 @@ const activityModel = new mongoose.Schema({
     methodType:String,
     date:{
         type:Date,
-        default:new Date()
+        default:Date.now
     },
     Url:String,
     groupId:{

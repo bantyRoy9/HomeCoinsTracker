@@ -21,7 +21,7 @@ exports.saveDailyExped = catchAsync(async(req,res,next)=>{
 exports.saveDailyEarnExpend = (type)=> createModal(type === "earn" ? EarnModel : ExpendModel,true);
 exports.updateDailyEarnExpend=(type)=> updateModal(type === "earn" ? EarnModel : ExpendModel,true);
 exports.deletrDailyEarnExpend=(type)=> deleteModal(type === "earn" ? EarnModel : ExpendModel,true);
-// exports.getDailyEarnExpendByUser=(type)=>findModal(type === "earn" ? EarnModel : ExpendModel);
+exports.getDailyEarnExpend=(type)=>findModal(type === "earn" ? EarnModel : ExpendModel,{},);
 
 exports.totalEarnByUser = catchAsync(async(req,res,next) =>{
     const toatalErn = await EarnModel.find({earnBy:req.user.id});

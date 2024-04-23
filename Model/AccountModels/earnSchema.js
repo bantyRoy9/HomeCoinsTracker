@@ -7,7 +7,7 @@ const earnSchema = new mongoose.Schema({
     },
     source:{
         type:mongoose.Schema.ObjectId,
-        ref:'Source'
+        ref:'Sources'
     },
     date:{
         type:Date,
