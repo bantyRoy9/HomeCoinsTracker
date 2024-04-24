@@ -7,21 +7,13 @@ const moment = require('moment');
 const AppError = require("../Utils/appError");
 const { updateModal, createModal,deleteModal, findModal } = require("./commonController");
 
-/*exports.saveDailyEarns = catchAsync(async(req,res,next) => {
-    const saveEarn = await EarnModel.create(req.body);
-    req.earnId=saveEarn._id;
-    next();
-});
 
-exports.saveDailyExped = catchAsync(async(req,res,next)=>{
-    const saveExpend = await ExpendModel.create(req.body);
-    req.expendId = saveExpend._id;
-    next();
-});*/
-exports.saveDailyEarnExpend = (type)=> createModal(type === "earn" ? EarnModel : ExpendModel,true);
-exports.updateDailyEarnExpend=(type)=> updateModal(type === "earn" ? EarnModel : ExpendModel,true);
-exports.deletrDailyEarnExpend=(type)=> deleteModal(type === "earn" ? EarnModel : ExpendModel,true);
-exports.getDailyEarnExpend=(type)=>findModal(type === "earn" ? EarnModel : ExpendModel,{},);
+exports.saveDailyEarnExpend=(type)=>createModal(type === "earn" ? EarnModel : ExpendModel,true);
+exports.updateDailyEarnExpend=(type)=>updateModal(type === "earn" ? EarnModel : ExpendModel,true);
+exports.deletrDailyEarnExpend=(type)=>deleteModal(type === "earn" ? EarnModel : ExpendModel,true);
+exports.getDailyEarnExpend=(type)=>findModal(type === "earn" ? EarnModel : ExpendModel);
+
+
 
 exports.totalEarnByUser = catchAsync(async(req,res,next) =>{
     const toatalErn = await EarnModel.find({earnBy:req.user.id});

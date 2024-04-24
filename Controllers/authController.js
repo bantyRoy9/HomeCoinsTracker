@@ -93,6 +93,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     if (!token) {
         return next(new AppError('you are not login! please Login', 401));
     };
+    console.log(token);
     const decoder = await promisify(jwt.verify)(token, process.env.jwt_secret);
     const currentUser = await User.findById(decoder.id);
     if (!currentUser) {
