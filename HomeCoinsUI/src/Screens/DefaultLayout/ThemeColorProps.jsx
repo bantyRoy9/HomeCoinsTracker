@@ -18,6 +18,8 @@ export const defaultTheme = {
     btnPrimaryColor: 'rgb(255, 255, 255)',
     btnSecondaryColor: 'rgb(1, 1, 1)',
 
+    modalPrimaryBackground:'rgb(255, 255, 255)',
+    modalSecondaryBackground:'rgb(255, 255, 255)',
     success: 'rgb(34, 119, 0)',
     warning: 'rgb(159, 96, 0)',
     error: 'rgb(207, 102, 121)',

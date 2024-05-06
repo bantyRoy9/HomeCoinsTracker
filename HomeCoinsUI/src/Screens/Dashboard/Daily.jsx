@@ -9,6 +9,7 @@ import AddExpend from '../AddEarnExpens/AddExpend';
 import { filterKeyIncludeArr, getElementByIndex, showAlert } from '../../Utils/CommonAuthFunction';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
 import IncomeExpendSection from './IncomeExpendSection';
+import ViewEarnExpend from '../AddEarnExpens/ViewEarnExpend';
 
 const Daily = () => {
     const { colors } = useTheme();
@@ -61,10 +62,11 @@ const Daily = () => {
               <IncomeExpendSection account={account} colors={colors} renderList={renderList} type="Earn" />
               <IncomeExpendSection account={account} colors={colors} renderList={renderList} type="Expend" />
               <Modals 
-                Component={modalVisible.element === "Earn" ? <AddEarn editData={modalVisible} isDelete={true} /> : <AddExpend editData={modalVisible} />} 
+                Component={modalVisible.longPress ? modalVisible.element === "Earn" ?  <AddEarn editData={modalVisible} isDelete={true} /> : <AddExpend editData={modalVisible} /> : <ViewEarnExpend viewData={modalVisible}/>} 
                 modalVisible={modalVisible.status} 
                 modalVisibleHandler={() => modalVisibleHandler(null, null)} 
-                onDelete={deleteHandler} 
+                onDelete={modalVisible.longPress && deleteHandler}
+                modalType={!modalVisible.longPress ? "Secondary" :"Primary"} 
                 bottomView={modalVisible.longPress}
               />
             </View>
