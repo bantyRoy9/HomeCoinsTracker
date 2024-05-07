@@ -74,12 +74,12 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 14,
-    elevation: 15,
+    elevation: 15
   },
   bottomView:{
     position:'absolute',
     width:'100%',
-    bottom:0,
+    bottom:-15,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
   }

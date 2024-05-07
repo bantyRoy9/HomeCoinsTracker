@@ -8,4 +8,5 @@ import Modals from './Modal';
 import SelectPicker from './SelectPicker';
 import Button from './Button';
 import HeaderRightButton from './HeaderRightButton';
-export { HeaderRightButton,Chart, DataTable, DatePicker, FloatingActionBtn, Header, Input, Modals,SelectPicker,Button}
+import CustomText from './CustomText';
+export {CustomText, HeaderRightButton,Chart, DataTable, DatePicker, FloatingActionBtn, Header, Input, Modals,SelectPicker,Button}

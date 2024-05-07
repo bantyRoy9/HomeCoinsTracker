@@ -5,7 +5,7 @@ import { DataTable, useTheme } from 'react-native-paper';
 const Table = ({tableData}) => {
   const { colors,dark} = useTheme();
   const backgroundStyle = {
-    headerStyle:{
+    tableHeaderStyle:{
       backgroundColor:colors.HeaderBg,
       color:colors.HeaderText,
       borderBottomWidth:0,
@@ -19,12 +19,12 @@ const Table = ({tableData}) => {
 return (
   
 	<DataTable>
-	<DataTable.Header style={backgroundStyle.headerStyle}>
-		<DataTable.Title textStyle={{color:backgroundStyle.headerStyle.color,fontWeight:'800'}}>Date</DataTable.Title>
-		<DataTable.Title textStyle={{color:backgroundStyle.headerStyle.color}}>Earn</DataTable.Title>
-		<DataTable.Title textStyle={{color:backgroundStyle.headerStyle.color}}>Expend</DataTable.Title>
-    <DataTable.Title textStyle={{color:backgroundStyle.headerStyle.color}}>Savings</DataTable.Title>
-    {/* <DataTable.Title textStyle={{color:backgroundStyle.headerStyle.color}}>Action</DataTable.Title> */}
+	<DataTable.Header style={backgroundStyle.tableHeaderStyle}>
+		<DataTable.Title textStyle={{color:backgroundStyle.tableHeaderStyle.color,fontWeight:'800'}}>Date</DataTable.Title>
+		<DataTable.Title textStyle={{color:backgroundStyle.tableHeaderStyle.color}}>Earn</DataTable.Title>
+		<DataTable.Title textStyle={{color:backgroundStyle.tableHeaderStyle.color}}>Expend</DataTable.Title>
+    <DataTable.Title textStyle={{color:backgroundStyle.tableHeaderStyle.color}}>Savings</DataTable.Title>
+    {/* <DataTable.Title textStyle={{color:backgroundStyle.tableHeaderStyle.color}}>Action</DataTable.Title> */}
 	</DataTable.Header>
   {tableData && tableData.labels.map((el,idx)=>(
     <>

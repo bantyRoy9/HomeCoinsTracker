@@ -27,7 +27,7 @@ const Daily = () => {
 
     
     const modalVisibleHandler = useCallback((type, data,longPress) => {
-      if(longPress && user.role !== "admin" && data?.createdBy !== user._id){
+      if(longPress && (user.role !== "admin" || data?.createdBy !== user._id || data?.expendBy !== user._id)){
         showAlert("you don't have permission to update other activity");
         return false; 
       }
@@ -67,7 +67,7 @@ const Daily = () => {
                 modalVisibleHandler={() => modalVisibleHandler(null, null)} 
                 onDelete={modalVisible.longPress && deleteHandler}
                 modalType={!modalVisible.longPress ? "Secondary" :"Primary"} 
-                bottomView={modalVisible.longPress}
+                bottomView={true}
               />
             </View>
           )}
