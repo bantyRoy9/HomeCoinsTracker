@@ -8,6 +8,9 @@ exports.findModal = (Modal,queryMap={},listView,populate) => catchAsync(async(re
         method='findById',queryMap=req.params.id;
         populate=["earnBy","createdBy","source"]
     }
+    if(queryMap && queryMap.hasOwnProperty("groupId")){
+        queryMap = {groupId:req.user.groupId}
+    }
     let data = await Modal[method](queryMap,listView);
     !data && next(new AppError("Record not found",404));
     if(populate) data = await data.populate(populate);

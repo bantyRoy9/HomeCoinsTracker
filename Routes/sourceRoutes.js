@@ -4,7 +4,7 @@ const { getSource , createSource,getExpendType,createExpendType } = require('../
 
 
 const router = express.Router();
-router.route('/source').get(getSource).post(protect,restrictTo('admin'),setUserAndGroupId('createdBy'),createSource);
-router.route('/expendType').get(getExpendType).post(protect,restrictTo('admin'),setUserAndGroupId('createdBy'),createExpendType);
+router.route('/source').get(protect,getSource).post(protect,restrictTo('admin'),setUserAndGroupId('createdBy'),createSource);
+router.route('/expendType').get(protect,getExpendType).post(protect,restrictTo('admin'),setUserAndGroupId('createdBy'),createExpendType);
 
 module.exports = router;
