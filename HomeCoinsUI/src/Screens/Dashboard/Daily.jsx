@@ -27,10 +27,17 @@ const Daily = () => {
 
     
     const modalVisibleHandler = useCallback((type, data,longPress) => {
-      console.log(data ,user._id,longPress , (user.role !== "admin" || data?.createdBy !== user._id || data?.expendBy !== user._id),longPress , user.role !== "admin" ,data?.createdBy !== user._id ,data?.expendBy !== user._id);
-      if(longPress && (user.role !== "admin" || (data.createdBy && data.createdBy !== user._id) || (data.expendBy && data?.expendBy !== user._id))){
-        showAlert("you don't have permission to update other activity");
-        return false; 
+      if(longPress){
+        let value = false;
+        if(data.createdBy && (data.createdBy !== user["_id"] || user.role !== "admin")){
+          value=true;
+        }else if(data.expendBy && (data.expendBy !== user["_id"] || user.role !== "admin")){
+          value=true;
+        };
+        if(value){
+          showAlert("you don't have permission to update other activity");
+          return false;
+        }
       }
       setModalVisible(prev => ({ ...prev, status: !prev.status, element: type, data: data,longPress }));
     }, []);
@@ -42,10 +49,10 @@ const Daily = () => {
       }
     };
     const bodyStyle={...styles.bodyTextStyle,backgroundColor:colors.surfaceVariant};
-    const renderList = (list, type) => list.map((el, idx) => (
+    const renderList = (list, type) => list.length && list.map((el, idx) => (
       <Pressable key={idx + type} onPress={() => modalVisibleHandler(type, el,false)} onLongPress={()=>modalVisibleHandler(type,el,true)}>
         <View style={bodyStyle}>
-          <Text style={{ color: colors.text }}>{stringTransform(type === "Earn" ? getElementByIndex(filterKeyIncludeArr(source, "_id", el.source), 0, "sourceName") : el.description, 'c')}</Text>
+          <Text style={{ color: colors.text }}>{((el.createdBy && user && user.id && el.createdBy === user._id) || (el.expendBy && user && user._id && el.expendBy === user._id) || (user && user.role && user.role === "admin")) && <Text>🟢 </Text> }{stringTransform(type === "Earn" ? getElementByIndex(filterKeyIncludeArr(source, "_id", el.source), 0, "sourceName") : el.description, 'c')}</Text>
           <Text style={{ color: colors.text }}>₹{parseFloat(el?.amount ?? 0).toFixed(2)}</Text>
         </View>
       </Pressable>

@@ -142,13 +142,14 @@ exports.restrictTo = (...role) => {
 };
 
 exports.setUserAndGroupId = (keyName) => async(req,res,next)=>{
-    console.log(req.user,"id");
+    console.log(req.user,"id","work");
     const keyNames = keyName.split(',');
     if(keyNames && keyNames.length>0){
         keyNames.forEach((keyName)=>{
             if(!req.body[keyName]) req.body[keyName] = req.user._id;
         });
     };
+    
     if(!req.user.isGroupIncluded) return next(new AppError('User not exist in any group',404));
     req.body['groupId'] = req.user.groupId;
     next();

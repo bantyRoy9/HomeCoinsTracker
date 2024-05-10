@@ -3,7 +3,7 @@ NODE_ENV="production";
 if(NODE_ENV ==="development"){
     ApiContextURL = "http://192.168.1.73:8000"
 };
-// console.log(ApiContextURL);
+console.log(ApiContextURL);
 const accountControllerURL = `${ApiContextURL}/api/v1/accountController`;
 const userControllerURL = `${ApiContextURL}/api/v1/userController`;
 const activityControllerURL = `${ApiContextURL}/api/v1/activityController`;
