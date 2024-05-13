@@ -1,14 +1,29 @@
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FeatherIcons, FontAwesome, defaultStyle, homeNavList } from '../../Utils'
 import { Chart, DataTable } from '../../Components'
-import { Card } from 'react-native-elements';
 import { useTheme } from 'react-native-paper'
 import { useSelector } from 'react-redux'
-const Monthly = ({dateRange}) => {
+const Monthly = ({dateRange,monthlyHandle}) => {
     const { colors } = useTheme();
     const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
     let { isLoading, account } = useSelector(state => state.account);
+    console.log(account.graphData.datasets,"************");
+    useEffect(()=>{
+      if(dateRange.label === "Yearly" && account.graphData && account.graphData.labels && account.graphData.labels.length ){
+        let date = account.graphData.labels[0]?.split(" ")[1],label=[date],obj={};
+        account.graphData.labels.forEach((el,idx)=>{
+          obj[el.split(" ")[1]]=[]
+          if(date === el.split(" ")[1]){
+
+          }else{
+            date=el.split(" ")[1];
+            label.push(date)
+          }
+        });
+        console.log(label,obj);
+      }
+    },[account])
     return (
     <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
         <View style={defaultStyle.screenContainer}>
@@ -44,7 +59,7 @@ const Monthly = ({dateRange}) => {
                   <Chart graphData={account?.graphData} />
                 </View>
                 <View>
-                  <DataTable tableData={account.graphData} />
+                  <DataTable tableData={account.graphData} monthlyHandle={monthlyHandle}/>
                 </View></>}
             </View></>}
         </View>

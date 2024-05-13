@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{memo} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 const IncomeExpendSection = ({ account, colors, renderList, type }) => {
@@ -46,4 +46,4 @@ const getStlyeSheet = (colors)=>{
     return styles;
 };
 
-export default IncomeExpendSection;
+export default memo(IncomeExpendSection);

@@ -1,8 +1,8 @@
 import React,{memo} from 'react';
-import {Modal, StyleSheet, View, TouchableWithoutFeedback, Text, Pressable, TouchableOpacity} from 'react-native';
+import {Modal, StyleSheet, View, TouchableWithoutFeedback, Text, Pressable} from 'react-native';
 import { FontAwesome5 } from '../Utils';
 import { useTheme }  from 'react-native-paper';
-const Modals = memo(({Component,modalVisible,type,modalVisibleHandler,bottomView=true,onDelete,modalType='Primary'}) => {
+const Modals = ({Component,modalVisible,type,modalVisibleHandler,bottomView=true,onDelete,modalType='Primary'}) => {
   const { colors } = useTheme();
   return (
 
@@ -26,7 +26,7 @@ const Modals = memo(({Component,modalVisible,type,modalVisibleHandler,bottomView
       </TouchableWithoutFeedback>
     </Modal>
   );
-});
+};
 
 const styles = StyleSheet.create({
   Primary:{
@@ -85,4 +85,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Modals;
+export default memo(Modals);

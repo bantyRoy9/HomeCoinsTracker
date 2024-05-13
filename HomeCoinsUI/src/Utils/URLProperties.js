@@ -1,7 +1,7 @@
 let NODE_ENV = process.env.NODE_ENV,ApiContextURL = "https://homecoinstracker.banti.cloud";
-NODE_ENV="production";
+// NODE_ENV="production";
 if(NODE_ENV ==="development"){
-    ApiContextURL = "http://192.168.1.73:8000"
+    ApiContextURL = "http://192.168.1.5:8000"
 };
 console.log(ApiContextURL);
 const accountControllerURL = `${ApiContextURL}/api/v1/accountController`;

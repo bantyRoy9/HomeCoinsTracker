@@ -3,6 +3,7 @@ import axios from "axios";
 import { Alert } from "react-native";
 import { validEmail, validMobile } from "./Regex";
 import moment from "moment";
+import { logoutUser } from "../Redux/Action/userAction";
 
 export const catchAsync = (asyncFunc) => {
   return (dispatch, errorType, ...args) => {
@@ -54,12 +55,17 @@ export const getAxiosHeader = async () => {
   }
 };
 
-export const showAlert = (firstMsg, secondMsg) => {
+export const showAlert = (firstMsg, secondMsg,statusCode,dispatch) => {
   return Alert.alert(firstMsg, secondMsg,
     [
       {
         text: 'OK',
-        onPress: () => { return true },
+        onPress: () => { 
+          if(statusCode == 302){
+            dispatch(logoutUser())
+          }
+          return true 
+        },
         style: 'cancel',
       },
     ],

@@ -64,6 +64,18 @@ const Home = () => {
     setDatePickerVisible(false);
     setDateRange(prev => { return {...prev,['dateRange']:`${dateFormat}_${dateFormat}`}});
   };
+  const monthlyHandle = (date,navigation) =>{
+    let dateFormat = moment(`${date} ${dateRange.dateRange.split("-")[0]}`,"DD-MMMM-YYYY").format("YYYY-MM-DD");
+    topHomeNavList.forEach(el => {
+      if(el.label === navigation){
+        el.active=true;
+        el.dateRange=`${dateFormat}_${dateFormat}`;
+      }else{
+        el.active=false;
+      };
+    });
+    setDateRange(topHomeNavList.filter(el=>el.active)[0]);
+  };
   let date = dateRange.dateRange.split("_")[0],dateFormat={date:moment(new Date(date)).format("DD"),day:moment(new Date(date)).format("dddd"),month:moment(new Date(date)).format("MMMM"),year:moment(new Date(date)).format("YYYY")},isDaily=dateRange.label === "Daily"?true:false;
   return (
         <>
@@ -95,7 +107,7 @@ const Home = () => {
               <TouchableOpacity style={{padding:8}} onPress={()=>handleDateRange("next")}><FontAwesome name='chevron-right' color={colors.text} size={15}/></TouchableOpacity>
             </View>
           </View>
-          {dateRange.label === "Daily"? <><Daily dateRange={dateRange}/><View style={styles.expensEarnBtn}><FloatingActionBtn dateRange={dateRange.dateRange}/></View></> : <Monthly dateRange={dateRange}/>}</View>
+          {dateRange.label === "Daily"? <><Daily dateRange={dateRange}/><View style={styles.expensEarnBtn}><FloatingActionBtn dateRange={dateRange.dateRange}/></View></> : <Monthly dateRange={dateRange} monthlyHandle={monthlyHandle}/>}</View>
         </>
     
   );

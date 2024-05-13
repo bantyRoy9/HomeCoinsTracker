@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{memo} from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useSelector } from 'react-redux';
 import {CustomText} from '../../Components';
@@ -61,6 +61,6 @@ const ViewEarnExpend = ({viewData}) => {
   )
 }
 
-export default ViewEarnExpend
+export default memo(ViewEarnExpend)
 
 const styles = StyleSheet.create({})
