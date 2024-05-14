@@ -6,6 +6,7 @@ import moment from 'moment';
 import { getActivity } from '../../Redux/Action/activityAction';
 import { showAlert,stringTransform,defaultStyle } from '../../Utils';
 import { dateFormat, filterKeyIncludeArr, getElementByIndex } from '../../Utils/CommonAuthFunction';
+import DataNotFound from '../../Components/DataNotFound';
 
 const Activity = () => {
     const dispatch = useDispatch(),
@@ -23,8 +24,8 @@ const Activity = () => {
     
     return (
         <>{isLoading ? <View style={defaultStyle.activityIndicator}><ActivityIndicator size="large" color={colors.text} /></View> :
-                <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={defaultStyle.screenContainer}>
-                        {activity && activity.data && activity?.data.map((el, idx) => (
+            (activity && activity.data && activity.data.length) ? <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={defaultStyle.screenContainer}>
+                        {activity.data.map((el, idx) => (
                             <View key={idx}>
                                 <Pressable style={{...styles.activityLists,borderBottomColor:colors.border,borderBottomWidth:activity.data.length - 1 > idx?1:0}}>
                                     <View style={styles.activityList}>
@@ -60,7 +61,7 @@ const Activity = () => {
                                 </Pressable>
                             </View>
                         ))}
-                </ScrollView>
+                </ScrollView> : <DataNotFound />
             }
         </>
     )

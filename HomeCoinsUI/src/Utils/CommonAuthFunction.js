@@ -55,17 +55,12 @@ export const getAxiosHeader = async () => {
   }
 };
 
-export const showAlert = (firstMsg, secondMsg,statusCode,dispatch) => {
+export const showAlert = (firstMsg, secondMsg,cb) => {
   return Alert.alert(firstMsg, secondMsg,
     [
       {
         text: 'OK',
-        onPress: () => { 
-          if(statusCode == 302){
-            dispatch(logoutUser())
-          }
-          return true 
-        },
+        onPress: cb,
         style: 'cancel',
       },
     ],

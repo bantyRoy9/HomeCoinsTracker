@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import moment from 'moment';
 import { useDispatch,useSelector } from 'react-redux';
-import { defaultStyle,updateErrors,validateForm } from '../../Utils';
+import { defaultStyle,showAlert,updateErrors,validateForm } from '../../Utils';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
 import {Input,DatePicker, SelectPicker, Modals} from '../../Components';
 import Button from '../../Components/Button';
@@ -21,7 +21,13 @@ const AddExpend = ({navigation,editData,...props}) => {
   const [details, setDetails] = useState(initialState);
   const [errors,setErrors] = useState({});
   const [modalVisible,setModalVisible]=useState(false);
-  
+  useEffect(()=>{
+    if(expendType && !expendType.length){
+      showAlert("Need to create expend type.","",()=>{
+        setModalVisible(true);
+      })
+    }
+  },[])
   const changeHandler = (name, value) => {
     setErrors(updateErrors(errors,name));
     setDetails({ ...details, [name]: value })

@@ -60,7 +60,7 @@ const Input = ({
                   ...styles.inputBox,
                   ...backgroundStyle,
                 }}
-                placeholderTextColor={colors.text}
+                placeholderTextColor={colors.placeholderColor}
                 activeUnderlineColor={colors.text}
                 underlineColor={colors.text}
                 textColor={colors.text}

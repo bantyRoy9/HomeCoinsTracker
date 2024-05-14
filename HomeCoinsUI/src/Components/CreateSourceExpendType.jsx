@@ -75,7 +75,8 @@ const CreateSourceExpendType = ({modalVisibleHandler,pageType}) => {
             helperType={'error'}
         /> : <Input
         key={'expend Type'}
-        placeholder={'Expend Type'}
+        placeholder={'e.g market, education ..'}
+        label={"Enter expend type"}
         name={'expendType'}
         icons={'barcode'}
         value={pageDetails.details?.expendType}
@@ -90,6 +91,7 @@ const CreateSourceExpendType = ({modalVisibleHandler,pageType}) => {
       <Input
         key={`${pageType}Name`}
         placeholder={`${stringTransform(pageType,'c')} Name`}
+        label={`Enter ${stringTransform(pageType,'l')} Name`}
         name={`${pageType}Name`}
         icons={'barcode'}
         value={pageDetails.details[`${pageType}Name`]}
@@ -102,8 +104,9 @@ const CreateSourceExpendType = ({modalVisibleHandler,pageType}) => {
         helperType={'error'}
       />
       {pageType === "source" && <Input
-        key={'Source Investmaent'}
-        placeholder={'Ex: 800000'}
+        key={'Source Investment'}
+        placeholder={'e.g. 8,00,000'}
+        label={"Enter investment amount"}
         name={'sourceInv'}
         icons={'barcode'}
         keyboardType={'decimal-pad'}

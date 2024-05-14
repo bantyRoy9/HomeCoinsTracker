@@ -61,7 +61,7 @@ export const createUser =(userDetails,navigation)=> async(dispatch) => {
 export const getAllUser = async(dispatch)=>{
     try{
         dispatch({type:ALL_USER_REQUIEST});
-        const resData = await axios.get(`${userControllerURL}/users`,getAxiosHeaderWithoutCookie());
+        const resData = await axios.get(`${userControllerURL}/users`,getAxiosHeader());
         if(resData && resData.status === 200){
             dispatch({type:ALL_USER_SUCCESS,payload:data.data});
         }else{

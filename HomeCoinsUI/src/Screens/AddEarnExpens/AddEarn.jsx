@@ -5,7 +5,7 @@ import moment from 'moment';
 import { addEarnExpend } from '../../Redux/Action/accountAction';
 import { getMemberList } from '../../Redux/Action/memberAction';
 import { DatePicker, Input, SelectPicker,Button, Modals } from '../../Components';
-import { defaultStyle,updateErrors,validateForm,filterKeyIncludeArr,getElementByIndex } from '../../Utils';
+import { defaultStyle,updateErrors,validateForm,filterKeyIncludeArr,getElementByIndex, showAlert } from '../../Utils';
 import CreateSourceExpendType from '../../Components/CreateSourceExpendType';
 
 const AddEarn = ({navigation,editData,...props}) => {
@@ -30,6 +30,11 @@ const AddEarn = ({navigation,editData,...props}) => {
     let userActive = getElementByIndex(filterKeyIncludeArr(member,"email",user.email),0);
     let sourceList = getElementByIndex(filterKeyIncludeArr(source,"sourceName","Auto"),0);
     (userActive || sourceList ) && !editData && setDetails({...details,earnBy:userActive._id,source:sourceList?._id});
+    if(source && !source.length){
+      showAlert("Need to create earning source.","",()=>{
+        setModalVisible(true);
+      })
+    }
   },[]);
 
   const modalVisibleHandler =()=>{
@@ -52,8 +57,8 @@ const AddEarn = ({navigation,editData,...props}) => {
     setDetails({ ...details, ["date"]: moment(new Date(date)).format('YYYY-MM-DD')});
   };
   const selectPickerChangleHandler = (e,selectType) =>{
-    setErrors(updateErrors(errors,selectType));
-    setDetails({ ...details, [selectType]: e});
+      setErrors(updateErrors(errors,selectType));
+      setDetails({ ...details, [selectType]: e});
   };
 
   const submitHandler = async (e) => {

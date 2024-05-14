@@ -54,7 +54,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
           </View>
           <View style={styles.pageTitle}>
             <Text style={{ ...styles.headerTitle, color: colors.text }}>{(isForgotPassword && !isOTPVerified)?"Forgot Password":(isForgotPassword && isOTPVerified)?"Reset Password":"Create Account"}</Text>
-            <Text style={{ ...styles.subHeaderTitle, color: colors.text }}>Please fill the deltai below here</Text>
+            <Text style={{ ...styles.subHeaderTitle, color: colors.text }}>Please fill the details below here</Text>
           </View>
           <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
             {(isForgotPassword && !isOTPVerified) ? <>
@@ -201,7 +201,7 @@ const Signup = ({ navigation,route: { params :{ isForgotPassword,isOTPVerified,O
             <View style={{ position: 'relative', height: 30 }}>
               <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignContent: 'center' }}>
-                  <Text style={{ fontSize: 16, color: backgroundStyle.color }}>{isForgotPassword?"Don't want to rest password?":"Allready have an accounts?"} </Text><Text onPress={() => navigation.navigate('Login')} style={{ color: colors.text, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Login</Text>
+                  <Text style={{ fontSize: 16, color: backgroundStyle.color }}>{isForgotPassword?"Don't want to rest password?":"Already have an account?"} </Text><Text onPress={() => navigation.navigate('Login')} style={{ color: colors.text, fontSize: 16, fontWeight: 600, textDecorationLine: 'underline' }}>Login</Text>
                 </View>
               </View>
             </View>
