@@ -53,7 +53,8 @@ exports.verifyCreatedUserOTP = catchAsync(async (req, res, next) => {
 });
  
 exports.loginUser = catchAsync(async (req, res, next) => {
-    const { email, password, mobile } = req.body;
+    let { email, password, mobile } = req.body;
+    email = removeWhiteSpace(email,'L');
     if (!Object.keys(req.body).includes('email')) {
         if (!mobile || !password) {
             return next(new AppError('Please fill both Mobile no & password ', 401));
@@ -91,17 +92,16 @@ exports.protect = catchAsync(async (req, res, next) => {
         token = req.headers.cookie.split('=')[1];
     };
     if (!token) {
-        return next(new AppError('you are not login! please Login', 401));
+        return next(new AppError('you are not login! please Login', 403));
     };
-    console.log(token);
     const decoder = await promisify(jwt.verify)(token, process.env.jwt_secret);
     const currentUser = await User.findById(decoder.id);
     if (!currentUser) {
-        return next(new AppError('The user belongs to this email is no longer exist', 401));
+        return next(new AppError('The user belongs to this email is no longer exist', 403));
     };
     // iat is key of decoder object which show time in ms
     if (currentUser.changePasswordAfter(decoder.iat)) {
-        return next(new AppError('User recently changed password! please login again!!', 401));
+        return next(new AppError('User recently changed password! please login again!!', 403));
     };
     req.user = currentUser;
     // send data into pug
@@ -118,15 +118,15 @@ exports.isLoggedIn = async (req, res, next) => {
         token = req.headers.cookie.split('=')[1];
     };
     if (!token) {
-        return next(new AppError('you are not login! please Login', 401));
+        return next(new AppError('you are not login! please Login', 403));
     };
     const decoder = await promisify(jwt.verify)(req.cookies.jwt, process.env.jwt_secret);
     const currentUser = await User.findById(decoder.id);
     if (!currentUser) {
-        return next(new AppError('The user belongs to this Id token is no longer exist', 401));
+        return next(new AppError('The user belongs to this Id token is no longer exist', 403));
     };
     if (currentUser.changePasswordAfter(decoder.iat)) {
-        return next(new AppError('User recently changed password! please login again!!', 401));
+        return next(new AppError('User recently changed password! please login again!!', 403));
     };
     res.user = currentUser;
     next();
