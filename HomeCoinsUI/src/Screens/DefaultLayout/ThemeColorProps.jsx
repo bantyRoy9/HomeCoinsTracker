@@ -17,6 +17,7 @@ export const defaultTheme = {
     btnSecondaryBackground: 'rgba(1, 66, 131,.1)',
     btnPrimaryColor: 'rgb(255, 255, 255)',
     btnSecondaryColor: 'rgb(1, 1, 1)',
+    placeholderColor:"#8e8e8e",
 
     modalPrimaryBackground:'rgb(255, 255, 255)',
     modalSecondaryBackground:'rgb(255, 255, 255)',
@@ -52,6 +53,8 @@ export const darkTheme = {
     btnSecondaryColor: 'rgb(240, 240, 240)',
     btntertiaryBackground: 'rgb(240, 240, 240)',
     btntertiaryColor:'rgb(240, 240, 240)',
+    placeholderColor:"#8e8e8e",
+    
     success: 'rgb(34, 119, 0)',
     successOverlay:'rgba(34, 119, 0,0.2)',
     warning: 'rgb(159, 96, 0)',

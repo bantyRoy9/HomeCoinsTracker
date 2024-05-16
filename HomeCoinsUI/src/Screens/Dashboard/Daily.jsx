@@ -55,7 +55,7 @@ const Daily = () => {
     const renderList = useCallback((list, type) => list.length && list.map((el, idx) => (
       <Pressable key={idx + type} onPress={() => modalVisibleHandler(type, el,false)} onLongPress={()=>modalVisibleHandler(type,el,true)}>
         <View style={bodyStyle}>
-          <Text style={{ color: colors.text }}>{el.createdBy ? (el.createdBy === user._id || user.role === "admin") ? <Text>🟢 </Text>:"": (el.expendBy === user._id || user.role === "admin") ? <Text>🔴 </Text>:""}{stringTransform(type === "Earn" ? getElementByIndex(filterKeyIncludeArr(source, "_id", el.source), 0, "sourceName") : el.description, 'c')}</Text>
+          <Text style={{ color: colors.text }}>{el.createdBy ? (el.createdBy === user?._id || user?.role === "admin") ? <Text>🟢 </Text>:"": (el.expendBy === user?._id || user?.role === "admin") ? <Text>🔴 </Text>:""}{stringTransform(type === "Earn" ? getElementByIndex(filterKeyIncludeArr(source, "_id", el.source), 0, "sourceName") : el.description, 'c')}</Text>
           <Text style={{ color: colors.text }}>₹{parseFloat(el?.amount ?? 0).toFixed(2)}</Text>
         </View>
       </Pressable>
