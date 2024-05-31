@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { StyleSheet, Pressable, Text, View, TouchableOpacity } from 'react-native'
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import DatePicker from 'react-native-date-picker';
 import { useTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEarnExpendData } from '../../Redux/Action/accountAction';
@@ -13,10 +14,12 @@ import Daily from './Daily';
 import Monthly from './Monthly';
 import { getSourceList } from '../../Redux/Action/sourceAction';
 import { getMemberList } from '../../Redux/Action/memberAction';
+import SelectDatePicker from '../../Components/SelectDatePicker';
 
 const Home = () => {
   const [dateRange, setDateRange] = useState(topHomeNavList.filter(el => el.active == true)[0]);
   const [datePickerVisible, setDatePickerVisible] = useState(false), dispatch = useDispatch(), { colors, dark } = useTheme();
+  const [dateModalVisible,setDateModalVisible]=useState(false);
   let { user } = useSelector(state=>state.user);
   const { account } = useSelector(state=>state.account);
   const { source,expendType } = useSelector(state=>state.source);
@@ -60,11 +63,15 @@ const Home = () => {
   };
 
   const handleConfirm = (date) => {
+    // console.log("");
     const dateFormat = moment(new Date(date)).format("YYYY-MM-DD");
     setDatePickerVisible(false);
     setDateRange(prev => { return {...prev,['dateRange']:`${dateFormat}_${dateFormat}`}});
   };
   const monthlyHandle = (date,navigation) =>{
+    if(!isDaily){
+      // dateModalVisible();
+    }
     let dateFormat = moment(`${date} ${dateRange.dateRange.split("-")[0]}`,"DD-MMMM-YYYY").format("YYYY-MM-DD");
     topHomeNavList.forEach(el => {
       if(el.label === navigation){
@@ -76,6 +83,14 @@ const Home = () => {
     });
     setDateRange(topHomeNavList.filter(el=>el.active)[0]);
   };
+  // const dateModalhandler =() =>{
+  //   // setDateModalVisible(!dateModalVisible)
+  //   console.log('work');
+  // }
+  const dateModalhandler = useCallback(() =>{
+    console.log("www");
+    setDatePickerVisible(prev=>!prev)
+  },[dateModalVisible])
   let date = dateRange.dateRange.split("_")[0],dateFormat={date:moment(new Date(date)).format("DD"),day:moment(new Date(date)).format("dddd"),month:moment(new Date(date)).format("MMMM"),year:moment(new Date(date)).format("YYYY")},isDaily=dateRange.label === "Daily"?true:false;
   return (
         <>
@@ -96,7 +111,8 @@ const Home = () => {
                       <Text style={{color:colors.text}}>{dateFormat.month} {dateFormat.year}</Text>
                       {isDaily &&<Text style={{color:colors.text}}>{dateFormat.day}</Text>}
                     </View>
-                    <DateTimePickerModal date={new Date(date)} isVisible={datePickerVisible} mode={'date'} onConfirm={handleConfirm} onCancel={hideDatePicker} maximumDate={new Date()} />
+                    <SelectDatePicker date={new Date(date)} datePickerVisible={datePickerVisible} mode={"monthly"} handleConfirm={handleConfirm} hideDatePicker={hideDatePicker} dateModalVisible={dateModalVisible} dateModalhandler={dateModalhandler} maximumDate={new Date()} />
+                    {/* <DateTimePickerModal date={new Date(date)} isVisible={datePickerVisible} mode={'date'} onConfirm={handleConfirm} onCancel={hideDatePicker} maximumDate={new Date()} /> */}
                 </Pressable>
             </View>
             <View style={{flexDirection:'row',alignItems:'center',gap:10}}>
