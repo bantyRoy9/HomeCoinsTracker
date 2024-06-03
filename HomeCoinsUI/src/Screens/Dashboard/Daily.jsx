@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, {memo, useEffect, useState, useCallback, useMemo } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { defaultStyle, stringTransform } from '../../Utils';
 import { useTheme } from 'react-native-paper';
@@ -91,4 +91,4 @@ const styles = StyleSheet.create({
     bodyTextStyle: { flexDirection: 'row', justifyContent: 'space-between', padding: 10 }
 });
 
-export default Daily;
+export default memo(Daily);

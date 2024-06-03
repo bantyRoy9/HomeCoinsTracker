@@ -147,3 +147,12 @@ export const updateArrByIndex = (arr,key,newElement) =>{
 export const removeElementByKey = (arr,key,value) =>{
   return arr.filter(el=>el[key] !== value);
 }
+export  const getMonthLists = (year) => {
+  const dateRanges = [];
+  for (let month = 0; month < 12; month++) {
+    const startDate = moment([year, month]).startOf('month').format('YYYY-MM-DD');
+    const endDate = moment([year, month]).endOf('month').format('YYYY-MM-DD');
+    dateRanges.push(`${startDate}_${endDate}`);
+  };
+  return dateRanges;
+};
