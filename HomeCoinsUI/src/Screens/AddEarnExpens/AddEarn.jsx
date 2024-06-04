@@ -77,6 +77,7 @@ const AddEarn = ({navigation,editData,...props}) => {
   };
 
   isLoading=false;
+  console.log(details?.source);
   return (
     <><View style={defaultStyle.screenContainer}>
       <View>

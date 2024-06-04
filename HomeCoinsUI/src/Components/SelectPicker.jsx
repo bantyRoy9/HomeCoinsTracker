@@ -5,7 +5,17 @@ import { useTheme,HelperText } from 'react-native-paper'
 import Icons from 'react-native-vector-icons/FontAwesome'
 import { defaultStyle } from '../Utils'
 
-const SelectPicker = (props) => {
+const SelectPicker = ({
+  placeholder,
+  onValueChange,
+  value,
+  items,
+  key,
+  icon,
+  isHelper,
+  helperType,
+  errorMsg,
+}) => {
   const { colors } = useTheme();
   const backgroundStyle = {
     backgroundColor: colors.background,
@@ -14,11 +24,11 @@ const SelectPicker = (props) => {
   return (
     <View style={defaultStyle.selectpickerContainer}>
       <RNPickerSelect
-        placeholder={{label:props?.placeholder,value: null,color: colors.text}}
-        items={props.items} 
-        onValueChange={props?.onValueChange}
-        itemKey={props.key}
-        value={props?.value}
+        placeholder={{label:placeholder,value: null,color: colors.text}}
+        items={items} 
+        onValueChange={onValueChange}
+        itemKey={key}
+        value={value}
         textInputProps={{}}
         style={{
           ...pickerSelectStyles,
@@ -35,10 +45,10 @@ const SelectPicker = (props) => {
             color:colors.text,
           },
         }}
-        Icon={()=> <Icons name={props.icon} size={20} color={colors.text}/>}
+        Icon={()=> <Icons name={icon} size={20} color={colors.text}/>}
         
       /> 
-      {props.isHelper && <HelperText type={props.helperType}>{props.errorMsg}</HelperText>}
+      {isHelper && <HelperText type={helperType}><Text>{errorMsg}</Text></HelperText>}
     </View>
   )
 }

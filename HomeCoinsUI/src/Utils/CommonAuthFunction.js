@@ -146,13 +146,20 @@ export const updateArrByIndex = (arr,key,newElement) =>{
 
 export const removeElementByKey = (arr,key,value) =>{
   return arr.filter(el=>el[key] !== value);
+};
+export const getYearLists = (max,min) => {
+  let years =[];
+  for (let i = max; i > min; i--) {
+    years.push(max--);
+  }
+  return years
 }
-export  const getMonthLists = (year) => {
+export  const getMonthLists = (year,type) => {
   const dateRanges = [];
   for (let month = 0; month < 12; month++) {
     const startDate = moment([year, month]).startOf('month').format('YYYY-MM-DD');
     const endDate = moment([year, month]).endOf('month').format('YYYY-MM-DD');
-    dateRanges.push(`${startDate}_${endDate}`);
+    type.toLowerCase() === "d"? dateRanges.push(`${startDate}_${endDate}`):dateRanges.push(moment().month(month).format("MMMM"));
   };
   return dateRanges;
 };
