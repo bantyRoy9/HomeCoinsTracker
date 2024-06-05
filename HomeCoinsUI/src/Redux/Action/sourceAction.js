@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getAxiosHeader, showAlert, sourceControllerURL } from "../../Utils";
+import { logoutUser } from "./userAction";
 
 export const getSourceList = (urlType,details) => async(dispatch)=>{
     const urlConstant = urlType.toUpperCase();
@@ -11,7 +12,11 @@ export const getSourceList = (urlType,details) => async(dispatch)=>{
         let { data } = await axios[method](`${sourceControllerURL}/${urlType}`,reqBody,await getAxiosHeader());
         dispatch({type:`GET_${urlConstant}_RESPONSE`,payload:{data:data.data,method}});
     }catch(err){
-        showAlert(err?.response?.data.msg??"Something wrong happend")
+        showAlert(err?.response?.data.msg??"Something wrong happend","403",()=>{
+            if(err?.response?.data.statusCode==403){
+                dispatch(logoutUser())
+            }
+        })
         dispatch({type:`GET_${urlConstant}_FAIL`,payload:[]});
     }
 };

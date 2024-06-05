@@ -68,11 +68,10 @@ const Home = () => {
     setDatePickerVisible(false);
     setDateRange(prev => { return {...prev,['dateRange']:`${dateFormat}_${dateFormat}`}});
   };
-  const monthlyHandle = (date,navigation) =>{
-    if(!isDaily){
-      // dateModalVisible();
-    }
+  const monthlyHandle = useCallback((date,navigation) =>{
+    console.log(date,"date");
     let dateFormat = moment(`${date} ${dateRange.dateRange.split("-")[0]}`,"DD-MMMM-YYYY").format("YYYY-MM-DD");
+   console.log(dateFormat);
     topHomeNavList.forEach(el => {
       if(el.label === navigation){
         el.active=true;
@@ -82,13 +81,12 @@ const Home = () => {
       };
     });
     setDateRange(topHomeNavList.filter(el=>el.active)[0]);
-  };
+  },[dateRange]);
   // const dateModalhandler =() =>{
   //   // setDateModalVisible(!dateModalVisible)
   //   console.log('work');
   // }
   const dateModalhandler = useCallback(() =>{
-    console.log("www");
     setDatePickerVisible(prev=>!prev)
   },[dateModalVisible])
   let date = dateRange.dateRange.split("_")[0],dateFormat={date:moment(new Date(date)).format("DD"),day:moment(new Date(date)).format("dddd"),month:moment(new Date(date)).format("MMMM"),year:moment(new Date(date)).format("YYYY")},isDaily=dateRange.label === "Daily"?true:false;
@@ -111,7 +109,7 @@ const Home = () => {
                       <Text style={{color:colors.text}}>{dateFormat.month} {dateFormat.year}</Text>
                       {isDaily &&<Text style={{color:colors.text}}>{dateFormat.day}</Text>}
                     </View>
-                    <SelectDatePicker date={new Date(date)} datePickerVisible={datePickerVisible} mode={"monthly"} handleConfirm={handleConfirm} hideDatePicker={hideDatePicker} dateModalVisible={dateModalVisible} dateModalhandler={dateModalhandler} maximumDate={new Date()} />
+                    <SelectDatePicker date={new Date(date)} datePickerVisible={datePickerVisible} mode={dateRange.label} handleConfirm={handleConfirm} hideDatePicker={hideDatePicker} dateModalVisible={dateModalVisible} dateModalhandler={dateModalhandler} maximumDate={new Date()} />
                     {/* <DateTimePickerModal date={new Date(date)} isVisible={datePickerVisible} mode={'date'} onConfirm={handleConfirm} onCancel={hideDatePicker} maximumDate={new Date()} /> */}
                 </Pressable>
             </View>

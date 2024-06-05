@@ -1,5 +1,5 @@
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect,memo } from 'react'
 import { FeatherIcons, FontAwesome, defaultStyle, homeNavList } from '../../Utils'
 import { Chart, DataTable } from '../../Components'
 import { useTheme } from 'react-native-paper'
@@ -8,7 +8,7 @@ const Monthly = ({dateRange,monthlyHandle}) => {
     const { colors } = useTheme();
     const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
     let { isLoading, account } = useSelector(state => state.account);
-    console.log(account.graphData.datasets,"************");
+    console.log(dateRange,"************");
     useEffect(()=>{
       if(dateRange.label === "Yearly" && account.graphData && account.graphData.labels && account.graphData.labels.length ){
         let date = account.graphData.labels[0]?.split(" ")[1],label=[date],obj={};
@@ -67,7 +67,7 @@ const Monthly = ({dateRange,monthlyHandle}) => {
   )
 }
 
-export default Monthly
+export default memo(Monthly)
 
 
 const styles = StyleSheet.create({
