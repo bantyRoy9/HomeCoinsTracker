@@ -14,7 +14,7 @@ import Daily from './Daily';
 import Monthly from './Monthly';
 import { getSourceList } from '../../Redux/Action/sourceAction';
 import { getMemberList } from '../../Redux/Action/memberAction';
-import SelectDatePicker from '../../Components/SelectDatePicker';
+import {SelectDatePicker} from '../../Components/SelectDatePicker';
 
 const Home = () => {
   const [dateRange, setDateRange] = useState(topHomeNavList.filter(el => el.active == true)[0]);

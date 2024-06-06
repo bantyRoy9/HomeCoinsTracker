@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React,{ memo } from 'react'
 import RNPickerSelect from 'react-native-picker-select'
 import { useTheme,HelperText } from 'react-native-paper'
 import Icons from 'react-native-vector-icons/FontAwesome'
@@ -53,7 +53,7 @@ const SelectPicker = ({
   )
 }
 
-export default SelectPicker
+export default memo(SelectPicker)
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
