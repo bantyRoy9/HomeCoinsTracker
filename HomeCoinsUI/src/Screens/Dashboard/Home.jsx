@@ -14,7 +14,7 @@ import Daily from './Daily';
 import Monthly from './Monthly';
 import { getSourceList } from '../../Redux/Action/sourceAction';
 import { getMemberList } from '../../Redux/Action/memberAction';
-import SelectDatePicker from '../../Components/SelectDatePicker';
+import {SelectDatePicker} from '../../Components/SelectDatePicker';
 
 const Home = () => {
   const [dateRange, setDateRange] = useState(topHomeNavList.filter(el => el.active == true)[0]);
@@ -109,7 +109,6 @@ const Home = () => {
                       <Text style={{color:colors.text}}>{dateFormat.month} {dateFormat.year}</Text>
                       {isDaily &&<Text style={{color:colors.text}}>{dateFormat.day}</Text>}
                     </View>
-                    <SelectDatePicker date={new Date(date)} datePickerVisible={datePickerVisible} mode={dateRange.label} handleConfirm={handleConfirm} hideDatePicker={hideDatePicker} dateModalVisible={dateModalVisible} dateModalhandler={dateModalhandler} maximumDate={new Date()} />
                     {/* <DateTimePickerModal date={new Date(date)} isVisible={datePickerVisible} mode={'date'} onConfirm={handleConfirm} onCancel={hideDatePicker} maximumDate={new Date()} /> */}
                 </Pressable>
             </View>
@@ -122,6 +121,7 @@ const Home = () => {
             </View>
           </View>
           {dateRange.label === "Daily"? <><Daily dateRange={dateRange}/><View style={styles.expensEarnBtn}><FloatingActionBtn dateRange={dateRange.dateRange}/></View></> : <Monthly dateRange={dateRange} monthlyHandle={monthlyHandle}/>}</View>
+          {datePickerVisible && <SelectDatePicker date={new Date(date)} datePickerVisible={datePickerVisible} mode={dateRange.label} handleConfirm={handleConfirm} hideDatePicker={hideDatePicker} dateModalVisible={dateModalVisible} dateModalhandler={dateModalhandler} maximumDate={new Date()} />}
         </>
     
   );
