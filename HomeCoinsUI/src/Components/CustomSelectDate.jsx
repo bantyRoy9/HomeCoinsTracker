@@ -26,7 +26,7 @@ const CustomSelectDateModal = ({mode}) => {
     return (
       <View style={styles.container}>
         <View>
-         <SelectPicker value={"2023"} placeholder={"Select Year"} icon={'calendar'} items={yearLists.map(el=>({label:el,value:el}))} onValueChange={(e)=>onValueChange(e,"year")}/>
+         <SelectPicker placeholder={"Select Year"} icon={'calendar'} items={yearLists.map(el=>({label:el,value:el}))} onValueChange={(e)=>onValueChange(e,"year")}/>
         </View>
         <View>
           <View>
