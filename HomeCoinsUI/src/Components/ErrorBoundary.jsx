@@ -17,7 +17,6 @@ class ErrorBoundary extends React.Component {
     console.error('Error caught by ErrorBoundary:', error);
   }
   render() {
-      console.log('lorem',this.state);
     if (this.state.hasError) {
       return (
         <View>

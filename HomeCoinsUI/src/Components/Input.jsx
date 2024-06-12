@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, useColorScheme } from 'react-native'
-import React, { useState,useRef } from 'react'
+import React, { useState,useRef, memo } from 'react'
 import { HelperText, TextInput, useTheme } from 'react-native-paper';
 import { FontAwesome, FontAwesome5 } from '../Utils';
 const Input = ({
@@ -87,7 +87,7 @@ const Input = ({
   )
 }
 
-export default Input
+export default memo(Input)
 
 const styles = StyleSheet.create({
     inputContainer:{

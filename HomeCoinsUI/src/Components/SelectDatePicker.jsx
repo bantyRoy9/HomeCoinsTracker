@@ -1,10 +1,9 @@
 import {StyleSheet, Text, View,FlatList, Pressable} from 'react-native';
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { Modals } from '.';
-import CustomSelectDate from './CustomSelectDate';
+import { CustomSelectDate, Modals } from '.';
 
-export const SelectDatePicker = ({
+const SelectDatePicker = ({
   mode,
   date,
   datePickerVisible,
@@ -24,16 +23,17 @@ export const SelectDatePicker = ({
           onCancel={hideDatePicker}
           maximumDate={new Date()}
         />:<Modals
-          Component={<CustomSelectDate mode={mode} />}
+          Component={<CustomSelectDate mode={mode} handleConfirm={handleConfirm}/>}
           modalVisible={datePickerVisible}
           modalVisibleHandler={dateModalhandler}
+          bottomView={false}
         />
       }
     </>
   );
 };
 
-// export default memo(SelectDatePicker);
+export default memo(SelectDatePicker);
 
 const styles = StyleSheet.create({
   container: {

@@ -1,5 +1,5 @@
 import {View, Text, Pressable, ActivityIndicator, StyleSheet, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, { memo } from 'react';
 import { useTheme } from 'react-native-paper';
 const Button = ({
   onPress,
@@ -25,7 +25,7 @@ const Button = ({
   );
 };
 
-export default Button;
+export default memo(Button);
 
 const styles = StyleSheet.create({
     button: {
