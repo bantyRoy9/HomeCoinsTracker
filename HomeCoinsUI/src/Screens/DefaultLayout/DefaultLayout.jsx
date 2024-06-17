@@ -23,7 +23,7 @@ const DefaultLayout = ({ Component,...props }) => {
         >
         <Component {...props}/>
       </ScrollView>
-      {props.isFlexCenter && props.route.name !=="Login" && <View><Header title={props.route.name}/></View>}
+      {/* {props.isFlexCenter && props.route.name !=="Login" && <View><Header title={props.route.name}/></View>} */}
     </SafeAreaView>
     </>
   );
