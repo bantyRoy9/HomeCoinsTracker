@@ -10,7 +10,7 @@ export const activityReducer=(state={activity:{}},action)=>{
             case ACTIVITY_SUCCESS:
                 return{
                     isLoading:false,
-                    activity:action.payload
+                    activity:[...state.activity, action.payload.data]
                 }
                 case ACTIVITY_FAIL:
                     return{

@@ -18,23 +18,14 @@ const AppNavigator = ({ userDetails }) => {
     <Stack.Navigator initialRouteName={(userDetails.cookie && userDetails.isGroupIncluded) ? "Home" : userDetails.cookie ? "CreateGroup" : "Login"}>
       {userDetails.cookie && userDetails.isGroupIncluded ? (
         <>
-           <Stack.Screen 
-            name="Dashboard" 
-            component={BottomNavigator} // Use BottomNavigator here
-            options={{ 
-              ...options, 
-              headerShown: false,
-              title: 'Dashboard', 
-              headerRight: () => <HeaderRightButton iconName="bell" theme={theme} notification={true}/> 
-            }} 
-          />
+            <Stack.Screen name="BottomNavigation" component={BottomNavigator} options={{ ...options, headerShown: false,title: 'Dashboard', headerRight: () => <HeaderRightButton iconName="bell" theme={theme} notification={true}/> }} />
+            <Stack.Screen name='AddEarn' component={AddEarn} options={{ ...options, title: 'Add earn' }} />
+            <Stack.Screen name='AddExpend' component={AddExpend} options={{ ...options, title: 'Add expend' }} />
+            <Stack.Screen name='EditProfile' component={EditProfile} options={{ ...options, title: 'Edit profile' }} />
           {/* <Stack.Screen name="Home" component={Home} options={{ ...options, title: 'Dashboard', headerRight: () => <HeaderRightButton iconName="bell" theme={theme} notification={true}/> }} /> */}
-          <Stack.Screen name='AddEarn' component={AddEarn} options={{ ...options, title: 'Add earn' }} />
-          <Stack.Screen name='AddExpend' component={AddExpend} options={{ ...options, title: 'Add expend' }} />
           {/* <Stack.Screen name='Activity' component={Activity} options={{ ...options, title: 'Activity' }} /> */}
           {/* <Stack.Screen name='Member' component={Members} options={{ ...options, title: 'Members' }} /> */}
           {/* <Stack.Screen name='Profile' component={Profile} options={{ ...options, title: 'Profile', headerRight: () => <HeaderRightButton iconName="user-edit" onPress={editProfile} theme={theme}/> }} /> */}
-          <Stack.Screen name='EditProfile' component={EditProfile} options={{ ...options, title: 'Edit profile' }} />
         
         </>
       ) : userDetails.cookie ? (

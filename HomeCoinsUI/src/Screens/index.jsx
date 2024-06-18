@@ -9,7 +9,7 @@ const Profile = (props) => <DefaultLayout Component={lazy(()=>import("./Users/Pr
 
 const Home = (props) => <DefaultLayout Component={HomeComponent} {...props} isFlexCenter={true} />
 const Members = (props) => <DefaultLayout Component={lazy(()=>import("./Members/Members"))} {...props} isFlexCenter={true}/>
-const Activity = (props) => <DefaultLayout Component={lazy(()=>import("./Activity/Activity"))} {...props} isFlexCenter={true}/>
+const Activity = (props) => <DefaultLayout Component={lazy(()=>import("./Activity/Activity"))} {...props} isFlexCenter={true} isFlatList={true}/>
 const AddEarn = (props) => <DefaultLayout Component={lazy(()=>import("./AddEarnExpens/AddEarn"))} {...props} />
 const AddExpend = (props) => <DefaultLayout Component={lazy(()=>import("./AddEarnExpens/AddExpend"))} {...props}/>
 const CreateGroup = (props) => <DefaultLayout Component={lazy(()=>import("./CreateGroup/CreateGroup"))} {...props} />
