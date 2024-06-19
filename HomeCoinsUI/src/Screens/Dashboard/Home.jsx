@@ -1,20 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { StyleSheet, Pressable, Text, View, TouchableOpacity } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import DatePicker from 'react-native-date-picker';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import { FloatingActionBtn, SelectDatePicker } from '../../Components';
 import { getEarnExpendData } from '../../Redux/Action/accountAction';
-import { FontAwesome,defaultStyle,topHomeNavList } from '../../Utils';
-import { FloatingActionBtn } from '../../Components';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getMemberList } from '../../Redux/Action/memberAction';
+import { getSourceList } from '../../Redux/Action/sourceAction';
 import { USER_SUCCCESS } from '../../Redux/constants';
+import { FontAwesome, defaultStyle, topHomeNavList } from '../../Utils';
 import Daily from './Daily';
 import Monthly from './Monthly';
-import { getSourceList } from '../../Redux/Action/sourceAction';
-import { getMemberList } from '../../Redux/Action/memberAction';
-import {SelectDatePicker} from '../../Components/SelectDatePicker';
 
 const Home = () => {
   const [dateRange, setDateRange] = useState(topHomeNavList.filter(el => el.active == true)[0]);
@@ -62,16 +59,16 @@ const Home = () => {
     setDatePickerVisible(false);
   };
 
-  const handleConfirm = (date) => {
-    // console.log("");
-    const dateFormat = moment(new Date(date)).format("YYYY-MM-DD");
+  const handleConfirm = (date,navType) => {
+    let dateFormat = moment(new Date(date)).format("YYYY-MM-DD");
+    if(navType !== "Daily"){
+      dateFormat = date;
+    }
     setDatePickerVisible(false);
     setDateRange(prev => { return {...prev,['dateRange']:`${dateFormat}_${dateFormat}`}});
   };
   const monthlyHandle = useCallback((date,navigation) =>{
-    console.log(date,"date");
     let dateFormat = moment(`${date} ${dateRange.dateRange.split("-")[0]}`,"DD-MMMM-YYYY").format("YYYY-MM-DD");
-   console.log(dateFormat);
     topHomeNavList.forEach(el => {
       if(el.label === navigation){
         el.active=true;
@@ -82,10 +79,7 @@ const Home = () => {
     });
     setDateRange(topHomeNavList.filter(el=>el.active)[0]);
   },[dateRange]);
-  // const dateModalhandler =() =>{
-  //   // setDateModalVisible(!dateModalVisible)
-  //   console.log('work');
-  // }
+
   const dateModalhandler = useCallback(() =>{
     setDatePickerVisible(prev=>!prev)
   },[dateModalVisible])

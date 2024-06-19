@@ -7,7 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
-import AppNavigator from './Navigation/appNavigator';
+import AppNavigator from './Navigation/AppNavigator';
 
 const App = () => {
   const [userDetails, setUserDetails] = useState(null);

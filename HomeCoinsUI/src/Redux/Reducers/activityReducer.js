@@ -1,21 +1,22 @@
 import { ACTIVITY_FAIL, ACTIVITY_REQUIEST, ACTIVITY_SUCCESS } from "../constants";
 
-export const activityReducer=(state={activity:{}},action)=>{
+export const activityReducer=(state={activity:[]},action)=>{
     switch(action.type){
         case ACTIVITY_REQUIEST:
             return {
                 isLoading:true,
-                activity:null
+                activity:state.activity
             }
             case ACTIVITY_SUCCESS:
+                debugger
                 return{
                     isLoading:false,
-                    activity:action.payload
+                    activity:[...state.activity, ...action.payload]
                 }
                 case ACTIVITY_FAIL:
                     return{
                         isLoading:false,
-                        activity:null
+                        activity:[]
                     }
         default:
             return state

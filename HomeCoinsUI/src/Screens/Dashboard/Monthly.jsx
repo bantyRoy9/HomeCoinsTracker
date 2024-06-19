@@ -8,7 +8,6 @@ const Monthly = ({dateRange,monthlyHandle}) => {
     const { colors } = useTheme();
     const backgroundStyle = {backgroundColor: colors.background,color: colors.text};
     let { isLoading, account } = useSelector(state => state.account);
-    console.log(dateRange,"************");
     useEffect(()=>{
       if(dateRange.label === "Yearly" && account.graphData && account.graphData.labels && account.graphData.labels.length ){
         let date = account.graphData.labels[0]?.split(" ")[1],label=[date],obj={};
@@ -21,7 +20,6 @@ const Monthly = ({dateRange,monthlyHandle}) => {
             label.push(date)
           }
         });
-        console.log(label,obj);
       }
     },[account])
     return (

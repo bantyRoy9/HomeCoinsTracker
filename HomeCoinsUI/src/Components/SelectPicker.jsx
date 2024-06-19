@@ -21,6 +21,7 @@ const SelectPicker = ({
     backgroundColor: colors.background,
     color: colors.text
   };
+  console.log(value,items,"ddd");
   return (
     <View style={defaultStyle.selectpickerContainer}>
       <RNPickerSelect
