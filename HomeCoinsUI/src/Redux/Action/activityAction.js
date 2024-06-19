@@ -8,11 +8,13 @@ export const getActivity = (groupId, page = 1, limit = 30) => async (dispatch) =
         dispatch({ type: ACTIVITY_REQUIEST })
         console.log(`${activityControllerURL}/activity/${groupId}?page=${page}&limit=${limit}`);
         const { data } = await axios.get(`${activityControllerURL}/activity/${groupId}?page=${page}&limit=${limit}`, await getAxiosHeader());
-        console.log(data);
+        console.log(data.data);
+        debugger
         if (data) {
-            dispatch({ type: ACTIVITY_SUCCESS, payload: data });
+            dispatch({ type: ACTIVITY_SUCCESS, payload: data.data });
         }
     } catch (err) {
+        console.log(err,'ddddfasf');
         dispatch({ type: ACCOUNT_ADD_FAIL, payload: null });
     }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Pressable, ActivityIndicator, FlatList, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from 'react-native-paper';
@@ -20,9 +20,7 @@ const Activity = () => {
     useEffect(() => {
         loadData(page);
     }, [page]);
-    useLayoutEffect(()=>{
-        loadData(page);
-    },[])
+
     const loadData = async (page) => {
         try {
            dispatch(getActivity(user?.groupId, page));
@@ -47,8 +45,8 @@ const Activity = () => {
     };
 
     const renderItem = ({ item, index }) => (
-        <View key={index}>
-            <Pressable style={{ ...styles.activityLists, borderBottomColor: colors.border, borderBottomWidth: activity.data.length - 1 > index ? 1 : 0 }}>
+        <View key={index} style={defaultStyle.screenContainer}>
+            <Pressable style={{ ...styles.activityLists, borderBottomColor: colors.border, borderBottomWidth: activity.length - 1 > index ? 1 : 0 }}>
                 <View style={styles.activityList}>
                     <View style={styles.activityLeftSec}>
                         <View style={styles.activityProfileList}>
@@ -84,13 +82,13 @@ const Activity = () => {
             </Pressable>
         </View>
     );
-console.log(activity);
+    console.log(activity);
     return (
         <>
         {(activity && activity.length) ? (
             <>
                 <FlatList
-                    data={activity.data}
+                    data={activity}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={renderItem}
                     onEndReached={loadMoreData}

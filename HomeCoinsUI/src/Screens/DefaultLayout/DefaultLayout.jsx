@@ -16,7 +16,7 @@ const DefaultLayout = ({ Component,...props }) => {
         barStyle={'light-content'}
         backgroundColor={colors.HeaderBg}
       />
-      {props.isFlatList ?<Component {...props}/> : <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle} contentContainerStyle={{height:'100%'}}>
+      {props.isFlatList ? <Component {...props}/> : <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic" style={backgroundStyle} contentContainerStyle={props.isFlexCenter ? {justifyContent:'center',height:'100%'} : {height:'100%'}}>
         <Component {...props}/>
       </ScrollView>}
       {/* {props.isFlexCenter && props.route.name !=="Login" && <View><Header title={props.route.name}/></View>} */}
