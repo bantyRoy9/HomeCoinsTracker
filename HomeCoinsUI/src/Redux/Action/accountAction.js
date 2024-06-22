@@ -30,7 +30,7 @@ export const getEarnExpendData = (dateRange,groupId,isGraph=false)=> async(dispa
             dispatch({type:ACCOUNT_FAIL,payload:null});
           };
     }catch(err){
-        if(err.response && err.response.data){showAlert(err?.response?.data.msg??err)};
+        if(err.response && err.response.data){showAlert(err?.response?.data.msg??err)}; ``
         dispatch({type:ACCOUNT_FAIL,payload:null});
     }
 };
@@ -55,7 +55,3 @@ export const addEarnExpend = (details,urlType,navigation,modalDate) => async(dis
         dispatch({type:ACCOUNT_ADD_FAIL,payload:null});
     }
 };
-
-export const deleteEarnExpend = (details) => async(disptch)=>{
-
-}

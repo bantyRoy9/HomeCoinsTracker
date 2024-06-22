@@ -19,7 +19,7 @@ const SelectDatePicker = ({
           date={new Date(date)}
           isVisible={datePickerVisible}
           mode={'date'}
-          onConfirm={handleConfirm}
+          onConfirm={(date)=>handleConfirm(date,mode)}
           onCancel={hideDatePicker}
           maximumDate={new Date()}
         />:<Modals
