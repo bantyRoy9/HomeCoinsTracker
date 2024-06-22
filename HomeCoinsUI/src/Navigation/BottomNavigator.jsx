@@ -14,7 +14,7 @@ function BottomNavigator() {
     <Tab.Navigator initialRouteName="Home" screenOptions={{tabBarActiveTintColor:  theme.colors.headerBg}}>
         <Tab.Screen name="Home" component={Home} options={{...options,title: 'Dashboard',   tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="home" color={color} size={size} />)}}/>
         <Tab.Screen name="Members" component={Members} options={{...options,title: 'Members',   tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="account-group" color={color} size={size} />)}}/>
-        <Tab.Screen name="Activity" component={Activity} options={{...options, title: 'Updates', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="bell" color={color} size={size} />),tabBarBadge: 3}}/>
+        <Tab.Screen name="Activity" component={Activity} options={{...options, title: 'Activity', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="format-list-bulleted" color={color} size={size} />)/*,tabBarBadge: 3*/}}/>
         <Tab.Screen name="Profile" component={Profile} options={{...options, title: 'Profile', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="account" color={color} size={size} />)}}/>
     </Tab.Navigator>
   );

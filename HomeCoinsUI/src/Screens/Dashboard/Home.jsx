@@ -60,12 +60,12 @@ const Home = () => {
   };
 
   const handleConfirm = (date,navType) => {
-    let dateFormat = moment(new Date(date)).format("YYYY-MM-DD");
-    if(navType !== "Daily"){
-      dateFormat = date;
+    if(navType == "Daily"){
+      date = moment(new Date(date)).format("YYYY-MM-DD");
+      date = `${date}_${date}`;
     }
     setDatePickerVisible(false);
-    setDateRange(prev => { return {...prev,['dateRange']:`${dateFormat}_${dateFormat}`}});
+    setDateRange(prev => { return {...prev,['dateRange']:date}});
   };
   const monthlyHandle = useCallback((date,navigation) =>{
     let dateFormat = moment(`${date} ${dateRange.dateRange.split("-")[0]}`,"DD-MMMM-YYYY").format("YYYY-MM-DD");
@@ -103,7 +103,6 @@ const Home = () => {
                       <Text style={{color:colors.text}}>{dateFormat.month} {dateFormat.year}</Text>
                       {isDaily &&<Text style={{color:colors.text}}>{dateFormat.day}</Text>}
                     </View>
-                    {/* <DateTimePickerModal date={new Date(date)} isVisible={datePickerVisible} mode={'date'} onConfirm={handleConfirm} onCancel={hideDatePicker} maximumDate={new Date()} /> */}
                 </Pressable>
             </View>
             <View style={{flexDirection:'row',alignItems:'center',gap:10}}>
