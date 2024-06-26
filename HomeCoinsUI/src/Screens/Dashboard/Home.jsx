@@ -28,6 +28,7 @@ const Home = () => {
         user = JSON.parse(await AsyncStorage.getItem('user'));
         dispatch({type:USER_SUCCCESS,payload:user});
       };
+      
       dispatch(getEarnExpendData(dateRange.dateRange, user?.groupId ?? "",dateRange.label !== "Daily" ? true : false));
       source && !source.length && dispatch(getSourceList('source'));
       member && !member.length && dispatch(getMemberList(user.groupId));
