@@ -14,5 +14,6 @@ const AddEarn = (props) => <DefaultLayout Component={lazy(()=>import("./AddEarnE
 const AddExpend = (props) => <DefaultLayout Component={lazy(()=>import("./AddEarnExpens/AddExpend"))} {...props}/>
 const CreateGroup = (props) => <DefaultLayout Component={lazy(()=>import("./CreateGroup/CreateGroup"))} {...props} />
 const OtpVerification = (props) => <DefaultLayout Component={lazy(()=>import("./Users/OtpVerification"))} {...props}/>
+const ChatWithFamily = (props) => <DefaultLayout Component={lazy(()=>import('./ChatWithFamily/ChatWithFamily'))} {...props}/>
 
-export { EditProfile, Login, Profile, Signup,Home,Members,Activity,AddEarn,AddExpend,CreateGroup,OtpVerification}
+export { EditProfile, Login, Profile, Signup,Home,Members,Activity,AddEarn,AddExpend,CreateGroup,OtpVerification,ChatWithFamily}
