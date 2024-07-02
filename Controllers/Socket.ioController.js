@@ -14,7 +14,7 @@ const joinGroup = async (socket, { userId, groupId }) => {
 
 const sendNotification = async (io, { groupId, message }) => {
     try {
-        io.to(groupId).emit('receiveNotification', message);
+        io.emit('receiveNotification', message);
         console.log(`Notification sent to group ${groupId}: ${message}`);
     } catch (error) {
         console.error('Error sending notification:', error);

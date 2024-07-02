@@ -17,6 +17,6 @@ mongoose.connect(DB).then( connection =>{
 });
 // Initialize Socket.IO
 initializeSocket(server);
-app.listen(PORT,()=>{
+server.listen(PORT,()=>{
     console.log(`Server is running on ${PORT}`,process.env.NODE_ENV);
 });

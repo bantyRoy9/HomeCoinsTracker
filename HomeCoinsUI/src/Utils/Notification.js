@@ -3,12 +3,13 @@ import { ApiContextURL } from './URLProperties';
 
 class NotificationService {
     constructor() {
-        this.socket = null;
+        this.socket = io(ApiContextURL);
     }
 
     initialize(userId, groupId) {
-        this.socket = io(ApiContextURL);
-        this.socket.emit('joinGroup', { userId, groupId });
+        this.socket.on('connection', (socket)=>{
+            console.log(socket,"connected");
+        });
     }
 
     sendNotification(groupId, message) {
@@ -18,11 +19,11 @@ class NotificationService {
     }
 
     onNotification(callback) {
-        if (this.socket) {
+        
             this.socket.on('receiveNotification', (message) => {
+                console.log(message,"message");
                 callback(message);
             });
-        }
     }
 
     disconnect() {
