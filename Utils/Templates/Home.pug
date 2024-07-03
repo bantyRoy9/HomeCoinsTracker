@@ -57,13 +57,16 @@ form#form(action='')
 script(src='/socket.io/socket.io.js')
 script.
   const socket = io();
+      socket.on("receiveNotification",(message)=>{
+        console.log(message);
+      })
   const form = document.getElementById("form");
   const input = document.getElementById("input");
   const user = document.getElementById("user");
   form.addEventListener("submit", function (e) {
   e.preventDefault();
   if (input.value && user.value) {
-  socket.emit("chat_message", {
+  socket.emit("sendNotification", {
   message: input.value,
   user: user.value,
   });
