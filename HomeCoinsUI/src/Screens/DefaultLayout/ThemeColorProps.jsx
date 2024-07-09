@@ -30,6 +30,7 @@ export const defaultTheme = {
     loaderColor: 'rgb(254, 254, 254)',
     lightBackground: 'rgb(238, 238, 238)',
     surfaceVariant: 'rgba(1, 66, 131,.1)',
+    surfaceVariantBold:'rgba(1, 66, 131)',
   },
 };
 
@@ -64,5 +65,6 @@ export const darkTheme = {
     loaderColor: 'rgb(254, 254, 254)',
     lightBackground: 'rgb(238, 238, 238)',
     surfaceVariant: 'rgba(33, 33, 33,0.5)',
+    surfaceVariantBold:'rgba(33, 33, 33)',
   },
 };
