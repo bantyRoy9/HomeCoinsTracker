@@ -11,7 +11,7 @@ function BottomNavigator() {
     const theme = useTheme();
     const options = navigationOptions(theme);
   return (
-    <Tab.Navigator initialRouteName="Home" screenOptions={{tabBarActiveTintColor:  theme.colors.headerBg}}>
+    <Tab.Navigator initialRouteName="Home" screenOptions={{tabBarLabelPosition:'below-icon',headerBackgroundContainerStyle:{backgroundColor:'red'}, tabBarActiveTintColor: theme.colors.text,tabBarActiveBackgroundColor:"#3d3d3d",tabBarStyle:{backgroundColor:theme.colors.HeaderBg}}} sceneContainerStyle={{backgroundColor:'#3d3d3d',shadowColor:'red'}}>
         <Tab.Screen name="Home" component={Home} options={{...options,title: 'Dashboard',   tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="home" color={color} size={size} />)}}/>
         <Tab.Screen name="Members" component={Members} options={{...options,title: 'Members',   tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="account-group" color={color} size={size} />)}}/>
         <Tab.Screen name="Activity" component={Activity} options={{...options, title: 'Activity', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="format-list-bulleted" color={color} size={size} />)/*,tabBarBadge: 3*/}}/>

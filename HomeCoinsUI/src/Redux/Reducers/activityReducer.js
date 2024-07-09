@@ -8,7 +8,6 @@ export const activityReducer=(state={activity:[]},action)=>{
                 activity:state.activity
             }
             case ACTIVITY_SUCCESS:
-                debugger
                 return{
                     isLoading:false,
                     activity:[...state.activity, ...action.payload]
