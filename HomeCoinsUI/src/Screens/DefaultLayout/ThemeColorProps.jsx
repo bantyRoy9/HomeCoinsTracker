@@ -48,7 +48,7 @@ export const darkTheme = {
     HeaderBg: 'rgb(33, 33, 33)',
     HeaderText: 'rgb(254, 254, 254)',
     modalOverlayColor: 'rgba(33, 33, 33,0.8)',
-    btnPrimaryBackground: 'rgba(0,82,164, 0.5)',
+    btnPrimaryBackground: 'rgba(0,82,164, 0.9)',
     btnSecondaryBackground: 'rgba(33, 33, 33,0.5)',
     btnPrimaryColor: 'rgb(255, 255, 255)',
     btnSecondaryColor: 'rgb(240, 240, 240)',
@@ -66,5 +66,6 @@ export const darkTheme = {
     lightBackground: 'rgb(238, 238, 238)',
     surfaceVariant: 'rgba(33, 33, 33,0.5)',
     surfaceVariantBold:'rgba(33, 33, 33)',
+    modalPrimaryBackground:'rgb(240, 240, 240)',
   },
 };

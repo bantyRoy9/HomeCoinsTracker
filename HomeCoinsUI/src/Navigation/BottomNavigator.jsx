@@ -8,10 +8,10 @@ import { useTheme } from 'react-native-paper';
 const Tab = createBottomTabNavigator();
 
 function BottomNavigator() {
-    const theme = useTheme();
-    const options = navigationOptions(theme);
+    const {colors,dark} = useTheme();
+    const options = navigationOptions(colors);
   return (
-    <Tab.Navigator initialRouteName="Home" screenOptions={{tabBarLabelPosition:'below-icon', tabBarActiveTintColor: theme.colors.text,tabBarActiveBackgroundColor:theme.colors.HeaderText,tabBarStyle:{backgroundColor:theme.colors.HeaderBg}}} sceneContainerStyle={{backgroundColor:'#3d3d3d'}}>
+    <Tab.Navigator initialRouteName="Home" screenOptions={{tabBarLabelPosition:'below-icon', tabBarActiveTintColor: colors[dark?'HeaderText':'HeaderBg'],tabBarActiveBackgroundColor:colors.surfaceVariant,tabBarStyle:{backgroundColor:colors.background}}}>
         <Tab.Screen name="Home" component={Home} options={{...options,title: 'Dashboard',   tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="home" color={color} size={size} />)}}/>
         <Tab.Screen name="Members" component={Members} options={{...options,title: 'Members',   tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="account-group" color={color} size={size} />)}}/>
         <Tab.Screen name="Activity" component={Activity} options={{...options, title: 'Activity', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="format-list-bulleted" color={color} size={size} />)/*,tabBarBadge: 3*/}}/>

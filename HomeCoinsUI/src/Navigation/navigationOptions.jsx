@@ -1,7 +1,7 @@
-const navigationOptions = (theme) => ({
-    headerTintColor: theme.colors.HeaderText,
+const navigationOptions = (colors) => ({
+    headerTintColor: colors.HeaderText,
     headerStyle: {
-      backgroundColor: theme.colors.HeaderBg,
+      backgroundColor: colors.HeaderBg,
     },
     headerTitleStyle: {
       fontSize: 20,
