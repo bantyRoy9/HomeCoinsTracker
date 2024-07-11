@@ -8,8 +8,8 @@ import BottomNavigator from './BottomNavigator';
 
 const Stack = createNativeStackNavigator();
 const AppNavigator = ({ userDetails }) => {
-  const theme = useTheme();
-  const options = navigationOptions(theme);
+  const {colors} = useTheme();
+  const options = navigationOptions(colors);
   const editProfile = () =>{
 
   };
@@ -18,7 +18,7 @@ const AppNavigator = ({ userDetails }) => {
     <Stack.Navigator initialRouteName={(userDetails.cookie && userDetails.isGroupIncluded) ? "Home" : userDetails.cookie ? "CreateGroup" : "Login"}>
       {userDetails.cookie && userDetails.isGroupIncluded ? (
         <>
-            <Stack.Screen name="BottomNavigation" component={BottomNavigator} options={{ ...options, headerShown: false,title: 'Dashboard', headerRight: () => <HeaderRightButton iconName="bell" theme={theme} notification={true}/> }} />
+            <Stack.Screen name="BottomNavigation" component={BottomNavigator} options={{ ...options, headerShown: false,title: 'Dashboard', headerRight: () => <HeaderRightButton iconName="bell" colors={colors} notification={true}/> }} />
             <Stack.Screen name='AddEarn' component={AddEarn} options={{ ...options, title: 'Add earn' }} />
             <Stack.Screen name='AddExpend' component={AddExpend} options={{ ...options, title: 'Add expend' }} />
             <Stack.Screen name='EditProfile' component={EditProfile} options={{ ...options, title: 'Edit profile' }} />
@@ -31,10 +31,10 @@ const AppNavigator = ({ userDetails }) => {
       ) : userDetails.cookie ? (
         <>
           {/* Group creation or profile editing screens */}
-          <Stack.Screen name="CreateGroup" component={CreateGroup} options={({navigation})=>({ ...options, title: 'Create Group',headerRight: ()=> <HeaderRightButton iconName="user" onPress={()=> navigation.navigate('Profile')} theme={theme}/> })}/>
+          <Stack.Screen name="CreateGroup" component={CreateGroup} options={({navigation})=>({ ...options, title: 'Create Group',headerRight: ()=> <HeaderRightButton iconName="user" onPress={()=> navigation.navigate('Profile')} colors={colors}/> })}/>
           <Stack.Screen name="CreateNewGroup" component={CreateGroup} options={{...options,title:"Create new group"}} />
           <Stack.Screen name='ExistingGroup' component={CreateGroup} options={options} />
-          <Stack.Screen name='Profile' component={Profile} options={{ ...options, title:"Profile", headerRight: () => <HeaderRightButton iconName="user-edit" onPress={editProfile} theme={theme} /> }} />
+          <Stack.Screen name='Profile' component={Profile} options={{ ...options, title:"Profile", headerRight: () => <HeaderRightButton iconName="user-edit" onPress={editProfile} colors={colors} /> }} />
           <Stack.Screen name='OtpVerification' component={OtpVerification} options={{ ...options, title:"User verification" }} />
         </>
       ) : (

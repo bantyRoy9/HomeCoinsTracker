@@ -4,8 +4,8 @@ import { FontAwesome5 } from '../Utils';
 import { useTheme }  from 'react-native-paper';
 const Modals = ({Component,modalVisible,type,modalVisibleHandler,bottomView=true,onDelete,modalType='Primary'}) => {
   const { colors } = useTheme();
+  
   return (
-
     <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={modalVisibleHandler}>
       <TouchableWithoutFeedback onPress={modalVisibleHandler}>
         <View style={[styles.overlay,{backgroundColor:colors.modalOverlayColor}]}>
@@ -68,11 +68,11 @@ const styles = StyleSheet.create({
     width:'95%',
     height:'auto',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.5,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.5,
     shadowRadius: 14,
     elevation: 15
   },
