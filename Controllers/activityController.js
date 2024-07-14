@@ -1,5 +1,5 @@
 const moment = require("moment");
-const ActivityModels = require("../Model/ActivityModels/activityModel");
+const ActivityModels = require("../Models/ActivityModel/activityModel");
 const catchAsync = require("../Utils/catchAsync");
 const { sortArrayDataByDate } = require("../Utils/commonFunction");
 const { responseSend } = require("./authController");

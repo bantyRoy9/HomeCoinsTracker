@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "596479933473",
+    "project_id": "homecoinstracker-fc4e9",
+    "storage_bucket": "homecoinstracker-fc4e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:596479933473:android:9a216fdae42a777248f760",
+        "android_client_info": {
+          "package_name": "com.homecoinsui"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWS_kOzxTVygnyrB4kgGcRsr2HhIhdWVA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

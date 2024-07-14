@@ -6,6 +6,7 @@ import DataNotFound from '../../Components/DataNotFound';
 import { getActivity } from '../../Redux/Action/activityAction';
 import { defaultStyle, showAlert, stringTransform } from '../../Utils';
 import { dateFormat, filterKeyIncludeArr, getElementByIndex } from '../../Utils/CommonAuthFunction';
+import { viewHeight } from '../../Utils/defaultStyle';
 
 const Activity = () => {
     const dispatch = useDispatch();
@@ -14,6 +15,9 @@ const Activity = () => {
     const { user } = useSelector(state => state.user);
     const { source } = useSelector(state => state.source);
     const [page, setPage] = useState(1);
+    const [listHeight, setListHeight] = useState(0);
+    const [viewportHeight, setViewportHeight] = useState(viewHeight);
+
 
 console.log(isLoading);
     useEffect(() => {
@@ -81,22 +85,31 @@ console.log(isLoading);
             </Pressable>
         </View>
     );
-    console.log(activity,"activity");
+    const onLayout = (event) =>{
+        const { height } = event.nativeEvent.layout;
+        setListHeight(height);
+    }
     return (
         <>
         {(activity && activity.length>0) ? (
             <>
-                {/* <FlatList
+                <View  onLayout={onLayout} style={{ flex: 1 }}>
+                <FlatList
                     data={activity}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={renderItem}
-                    onEndReached={loadMoreData}
+                    onEndReached={()=>{
+                        // if(viewportHeight<listHeight){
+                           loadMoreData()
+                        // }
+                    }}
                     onEndReachedThreshold={0.5}
                     ListFooterComponent={renderFooter}
-                /> */}
-                {/* {(isLoading && page === 1) && <View style={defaultStyle.activityIndicator}>
+                />
+                {(isLoading && page === 1) && <View style={defaultStyle.activityIndicator}>
                     <ActivityIndicator size="large" color={colors.text} />
-                </View>} */}
+                </View>}
+                </View>
                 </>
             ) : (
                 <DataNotFound />

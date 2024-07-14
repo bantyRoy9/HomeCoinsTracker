@@ -15,6 +15,8 @@
     "@react-native-async-storage/async-storage": "^1.19.3",
     "@react-native-community/cli-doctor": "^11.3.7",
     "@react-native-community/datetimepicker": "^7.5.0",
+    "@react-native-firebase/app": "^20.1.0",
+    "@react-native-firebase/messaging": "^20.1.0",
     "@react-native-picker/picker": "^2.5.1",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.7",

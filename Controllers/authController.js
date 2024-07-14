@@ -1,4 +1,4 @@
-const User = require('../Model/UserModels/userSchema');
+const User = require('../Models/UserModel/userSchema');
 const crypto = require('crypto')
 const AppError = require('./../Utils/appError');
 const { promisify } = require('util')

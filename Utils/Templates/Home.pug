@@ -1,75 +1,92 @@
+doctype html
 head
-  title Socket.IO chat
-  style.
-    body {
-    margin: 0;
-    padding-bottom: 3rem;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif;
-    }
-    #form {
-    background: rgba(0, 0, 0, 0.15);
-    padding: 0.25rem;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    height: 3rem;
-    box-sizing: border-box;
-    backdrop-filter: blur(10px);
-    }
-    .input {
-    border: none;
-    padding: 0 1rem;
-    flex-grow: 1;
-    border-radius: 2rem;
-    margin: 0.25rem;
-    }
-    #input:focus {
-    outline: none;
-    }
-    #form > button {
-    background: #333;
-    border: none;
-    padding: 0 1rem;
-    margin: 0.25rem;
-    border-radius: 3px;
-    outline: none;
-    color: #fff;
-    }
-    #messages {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    }
-    #messages > li {
-    padding: 0.5rem 1rem;
-    }
-    #messages > li:nth-child(odd) {
-    background: #efefef;
-    }
-ul#messages
-form#form(action='')
-  input#user.input(placeholder='User name' autocomplete='off')
-  input#input.input(placeholder='Message' autocomplete='off')
-  button Send
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Document
+h1  Group chat 
+hr
+#login
+  form(onsubmit='login(event)')
+    label Name
+    input#inputName(type='text' placeholder='input your name')
+    button(type='submit') Submit
+#groups.isLoggedIn
+  h2  Join group 
+  ul
+    li(style='cursor: pointer;' onclick='joinGroup(`6643890fc3f530873a002ac6`)') Group 1
+    li(style='cursor: pointer;' onclick='joinGroup(`group 2`)') Group 2
+#chat.isLoggedIn
+  h2  Group 1 
+  ul
+    li  Dzakki: Hai there! 
+  form(onsubmit='sendMessage(event)')
+    label Message
+    input#message(type='text' placeholder='input your message')
+    button(type='submit') Submit
 script(src='/socket.io/socket.io.js')
+script(src='https://code.jquery.com/jquery-3.5.1.min.js' integrity='sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=' crossorigin='anonymous')
 script.
-  const socket = io();
-      socket.on("receiveNotification",(message)=>{
-        console.log(message);
-      })
-  const form = document.getElementById("form");
-  const input = document.getElementById("input");
-  const user = document.getElementById("user");
-  form.addEventListener("submit", function (e) {
-  e.preventDefault();
-  if (input.value && user.value) {
-  socket.emit("sendNotification", {
-  message: input.value,
-  user: user.value,
-  });
-  input.value = "";
+  const socket = io() // connect to socket
+  let groupId;
+  // if dom have ready
+  $(document).ready(function () {
+  if (localStorage.name) {
+  $("#login").hide()
+  $("#groups").show()
+  $("#chat").hide()
+  }else{
+  $("#login").show()
+  $(".isLoggedIn").hide()
   }
   });
+  const login = function (event) {
+  event.preventDefault()
+  const name = $("#inputName").val()
+  localStorage.setItem("name", name)
+  $("#login").hide()
+  $(".isLoggedIn").show()
+  }
+  const joinGroup = function (nameOfGroup) {
+  // check if user ever joined to other group
+  if (groupId) {
+  // leave previous gorup
+  socket.emit("leaveGroup", groupId)
+  } else {
+  // listen new message
+  newMessage()
+  }
+  groupId = nameOfGroup 
+  // join group
+  socket.emit("joinGroup", groupId)
+  // show dom for chat
+  $("#chat").show()
+  $("#chat h2").text(groupId)
+  $("#chat ul").empty()
+  }
+  const sendMessage = function (event) {
+  event.preventDefault()
+  const message = $("#message").val()
+  const senderId = localStorage.name
+  // append new message to dom
+  appendMessage(senderId, message)
+  // send message to group
+  socket.emit("sendMessage", {
+  senderId,
+  message,
+  groupId
+  })
+  // make input value be blank after send message
+  $("#message").val("")
+  }
+  const newMessage = function () {
+  // listen new message
+  socket.on("newMessage", function (result) {
+  // append new message to dom
+  appendMessage(result.senderId, result.message)
+  })
+  }
+  const appendMessage = function (senderId, msg) {
+  $("#chat ul").append(`
+  <li> ${senderId}: ${msg} </li>
+  `)
+  }

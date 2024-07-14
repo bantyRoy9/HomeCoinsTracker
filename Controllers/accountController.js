@@ -1,5 +1,5 @@
-const EarnModel = require("../Model/AccountModels/earnSchema");
-const ExpendModel = require("../Model/AccountModels/expendSchema");
+const EarnModel = require("../Models/AccountModel/earnSchema");
+const ExpendModel = require("../Models/AccountModel/expendSchema");
 const { graphData } = require("../Utils/commonFunction");
 const catchAsync = require("../Utils/catchAsync");
 const ApiFeature = require("../Utils/apiFeature");

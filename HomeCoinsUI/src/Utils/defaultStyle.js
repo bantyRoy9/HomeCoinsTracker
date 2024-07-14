@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions,PixelRatio } from 'react-native'
 
 const width = Dimensions.get("window").width - 40;
+export const viewHeight = Dimensions.get("window").height;
 const fontScale = PixelRatio.getFontScale();
 const getFontSize = size => size/fontScale;
 export const defaultStyle = StyleSheet.create({

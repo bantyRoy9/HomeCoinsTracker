@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
 import AppNavigator from './Navigation/AppNavigator';
+import messaging from '@react-native-firebase/messaging';
 
 const App = () => {
   const [userDetails, setUserDetails] = useState(null);
@@ -19,6 +20,12 @@ const App = () => {
       isActive: details[2][1]?.toLowerCase() === 'true'
     });
   };
+  const checkToken = async () => {
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+       console.log(fcmToken);
+    } 
+   };
   const { user } = useSelector(state=>state.user);
   const { group } = useSelector(state=>state.group);
 
@@ -26,6 +33,7 @@ const App = () => {
     fetchUserDetails().then(() => {
       SplashScreen.hide();
     });
+    checkToken();
   }, [user,group]);
 
   return (
