@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { createUser,verifyCreatedUserOTP, loginUser, protect, isLoggedIn, logout, restrictTo, resetPassword, forgotPassword,sendOTP } = require('../Controllers/authController');
+const { createUser,verifyCreatedUserOTP, loginUser, protect, isLoggedIn, logout, restrictTo, resetPassword, forgotPassword, sendOTP, setFcmToken } = require('../Controllers/authController');
 const { getUserDetails,getLoginUserDetails,getUsers, getUserLists  } = require('../Controllers/userController');
 
 router.post('/createUser',createUser);
@@ -14,9 +14,10 @@ router.use(protect);
 router.get('/getUserDetailById', getUserDetails);
 router.post('/sendOTP',sendOTP);
 router.get('/getUserLists',getUserLists);
+router.patch('/fcmtoken/:token',setFcmToken)
 
 router.use(restrictTo('admin'));
 router.route('/users').get(getUsers);
-router.route('/users/:id').patch(getUsers)
+router.route('/users/:id').patch(getUsers);
 
 module.exports = router
