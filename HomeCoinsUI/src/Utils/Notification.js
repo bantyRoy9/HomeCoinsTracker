@@ -24,6 +24,7 @@ class NotificationService {
     newMessage(callback) {
         if (this.socket) {
             this.socket.on('newMessage', (message) => {
+                console.log(message,"message");
                 callback(message);
             });
         }

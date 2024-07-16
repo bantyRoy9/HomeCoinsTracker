@@ -6,7 +6,7 @@ const initializeSocket = (server) => {
     io.on('connection', (socket) => {
         console.log('user connected:', socket.id);
         socket.on('joinGroup', (groupId) => notificationController.joinGroup(socket, groupId));
-        socket.on('leaveGroup',(groupId)=> notificationController.leaveGroup(socket,groupId))
+        socket.on('leaveGroup',(groupId)=> notificationController.leaveGroup(socket,groupId));
         socket.on('sendMessage', (newMsg) => notificationController.sendMessage(socket, newMsg));
         socket.on('disconnect', () => notificationController.handleDisconnect(socket));
     });

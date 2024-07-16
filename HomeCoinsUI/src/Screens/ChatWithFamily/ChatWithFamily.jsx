@@ -15,11 +15,11 @@ const ChatWithFamily = () => {
   const {user} = useSelector(state => state.user);
   const userId = user?._id??"";
   const groupId = user?.groupId??"";
+  // console.log(user);
   useEffect(() => {
     notificationService.initialize();
     notificationService.joinGroup(groupId);
     notificationService.newMessage(message => {
-      console.log(message, 'new Messages');
       setNotifications(prevNotifications => [...prevNotifications, message]);
     });
     fetchMessages();
@@ -35,10 +35,7 @@ const ChatWithFamily = () => {
   // Fetch previous messages
   const fetchMessages = async () => {
     try {
-      const {data} = await axios.get(
-        `${chatControllerURL}/chat/${groupId}`,
-        await getAxiosHeader(),
-      );
+      const {data} = await axios.get(`${chatControllerURL}/chat/${groupId}`,await getAxiosHeader());
       setNotifications(data.data);
     } catch (error) {
       console.error('Error fetching messages:', error);
@@ -48,7 +45,7 @@ const ChatWithFamily = () => {
   const updatefcmtoken = async() =>{
     try{
       let fcmtoken = await checkToken();
-      console.log(`${userControllerURL}/fcmtoken/${fcmtoken}`);
+      // console.log(`${userControllerURL}/fcmtoken/${fcmtoken}`);
       const {data} = await axios.patch(`${userControllerURL}/fcmtoken/${fcmtoken}`);
       if(data){
         console.log(data);
