@@ -3,7 +3,8 @@ const ChatModel = require('../Models/ChatModel/ChatModel');
 const { responseSend } = require('./authController');
 const catchAsync = require('../Utils/catchAsync');
 const { sendNotification } = require('../firebase');
-const { default: mongoose } = require('mongoose');
+const mongoose = require('mongoose');
+const { groupMembers } = require('./groupController');
 
 
 
@@ -13,7 +14,8 @@ exports.joinGroup = catchAsync(async (socket, groupId) => {
 
 exports.sendMessage = catchAsync(async (socket, { groupId, senderId, message }) => {
     const chatMessage = await ChatModel.create({ groupId, senderId, message });
-    const users = await User.find({ groupId:mongoose.Types.ObjectId(groupId) });
+    const users = await User.find({ groupId:new mongoose.Types.ObjectId(groupId) });
+    // const users = await User.find({groupId},'name email mobile role userId photo groupId');
     console.log(users);
     const tokens = users.flatMap(user => user.fcmtoken);
 

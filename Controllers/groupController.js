@@ -5,6 +5,7 @@ const Email = require("../Utils/Email");
 const AppError = require("../Utils/appError");
 const catchAsync = require("../Utils/catchAsync");
 const { responseSend } = require("./authController");
+const { ObjectId}  = require("mongoose").Types;
 
 exports.createGroup = catchAsync(async (req, res, next) => {
     let reqBody = {
@@ -79,6 +80,6 @@ exports.addMembers = catchAsync(async (req, res, next) => {
 exports.getGroupMember=catchAsync(async(req,res,next)=>{
     const groupId = req.params.groupId;
     if(!groupId) return next(new AppError('GroupId invalid',400));
-    const data = await User.find({groupId},'name email mobile role userId photo groupId');
+    const data = await User.find({groupId:new ObjectId(groupId)},'name email mobile role userId photo groupId');
     responseSend(res,200,true,data,"user find successfull");
-})
+});

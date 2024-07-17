@@ -19,7 +19,8 @@ const userSchema = new mongoose.Schema({
         default:false
     },
     groupId:{
-        type:mongoose.Schema.ObjectId
+        type:mongoose.Schema.ObjectId,
+        ref:'Group'
     },
     email:{
         type:String,
