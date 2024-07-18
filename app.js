@@ -1,21 +1,21 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
-const app = express();
-const { sourceRoute, accountRoute, userRoutes, activityRoute, groupRoute, chatRoute } = require('./Routes');
 const bodyParser = require('body-parser');
+const { sourceRoute, accountRoute, userRoutes, activityRoute, groupRoute, chatRoute } = require('./Routes');
 const AppError = require('./Utils/appError');
 const globleErrorHandler = require('./Controllers/errorController');
-app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, './Utils/Templates'));
+// const path = require('path');
+// app.set('view engine', 'pug');
+// app.set('views', path.join(__dirname, './Utils/Templates'));
+const app = express();
 app.use(bodyParser());
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+// app.use(express.static('public'));
 
-app.get('/home', (req, res) => {
-    res.render('Home');
-});
+// app.get('/home', (req, res) => {
+//     res.render('Home');
+// });
 
 app.use('/api/v1/userController',userRoutes);
 app.use('/api/v1/accountController', accountRoute);
