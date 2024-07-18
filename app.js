@@ -8,9 +8,10 @@ const globleErrorHandler = require('./Controllers/errorController');
 // app.set('view engine', 'pug');
 // app.set('views', path.join(__dirname, './Utils/Templates'));
 const app = express();
-app.use(bodyParser());
+// app.use(bodyParser());
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 // app.use(express.static('public'));
 
 // app.get('/home', (req, res) => {
