@@ -4,8 +4,6 @@ const { responseSend } = require('./authController');
 const catchAsync = require('../Utils/catchAsync');
 const { sendNotification } = require('../firebase');
 const mongoose = require('mongoose');
-const { groupMembers } = require('./groupController');
-
 
 
 exports.joinGroup = catchAsync(async (socket, groupId) => {
@@ -13,26 +11,27 @@ exports.joinGroup = catchAsync(async (socket, groupId) => {
 });
 
 exports.sendMessage = catchAsync(async (socket, { groupId, senderId, message }) => {
-    const chatMessage = await ChatModel.create({ groupId, senderId, message });
+    let chatMessage = await ChatModel.create({ groupId, senderId, message });
     const users = await User.find({ groupId:new mongoose.Types.ObjectId(groupId) });
-    // const users = await User.find({groupId},'name email mobile role userId photo groupId');
-    console.log(users);
+    let user = users.filter(el=>el.id == senderId);
+    if(user && user.length>0){
+        user = user[0]
+    };
+    chatMessage.senderId = user;
     const tokens = users.flatMap(user => user.fcmtoken);
-
     const notificationPayload = {
         notification: {
-            title: `New message from ${senderId}`,
+            title: `New message from ${user?.name}`,
             body: message
         }
     };
-    console.log(tokens);
     tokens.forEach(token => sendNotification(token, notificationPayload));
     socket.broadcast.to(groupId).emit("newMessage", chatMessage);
 });
 
 exports.getChatMessages = catchAsync(async (req, res) => {
     const { groupId } = req.params;
-    const messages = await ChatModel.find({ groupId }).sort({ timestamp: 1 });
+    const messages = await ChatModel.find({ groupId }).sort({ timestamp: 1 }).populate('senderId');
     responseSend(res, 200, true, messages, "message foun success");
 });
 exports.handleDisconnect = catchAsync(async (socket) => {

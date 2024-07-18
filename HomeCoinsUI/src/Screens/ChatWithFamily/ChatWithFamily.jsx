@@ -7,11 +7,14 @@ import messaging from '@react-native-firebase/messaging';
 import axios from 'axios';
 import {chatControllerURL, userControllerURL} from '../../Utils/URLProperties';
 import {getAxiosHeader} from '../../Utils';
+import { useFocusEffect } from '@react-navigation/native';
+import moment from 'moment';
 
 const ChatWithFamily = () => {
   const dispatch = useDispatch();
   const [notifications, setNotifications] = useState([]);
   const [message, setMessages] = useState('');
+  const [fcmtoken,setfcmtoken] = useState("");
   const {user} = useSelector(state => state.user);
   const userId = user?._id??"";
   const groupId = user?.groupId??"";
@@ -28,24 +31,31 @@ const ChatWithFamily = () => {
     };
   }, [groupId, userId]);
   useEffect(()=>{
-    if(user && !user.fcmtoken){
-      updatefcmtoken();
+    const checkToken = async () => {
+      const fcmToken = await messaging().getToken();
+      if (fcmToken) {
+        setfcmtoken(fcmToken.toString())
+      } 
+     };
+    checkToken();
+    console.log(user.fcmtoken , fcmtoken)
+    if(!user.fcmtoken || user.fcmtoken != fcmtoken){
+      updatefcmtoken(fcmtoken);
     }
   },[]);
   // Fetch previous messages
   const fetchMessages = async () => {
     try {
       const {data} = await axios.get(`${chatControllerURL}/chat/${groupId}`,await getAxiosHeader());
+      console.log(data.data);
       setNotifications(data.data);
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
   };
 
-  const updatefcmtoken = async() =>{
+  const updatefcmtoken = async(fcmtoken) =>{
     try{
-      let fcmtoken = await checkToken();
-      // console.log(`${userControllerURL}/fcmtoken/${fcmtoken}`);
       const {data} = await axios.patch(`${userControllerURL}/fcmtoken/${fcmtoken}`);
       if(data){
         console.log(data);
@@ -53,15 +63,11 @@ const ChatWithFamily = () => {
     }catch(err){
       console.log(err.response?.data.message??"something wrong happen");
     }
-  }
-  const checkToken = async () => {
-    const fcmToken = await messaging().getToken();
-    if (fcmToken) {
-       return fcmToken.toString()
-    } 
-   };
+  };
+
   const handleSendMessage = () => {
     notificationService.sendMessage(userId, message, groupId);
+    setNotifications(prev=>([...prev,{message, groupId,senderId:user,createdAt:moment().format(),updatedAt:moment().format()}]))
     setMessages('');
   };
 
@@ -73,7 +79,7 @@ const ChatWithFamily = () => {
         renderItem={({item}) => (
           <View>
             <Text>
-              {item.senderId}: {item.message}
+              {item.senderId.name}: {item.message}
             </Text>
           </View>
         )}

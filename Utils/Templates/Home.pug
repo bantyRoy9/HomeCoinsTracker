@@ -82,7 +82,8 @@ script.
   // listen new message
   socket.on("newMessage", function (result) {
   // append new message to dom
-  appendMessage(result.senderId, result.message)
+  console.log(result,"result")
+  appendMessage(result.senderId.name, result.message)
   })
   }
   const appendMessage = function (senderId, msg) {
