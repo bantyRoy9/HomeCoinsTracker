@@ -1,39 +1,45 @@
-const User = require('../Model/UserModels/userSchema');
+const User = require('../Models/UserModel/userSchema');
+const ChatModel = require('../Models/ChatModel/ChatModel');
+const { responseSend } = require('./authController');
+const catchAsync = require('../Utils/catchAsync');
+const { sendNotification } = require('../firebase');
+const mongoose = require('mongoose');
 
-const joinGroup = async (socket, { userId, groupId }) => {
-    try {
-        const user = new ({ userId, groupId });
-        await user.save();
 
-        socket.join(groupId);
-        console.log(`${userId} joined group ${groupId}`);
-    } catch (error) {
-        console.error('Error joining group:', error);
-    }
-};
+exports.joinGroup = catchAsync(async (socket, groupId) => {
+    socket.join(groupId);
+});
 
-const sendNotification = async (io, { groupId, message }) => {
-    try {
-        io.emit('receiveNotification', message);
-        console.log(`Notification sent to group ${groupId}: ${message}`);
-    } catch (error) {
-        console.error('Error sending notification:', error);
-    }
-};
-
-const handleDisconnect = async (socket) => {
-    try {
-        const user = await User.findOneAndDelete({ socketId: socket.id });
-        if (user) {
-            console.log(`${user.userId} disconnected from group ${user.groupId}`);
+exports.sendMessage = catchAsync(async (socket, { groupId, senderId, message }) => {
+    let chatMessage = await ChatModel.create({ groupId, senderId, message });
+    const users = await User.find({ groupId:new mongoose.Types.ObjectId(groupId) });
+    let user = users.filter(el=>el.id == senderId);
+    if(user && user.length>0){
+        user = user[0]
+    };
+    chatMessage.senderId = user;
+    const tokens = users.flatMap(user => user.fcmtoken);
+    const notificationPayload = {
+        notification: {
+            title: `New message from ${user?.name}`,
+            body: message
         }
-    } catch (error) {
-        console.error('Error on disconnect:', error);
-    }
-};
+    };
+    tokens.forEach(token => sendNotification(token, notificationPayload));
+    socket.broadcast.to(groupId).emit("newMessage", chatMessage);
+});
 
-module.exports = {
-    joinGroup,
-    sendNotification,
-    handleDisconnect,
-};
+exports.getChatMessages = catchAsync(async (req, res) => {
+    const { groupId } = req.params;
+    const messages = await ChatModel.find({ groupId }).sort({ timestamp: 1 }).populate('senderId');
+    responseSend(res, 200, true, messages, "message foun success");
+});
+exports.handleDisconnect = catchAsync(async (socket) => {
+    const user = await User.findOneAndDelete({ socketId: socket.id });
+    if (user) {
+        console.log(`${user.userId} disconnected from group ${user.groupId}`);
+    }
+});
+exports.leaveGroup = catchAsync(async (socket, groupId) => {
+    socket.leave(groupId);
+});

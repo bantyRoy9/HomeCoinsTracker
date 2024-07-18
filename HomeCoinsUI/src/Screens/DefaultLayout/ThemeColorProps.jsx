@@ -66,6 +66,6 @@ export const darkTheme = {
     lightBackground: 'rgb(238, 238, 238)',
     surfaceVariant: 'rgba(33, 33, 33,0.5)',
     surfaceVariantBold:'rgba(33, 33, 33)',
-    modalPrimaryBackground:'rgb(240, 240, 240)',
+    modalPrimaryBackground:'rgb(11, 11, 11)',
   },
 };

@@ -1,4 +1,4 @@
-const User = require('../Model/UserModels/userSchema');
+const User = require('../Models/UserModel/userSchema');
 const crypto = require('crypto')
 const AppError = require('./../Utils/appError');
 const { promisify } = require('util')
@@ -59,7 +59,7 @@ exports.loginUser = catchAsync(async (req, res, next) => {
         if (!mobile || !password) {
             return next(new AppError('Please fill both Mobile no & password ', 401));
         };
-        const user = await User.findOne({ mobile },'name email isActive isGroupIncluded role userId mobile').select('+password');
+        const user = await User.findOne({ mobile },'name email isActive isGroupIncluded role userId mobile fcmtoken').select('+password');
         if (!user || !(await user.correctPassword(password, user.password))) {
             return next(new AppError('Incorrect user Moble or Password', 401));
         };
@@ -68,7 +68,7 @@ exports.loginUser = catchAsync(async (req, res, next) => {
         if (!email || !password) {
             return next(new AppError('Please fill both email & password ', 401));
         };
-        const user = await User.findOne({ email },'name email isActive isGroupIncluded role userId mobile totalEarn totalExpend groupId').select('+password').populate('totalEarn totalExpend','amount -_id');
+        const user = await User.findOne({ email },'name email isActive isGroupIncluded role userId mobile totalEarn totalExpend groupId fcmtoken').select('+password').populate('totalEarn totalExpend','amount -_id');
         if (!user || !(await user.correctPassword(password, user.password))) {
             return next(new AppError('Incorrect user email or password', 401));
         };
@@ -221,7 +221,16 @@ exports.sendOTP = catchAsync(async(req,res,next)=>{
 exports.responseSend = async(res,statusCode,status,data,msg,DTO,token)=>{
     if(DTO && DTO.length){data = await requiredResponseBody(data,DTO)};
     if(token){data = {user:data}}
-    res.status(statusCode).json({
+    return res.status(statusCode).json({
         status,length:data?.length??0,msg,data,token
     });
 };
+
+exports.setFcmToken = catchAsync(async(req,res,next)=>{
+    let reqParam = req.user._id,{token} = req.params;
+    if(!token) return next(new AppError("fcm token not found",403));
+    console.log(token,reqParam);
+    const updatedRecord = await User.findByIdAndUpdate(reqParam,{fcmtoken:token});
+    if(!updatedRecord) return next(new AppError("Record not updated"));
+    this.responseSend(res,200,true,{},"fcm token updated")
+})

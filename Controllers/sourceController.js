@@ -1,5 +1,5 @@
-const expendType = require("../Model/AccountModels/expendTypeSchema");
-const sourceModel = require("../Model/SourceModels/sourceSchema");
+const expendType = require("../Models/AccountModel/expendTypeSchema");
+const sourceModel = require("../Models/SourceModel/sourceSchema");
 const { findModal, createModal } = require("./commonController");
 
 exports.getSource = findModal(sourceModel,{groupId:true},"sourceName");

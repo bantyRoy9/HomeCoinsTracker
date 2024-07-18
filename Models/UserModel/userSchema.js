@@ -19,7 +19,8 @@ const userSchema = new mongoose.Schema({
         default:false
     },
     groupId:{
-        type:String
+        type:mongoose.Schema.ObjectId,
+        ref:'Group'
     },
     email:{
         type:String,
@@ -63,6 +64,7 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         default:'false'
     },
+    fcmtoken:String,
     passwordChangeAt: Date,
     passwordResetToken:String,
     passwordResetExpire:Date,

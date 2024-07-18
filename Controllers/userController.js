@@ -1,5 +1,5 @@
 const catchAsync = require('../Utils/catchAsync');
-const User = require("../Model/UserModels/userSchema");
+const User = require("../Models/UserModel/userSchema");
 const { responseSend } = require('./authController');
 const { usersListBO } = require('../Utils/responseJSON');
 

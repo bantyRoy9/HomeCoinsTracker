@@ -88,3 +88,7 @@ exports.requiredResponseBody = async(modal,responseArr) =>{
     };
     return modal;
 };
+
+exports.filterMapList = () =>{
+    
+}

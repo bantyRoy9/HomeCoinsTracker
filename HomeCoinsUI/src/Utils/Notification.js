@@ -5,27 +5,30 @@ class NotificationService {
     constructor() {
         this.socket = io(ApiContextURL);
     }
-
-    initialize(userId, groupId) {
-        this.socket.on('connection', (socket)=>{
-            console.log(socket,"connected");
+    initialize() {
+        this.socket.on('connection', (socket) => {
+            console.log(socket, "connected");
         });
     }
-
-    sendNotification(groupId, message) {
-        if (this.socket) {
-            this.socket.emit('sendNotification', { groupId, message });
-        }
+    joinGroup(groupId) {
+        this.socket.emit('joinGroup', groupId);
     }
-
-    onNotification(callback) {
-        
-            this.socket.on('receiveNotification', (message) => {
+    leaveGroup(groupId) {
+        this.socket.emit("leaveGroup", groupId);
+    }
+    sendMessage(senderId, message, groupId) {
+        if (this.socket) {
+            this.socket.emit("sendMessage", { senderId, message, groupId });
+        };
+    }
+    newMessage(callback) {
+        if (this.socket) {
+            this.socket.on('newMessage', (message) => {
                 console.log(message,"message");
                 callback(message);
             });
+        }
     }
-
     disconnect() {
         if (this.socket) {
             this.socket.disconnect();
