@@ -34,14 +34,12 @@ const ChatWithFamily = () => {
     const checkToken = async () => {
       const fcmToken = await messaging().getToken();
       if (fcmToken) {
-        setfcmtoken(fcmToken.toString())
+        if(!user.fcmtoken || user.fcmtoken != fcmtoken){
+          updatefcmtoken(fcmtoken);
+        }
       } 
      };
-    checkToken();
-    console.log(user.fcmtoken , fcmtoken)
-    if(!user.fcmtoken || user.fcmtoken != fcmtoken){
-      updatefcmtoken(fcmtoken);
-    }
+    checkToken();    
   },[]);
   // Fetch previous messages
   const fetchMessages = async () => {
@@ -56,12 +54,13 @@ const ChatWithFamily = () => {
 
   const updatefcmtoken = async(fcmtoken) =>{
     try{
+      console.log(`${userControllerURL}/fcmtoken/${fcmtoken}`)
       const {data} = await axios.patch(`${userControllerURL}/fcmtoken/${fcmtoken}`);
       if(data){
         console.log(data);
       }
     }catch(err){
-      console.log(err.response?.data.message??"something wrong happen");
+      console.log(err.response?.data.message??"something wrong happen to update fcmtoken");
     }
   };
 

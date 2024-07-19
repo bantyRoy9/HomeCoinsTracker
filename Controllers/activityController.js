@@ -3,6 +3,9 @@ const ActivityModels = require("../Models/ActivityModel/activityModel");
 const catchAsync = require("../Utils/catchAsync");
 const { sortArrayDataByDate } = require("../Utils/commonFunction");
 const { responseSend } = require("./authController");
+const User = require("../Models/UserModel/userSchema");
+const { default: mongoose } = require("mongoose");
+const { sendNotification } = require("../firebase");
 
 exports.addUsersActivity = catchAsync(async(req,res,next)=>{
     let reqBody = {
@@ -11,14 +14,16 @@ exports.addUsersActivity = catchAsync(async(req,res,next)=>{
         Url:req.url,
         groupId:req.body.groupId
     };
-    let msg="added",filterKey="addEarn"
+    let msg="added",filterKey="addEarn",amount='';
     switch(req.url){
         case "/earn":
             reqBody.addEarn=req.earnId
+            amount = req.earnAmount;
         break;
         case "/expend":
             reqBody.addExpend = req.expendId;
-            filterKey="addExpend"
+            filterKey="addExpend";
+            amount = req.expendAmount;
         break;
         default:
             break;
@@ -36,7 +41,20 @@ exports.addUsersActivity = catchAsync(async(req,res,next)=>{
             await ActivityModels.create(reqBody);
             break;
     }
-    
+    const users = await User.find({ groupId:new mongoose.Types.ObjectId(req.body.groupId) });
+    let user = users.filter(el=>el.id == req.user.id);
+    if(user && user.length>0){
+        user = user[0]
+    };
+    const tokens = users.flatMap(user => user.fcmtoken);
+    const notificationPayload = {
+        notification: {
+            title: `${user?.name} ${msg}`,
+            body: `${amount}`
+        }
+    };
+    console.log(notificationPayload,"notificationActivity")
+    tokens.forEach(token => sendNotification(token, notificationPayload)); 
     next(responseSend(res,200,true,reqBody,`Amount ${msg} successful.`));
 });
 

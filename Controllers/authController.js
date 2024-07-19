@@ -142,7 +142,6 @@ exports.restrictTo = (...role) => {
 };
 
 exports.setUserAndGroupId = (keyName) => async(req,res,next)=>{
-    console.log(req.user,"id","work");
     const keyNames = keyName.split(',');
     if(keyNames && keyNames.length>0){
         keyNames.forEach((keyName)=>{
@@ -221,7 +220,7 @@ exports.sendOTP = catchAsync(async(req,res,next)=>{
 exports.responseSend = async(res,statusCode,status,data,msg,DTO,token)=>{
     if(DTO && DTO.length){data = await requiredResponseBody(data,DTO)};
     if(token){data = {user:data}}
-    return res.status(statusCode).json({
+     res.status(statusCode).json({
         status,length:data?.length??0,msg,data,token
     });
 };

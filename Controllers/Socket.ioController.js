@@ -43,3 +43,6 @@ exports.handleDisconnect = catchAsync(async (socket) => {
 exports.leaveGroup = catchAsync(async (socket, groupId) => {
     socket.leave(groupId);
 });
+// exports.sendNotificationByUsers = catchAsync(async(fmctokens,notification)=>{
+
+// })

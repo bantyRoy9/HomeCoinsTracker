@@ -8,7 +8,7 @@ const path = require('path');
 const app = express();
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, './Utils/Templates'));
-app.use(bodyParser());
+//app.use(bodyParser());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
