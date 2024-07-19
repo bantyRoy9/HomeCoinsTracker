@@ -21,6 +21,7 @@ exports.createModal = (Modal,isSetActivity) => catchAsync(async(req,res,next)=>{
     const createRespone = await Modal.create(req.body);
     if(isSetActivity){
         req[`${req.url.replace("/","")}Id`]=createRespone._id;
+        req[`${req.url.replace("/","")}Amount`]=createRespone.amount;
         next();
     }else{
         next(responseSend(res,201,true,createRespone,"Record created successfull."));
@@ -33,6 +34,7 @@ exports.updateModal = (Modal,isSetActivity) => catchAsync(async(req,res,next)=>{
     !updatedRecord && next(new AppError("Expend not found",404));
     if(isSetActivity){
         req[`${req.url.replace("/","")}Id`]=updatedId;
+        req[`${req.url.replace("/","")}Amount`]=req.body.amount;
         next();
     }else{
         next(responseSend(res,201,true,{},"Record updated successfull."));
