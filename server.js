@@ -9,8 +9,8 @@ let DB = process.env.DB_URL;
 if(process.env.NODE_ENV === 'development'){
     DB = process.env.DB_URL_LOCAL;
 };
-const firebaseServiceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
-const serviceAccount = JSON.parse(firebaseServiceAccountKey);
+
+const serviceAccount = require('./firebaseServiceAccountKey.json')//JSON.parse(firebaseServiceAccountKey);
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 });

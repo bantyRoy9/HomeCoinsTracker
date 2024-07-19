@@ -3,6 +3,7 @@ const notificationController = require('../Controllers/Socket.ioController');
 
 const initializeSocket = (server) => {
     const io = new Server(server);
+    console.log("initializing socket-io.....")
     io.on('connection', (socket) => {
         console.log('user connected:', socket.id);
         socket.on('joinGroup', (groupId) => notificationController.joinGroup(socket, groupId));
