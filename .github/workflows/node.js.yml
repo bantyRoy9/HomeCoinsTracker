@@ -26,4 +26,7 @@ jobs:
     - run: |
         touch .env
         echo "${{ secrets.HOMECOINSTRACKER_ENV }}" > .env
+    - run: |
+        touch Utils/firebaseServiceAccountKey.json
+        echo "${{secrets.FIREBASE_SERVICE_ACCOUNT_KEY}}" > Utils/firebaseServiceAccountKey.json
     - run: pm2 restart homecoinstracker      
