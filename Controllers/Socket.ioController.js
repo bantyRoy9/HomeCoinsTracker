@@ -19,13 +19,14 @@ exports.sendMessage = catchAsync(async (socket, { groupId, senderId, message }) 
     };
     chatMessage.senderId = user;
     const tokens = users.flatMap(user => user.fcmtoken);
+    console.log(tokens,'tokens')
     const notificationPayload = {
         notification: {
             title: `New message from ${user?.name}`,
             body: message
         }
     };
-    tokens.forEach(token => sendNotification(token, notificationPayload));
+    tokens.forEach(token => token && sendNotification(token, notificationPayload));
     socket.broadcast.to(groupId).emit("newMessage", chatMessage);
 });
 
