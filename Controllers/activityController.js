@@ -53,8 +53,8 @@ exports.addUsersActivity = catchAsync(async(req,res,next)=>{
             body: `${amount}`
         }
     };
-    console.log(notificationPayload,"notificationActivity")
-    tokens.forEach(token => sendNotification(token, notificationPayload)); 
+    console.log(tokens,notificationPayload,"notificationActivity")
+    tokens.forEach(token => token && sendNotification(token, notificationPayload)); 
     next(responseSend(res,200,true,reqBody,`Amount ${msg} successful.`));
 });
 

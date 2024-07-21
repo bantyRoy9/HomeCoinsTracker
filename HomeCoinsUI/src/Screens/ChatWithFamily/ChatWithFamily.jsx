@@ -3,18 +3,16 @@ import {View,Text,Pressable,SafeAreaView,FlatList,Button} from 'react-native';
 import notificationService from '../../Utils/Notification';
 import {useDispatch, useSelector} from 'react-redux';
 import {Input} from '../../Components';
-import messaging from '@react-native-firebase/messaging';
+
 import axios from 'axios';
 import {chatControllerURL, userControllerURL} from '../../Utils/URLProperties';
 import {getAxiosHeader} from '../../Utils';
-import { useFocusEffect } from '@react-navigation/native';
 import moment from 'moment';
 
 const ChatWithFamily = () => {
   const dispatch = useDispatch();
   const [notifications, setNotifications] = useState([]);
   const [message, setMessages] = useState('');
-  const [fcmtoken,setfcmtoken] = useState("");
   const {user} = useSelector(state => state.user);
   const userId = user?._id??"";
   const groupId = user?.groupId??"";
@@ -30,39 +28,18 @@ const ChatWithFamily = () => {
       notificationService.disconnect();
     };
   }, [groupId, userId]);
-  useEffect(()=>{
-    const checkToken = async () => {
-      const fcmToken = await messaging().getToken();
-      if (fcmToken) {
-        if(!user.fcmtoken || user.fcmtoken != fcmtoken){
-          updatefcmtoken(fcmtoken);
-        }
-      } 
-     };
-    checkToken();    
-  },[]);
+
   // Fetch previous messages
   const fetchMessages = async () => {
     try {
       const {data} = await axios.get(`${chatControllerURL}/chat/${groupId}`,await getAxiosHeader());
-      console.log(data.data);
+      //console.log(data.data);
       setNotifications(data.data);
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
   };
-
-  const updatefcmtoken = async(fcmtoken) =>{
-    try{
-      console.log(`${userControllerURL}/fcmtoken/${fcmtoken}`)
-      const {data} = await axios.patch(`${userControllerURL}/fcmtoken/${fcmtoken}`);
-      if(data){
-        console.log(data);
-      }
-    }catch(err){
-      console.log(err.response?.data.message??"something wrong happen to update fcmtoken");
-    }
-  };
+;
 
   const handleSendMessage = () => {
     notificationService.sendMessage(userId, message, groupId);

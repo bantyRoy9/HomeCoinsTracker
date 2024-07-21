@@ -8,7 +8,14 @@ export const loging = (userDetails,navigation) => async(dispatch) =>{
         dispatch({type:USER_REQUIEST});
         const { data } = await axios.post(`${userControllerURL}/loginUser`, userDetails, getAxiosHeaderWithoutCookie());
         if(data){
-            await AsyncStorage.multiSet([['userEmail',data.data.user.email],['cookie',data.token], ['user',JSON.stringify(data.data.user)], ['isGroupIncluded',`${data.data.user.isGroupIncluded}`],['isActive',`${data.data.user.isActive}`] ],()=>{
+            await AsyncStorage.multiSet([
+                ['userEmail',data.data.user.email],
+                ['cookie',data.token], 
+                ['user',JSON.stringify(data.data.user)],
+                ['fcmtoken',data.data.user?.fcmtoken??""],
+                ['isGroupIncluded',`${data.data.user.isGroupIncluded}`],
+                ['isActive',`${data.data.user.isActive}`]
+            ],()=>{
                 dispatch({type:USER_SUCCCESS,payload:data.data.user});
             })
         };
@@ -115,3 +122,15 @@ export const verifyUserOTP = (OTP,user,navigation,navigateURL)=>async(dispatch) 
         dispatch({type:USER_REGISTER_FAIL,payload:null})
     };
 };
+
+export const updatefcmtoken = async(fcmtoken) =>{
+    try{
+      console.log(`${userControllerURL}/fcmtoken/${fcmtoken}`)
+      const {data} = await axios.patch(`${userControllerURL}/fcmtoken/${fcmtoken}`);
+      if(data){
+        await AsyncStorage.setItem('fcmtoken',fcmtoken);
+      }
+    }catch(err){
+      console.log(err.response?.data.message??"something wrong happen to update fcmtoken");
+    }
+  }
