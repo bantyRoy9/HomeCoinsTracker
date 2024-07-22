@@ -14,9 +14,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-app.get('/home', (req, res) => {
-    res.render('Home');
-});
+// app.get('/home', (req, res) => {
+//     res.render('Home');
+// });
 
 app.use('/api/v1/userController',userRoutes);
 app.use('/api/v1/accountController', accountRoute);
