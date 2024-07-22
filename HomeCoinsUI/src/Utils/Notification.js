@@ -3,7 +3,15 @@ import { ApiContextURL } from './URLProperties';
 
 class NotificationService {
     constructor() {
-        this.socket = io(ApiContextURL);
+        this.socket = io(ApiContextURL,{
+            transports: ['websocket', 'polling'], // Use websocket and fallback to polling if necessary
+            reconnection: true,
+            reconnectionAttempts: Infinity,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax: 5000,
+            timeout: 20000,
+            autoConnect: true
+        });
     }
     initialize() {
         this.socket.on('connection', (socket) => {
