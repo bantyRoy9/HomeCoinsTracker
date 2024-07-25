@@ -89,6 +89,24 @@ exports.requiredResponseBody = async(modal,responseArr) =>{
     return modal;
 };
 
-exports.filterMapList = () =>{
-    
-}
+exports.getDateRange = (period) => {
+    const now = new Date();
+    let startDate;
+    let endDate = now;
+
+    switch (period) {
+        case 'weekly':
+            startDate = new Date(now.setDate(now.getDate() - 7));
+            break;
+        case 'monthly':
+            startDate = new Date(now.setMonth(now.getMonth() - 1));
+            break;
+        case 'yearly':
+            startDate = new Date(now.setFullYear(now.getFullYear() - 1));
+            break;
+        default:
+            throw new Error('Invalid period specified');
+    }
+
+    return { startDate, endDate };
+};
