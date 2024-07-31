@@ -5,6 +5,7 @@ const { usersListBO } = require('../Utils/responseJSON');
 const { getDateRange } = require('../Utils/commonFunction');
 const ExpendModel = require('../Models/AccountModel/expendSchema');
 const EarnModel = require('../Models/AccountModel/earnSchema');
+const mongoose = require('mongoose');
 
 exports.getUserDetails = catchAsync(async (req, res, next) => {
     const user = await User.findOne({ _id: req.user.id }).populate('totalEarn totalExpend', 'amount -_id');
@@ -18,7 +19,7 @@ exports.getUserDetails = catchAsync(async (req, res, next) => {
 exports.getLoginUserDetails = catchAsync(async (req, res, next) => {
     res.status(200).json({
         status: true,
-        data: req?.user
+        data: req.user
     })
 });
 
@@ -32,12 +33,140 @@ exports.getUserLists = catchAsync(async (req, res, next) => {
     responseSend(res, 200, true, users, "");
 })
 exports.userReport = catchAsync(async (req, res, next) => {
-    const { period } = req.params, { _id } = req.user;
+    let { period, userid } = req.params;
+    let { _id } = req.user;
+    if (userid) {
+        _id = userid;
+    }
+
     const { startDate, endDate } = getDateRange(period);
-    const expenses = await ExpendModel.find({expendBy: _id,date: { $gte: startDate, $lte: endDate }});
-    const earnings = await EarnModel.find({earnBy:_id,date: { $gte: startDate, $lte: endDate }});
-    const totalExpend = expenses.reduce((acc, exp) => acc + exp.amount, 0);
-    const totalEarn = earnings.reduce((acc, earn) => acc + earn.amount, 0);
+
+    const expenseAggregation = ExpendModel.aggregate([
+        {
+            $match: {
+                expendBy: new mongoose.Types.ObjectId(_id),
+                date: { $gte: new Date(startDate), $lte: new Date(endDate) }
+            }
+        },
+        {
+            $lookup: {
+                from: 'expendtypes', // the name of the expend type collection
+                localField: 'expendType',
+                foreignField: '_id',
+                as: 'expendTypeDetails'
+            }
+        },
+        {
+            $unwind: '$expendTypeDetails'
+        },
+        {
+            $facet: {
+                totalExpenses: [
+                    {
+                        $group: {
+                            _id: null,
+                            totalAmount: { $sum: "$amount" },
+                            averageAmount: { $avg: "$amount" }
+                        }
+                    }
+                ],
+                expensesByType: [
+                    {
+                        $group: {
+                            _id: "$expendTypeDetails",
+                            totalAmount: { $sum: "$amount" }
+                        }
+                    }
+                ],
+                recentTopExpenses: [
+                    {
+                        $sort: { date: -1 }
+                    },
+                    { $limit: 4 },
+                    {
+                        $lookup: {
+                            from: 'expendtypes',
+                            localField: 'expendType',
+                            foreignField: '_id',
+                            as: 'expendTypeDetails'
+                        }
+                    },
+                    {
+                        $unwind: '$expendTypeDetails'
+                    }
+                ]
+            }
+        }
+    ]);
+
+    const earningAggregation = EarnModel.aggregate([
+        {
+            $match: {
+                earnBy: _id,
+                date: { $gte: new Date(startDate), $lte: new Date(endDate) }
+            }
+        },
+        {
+            $lookup: {
+                from: 'sources', // the name of the source collection
+                localField: 'source',
+                foreignField: '_id',
+                as: 'sourceDetails'
+            }
+        },
+        {
+            $unwind: '$sourceDetails'
+        },
+        {
+            $facet: {
+                totalEarnings: [
+                    {
+                        $group: {
+                            _id: null,
+                            totalAmount: { $sum: "$amount" },
+                            averageAmount: { $avg: "$amount" }
+                        }
+                    }
+                ],
+                earningsBySource: [
+                    {
+                        $group: {
+                            _id: "$sourceDetails",
+                            totalAmount: { $sum: "$amount" }
+                        }
+                    }
+                ],
+                recentTopEarnings: [
+                    {
+                        $sort: { date: -1 }
+                    },
+                    { $limit: 4 },
+                    {
+                        $lookup: {
+                            from: 'sources',
+                            localField: 'source',
+                            foreignField: '_id',
+                            as: 'sourceDetails'
+                        }
+                    },
+                    {
+                        $unwind: '$sourceDetails'
+                    }
+                ]
+            }
+        }
+    ]);
+
+    const [expensesResult, earningsResult] = await Promise.all([expenseAggregation, earningAggregation]);
+
+    const totalExpend = expensesResult[0]?.totalExpenses[0]?.totalAmount || 0;
+    const totalEarn = earningsResult[0]?.totalEarnings[0]?.totalAmount || 0;
+    const avgExpend = expensesResult[0]?.totalExpenses[0]?.averageAmount || 0;
+    const avgEarn = earningsResult[0]?.totalEarnings[0]?.averageAmount || 0;
+    const expensesByType = expensesResult[0]?.expensesByType || [];
+    const earningsBySource = earningsResult[0]?.earningsBySource || [];
+    const recentTopExpenses = expensesResult[0]?.recentTopExpenses || [];
+    const recentTopEarnings = earningsResult[0]?.recentTopEarnings || [];
 
     res.status(200).json({
         status: 'success',
@@ -45,8 +174,12 @@ exports.userReport = catchAsync(async (req, res, next) => {
             period,
             totalExpend,
             totalEarn,
-            expenses,
-            earnings
+            avgExpend,
+            avgEarn,
+            expensesByType,
+            earningsBySource,
+            recentTopExpenses,
+            recentTopEarnings
         }
     });
-})
+});

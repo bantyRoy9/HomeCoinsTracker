@@ -96,13 +96,13 @@ exports.getDateRange = (period) => {
 
     switch (period) {
         case 'weekly':
-            startDate = moment().subtract('days',7)// new Date(now.setDate(now.getDate() - 7));
+            startDate = moment().subtract(7,'days')// new Date(now.setDate(now.getDate() - 7));
             break;
         case 'monthly':
-            startDate = moment().subtract('months',1) //new Date(now.setMonth(now.getMonth() - 1));
+            startDate = moment().subtract(1,'months') //new Date(now.setMonth(now.getMonth() - 1));
             break;
         case 'yearly':
-            startDate = moment().subtract('years',1) //new Date(now.setFullYear(now.getFullYear() - 1));
+            startDate = moment().subtract(1,'years') //new Date(now.setFullYear(now.getFullYear() - 1));
             break;
         default:
             throw new Error('Invalid period specified');

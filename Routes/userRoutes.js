@@ -15,7 +15,7 @@ router.get('/getUserDetailById', getUserDetails);
 router.post('/sendOTP',sendOTP);
 router.get('/getUserLists',getUserLists);
 router.patch('/fcmtoken/:token',setFcmToken);
-router.get('/report/:period',userReport)
+router.get('/report/:period/:userid',userReport)
 
 router.use(restrictTo('admin'));
 router.route('/users').get(getUsers);

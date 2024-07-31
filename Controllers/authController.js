@@ -94,6 +94,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     if (!token) {
         return next(new AppError('you are not login! please Login', 403));
     };
+    
     const decoder = await promisify(jwt.verify)(token, process.env.jwt_secret);
     const currentUser = await User.findById(decoder.id);
     if (!currentUser) {
@@ -120,7 +121,7 @@ exports.isLoggedIn = async (req, res, next) => {
     if (!token) {
         return next(new AppError('you are not login! please Login', 403));
     };
-    const decoder = await promisify(jwt.verify)(req.cookies.jwt, process.env.jwt_secret);
+    const decoder = await promisify(jwt.verify)(token, process.env.jwt_secret);
     const currentUser = await User.findById(decoder.id);
     if (!currentUser) {
         return next(new AppError('The user belongs to this Id token is no longer exist', 403));
@@ -128,7 +129,7 @@ exports.isLoggedIn = async (req, res, next) => {
     if (currentUser.changePasswordAfter(decoder.iat)) {
         return next(new AppError('User recently changed password! please login again!!', 403));
     };
-    res.user = currentUser;
+    req.user = currentUser;
     next();
 };
 

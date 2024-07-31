@@ -14,7 +14,7 @@ exports.findModal = (Modal,queryMap={},listView,populate) => catchAsync(async(re
     let data = await Modal[method](queryMap,listView);
     !data && next(new AppError("Record not found",404));
     if(populate) data = await data.populate(populate);
-    next(responseSend(res,200,true,data,"Record find successfull."));
+    responseSend(res,200,true,data,"Record find successfull.");
 });
 
 exports.createModal = (Modal,isSetActivity) => catchAsync(async(req,res,next)=>{
@@ -24,7 +24,7 @@ exports.createModal = (Modal,isSetActivity) => catchAsync(async(req,res,next)=>{
         req[`${req.url.replace("/","")}Amount`]=createRespone.amount;
         next();
     }else{
-        next(responseSend(res,201,true,createRespone,"Record created successfull."));
+        responseSend(res,201,true,createRespone,"Record created successfull.");
     }
 });
 
@@ -37,7 +37,7 @@ exports.updateModal = (Modal,isSetActivity) => catchAsync(async(req,res,next)=>{
         req[`${req.url.replace("/","")}Amount`]=req.body.amount;
         next();
     }else{
-        next(responseSend(res,201,true,{},"Record updated successfull."));
+        responseSend(res,201,true,{},"Record updated successfull.");
     }
 });
 
@@ -49,6 +49,6 @@ exports.deleteModal = (Modal,isSetActivity) => catchAsync(async(req,res,next)=>{
         req[`${req.url.replace("/","")}Id`]=deletrdId;
         next();
     }else{
-        next(responseSend(res,200,true,{},"Record deleted successfull."));
+        responseSend(res,200,true,{},"Record deleted successfull.");
     }
 });
