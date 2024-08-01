@@ -50,7 +50,7 @@ exports.userReport = catchAsync(async (req, res, next) => {
         },
         {
             $lookup: {
-                from: 'expendtypes', // the name of the expend type collection
+                from: 'expendtypes',
                 localField: 'expendType',
                 foreignField: '_id',
                 as: 'expendTypeDetails'
