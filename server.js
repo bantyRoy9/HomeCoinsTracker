@@ -10,10 +10,9 @@ if(process.env.NODE_ENV === 'development'){
     //DB = process.env.DB_URL_LOCAL;
 };
 
-const {serviceAccount} = require('./firebaseServiceAccountKey.js')//JSON.parse(firebaseServiceAccountKey);
-console.log(JSON.parse(serviceAccount),"serverAccount");
+const serviceAccount = require('./firebaseServiceAccountKey.json')//JSON.parse(firebaseServiceAccountKey);
 admin.initializeApp({
-    credential: admin.credential.cert(JSON.parse(serviceAccount))
+    credential: admin.credential.cert(serviceAccount)
 });
 
 const PORT = process.env.PORT || 8000;
