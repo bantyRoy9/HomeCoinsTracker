@@ -55,7 +55,7 @@ exports.addUsersActivity = catchAsync(async(req,res,next)=>{
     };
     console.log(tokens,notificationPayload,"notificationActivity")
     tokens.forEach(token => token && sendNotification(token, notificationPayload)); 
-    next(responseSend(res,200,true,reqBody,`Amount ${msg} successful.`));
+    responseSend(res,200,true,reqBody,`Amount ${msg} successful.`);
 });
 
 // exports.getActivity=catchAsync(async(req,res,next)=>{

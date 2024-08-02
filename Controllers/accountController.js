@@ -11,6 +11,7 @@ const { updateModal, createModal,deleteModal, findModal } = require("./commonCon
 exports.saveDailyEarnExpend=(type)=>createModal(type === "earn" ? EarnModel : ExpendModel,true);
 exports.updateDailyEarnExpend=(type)=>updateModal(type === "earn" ? EarnModel : ExpendModel,true);
 exports.deletrDailyEarnExpend=(type)=>deleteModal(type === "earn" ? EarnModel : ExpendModel,true);
+exports.getDailyEarnExpend=(type)=>findMoeteModal(type === "earn" ? EarnModel : ExpendModel,true);
 exports.getDailyEarnExpend=(type)=>findModal(type === "earn" ? EarnModel : ExpendModel);
 
 
