@@ -90,9 +90,8 @@ exports.requiredResponseBody = async(modal,responseArr) =>{
 };
 
 exports.getDateRange = (period) => {
-    const now = new Date();
+    const endDate = moment();
     let startDate;
-    let endDate = now;
 
     switch (period) {
         case 'weekly':

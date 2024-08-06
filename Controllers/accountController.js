@@ -1,95 +1,266 @@
 const EarnModel = require("../Models/AccountModel/earnSchema");
 const ExpendModel = require("../Models/AccountModel/expendSchema");
-const { graphData } = require("../Utils/commonFunction");
+const { graphData, getDateRange } = require("../Utils/commonFunction");
 const catchAsync = require("../Utils/catchAsync");
 const ApiFeature = require("../Utils/apiFeature");
 const moment = require('moment');
 const AppError = require("../Utils/appError");
-const { updateModal, createModal,deleteModal, findModal } = require("./commonController");
+const { updateModal, createModal, deleteModal, findModal } = require("./commonController");
+const { default: mongoose } = require("mongoose");
+const { responseSend } = require("./authController");
 
 
-exports.saveDailyEarnExpend=(type)=>createModal(type === "earn" ? EarnModel : ExpendModel,true);
-exports.updateDailyEarnExpend=(type)=>updateModal(type === "earn" ? EarnModel : ExpendModel,true);
-exports.deletrDailyEarnExpend=(type)=>deleteModal(type === "earn" ? EarnModel : ExpendModel,true);
-exports.getDailyEarnExpend=(type)=>findMoeteModal(type === "earn" ? EarnModel : ExpendModel,true);
-exports.getDailyEarnExpend=(type)=>findModal(type === "earn" ? EarnModel : ExpendModel);
+exports.saveDailyEarnExpend = (type) => createModal(type === "earn" ? EarnModel : ExpendModel, true);
+exports.updateDailyEarnExpend = (type) => updateModal(type === "earn" ? EarnModel : ExpendModel, true);
+exports.deletrDailyEarnExpend = (type) => deleteModal(type === "earn" ? EarnModel : ExpendModel, true);
+exports.getDailyEarnExpend = (type) => findMoeteModal(type === "earn" ? EarnModel : ExpendModel, true);
+exports.getDailyEarnExpend = (type) => findModal(type === "earn" ? EarnModel : ExpendModel);
 
 
 
-exports.totalEarnByUser = catchAsync(async(req,res,next) =>{
-    const toatalErn = await EarnModel.find({earnBy:req.user.id});
-    if(!toatalErn){
-        next(new AppError("Earn not found by this user Id.",500));
+exports.totalEarnByUser = catchAsync(async (req, res, next) => {
+    const toatalErn = await EarnModel.find({ earnBy: req.user.id });
+    if (!toatalErn) {
+        next(new AppError("Earn not found by this user Id.", 500));
     };
     res.status(200).json({
-        status:true,
+        status: true,
         length: toatalErn.length,
-        data:toatalErn
+        data: toatalErn
     });
 });
 
-exports.getQuery= catchAsync(async(req,res,next)=>{
+exports.getQuery = catchAsync(async (req, res, next) => {
     let { dateRange } = req.query;
-   if(dateRange && dateRange.split('_') && dateRange.split('_').length){
-        req.query.date={
+    if (dateRange && dateRange.split('_') && dateRange.split('_').length) {
+        req.query.date = {
             gte: moment(new Date(dateRange.split('_')[0])),
             lte: moment(new Date(dateRange.split('_')[1])),
         };
         delete req.query.dateRange;
-   }; 
-   next();
+    };
+    req.query.groupId = req.user.groupId;
+    next();
 });
-exports.getTotalEarns = catchAsync(async(req,res,next) =>{
-    const groupFilter = req.query.groupId ? {groupId:req.query.groupId}:{};
-    const filterData = new ApiFeature(EarnModel,req.query).filter();
+exports.getTotalEarns = catchAsync(async (req, res, next) => {
+    const groupFilter = req.query.groupId ? { groupId: req.query.groupId } : {};
+
+    const filterData = new ApiFeature(EarnModel, req.query).filter();
     const totalErans = await filterData.modal
-    if(req.query?.type == 'both'){
+    if (req.query?.type == 'both') {
         req.totalErans = totalErans;
         next();
-    }else{
-    let graphDataJson= graphData([totalErans],['Earn'],['#5aa16d']);
-    res.status(200).json({
-        status:true,
-        graphData:graphDataJson,
-        length:totalErans.length,
-        data:totalErans
-    });
-}
+    } else {
+        let graphDataJson = graphData([totalErans], ['Earn'], ['#5aa16d']);
+        res.status(200).json({
+            status: true,
+            graphData: graphDataJson,
+            length: totalErans.length,
+            data: totalErans
+        });
+    }
 });
 
-exports.getTotalExpend = catchAsync(async(req,res,next)=>{
-    const groupFilter = req.query.groupId ? {groupId:req.query.groupId}:{};
-    const filterData = new ApiFeature(ExpendModel,req.query).filter();
+exports.getTotalExpend = catchAsync(async (req, res, next) => {
+    const groupFilter = req.query.groupId ? { groupId: req.query.groupId } : {};
+    const filterData = new ApiFeature(ExpendModel, req.query).filter();
     const totalExpend = await filterData.modal;
-   let graphDataJson = null;
-   if(req.query.type === "both" && req.query.isGraph === "true"){
-       if(req.totalErans){ 
-           graphDataJson = graphData([req.totalErans,totalExpend],['Earn','Expend'],['#5aa16d','#a15a76']);
-       }else{
-           graphDataJson = graphData([totalExpend],['Expend'],['#5aa16d']);
-       }
-   }else{
-        if(req.totalErans){
-            graphDataJson=[...req?.totalErans,...totalExpend]
-        }else{
-            graphDataJson=totalExpend
+    let graphDataJson = null;
+    if (req.query.type === "both" && req.query.isGraph === "true") {
+        if (req.totalErans) {
+            graphDataJson = graphData([req.totalErans, totalExpend], ['Earn', 'Expend'], ['#5aa16d', '#a15a76']);
+        } else {
+            graphDataJson = graphData([totalExpend], ['Expend'], ['#5aa16d']);
+        }
+    } else {
+        if (req.totalErans) {
+            graphDataJson = [...req?.totalErans, ...totalExpend]
+        } else {
+            graphDataJson = totalExpend
         }
     };
 
     res.status(200).json({
-        status:true,
-        graphData:graphDataJson,
-        length:totalExpend.length,
-        data:totalExpend
+        status: true,
+        graphData: graphDataJson,
+        length: totalExpend.length,
+        data: totalExpend
     });
 });
 
-exports.deleteDailyEarns = catchAsync(async(req,res,next)=>{
+exports.deleteDailyEarns = catchAsync(async (req, res, next) => {
     const params = req.params.id;
     const response = await EarnModel.findByIdAndDelete(req.params.id);
     res.status(200).json({
-        status:true,
-        msg:'delete successfull',
-        data:null
-    })
-})
+        status: true,
+        msg: 'delete successfull',
+        data: null
+    });
+});
+
+exports.getAnalysisData = catchAsync(async (req, res, next) => {
+    const {groupId,date:{gte,lte}} = req.query;
+    const earningAggregation = await EarnModel.aggregate([
+        {
+            $match: {
+                groupId: groupId,
+                date: { $gte: new Date(gte), $lte: new Date(lte) }
+            }
+        }, {
+            $lookup: {
+                from: 'sources',
+                foreignField: '_id',
+                localField: 'source',
+                as: 'sourceType'
+            }
+        }, {
+            $lookup: {
+                from: 'users',
+                foreignField: '_id',
+                localField: 'earnBy',
+                as: 'earnBy'
+            }
+        }, {
+            $unwind: '$sourceType'
+        }, {
+            $unwind: '$earnBy'
+        }, {
+            $facet: {
+                totalearn: [{
+                    $group: {
+                        _id: null,
+                        totalAmount: { $sum: "$amount" }
+                    }
+                }],
+                earnBySources: [
+                    {
+                        $group: {
+                            _id: {
+                                id: "$sourceType._id",
+                                sourceType: "$sourceType.sourceType",
+                                sourceName: "$sourceType.sourceName",
+                                sourceInv: "$sourceType.sourceInv",
+                            },
+                            totalAmount: { $sum: "$amount" }
+                        }
+                    }
+                ],
+                earnByMembers: [
+                    {
+                        $group: {
+                            _id: {
+                                id: "$earnBy._id",
+                                name: "$earnBy.name",
+                                photo: "$earnBy.photo",
+                            },
+                            totalAmount: { $sum: "$amount" }
+                        }
+                    }
+                ],
+                recentearn: [{
+                    $sort: { date: -1 }
+                }, {
+                    $limit: 4
+                }, {
+                    $project: {
+                        _id: 1,
+                        amount: 1,
+                        date: 1,
+                        'earnBy._id': 1,
+                        'earnBy.name': 1,
+                        'sourceType._id': 1,
+                        'sourceType.sourceName': 1
+                    }
+                }]
+            }
+        }
+    ]);
+
+    const expendAggegation = await ExpendModel.aggregate([
+        {
+            $match: {
+                groupId: groupId,
+                date: { $gte: new Date(gte), $lte: new Date(lte) }
+            }
+        }, {
+            $lookup: {
+                from: 'expendtypes',
+                foreignField: '_id',
+                localField: 'expendType',
+                as: 'expendType'
+            }
+        }, {
+            $lookup: {
+                from: 'users',
+                foreignField: '_id',
+                localField: 'expendBy',
+                as: 'expendBy'
+            }
+        }, {
+            $unwind: '$expendType'
+        }, {
+            $unwind: '$expendBy'
+        }, {
+            $facet: {
+                totalexpend: [{
+                    $group: {
+                        _id: null,
+                        totalAmount: { $sum: "$amount" }
+                    }
+                }],
+                expendByTypes: [
+                    {
+                        $group: {
+                            _id: {
+                                id: "$expendType._id",
+                                expendType: "$expendType.expendType",
+                                sourceName: "$expendType.expendName",
+                            },
+                            totalAmount: { $sum: "$amount" }
+                        }
+                    }
+                ],
+                expendByMembers: [
+                    {
+                        $group: {
+                            _id: {
+                                id: "$expendBy._id",
+                                name: "$expendBy.name",
+                                photo: "$expendBy.photo",
+                            },
+                            total: { $sum: "$amount" }
+                        }
+                    }
+                ],
+                recentexpend: [{
+                    $sort: { date: -1 }
+                }, {
+                    $limit: 4
+                }, {
+                    $project: {
+                        _id: 1,
+                        amount: 1,
+                        date: 1,
+                        'expendBy._id': 1,
+                        'expendBy.name': 1,
+                        'expendType._id': 1,
+                        'expendType.expendType':1,
+                        'expendType.expendName': 1
+                    }
+                }]
+            }
+        }
+    ])
+    const totalearn = earningAggregation[0]?.totalearn[0]?.totalAmount || 0;
+    const earnBySources = earningAggregation[0]?.earnBySources || [];
+    const earnByMembers = earningAggregation[0]?.earnByMembers || [];
+    const recentearn = earningAggregation[0]?.recentearn || [];
+    
+    const totalexpend = expendAggegation[0]?.totalexpend[0]?.totalAmount || 0;
+    const expendByTypes = expendAggegation[0]?.expendByTypes || [];
+    const expendByMembers = expendAggegation[0]?.expendByMembers || [];
+    const recentexpend = expendAggegation[0]?.recentexpend || [];
+
+    responseSend(res, 200, true, {earn:{totalearn,earnBySources,earnByMembers,recentearn},expend:{totalexpend,expendByTypes,expendByMembers,recentexpend}});
+
+});
