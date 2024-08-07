@@ -100,6 +100,8 @@ exports.deleteDailyEarns = catchAsync(async (req, res, next) => {
 
 exports.getAnalysisData = catchAsync(async (req, res, next) => {
     const {groupId,date:{gte,lte}} = req.query;
+    console.log(req.query);
+    
     const earningAggregation = await EarnModel.aggregate([
         {
             $match: {

@@ -230,7 +230,19 @@ exports.setFcmToken = catchAsync(async(req,res,next)=>{
     let reqParam = req.user._id,{token} = req.params;
     if(!token) return next(new AppError("fcm token not found",403));
     console.log(token,reqParam);
-    const updatedRecord = await User.findByIdAndUpdate(reqParam,{fcmtoken:token});
-    if(!updatedRecord) return next(new AppError("Record not updated"));
-    this.responseSend(res,200,true,{},"fcm token updated")
+    const user = await User.findById(reqParam);
+    if(!user) return next(new AppError("Record not updated"));
+    if (!user.fcmTokens.includes(fcmToken)) {
+        user.fcmTokens.push(fcmToken);
+        await user.save();
+    }
+    this.responseSend(res,200,true,{},"fcm token updated");
+});
+export const removeFcmToken = catchAsync(async(req, res) => {
+    let reqParam = req.user._id;
+    const user = await User.findById(reqParam);
+    if (!user) return next(new AppError("Record not updated"));
+    user.fcmTokens = user.fcmTokens.filter(token => token !== fcmToken);
+    await user.save();
+    this.responseSend(res,200,true,{},"fcm token removed");
 })
