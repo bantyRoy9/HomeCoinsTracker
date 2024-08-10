@@ -146,13 +146,15 @@ const pieJson = (data, type, theme) => {
 }
 
 exports.picGraphData = (data, theme = "light") => {
-    let graphResponse = {};
+    let graphResponse = [];
     Object.keys(data).forEach(el => {
-        if (el === "earn") {
-            graphResponse[el] = pieJson(data[el], 'earn', theme);
-        } else {
-            graphResponse[el] = pieJson(data[el], 'expend', theme);
-        }
+        graphResponse.push(pieJson(data[el], el, theme))
+
+        // if (el === "earn") {
+        //     graphResponse[el] = pieJson(data[el], 'earn', theme);
+        // } else {
+        //     graphResponse[el] = pieJson(data[el], 'expend', theme);
+        // }
     });
     return graphResponse;
 };

@@ -7,7 +7,7 @@ const initializeSocket = require('./Utils/SocketIO');
 const  admin = require('firebase-admin');
 let DB = process.env.DB_URL;
 if(process.env.NODE_ENV === 'development'){
-    // DB = process.env.DB_URL_LOCAL;
+    DB = process.env.DB_URL_LOCAL;
 };
 
 const serviceAccount = require('./firebaseServiceAccountKey.json')//JSON.parse(firebaseServiceAccountKey);
