@@ -64,7 +64,7 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         default:'false'
     },
-    fcmtoken:String,
+    fcmTokens: { type: [String], default: [] },
     passwordChangeAt: Date,
     passwordResetToken:String,
     passwordResetExpire:Date,

@@ -1,6 +1,6 @@
 const EarnModel = require("../Models/AccountModel/earnSchema");
 const ExpendModel = require("../Models/AccountModel/expendSchema");
-const { graphData, getDateRange } = require("../Utils/commonFunction");
+const { graphData, getDateRange, picGraphData } = require("../Utils/commonFunction");
 const catchAsync = require("../Utils/catchAsync");
 const ApiFeature = require("../Utils/apiFeature");
 const moment = require('moment');
@@ -100,6 +100,8 @@ exports.deleteDailyEarns = catchAsync(async (req, res, next) => {
 
 exports.getAnalysisData = catchAsync(async (req, res, next) => {
     const {groupId,date:{gte,lte}} = req.query;
+    console.log(req.query);
+    
     const earningAggregation = await EarnModel.aggregate([
         {
             $match: {
@@ -214,7 +216,7 @@ exports.getAnalysisData = catchAsync(async (req, res, next) => {
                             _id: {
                                 id: "$expendType._id",
                                 expendType: "$expendType.expendType",
-                                sourceName: "$expendType.expendName",
+                                expendName: "$expendType.expendName",
                             },
                             totalAmount: { $sum: "$amount" }
                         }
@@ -228,7 +230,7 @@ exports.getAnalysisData = catchAsync(async (req, res, next) => {
                                 name: "$expendBy.name",
                                 photo: "$expendBy.photo",
                             },
-                            total: { $sum: "$amount" }
+                            totalAmount: { $sum: "$amount" }
                         }
                     }
                 ],
@@ -254,13 +256,15 @@ exports.getAnalysisData = catchAsync(async (req, res, next) => {
     const totalearn = earningAggregation[0]?.totalearn[0]?.totalAmount || 0;
     const earnBySources = earningAggregation[0]?.earnBySources || [];
     const earnByMembers = earningAggregation[0]?.earnByMembers || [];
+    const earnGraph ={};
+
     const recentearn = earningAggregation[0]?.recentearn || [];
     
     const totalexpend = expendAggegation[0]?.totalexpend[0]?.totalAmount || 0;
     const expendByTypes = expendAggegation[0]?.expendByTypes || [];
     const expendByMembers = expendAggegation[0]?.expendByMembers || [];
     const recentexpend = expendAggegation[0]?.recentexpend || [];
-
-    responseSend(res, 200, true, {earn:{totalearn,earnBySources,earnByMembers,recentearn},expend:{totalexpend,expendByTypes,expendByMembers,recentexpend}});
-
+    let responseData = {earn:{totalearn,earnBySources,earnByMembers,recentearn},expend:{totalexpend,expendByTypes,expendByMembers,recentexpend}};
+    responseData['graphdata'] = picGraphData(responseData);    
+    responseSend(res, 200, true, responseData);
 });
