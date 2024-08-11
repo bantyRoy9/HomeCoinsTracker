@@ -122,7 +122,7 @@ const pieJson = (data, type, theme) => {
     };
 
     const colors = themeColors[theme];
-    let finalobj = {};
+    let finalobj = [];
     let colorIndex = 0;
 
     Object.keys(data).forEach(el => {
@@ -138,7 +138,7 @@ const pieJson = (data, type, theme) => {
                 });
                 colorIndex++;
             });
-            finalobj[el] = arr;
+            finalobj.push(arr);
         }
     });
 
@@ -148,7 +148,7 @@ const pieJson = (data, type, theme) => {
 exports.picGraphData = (data, theme = "light") => {
     let graphResponse = [];
     Object.keys(data).forEach(el => {
-        graphResponse.push(pieJson(data[el], el, theme))
+        graphResponse.push(...pieJson(data[el], el, theme))
 
         // if (el === "earn") {
         //     graphResponse[el] = pieJson(data[el], 'earn', theme);
@@ -156,5 +156,7 @@ exports.picGraphData = (data, theme = "light") => {
         //     graphResponse[el] = pieJson(data[el], 'expend', theme);
         // }
     });
+
+    // graphResponse=[...graphResponse[0].earnBySources,...graphResponse[0].earnByMembers,...graphResponse[0].expendByTypes,...graphResponse[0].expendByMembers];
     return graphResponse;
 };

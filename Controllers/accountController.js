@@ -265,9 +265,6 @@ exports.getAnalysisData = catchAsync(async (req, res, next) => {
     const expendByMembers = expendAggegation[0]?.expendByMembers || [];
     const recentexpend = expendAggegation[0]?.recentexpend || [];
     let responseData = {earn:{totalearn,earnBySources,earnByMembers,recentearn},expend:{totalexpend,expendByTypes,expendByMembers,recentexpend}};
-    responseData['graphdata'] = picGraphData(responseData);
-    console.log(responseData);
-    
+    responseData['graphdata'] = picGraphData(responseData);    
     responseSend(res, 200, true, responseData);
-
 });
