@@ -134,7 +134,7 @@ const pieJson = (data, type, theme) => {
                     [type]: parseFloat(ele.totalAmount),
                     color: colors.sliceColors[colorIndex % colors.sliceColors.length],
                     legendFontColor: colors.legendFontColor,
-                    legendFontSize: 15
+                    legendFontSize: 13
                 });
                 colorIndex++;
             });
