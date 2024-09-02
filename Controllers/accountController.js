@@ -99,7 +99,7 @@ exports.deleteDailyEarns = catchAsync(async (req, res, next) => {
 });
 
 exports.getAnalysisData = catchAsync(async (req, res, next) => {
-    const { groupId, date: { gte, lte }, source, earnBy, expendBy, expendtype } = req.query;
+    const { groupId, date: { gte, lte }, source, earnBy, expendBy, expendType } = req.query;
 
     const match = {
         groupId: groupId,
@@ -114,8 +114,8 @@ exports.getAnalysisData = catchAsync(async (req, res, next) => {
     if (expendBy) {
         extraQueryExpend.expendBy = new mongoose.Types.ObjectId(expendBy);
     }
-    if (expendtype) {
-        extraQueryExpend.expendType = new mongoose.Types.ObjectId(expendtype);
+    if (expendType) {
+        extraQueryExpend.expendType = new mongoose.Types.ObjectId(expendType);
     }
     let earningAggregation = expendAggegation = [];
     if(!Object.keys(extraQueryExpend).length){
