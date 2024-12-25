@@ -99,12 +99,11 @@ exports.deleteDailyEarns = catchAsync(async (req, res, next) => {
 });
 
 exports.getAnalysisData = catchAsync(async (req, res, next) => {
-    const { groupId, date: { gte, lte }, source, earnBy, expendBy, expendType } = req.query;
-
-    const match = {
-        groupId: groupId,
-        date: { $gte: new Date(gte), $lte: new Date(lte) }
-    }, extraQueryEarn = {}, extraQueryExpend = {};
+    const { groupId, date, source, earnBy, expendBy, expendType,recentlimit } = req.query;
+    const match = {groupId}, extraQueryEarn = {}, extraQueryExpend = {};
+    if(date){
+        match['date']={ $gte: new Date(date.gte), $lte: new Date(date.lte) }
+    }
     if (source) {
         extraQueryEarn.source = new mongoose.Types.ObjectId(source)
     };
@@ -117,7 +116,7 @@ exports.getAnalysisData = catchAsync(async (req, res, next) => {
     if (expendType) {
         extraQueryExpend.expendType = new mongoose.Types.ObjectId(expendType);
     }
-    let earningAggregation = expendAggegation = [];
+    let earningAggregation = expendAggegation = [],limit = !date ? null  : recentlimit ? parseInt(recentlimit) : 4;
     if(!Object.keys(extraQueryExpend).length){
     earningAggregation = await EarnModel.aggregate([
         {
@@ -173,12 +172,10 @@ exports.getAnalysisData = catchAsync(async (req, res, next) => {
                         }
                     }
                 ],
-                recentearn: [{
-                    $sort: { date: -1 }
-                }, {
-                    $limit: 4
-                }, {
-                    $project: {
+                recentearn: [
+                    {$sort: { date: -1 }}, 
+                    ...(limit !== null ? [{ $limit: limit }] : []),
+                    {$project: {
                         _id: 1,
                         amount: 1,
                         date: 1,
@@ -246,12 +243,10 @@ exports.getAnalysisData = catchAsync(async (req, res, next) => {
                         }
                     }
                 ],
-                recentexpend: [{
-                    $sort: { date: -1 }
-                }, {
-                    $limit: 4
-                }, {
-                    $project: {
+                recentexpend: [
+                    {$sort: { date: -1 }},                 
+                    ...(limit !== null ? [{ $limit: limit }] : []),
+                    {$project: {
                         _id: 1,
                         amount: 1,
                         date: 1,
@@ -266,6 +261,7 @@ exports.getAnalysisData = catchAsync(async (req, res, next) => {
         }
     ]);
     }
+    
     const totalearn = earningAggregation[0]?.totalearn[0]?.totalAmount || 0;
     const earnBySources = earningAggregation[0]?.earnBySources || [];
     const earnByMembers = earningAggregation[0]?.earnByMembers || [];
